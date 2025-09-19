@@ -1,0 +1,10 @@
+[33m35b5fd1[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mtelaDeLogin[m[33m, [m[1;31morigin/telaDeLogin[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m HEAD@{0}: rebase (finish): returning to refs/heads/telaDeLogin
+[33m35b5fd1[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mtelaDeLogin[m[33m, [m[1;31morigin/telaDeLogin[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m HEAD@{1}: rebase (start): checkout HEAD~2
+[33m415abdd[m HEAD@{2}: rebase (abort): returning to refs/heads/telaDeLogin
+[33m415abdd[m HEAD@{3}: rebase (abort): returning to refs/heads/telaDeLogin
+[33m415abdd[m HEAD@{4}: rebase (finish): returning to refs/heads/telaDeLogin
+[33m415abdd[m HEAD@{5}: rebase (finish): refs/heads/telaDeLogin onto 35b5fd1595a77defcdc0f16a8772a61d1e209f6f
+[33m415abdd[m HEAD@{6}: commit: criação da tela de login
+[33m7d4fbb2[m HEAD@{7}: commit: criação da tela de login
+[33m35b5fd1[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mtelaDeLogin[m[33m, [m[1;31morigin/telaDeLogin[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m HEAD@{8}: checkout: moving from main to telaDeLogin
+[33m35b5fd1[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mtelaDeLogin[m[33m, [m[1;31morigin/telaDeLogin[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m HEAD@{9}: clone: from https://github.com/sucsnj/CasaSync
