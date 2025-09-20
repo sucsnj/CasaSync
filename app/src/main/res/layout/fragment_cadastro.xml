@@ -5,8 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cadastro"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".CadastroActivity">
+    android:layout_height="match_parent" >
 
     <LinearLayout
         android:id="@+id/layoutNewUser"
@@ -128,7 +127,7 @@
 
 
         <TextView
-            android:id="@+id/btnCreatAccount"
+            android:id="@+id/btnLoginAccount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
