@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">CasaSync</string>
-    <string name="login_prompt">Digite seu login</string>
+    <string name="login_prompt">Digite seu e-mail</string>
     <string name="password_prompt">Digite sua senha</string>
     <string name="cancel_button">Cancelar</string>
     <string name="login_button">Acessar</string>
