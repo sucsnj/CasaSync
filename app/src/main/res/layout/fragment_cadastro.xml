@@ -141,7 +141,6 @@
             android:text="@string/login_account_text"
             android:textSize="14sp" />
 
-        <!-- mesmo problema do LinearLayout de login -->
         <LinearLayout
             android:id="@+id/footer"
             android:layout_width="match_parent"
