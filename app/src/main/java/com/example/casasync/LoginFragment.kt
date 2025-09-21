@@ -8,15 +8,8 @@ import androidx.fragment.app.Fragment
 import android.widget.TextView
 import android.widget.Toast
 
-class LoginFragment : Fragment() {
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_login, container, false)
-    }
+// lógica de inflação de fragmento já na declaração de classe
+class LoginFragment : BaseFragment(R.layout.fragment_login) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

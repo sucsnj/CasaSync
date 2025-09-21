@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import android.widget.TextView
 import android.widget.Toast
 
-class CadastroFragment : Fragment() {
+class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
 
     // banco de dados (em memória)
     companion object {
@@ -17,15 +17,6 @@ class CadastroFragment : Fragment() {
 
     // classe que representa um usuário (em memória)
     data class User(val name: String, val login: String, val password: String)
-
-    // função para inflar o layout do fragment_cadastro.xml
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_cadastro, container, false)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
