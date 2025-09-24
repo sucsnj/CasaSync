@@ -21,7 +21,7 @@
             android:layout_width="160dp"
             android:layout_height="160dp"
             android:contentDescription="@string/casasync_image_description"
-            android:src="@drawable/casasync" />
+            android:src="@drawable/casasyncnome" />
 
         <TextView
             android:layout_width="wrap_content"
