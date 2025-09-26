@@ -16,7 +16,7 @@ class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
     }
 
     // classe que representa um usuário (em memória)
-    data class User(val name: String, val login: String, val password: String)
+    // data class User(val name: String, val login: String, val password: String)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -32,6 +32,18 @@ class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
             val name = newUserPrompt.text.toString()
             val login = newLoginPrompt.text.toString()
             val password = newPasswordPrompt.text.toString()
+
+            // verificação contra duplicidade de cadastro
+            // se newLoginPrompt for encontrado em User
+            val loginEncontrado = users.find { it.login == login }
+            if (loginEncontrado != null) {
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.login_found_message),
+                    Toast.LENGTH_SHORT
+                ).show()
+                return@setOnClickListener
+            }
 
             if (name.isNotEmpty() && login.isNotEmpty() && password.isNotEmpty()) {
                 users.add(User(name, login, password))

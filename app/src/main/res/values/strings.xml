@@ -22,6 +22,8 @@
 
     <string name="login_success_message">Login realizado com sucesso!</string>
     <string name="login_error_message">Erro ao realizar login. Verifique suas credenciais.</string>
+    <string name="login_empty_message">Preencha os campos de login!</string>
+    <string name="login_found_message">Este usuário já foi cadastrado. Tente outro email!</string>
     <string name="cadastro_success_message">Cadastro realizado com sucesso!</string>"
     <string name="cadastro_error_message">Erro ao realizar cadastro. Verifique os dados informados.</string>
 
