@@ -34,6 +34,16 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                         getString(R.string.login_success_message),
                         Toast.LENGTH_SHORT
                     ).show()
+                    parentFragmentManager.beginTransaction()
+                    .setCustomAnimations(
+                        R.anim.slide_in_right,
+                        R.anim.slide_out_left,
+                        R.anim.slide_in_left,
+                        R.anim.slide_out_right
+                    )
+                    .replace(R.id.fragment_container, HomeFragment()) // ou qualquer outro fragmento
+                    .addToBackStack(null)
+                    .commit()
                 } else {
                     Toast.makeText(
                         requireContext(),
