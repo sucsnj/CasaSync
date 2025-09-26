@@ -14,8 +14,10 @@
     <string name="new_user_text">Novo usuário</string>
     <string name="or_text">Ou</string>
     <string name="login_google_text">Entrar com Google</string>
-    <string name="create_account_text">Ainda não possui uma conta? Cadastre-se!</string>
-    <string name="login_account_text">Já possui conta? Faça o login!</string>
+    <string name="create_account_text">Ainda não possui uma conta?</string>
+    <string name="create_account_btn">Cadastre-se!</string>
+    <string name="login_account_text">Já possui conta?</string>
+    <string name="login_account_btn">Faça o login!</string>
     <string name="forgot_password_text">Esqueceu sua senha?</string>
 
     <string name="login_success_message">Login realizado com sucesso!</string>
