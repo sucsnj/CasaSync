@@ -15,9 +15,6 @@ class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
         var users = mutableListOf<User>()
     }
 
-    // classe que representa um usuário (em memória)
-    // data class User(val name: String, val login: String, val password: String)
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

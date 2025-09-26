@@ -41,6 +41,12 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                         Toast.LENGTH_SHORT
                     ).show()
                 }
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.login_empty_message),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
 
