@@ -6,4 +6,5 @@
     <color name="cinza">#a5a4aa</color>
     <color name="branco">#FFFFFF</color>
     <color name="azul_cris">#9BE6FB</color>
+    <color name="toast_background">#333333</color>
 </resources>

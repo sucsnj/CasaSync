@@ -6,7 +6,7 @@
     <string name="cancel_button">Cancelar</string>
     <string name="login_button">Acessar</string>
     <string name="cadastro_button">Cadastrar</string>
-    <string name="devminds_message">Powered by DevMinds, muito mais minds</string>
+    <string name="devminds_message">Powered by DevMinds</string>
     <string name="my_image_description">Logo do DevMinds</string>
     <string name="google_img_desc">Logo do Google</string>
     <string name="casasync_image_description">Logo do CasaSync</string>

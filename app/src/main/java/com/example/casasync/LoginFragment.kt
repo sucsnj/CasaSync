@@ -1,10 +1,7 @@
 package com.example.casasync
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import android.widget.TextView
 import android.widget.Toast
 
@@ -30,7 +27,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
 
                 if (userFound != null) {
                     Toast.makeText(
-                        requireContext(),
+                        requireActivity(),
                         getString(R.string.login_success_message),
                         Toast.LENGTH_SHORT
                     ).show()
@@ -46,14 +43,14 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                     .commit()
                 } else {
                     Toast.makeText(
-                        requireContext(),
+                        requireActivity(),
                         getString(R.string.login_error_message),
                         Toast.LENGTH_SHORT
                     ).show()
                 }
             } else {
                 Toast.makeText(
-                    requireContext(),
+                    requireActivity(),
                     getString(R.string.login_empty_message),
                     Toast.LENGTH_SHORT
                 ).show()
