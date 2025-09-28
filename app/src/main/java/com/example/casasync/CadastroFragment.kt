@@ -1,12 +1,9 @@
 package com.example.casasync
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import android.widget.TextView
-import android.widget.Toast
+import com.example.casasync.SnackbarUtils.showMessage
 
 class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
 
@@ -34,17 +31,17 @@ class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
             // se newLoginPrompt for encontrado em User
             val loginEncontrado = users.find { it.login == login }
             if (loginEncontrado != null) {
-                Toast.makeText(
-                    requireContext(),
+                showMessage(requireContext(),
                     getString(R.string.login_found_message),
-                    Toast.LENGTH_SHORT
-                ).show()
+                    R.drawable.casasync)
                 return@setOnClickListener
             }
 
             if (name.isNotEmpty() && login.isNotEmpty() && password.isNotEmpty()) {
                 users.add(User(name, login, password))
-                Toast.makeText(requireContext(), getString(R.string.cadastro_success_message), Toast.LENGTH_SHORT).show()
+                showMessage(requireContext(),
+                    getString(R.string.cadastro_success_message),
+                    R.drawable.casasync)
 
                 parentFragmentManager.beginTransaction()
                 .setCustomAnimations(
@@ -58,7 +55,9 @@ class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
                 .commit()
 
             } else {
-                Toast.makeText(requireContext(), getString(R.string.cadastro_error_message), Toast.LENGTH_SHORT).show()
+               showMessage(requireContext(),
+                    getString(R.string.cadastro_error_message),
+                    R.drawable.casasync)
             }
         }
 

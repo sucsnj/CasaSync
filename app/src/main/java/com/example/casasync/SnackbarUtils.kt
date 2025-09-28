@@ -11,7 +11,9 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import com.google.android.material.snackbar.Snackbar
-import com.example.casasync.R
+import android.content.Context
+import android.os.Build
+import android.widget.Toast
 
 object SnackbarUtils {
 
@@ -42,10 +44,9 @@ object SnackbarUtils {
         params.leftMargin = sideMargin
         params.rightMargin = sideMargin
         params.gravity = Gravity.BOTTOM
-//        params.bottomMargin = 300
         val bottomMarginDp = TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,
-            112f,
+            100f,
             Resources.getSystem().displayMetrics
         ).toInt()
         params.bottomMargin = bottomMarginDp
@@ -59,5 +60,13 @@ object SnackbarUtils {
         snackbarLayout.addView(customView)
 
         snackbar.show()
+    }
+
+    fun showMessage(context: Context, message: String, iconResId: Int? = null) {
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            SnackbarUtils.show(context as Activity, message, iconResId)
+        } else {
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+        }
     }
 }
