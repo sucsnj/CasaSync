@@ -53,12 +53,7 @@ class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
                     R.drawable.casasync)
 
                 parentFragmentManager.beginTransaction() // troca de tela para o login
-                .setCustomAnimations( // animação de troca de tela
-                    R.anim.slide_in_left,
-                    R.anim.slide_out_right,
-                    R.anim.slide_in_right,
-                    R.anim.slide_out_left
-                )
+                .setCustomTransition(TransitionType.FADE)
                 .replace(R.id.fragment_container, LoginFragment())
                 .addToBackStack(null)
                 .commit()
@@ -75,12 +70,7 @@ class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
 
         btnLoginAccount.setOnClickListener {
             parentFragmentManager.beginTransaction()
-                .setCustomAnimations(
-                    R.anim.slide_in_left,
-                    R.anim.slide_out_right,
-                    R.anim.slide_in_right,
-                    R.anim.slide_out_left
-                )
+                .setCustomTransition(TransitionType.FADE)
                 .replace(R.id.fragment_container, LoginFragment())
                 .addToBackStack(null)
                 .commit()

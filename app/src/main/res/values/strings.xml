@@ -27,6 +27,18 @@
     <string name="cadastro_success_message">Cadastro realizado com sucesso!</string>"
     <string name="cadastro_error_message">Erro ao realizar cadastro. Verifique os dados informados.</string>
 
+    <string name="recovey_text">Recuperar Senha</string>
+    <string name="validator_button">Validar</string>
+    <string name="recovery_button">Trocar Senha</string>
+    <string name="new_password">Digite sua nova senha</string>
+    <string name="login_found_recovery">Login encontrado!</string>
+    <string name="login_not_found_recovery">Login não encontrado!</string>
+    <string name="login_empty_recovery">Preencha o campo de login!</string>
+    <string name="password_changed">Senha Alterada!</string>
+    <string name="password_empty_recovery">Digite uma nova senha!</string>
+
+    <string name="never">_Nunca chegará aqui_</string>
     <string name="main_text">para bens sozinho no meio da tela</string>
+
 
 </resources>

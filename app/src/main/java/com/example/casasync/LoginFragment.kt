@@ -43,16 +43,12 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
 
                     // troca de tela para a tela inicial
                     parentFragmentManager.beginTransaction()
-                    .setCustomAnimations( // animação de troca de tela
-                        R.anim.slide_in_right,
-                        R.anim.slide_out_left,
-                        R.anim.slide_in_left,
-                        R.anim.slide_out_right
-                    )
-                    // muda o fragmento (tela)
-                    .replace(R.id.fragment_container, HomeFragment())
-                    .addToBackStack(null) // guarda a tela atual para voltar quando precisar
-                    .commit() // finaliza a transação
+                        .setCustomTransition(TransitionType.SLIDE)
+
+                        // muda o fragmento (tela)
+                        .replace(R.id.fragment_container, HomeFragment())
+                        .addToBackStack(null) // guarda a tela atual para voltar quando precisar
+                        .commit() // finaliza a transação
                 } else {
                     // mostra a mensagem de erro
                     showMessage(requireContext(),
@@ -75,15 +71,22 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
 
             // troca de tela para o cadastro
             parentFragmentManager.beginTransaction()
-                .setCustomAnimations( // animação de troca de tela
-                    R.anim.slide_in_right,
-                    R.anim.slide_out_left,
-                    R.anim.slide_in_left,
-                    R.anim.slide_out_right
-                )
+                .setCustomTransition(TransitionType.SLIDE)
 
                 // muda o fragmento (tela)
                 .replace(R.id.fragment_container, CadastroFragment())
+                .addToBackStack(null) // guarda a tela atual para voltar quando precisar
+                .commit() // finaliza a transação
+        }
+
+        // representa o botão de recuperar senha
+        val btnForgotPassword = view.findViewById<TextView>(R.id.txtForgotPassword)
+
+        // o que fazer ao clicar no botão de recuperar senha
+        btnForgotPassword.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .setCustomTransition(TransitionType.SLIDE) // animação de troca de tela
+                .replace(R.id.fragment_container, RecoveryFragment())
                 .addToBackStack(null) // guarda a tela atual para voltar quando precisar
                 .commit() // finaliza a transação
         }
