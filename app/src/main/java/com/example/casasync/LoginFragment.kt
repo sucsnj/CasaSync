@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import com.example.casasync.SnackbarUtils
 
 // lógica de inflação de fragmento já na declaração de classe
 class LoginFragment : BaseFragment(R.layout.fragment_login) {
@@ -26,11 +27,16 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                 }
 
                 if (userFound != null) {
-                    Toast.makeText(
+//                    Toast.makeText(
+//                        requireActivity(),
+//                        getString(R.string.login_success_message),
+//                        Toast.LENGTH_SHORT
+//                    ).show()
+                    SnackbarUtils.show(
                         requireActivity(),
                         getString(R.string.login_success_message),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                        iconResId = R.drawable.casasync
+                    )
                     parentFragmentManager.beginTransaction()
                     .setCustomAnimations(
                         R.anim.slide_in_right,
@@ -42,18 +48,28 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                     .addToBackStack(null)
                     .commit()
                 } else {
-                    Toast.makeText(
+//                    Toast.makeText(
+//                        requireActivity(),
+//                        getString(R.string.login_error_message),
+//                        Toast.LENGTH_SHORT
+//                    ).show()
+                    SnackbarUtils.show(
                         requireActivity(),
                         getString(R.string.login_error_message),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                        iconResId = R.drawable.casasync
+                    )
                 }
             } else {
-                Toast.makeText(
+//                Toast.makeText(
+//                    requireActivity(),
+//                    getString(R.string.login_empty_message),
+//                    Toast.LENGTH_SHORT
+//                ).show()
+                SnackbarUtils.show(
                     requireActivity(),
                     getString(R.string.login_empty_message),
-                    Toast.LENGTH_SHORT
-                ).show()
+                    iconResId = R.drawable.casasync
+                )
             }
         }
 
