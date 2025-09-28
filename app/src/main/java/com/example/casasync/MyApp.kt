@@ -10,7 +10,7 @@ class MyApp : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        // força o modo claro
+        // forçar o modo claro
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
     }
 }
