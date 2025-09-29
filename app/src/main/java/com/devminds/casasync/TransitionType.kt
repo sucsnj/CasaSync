@@ -1,4 +1,4 @@
-package com.example.casasync
+package com.devminds.casasync
 
 import androidx.fragment.app.FragmentTransaction
 

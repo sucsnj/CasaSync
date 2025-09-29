@@ -1,4 +1,4 @@
-package com.example.casasync
+package com.devminds.casasync
 
 import android.os.Bundle
 import android.view.LayoutInflater
