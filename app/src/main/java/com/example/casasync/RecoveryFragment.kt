@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import com.example.casasync.CadastroFragment.Companion.users
-import com.example.casasync.SnackbarUtils.showMessage
+import com.example.casasync.Utils.safeShowDialog
 
 // declaração de classe para recuperação de senha
 class RecoveryFragment : BaseFragment(R.layout.fragment_recovery) {
@@ -30,24 +30,22 @@ class RecoveryFragment : BaseFragment(R.layout.fragment_recovery) {
 
             if (login.isNotEmpty()) {
                 if (loginEncontrado != null) {
-                    showMessage(requireContext(),
-                        getString(R.string.login_found_recovery),
-                        R.drawable.casasync)
+                    safeShowDialog(getString(R.string.login_found_recovery))
 
-                    promptChangePassword.visibility = View.VISIBLE // mostra o prompt para troca de senha
-                    btnChangePassword.visibility = View.VISIBLE // mostra o botão para troca de senha
+                    promptChangePassword.visibility =
+                        View.VISIBLE // mostra o prompt para troca de senha
+                    btnChangePassword.visibility =
+                        View.VISIBLE // mostra o botão para troca de senha
                 } else {
-                    showMessage(requireContext(),
-                        getString(R.string.login_not_found_recovery),
-                        R.drawable.casasync)
+                    safeShowDialog(getString(R.string.login_not_found_recovery))
 
-                    promptChangePassword.visibility = View.INVISIBLE // esconde o prompt para troca de senha
-                    btnChangePassword.visibility = View.INVISIBLE // esconde o botão para troca de senha
+                    promptChangePassword.visibility =
+                        View.INVISIBLE // esconde o prompt para troca de senha
+                    btnChangePassword.visibility =
+                        View.INVISIBLE // esconde o botão para troca de senha
                 }
             } else {
-                showMessage(requireContext(),
-                    getString(R.string.login_empty_recovery),
-                    R.drawable.casasync)
+                safeShowDialog(getString(R.string.login_empty_recovery))
 
                 promptChangePassword.visibility = View.INVISIBLE
                 btnChangePassword.visibility = View.INVISIBLE
@@ -60,22 +58,15 @@ class RecoveryFragment : BaseFragment(R.layout.fragment_recovery) {
             val password = promptChangePassword.text.toString()
             if (password.isNotEmpty()) {
                 loginEncontrado?.password = password
-                showMessage(
-                    requireContext(),
-                    getString(R.string.password_changed),
-                    R.drawable.casasync
-                )
+                safeShowDialog(getString(R.string.password_changed))
+
                 parentFragmentManager.beginTransaction()
                     .setCustomTransition(TransitionType.SLIDE)
                     .replace(R.id.fragment_container, LoginFragment())
                     .addToBackStack(null)
                     .commit()
             } else {
-                showMessage(
-                    requireContext(),
-                    getString(R.string.password_empty_recovery),
-                    R.drawable.casasync
-                )
+                safeShowDialog(getString(R.string.password_empty_recovery))
             }
         }
 
