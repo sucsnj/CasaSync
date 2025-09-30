@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import com.example.casasync.R
 import com.google.android.material.snackbar.Snackbar
 
 object ToastUtils {

@@ -7,6 +7,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ListView
 import androidx.fragment.app.Fragment
+import com.example.casasync.R
 
 // Tela principal do app (implementação do fragment)
 class HomeFragment : Fragment(R.layout.fragment_tela_inicial) {

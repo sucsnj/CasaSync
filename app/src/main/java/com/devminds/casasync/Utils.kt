@@ -2,6 +2,7 @@ package com.devminds.casasync
 
 import android.content.Context
 import androidx.fragment.app.Fragment
+import com.example.casasync.R
 
 // classe utilitária
 object Utils {
