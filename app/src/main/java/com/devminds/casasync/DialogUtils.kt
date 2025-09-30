@@ -15,7 +15,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.graphics.drawable.toDrawable
-import com.example.casasync.R
+import com.devminds.casasync.R
 
 object DialogUtils {
 

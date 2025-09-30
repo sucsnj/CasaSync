@@ -1,7 +1,7 @@
 package com.devminds.casasync
 
 import androidx.fragment.app.FragmentTransaction
-import com.example.casasync.R
+import com.devminds.casasync.R
 
 enum class TransitionType {
     SLIDE, FADE

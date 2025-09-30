@@ -14,7 +14,7 @@ import com.google.android.material.snackbar.Snackbar
 import android.content.Context
 import android.os.Build
 import android.widget.Toast
-import com.example.casasync.R
+import com.devminds.casasync.R
 
 // objeto auxiliar para substituir o Toast do android
 object SnackbarUtils {
