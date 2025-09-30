@@ -37,6 +37,28 @@
     <string name="password_changed">Senha Alterada!</string>
     <string name="password_empty_recovery">Digite uma nova senha!</string>
 
+    <string name="personal_data_text">Dados Pessoais</string>
+    <string name="date_prompt">Data de Nascimento</string>
+    <string name="male">Masculino</string>
+    <string name="female">Feminino</string>
+    <string name="another">Outro</string>
+    <string name="contactSecurity">Contato e Segurança</string>
+    <string name="login_prompt_confirm">Confirme seu email</string>
+    <string name="password_prompt_confirm">Confirme sua senha</string>
+    <string name="phone_prompt">Telefone para Contato</string>
+    <string name="address">Endereço</string>
+    <string name="cep_prompt">CEP do seu endereço</string>
+    <string name="street_prompt">Logradouro/Rua/Avenida</string>
+    <string name="city_prompt">Nome da Cidade</string>
+    <string name="district_prompt">Nome do Bairro</string>
+    <string name="number_address_prompt">Número do endereço</string>
+    <string name="complement_prompt">Complemento (casa, apartamento...)</string>
+    <string name="configs">Configurações</string>
+    <string name="adm">Responsável</string>
+    <string name="member">Membro</string>
+    <string name="accept">Aceitar Termos de uso</string>
+    <string name="decline">Recusar Termos de uso</string>
+
     <string name="never">_Nunca chegará aqui_</string>
     <string name="main_text">para bens sozinho no meio da tela</string>
 
