@@ -3,6 +3,7 @@ package com.devminds.casasync
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import com.devminds.casasync.Utils.safeShowDialog
 
 class LoginFragment : BaseFragment(R.layout.fragment_login) {
 
@@ -36,11 +37,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
 
                     // mostra a mensagem de sucesso e troca de tela
                     context?.let {
-                        DialogUtils.show(
-                            it,
-                            getString(R.string.login_success_message),
-                            R.drawable.casasync
-                        )
+                        safeShowDialog(getString(R.string.login_success_message))
                     }
 
                     // troca de tela para a tela inicial
@@ -53,22 +50,12 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                         .commit() // finaliza a transação
                 } else {
                     // mostra a mensagem de erro
-                    context?.let { // verifica se o contexto não é nulo
-                        DialogUtils.show(
-                            it,
-                            getString(R.string.login_error_message),
-                            R.drawable.casasync
-                        )
-                    }
+                    safeShowDialog(getString(R.string.login_error_message))
                 }
             } else {
-                context?.let {
-                    DialogUtils.show(
-                        it,
-                        getString(R.string.login_empty_message),
-                        R.drawable.casasync
-                    )
-                }
+                safeShowDialog(
+                    getString(R.string.login_empty_message)
+                )
             }
         }
 

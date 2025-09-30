@@ -3,7 +3,7 @@ package com.devminds.casasync
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
-import com.devminds.casasync.SnackbarUtils.showMessage
+import com.devminds.casasync.Utils.safeShowDialog
 
 // declaração de classe com fragmento para o cadastro
 class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
@@ -39,29 +39,23 @@ class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
 
             // se o login já existe, mostra a mensagem de erro
             if (loginEncontrado != null) {
-                showMessage(requireContext(),
-                    getString(R.string.login_found_message),
-                    R.drawable.casasync)
+                safeShowDialog(getString(R.string.login_found_message))
                 return@setOnClickListener // sai da função, impedindo o cadastro
             }
 
             // se estiver tudo preenchido, cadastra o usuário
             if (name.isNotEmpty() && login.isNotEmpty() && password.isNotEmpty()) {
                 users.add(User(name, login, password)) // adiciona o usuário à lista
-                showMessage(requireContext(),
-                    getString(R.string.cadastro_success_message),
-                    R.drawable.casasync)
+                safeShowDialog(getString(R.string.cadastro_success_message))
 
                 parentFragmentManager.beginTransaction() // troca de tela para o login
-                .setCustomTransition(TransitionType.FADE)
-                .replace(R.id.fragment_container, LoginFragment())
-                .addToBackStack(null)
-                .commit()
+                    .setCustomTransition(TransitionType.FADE)
+                    .replace(R.id.fragment_container, LoginFragment())
+                    .addToBackStack(null)
+                    .commit()
 
             } else {
-               showMessage(requireContext(),
-                    getString(R.string.cadastro_error_message),
-                    R.drawable.casasync)
+                safeShowDialog(getString(R.string.cadastro_error_message))
             }
         }
 
