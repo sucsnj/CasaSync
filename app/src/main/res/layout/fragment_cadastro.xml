@@ -7,184 +7,392 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <LinearLayout
-        android:id="@+id/layoutNewUser"
+    <ScrollView   
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="28dp"
-        android:layout_marginTop="70dp"
-        tools:layout_editor_absoluteX="32dp"
-        tools:layout_editor_absoluteY="-76dp">
-
-        <ImageView
-            android:layout_width="160dp"
-            android:layout_height="160dp"
-            android:contentDescription="@string/casasync_image_description"
-            android:src="@drawable/casasyncnome" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:layout_marginTop="16dp"
-            android:text="@string/new_user_text"
-            android:textStyle="bold"
-            android:textSize="36sp" />
-
-        <EditText
-            android:id="@+id/newUserPrompt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:inputType="text"
-            android:hint="@string/name_prompt"
-            android:autofillHints="username"
-            android:drawableStart="@drawable/user"
-            android:drawablePadding="10dp" />
-
-        <EditText
-            android:id="@+id/newLoginPrompt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:autofillHints="emailAddress"
-            android:hint="@string/login_prompt"
-            android:drawableStart="@drawable/email"
-            android:drawablePadding="10dp"
-            android:inputType="textEmailAddress" />
-
-        <EditText
-            android:id="@+id/newPasswordPrompt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:autofillHints="password"
-            android:hint="@string/password_prompt"
-            android:drawableStart="@drawable/password"
-            android:drawablePadding="10dp"
-            android:inputType="textPassword" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp">
-
-            <Button
-                android:id="@+id/btnCadastro"
-                style="@style/BotaoAzul"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/cadastro_button"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintWidth_percent="0.8" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <!--
-        <TextView
-            android:id="@+id/txtOr"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            android:text="@string/or_text"
-            android:textSize="14sp" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/rounded_button"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center"
-                android:orientation="horizontal"
-                app:layout_constraintTop_toTopOf="parent"
-                android:padding="12dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintWidth_percent="0.8">
-
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_marginEnd="8dp"
-                    android:src="@drawable/ico_google16"
-                    android:contentDescription="@string/google_img_desc"
-                    />
-
-                <TextView
-                    android:id="@+id/btnGoogleLoginText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/login_google_text"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
-                    android:textSize="14sp" />
-            </LinearLayout>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-        >
-
-        <TextView
-            android:id="@+id/txtLoginAccount"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:gravity="center"
-            android:text="@string/login_account_text"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/btnLoginAccount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:paddingStart="2dp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:textColor="@color/azul_escuro"
-            android:text="@string/login_account_btn"
-            android:textSize="15sp" />
-        </LinearLayout>
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/footer"
+            android:id="@+id/layoutNewUser"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="bottom|center_horizontal"
+            android:gravity="center"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="28dp"
+            android:layout_marginTop="30dp">
 
             <ImageView
-                android:id="@+id/imgFooter"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:contentDescription="@string/my_image_description"
-                android:src="@drawable/devminds" />
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:contentDescription="@string/casasync_image_description"
+                android:src="@drawable/casasyncnome" />
 
             <TextView
-                android:id="@+id/txtFooter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@string/devminds_message"
-                android:textSize="11sp" />
+                android:layout_gravity="start"
+                android:layout_marginTop="14dp"
+                android:text="@string/new_user_text"
+                android:textStyle="bold"
+                android:textSize="36sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="10dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/borda_layout">
+
+                        <TextView
+                            android:id="@+id/personalData"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:layout_marginTop="10dp"
+                            android:text="@string/personal_data_text"
+                            android:textStyle="bold"
+                            android:textSize="30sp" />
+                    
+                        <EditText
+                            android:id="@+id/newUserPrompt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:inputType="text"
+                            android:hint="@string/name_prompt"
+                            android:autofillHints="username"
+                            android:drawableStart="@drawable/user"
+                            android:drawablePadding="10dp" />
+
+                        <EditText
+                            android:id="@+id/newBirthdayPrompt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:hint="@string/date_prompt"
+                            android:focusable="false"
+                            android:clickable="true"
+                            android:inputType="none" />
+
+                        <RadioGroup
+                            android:id="@+id/newGender"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/male"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/male" />
+
+                            <RadioButton
+                                android:id="@+id/female"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/female" />
+
+                            <RadioButton
+                                android:id="@+id/another"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/another" />
+                        </RadioGroup>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="10dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/borda_layout">
+                    
+                        <TextView
+                            android:id="@+id/contactAndSecurity"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:layout_marginTop="10dp"
+                            android:text="@string/contact_security_text"
+                            android:textStyle="bold"
+                            android:textSize="30sp" />
+
+                        <EditText
+                            android:id="@+id/newLoginPrompt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:autofillHints="none"
+                            android:hint="@string/login_prompt"
+                            android:drawableStart="@drawable/email"
+                            android:drawablePadding="10dp"
+                            android:inputType="textEmailAddress"/>
+
+                        <EditText
+                            android:id="@+id/newLoginPromptConfirm"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:autofillHints="none"
+                            android:hint="@string/login_prompt_confirm"
+                            android:drawableStart="@drawable/email"
+                            android:drawablePadding="10dp"
+                            android:inputType="textEmailAddress"/>
+                    
+                        <EditText
+                            android:id="@+id/newPasswordPrompt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:autofillHints="none"
+                            android:hint="@string/password_prompt"
+                            android:drawableStart="@drawable/password"
+                            android:drawablePadding="10dp"
+                            android:inputType="textPassword"/>
+
+                        <EditText
+                            android:id="@+id/newPasswordPromptConfirm"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:autofillHints="none"
+                            android:hint="@string/password_prompt_confirm"
+                            android:drawableStart="@drawable/password"
+                            android:drawablePadding="10dp"
+                            android:inputType="textPassword"/>
+
+                        <EditText
+                            android:id="@+id/newPhonePrompt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:hint="@string/phone_prompt"
+                            android:drawableStart="@drawable/password"
+                            android:drawablePadding="10dp"
+                            android:inputType="phone"
+                            android:maxLength="11"
+                            android:ems="10" />
+                    
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="10dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/borda_layout">
+
+                        <TextView
+                            android:id="@+id/address"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:layout_marginTop="10dp"
+                            android:text="@string/address_text"
+                            android:textStyle="bold"
+                            android:textSize="30sp" />
+
+                        <EditText
+                            android:id="@+id/newCep"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/cep_prompt"
+                            android:inputType="number"
+                            android:maxLength="8"
+                            android:layout_marginTop="6dp"
+                            android:drawablePadding="10dp"
+                            android:ems="8" />
+
+                        <EditText
+                            android:id="@+id/newStreet"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/street_prompt"
+                            android:inputType="textPostalAddress"
+                            android:layout_marginTop="6dp"
+                            android:drawablePadding="10dp"
+                            android:maxLines="1" />
+
+                        <EditText
+                            android:id="@+id/newCity"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/city_prompt"
+                            android:inputType="textCapWords"
+                            android:layout_marginTop="6dp"
+                            android:drawablePadding="10dp"
+                            android:maxLines="1" />
+
+                        <EditText
+                            android:id="@+id/newDistrict"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/district_prompt"
+                            android:inputType="textCapWords"
+                            android:layout_marginTop="6dp"
+                            android:drawablePadding="10dp"
+                            android:maxLines="1" />
+
+                        <EditText
+                            android:id="@+id/newNumberAddress"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/number_address_prompt"
+                            android:inputType="number"
+                            android:layout_marginTop="6dp"
+                            android:drawablePadding="10dp"
+                            android:maxLines="1" />
+
+                        <EditText
+                            android:id="@+id/newComplement"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="text"
+                            android:hint="@string/complement_prompt"
+                            android:autofillHints="none"
+                            android:drawableStart="@drawable/user"
+                            android:layout_marginTop="6dp"
+                            android:drawablePadding="10dp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="10dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/borda_layout">
+
+                        <TextView
+                            android:id="@+id/newConfigs"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:layout_marginTop="10dp"
+                            android:text="@string/configs_text"
+                            android:textStyle="bold"
+                            android:textSize="30sp" />
+                        
+                        <RadioGroup
+                            android:id="@+id/newUserType"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/adm"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/adm_buttom" />
+
+                            <RadioButton
+                                android:id="@+id/member"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/member_buttom" />
+                        </RadioGroup>
+
+                        <RadioGroup
+                            android:id="@+id/userTerms"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/acceptButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/accept_buttom" />
+
+                            <RadioButton
+                                android:id="@+id/declineButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/decline_buttom" />
+                        </RadioGroup>
+
+                    </LinearLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp">
+
+                <Button
+                    android:id="@+id/btnCadastro"
+                    style="@style/BotaoAzul"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cadastro_button"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintWidth_percent="0.8" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+            >
+
+            <TextView
+                android:id="@+id/txtLoginAccount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:gravity="center"
+                android:text="@string/login_account_text"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/btnLoginAccount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:paddingStart="2dp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textColor="@color/azul_escuro"
+                android:text="@string/login_account_btn"
+                android:textSize="15sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/footer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="bottom|center_horizontal"
+                android:orientation="vertical"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="10dp"
+                android:padding="16dp">
+
+                <ImageView
+                    android:id="@+id/imgFooter"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:contentDescription="@string/my_image_description"
+                    android:src="@drawable/devminds" />
+
+                <TextView
+                    android:id="@+id/txtFooter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/devminds_message"
+                    android:textSize="11sp" />
+
+            </LinearLayout>
 
         </LinearLayout>
-
-    </LinearLayout>
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
