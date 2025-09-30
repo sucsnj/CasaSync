@@ -19,7 +19,7 @@
             android:gravity="center"
             android:orientation="vertical"
             android:padding="28dp"
-            android:layout_marginTop="50dp">
+            android:layout_marginTop="30dp">
 
             <ImageView
                 android:layout_width="160dp"
@@ -31,7 +31,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="14dp"
                 android:text="@string/new_user_text"
                 android:textStyle="bold"
                 android:textSize="36sp" />
@@ -41,7 +41,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:orientation="vertical"
-                        android:padding="28dp"
+                        android:padding="10dp"
                         android:layout_marginTop="10dp"
                         android:background="@drawable/borda_layout">
 
@@ -53,7 +53,7 @@
                             android:layout_marginTop="10dp"
                             android:text="@string/personal_data_text"
                             android:textStyle="bold"
-                            android:textSize="36sp" />
+                            android:textSize="30sp" />
                     
                         <EditText
                             android:id="@+id/newUserPrompt"
@@ -70,6 +70,7 @@
                             android:id="@+id/newBirthdayPrompt"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
                             android:hint="@string/date_prompt"
                             android:focusable="false"
                             android:clickable="true"
@@ -106,7 +107,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:orientation="vertical"
-                        android:padding="28dp"
+                        android:padding="10dp"
                         android:layout_marginTop="10dp"
                         android:background="@drawable/borda_layout">
                     
@@ -115,10 +116,10 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="start"
-                            android:layout_marginTop="16dp"
-                            android:text="@string/contactSecurity"
+                            android:layout_marginTop="10dp"
+                            android:text="@string/contact_security_text"
                             android:textStyle="bold"
-                            android:textSize="36sp" />
+                            android:textSize="30sp" />
 
                         <EditText
                             android:id="@+id/newLoginPrompt"
@@ -183,8 +184,8 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:orientation="vertical"
-                        android:padding="28dp"
-                        android:layout_marginTop="5dp"
+                        android:padding="10dp"
+                        android:layout_marginTop="10dp"
                         android:background="@drawable/borda_layout">
 
                         <TextView
@@ -192,10 +193,10 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="start"
-                            android:layout_marginTop="16dp"
-                            android:text="@string/address"
+                            android:layout_marginTop="10dp"
+                            android:text="@string/address_text"
                             android:textStyle="bold"
-                            android:textSize="36sp" />
+                            android:textSize="30sp" />
 
                         <EditText
                             android:id="@+id/newCep"
@@ -266,8 +267,8 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:orientation="vertical"
-                        android:padding="28dp"
-                        android:layout_marginTop="5dp"
+                        android:padding="10dp"
+                        android:layout_marginTop="10dp"
                         android:background="@drawable/borda_layout">
 
                         <TextView
@@ -275,10 +276,10 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="start"
-                            android:layout_marginTop="16dp"
-                            android:text="@string/configs"
+                            android:layout_marginTop="10dp"
+                            android:text="@string/configs_text"
                             android:textStyle="bold"
-                            android:textSize="36sp" />
+                            android:textSize="30sp" />
                         
                         <RadioGroup
                             android:id="@+id/newUserType"
@@ -290,13 +291,13 @@
                                 android:id="@+id/adm"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/adm" />
+                                android:text="@string/adm_buttom" />
 
                             <RadioButton
                                 android:id="@+id/member"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/member" />
+                                android:text="@string/member_buttom" />
                         </RadioGroup>
 
                         <RadioGroup
@@ -309,13 +310,13 @@
                                 android:id="@+id/acceptButton"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/accept" />
+                                android:text="@string/accept_buttom" />
 
                             <RadioButton
                                 android:id="@+id/declineButton"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/decline" />
+                                android:text="@string/decline_buttom" />
                         </RadioGroup>
 
                     </LinearLayout>
@@ -371,6 +372,8 @@
                 android:layout_height="match_parent"
                 android:gravity="bottom|center_horizontal"
                 android:orientation="vertical"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="10dp"
                 android:padding="16dp">
 
                 <ImageView
