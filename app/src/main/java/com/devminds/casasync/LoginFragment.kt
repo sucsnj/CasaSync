@@ -3,7 +3,7 @@ package com.devminds.casasync
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
-import com.example.casasync.Utils.safeShowDialog
+import com.devminds.casasync.Utils.safeShowDialog
 
 class LoginFragment : BaseFragment(R.layout.fragment_login) {
 
