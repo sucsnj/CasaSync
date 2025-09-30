@@ -39,7 +39,7 @@
             android:layout_marginTop="16dp"
             android:autofillHints="username"
             android:hint="@string/login_prompt"
-            android:drawableStart="@drawable/email"
+            android:drawableStart="@drawable/ico_email"
             android:drawablePadding="10dp"
             android:inputType="textEmailAddress" />
 
@@ -50,7 +50,7 @@
             android:layout_marginTop="16dp"
             android:autofillHints="password"
             android:hint="@string/password_prompt"
-            android:drawableStart="@drawable/password"
+            android:drawableStart="@drawable/ico_password"
             android:drawablePadding="10dp"
             android:inputType="textPassword" />
 
