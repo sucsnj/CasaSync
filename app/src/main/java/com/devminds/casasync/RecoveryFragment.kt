@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.TextView
 import com.devminds.casasync.CadastroFragment.Companion.users
 import com.devminds.casasync.Utils.safeShowDialog
+import com.devminds.casasync.R
 
 // declaração de classe para recuperação de senha
 class RecoveryFragment : BaseFragment(R.layout.fragment_recovery) {
