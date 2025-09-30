@@ -1,9 +1,9 @@
-package com.example.casasync
+package com.devminds.casasync
 
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
-import com.example.casasync.SnackbarUtils.showMessage
+import com.devminds.casasync.SnackbarUtils.showMessage
 
 // declaração de classe com fragmento para o cadastro
 class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {

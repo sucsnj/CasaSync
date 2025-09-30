@@ -1,11 +1,9 @@
-package com.example.casasync
+package com.devminds.casasync
 
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
-import com.example.casasync.SnackbarUtils.showMessage
 
-// declaração de classe com fragmento para o login
 class LoginFragment : BaseFragment(R.layout.fragment_login) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -37,9 +35,13 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                 if (userFound != null) {
 
                     // mostra a mensagem de sucesso e troca de tela
-                    showMessage(requireContext(),
-                        getString(R.string.login_success_message),
-                        R.drawable.casasync)
+                    context?.let {
+                        DialogUtils.show(
+                            it,
+                            getString(R.string.login_success_message),
+                            R.drawable.casasync
+                        )
+                    }
 
                     // troca de tela para a tela inicial
                     parentFragmentManager.beginTransaction()
@@ -51,15 +53,22 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                         .commit() // finaliza a transação
                 } else {
                     // mostra a mensagem de erro
-                    showMessage(requireContext(),
-                        getString(R.string.login_error_message),
-                        R.drawable.casasync)
+                    context?.let { // verifica se o contexto não é nulo
+                        DialogUtils.show(
+                            it,
+                            getString(R.string.login_error_message),
+                            R.drawable.casasync
+                        )
+                    }
                 }
             } else {
-                // mostra a mensagem de erro
-                showMessage(requireContext(),
-                    getString(R.string.login_empty_message),
-                    R.drawable.casasync)
+                context?.let {
+                    DialogUtils.show(
+                        it,
+                        getString(R.string.login_empty_message),
+                        R.drawable.casasync
+                    )
+                }
             }
         }
 
