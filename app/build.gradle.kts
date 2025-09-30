@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.casasync"
+    namespace = "com.devminds.casasync"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.example.casasync"
+        applicationId = "com.devminds.casasync"
         minSdk = 26
         targetSdk = 36
         versionCode = 1

@@ -1,9 +1,9 @@
-package com.example.casasync
+package com.devminds.casasync
 
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
-import com.example.casasync.Utils.safeShowDialog
+import com.devminds.casasync.SnackbarUtils.showMessage
 
 // declaração de classe com fragmento para o cadastro
 class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
@@ -39,7 +39,9 @@ class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
 
             // se o login já existe, mostra a mensagem de erro
             if (loginEncontrado != null) {
-                safeShowDialog(getString(R.string.login_found_message))
+                showMessage(requireContext(),
+                    getString(R.string.login_found_message),
+                    R.drawable.casasync)
                 return@setOnClickListener // sai da função, impedindo o cadastro
             }
 
