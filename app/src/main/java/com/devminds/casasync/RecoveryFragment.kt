@@ -4,11 +4,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import com.devminds.casasync.CadastroFragment.Companion.users
-import com.devminds.casasync.SnackbarUtils.showMessage
-import com.devminds.casasync.BaseFragment
-import com.devminds.casasync.LoginFragment
-import com.devminds.casasync.R
-import com.devminds.casasync.TransitionType
 import com.devminds.casasync.Utils.safeShowDialog
 
 // declaração de classe para recuperação de senha
