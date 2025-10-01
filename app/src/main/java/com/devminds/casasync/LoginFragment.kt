@@ -10,6 +10,10 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // testando o firestore
+        FirestoreHelper.escreverUsuario()
+        FirestoreHelper.lerUsuarios()
+
         // guarda os dados de login e senha
         val txtLoginPrompt = view.findViewById<TextView>(R.id.txtLoginPrompt)
         val txtPasswordPrompt = view.findViewById<TextView>(R.id.txtPasswordPrompt)
