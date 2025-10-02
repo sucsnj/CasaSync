@@ -10,7 +10,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.devminds.casasync.R
 
-class HomeFragment : Fragment(R.layout.fragment_tela_inicial) {
+class MemberFragment : Fragment(R.layout.fragment_tela_inicial) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -26,7 +26,7 @@ class HomeFragment : Fragment(R.layout.fragment_tela_inicial) {
 
             parentFragmentManager.beginTransaction()
                 .setCustomTransition(TransitionType.SLIDE)
-                .replace(R.id.fragment_container, HouseFragment())
+                .replace(R.id.fragment_container, TaskFragment())
                 .addToBackStack(null)
                 .commit()
         }
