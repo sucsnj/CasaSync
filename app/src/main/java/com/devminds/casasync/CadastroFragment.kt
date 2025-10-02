@@ -4,71 +4,60 @@ import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import com.devminds.casasync.Utils.safeShowDialog
-import com.devminds.casasync.R
+import com.google.firebase.firestore.FirebaseFirestore
 
-// declaração de classe com fragmento para o cadastro
 class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
 
-    // banco de dados (em memória)
+    // permanece aqui para evitar erros de inicialização (será removido em breve)
     companion object {
-        var users = mutableListOf<User>() // lista de usuários (arrayList)
+        val users = mutableListOf<User>()
     }
 
+    // lógica real
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // lógica para guardar os cadastros (em memória)
-
         // guarda os dados de cadastro
-        val newUserPrompt = view.findViewById<TextView>(R.id.newUserPrompt) // nome
-        val newLoginPrompt = view.findViewById<TextView>(R.id.newLoginPrompt) // login (email)
-        val newPasswordPrompt = view.findViewById<TextView>(R.id.newPasswordPrompt) // senha
+        val nomeEditText = view.findViewById<TextView>(R.id.newUserPrompt)
 
-        val btnCadastro = view.findViewById<TextView>(R.id.btnCadastro) // botão de cadastro
-
+        val btnCadastro = view.findViewById<TextView>(R.id.btnCadastro)
         btnCadastro.setOnClickListener {
 
-            // transforma os dados em string
-            val name = newUserPrompt.text.toString()
-            val login = newLoginPrompt.text.toString()
-            val password = newPasswordPrompt.text.toString()
+            // o trim() remove espaços em branco nas extremidades da string
+            val nomeDigitado = nomeEditText.text.toString().trim()
 
-            // verificação contra duplicidade de cadastro
+//                return@setOnClickListener // sai da função, impedindo o cadastro
 
-            // verifica se o login já existe
-            val loginEncontrado = users.find { it.login == login }
+            if (nomeDigitado.isNotEmpty()) {
+                val db = FirebaseFirestore.getInstance() // cria instância do banco de dados
+                val usuario = hashMapOf("nome" to nomeDigitado)
 
-            // se o login já existe, mostra a mensagem de erro
-            if (loginEncontrado != null) {
-                safeShowDialog(getString(R.string.login_found_message))
-                return@setOnClickListener // sai da função, impedindo o cadastro
+                db.collection("usuarios").add(usuario)
+                    .addOnSuccessListener { documentReference ->
+                        safeShowDialog(getString(R.string.cadastro_success_message))
+
+                        parentFragmentManager.beginTransaction() // troca de tela para o login
+                            .setCustomTransition(TransitionType.FADE)
+                            .replace(R.id.fragment_container, LoginFragment())
+                            .addToBackStack(null)
+                            .commit()
+                    }
+                    .addOnFailureListener { e ->
+                        safeShowDialog(getString(R.string.cadastro_error_message))
+                    }
+
+            } else {
+                safeShowDialog(getString(R.string.cadastro_empty_message))
             }
 
-            // se estiver tudo preenchido, cadastra o usuário
-            if (name.isNotEmpty() && login.isNotEmpty() && password.isNotEmpty()) {
-                users.add(User(name, login, password)) // adiciona o usuário à lista
-                safeShowDialog(getString(R.string.cadastro_success_message))
-
-                parentFragmentManager.beginTransaction() // troca de tela para o login
+            val btnLoginAccount = view.findViewById<TextView>(R.id.btnLoginAccount)
+            btnLoginAccount.setOnClickListener {
+                parentFragmentManager.beginTransaction()
                     .setCustomTransition(TransitionType.FADE)
                     .replace(R.id.fragment_container, LoginFragment())
                     .addToBackStack(null)
                     .commit()
-
-            } else {
-                safeShowDialog(getString(R.string.cadastro_error_message))
             }
-        }
-
-        // lógica da troca de tela para o login
-        val btnLoginAccount = view.findViewById<TextView>(R.id.btnLoginAccount) // botão de login
-
-        btnLoginAccount.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .setCustomTransition(TransitionType.FADE)
-                .replace(R.id.fragment_container, LoginFragment())
-                .addToBackStack(null)
-                .commit()
         }
     }
 }

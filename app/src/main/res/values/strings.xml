@@ -27,6 +27,8 @@
     <string name="cadastro_success_message">Cadastro realizado com sucesso!</string>"
     <string name="cadastro_error_message">Erro ao realizar cadastro. Verifique os dados informados.</string>
 
+    <string name="cadastro_empty_message">Preencha os campos de cadastro!</string>
+
     <string name="recovey_text">Recuperar Senha</string>
     <string name="validator_button">Validar</string>
     <string name="recovery_button">Trocar Senha</string>
