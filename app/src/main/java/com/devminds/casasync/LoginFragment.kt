@@ -7,6 +7,8 @@ import com.devminds.casasync.Utils.safeShowDialog
 
 class LoginFragment : BaseFragment(R.layout.fragment_login) {
 
+    val userList = User.users
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -28,7 +30,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
             if (login.isNotEmpty() && password.isNotEmpty()) {
 
                 // pega o usuário com os dados de login e senha
-                val userFound = CadastroFragment.users.find {
+                val userFound = userList.find {
                     it.login == login && it.password == password
                 }
 
