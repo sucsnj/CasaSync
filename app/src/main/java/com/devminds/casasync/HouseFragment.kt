@@ -10,39 +10,39 @@ import androidx.recyclerview.widget.RecyclerView
 class HouseFragment : Fragment(R.layout.fragment_house) {
 
     // membros mockados
-    class Member(
+    class Dependent(
         val id: String,
         val name: String
     )
 
-    private val memberList = mutableListOf<Member>(
-        Member("1", "Membro 1"),
-        Member("2", "Membro 2"),
-        Member("3", "Membro 3")
+    private val dependentList = mutableListOf<Dependent>(
+        Dependent("1", "Membro 1"),
+        Dependent("2", "Membro 2"),
+        Dependent("3", "Membro 3")
     )
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val btnAddMember = view.findViewById<TextView>(R.id.btnAddMember)
-        btnAddMember.setOnClickListener {
+        val btnAddDependent = view.findViewById<TextView>(R.id.btnAddDependent)
+        btnAddDependent.setOnClickListener {
 
-            // TODO lógica para add membro
+            // TODO lógica para add dependente
         }
 
-        val recyclerMembers = view.findViewById<RecyclerView>(R.id.recyclerMembers)
-        recyclerMembers.layoutManager = LinearLayoutManager(requireContext())
+        val recyclerDependent = view.findViewById<RecyclerView>(R.id.recyclerDependent)
+        recyclerDependent.layoutManager = LinearLayoutManager(requireContext())
 
-        recyclerMembers.adapter = GenericAdapter(
-            items = memberList,
+        recyclerDependent.adapter = GenericAdapter(
+            items = dependentList,
             layoutResId = R.layout.item_generic,
-            bind = { itemView, member ->
-                itemView.findViewById<TextView>(R.id.itemName).text = member.name
+            bind = { itemView, dependent ->
+                itemView.findViewById<TextView>(R.id.itemName).text = dependent.name
             },
-            onItemClick = { selectedMember ->
+            onItemClick = { selectedDependent ->
                 val fragment = DependentFragment().apply {
                     arguments = Bundle().apply {
-                        putString("memberId", selectedMember.id)
+                        putString("dependentId", selectedDependent.id)
                     }
                 }
 

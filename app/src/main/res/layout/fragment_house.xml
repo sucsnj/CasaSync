@@ -16,7 +16,7 @@
         android:padding="28dp">
 
         <Button
-            android:id="@+id/btnAddMember"
+            android:id="@+id/btnAddDependent"
             style="@style/BotaoAzul"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -27,7 +27,7 @@
             app:layout_constraintWidth_percent="0.8" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerMembers"
+            android:id="@+id/recyclerDependent"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

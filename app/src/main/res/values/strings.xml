@@ -55,7 +55,7 @@
     <string name="complement_prompt">Complemento (casa, apartamento...)</string>
     <string name="configs_text">Configurações</string>
     <string name="adm_buttom">Responsável</string>
-    <string name="member_buttom">Membro</string>
+    <string name="dependent_buttom">Dependente</string>
     <string name="accept_buttom">Aceitar Termos de uso</string>
     <string name="decline_buttom">Recusar Termos de uso</string>
 

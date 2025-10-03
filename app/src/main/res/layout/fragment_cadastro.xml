@@ -316,10 +316,10 @@
                         android:text="@string/adm_buttom" />
 
                     <RadioButton
-                        android:id="@+id/member"
+                        android:id="@+id/dependent"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/member_buttom" />
+                        android:text="@string/dependent_buttom" />
                 </RadioGroup>
 
                 <RadioGroup

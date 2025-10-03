@@ -3,7 +3,7 @@ package com.devminds.casasync
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
-import com.devminds.casasync.HouseFragment.Member
+import com.devminds.casasync.HouseFragment.Dependent
 import com.devminds.casasync.Utils.safeShowDialog
 import com.devminds.casasync.R
 
