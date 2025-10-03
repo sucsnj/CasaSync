@@ -29,6 +29,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val username = arguments?.getString("username") ?: "Gandalf, o Branco"
+
         val btnNewHouse = view.findViewById<TextView>(R.id.btnAddHouse)
         btnNewHouse.setOnClickListener {
             val context = requireContext()

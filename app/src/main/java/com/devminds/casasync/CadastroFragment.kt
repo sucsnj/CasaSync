@@ -7,20 +7,12 @@ import com.devminds.casasync.HouseFragment.Member
 import com.devminds.casasync.Utils.safeShowDialog
 import com.devminds.casasync.R
 
-// declaração de classe com fragmento para o cadastro
 class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
 
-    // banco de dados (em memória)
-    companion object {
-        var users = mutableListOf<User>(
-            User("admin", "admin", "admin")
-        ) // lista de usuários (arrayList)
-    }
+    val userList = User.users
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        // lógica para guardar os cadastros (em memória)
 
         // guarda os dados de cadastro
         val newUserPrompt = view.findViewById<TextView>(R.id.newUserPrompt) // nome
@@ -39,7 +31,7 @@ class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
             // verificação contra duplicidade de cadastro
 
             // verifica se o login já existe
-            val loginEncontrado = users.find { it.login == login }
+            val loginEncontrado = userList.find { it.login == login }
 
             // se o login já existe, mostra a mensagem de erro
             if (loginEncontrado != null) {
@@ -49,7 +41,7 @@ class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
 
             // se estiver tudo preenchido, cadastra o usuário
             if (name.isNotEmpty() && login.isNotEmpty() && password.isNotEmpty()) {
-                users.add(User(name, login, password)) // adiciona o usuário à lista
+                userList.add(User(name, login, password)) // adiciona o usuário à lista
                 safeShowDialog(getString(R.string.cadastro_success_message))
 
                 parentFragmentManager.beginTransaction() // troca de tela para o login
