@@ -9,16 +9,16 @@ import androidx.recyclerview.widget.RecyclerView
 
 class HouseFragment : Fragment(R.layout.fragment_house) {
 
-    // membros mockados
+    // dependentes mockados
     class Dependent(
         val id: String,
         val name: String
     )
 
     private val dependentList = mutableListOf<Dependent>(
-        Dependent("1", "Membro 1"),
-        Dependent("2", "Membro 2"),
-        Dependent("3", "Membro 3")
+        Dependent("1", "Dependente 1"),
+        Dependent("2", "Dependente 2"),
+        Dependent("3", "Dependente 3")
     )
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
