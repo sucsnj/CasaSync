@@ -6,6 +6,7 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import java.util.UUID
@@ -13,6 +14,7 @@ import java.util.UUID
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private lateinit var adapter: GenericAdapter<House>
+    private val userViewModel: UserViewModel by activityViewModels()
 
     // casas mockadas
     class House(
@@ -29,7 +31,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val username = arguments?.getString("username") ?: "Gandalf, o Branco"
+        val txtWelcome = view.findViewById<TextView>(R.id.welcomeText)
+
+        userViewModel.user.observe(viewLifecycleOwner) { user ->
+            txtWelcome.text = "Bem-vindo, ${user?.name ?: "Usuário"}"
+        }
 
         val btnNewHouse = view.findViewById<TextView>(R.id.btnAddHouse)
         btnNewHouse.setOnClickListener {

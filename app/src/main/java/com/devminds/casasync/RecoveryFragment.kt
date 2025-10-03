@@ -3,12 +3,13 @@ package com.devminds.casasync
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
-import com.devminds.casasync.CadastroFragment.Companion.users
 import com.devminds.casasync.Utils.safeShowDialog
 import com.devminds.casasync.R
 
 // declaração de classe para recuperação de senha
 class RecoveryFragment : BaseFragment(R.layout.fragment_recovery) {
+
+    val userList = User.users
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -27,7 +28,7 @@ class RecoveryFragment : BaseFragment(R.layout.fragment_recovery) {
         btnRecovery.setOnClickListener {
 
             val login = txtLoginPromptRecovery.text.toString()
-            loginEncontrado = users.find { it.login == login }
+            loginEncontrado = userList.find { it.login == login }
 
             if (login.isNotEmpty()) {
                 if (loginEncontrado != null) {

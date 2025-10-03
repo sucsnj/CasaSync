@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import com.devminds.casasync.Utils.safeShowDialog
+import androidx.fragment.app.activityViewModels
 
 class LoginFragment : BaseFragment(R.layout.fragment_login) {
 
     val userList = User.users
+    private val userViewModel: UserViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -41,21 +43,16 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                         safeShowDialog(getString(R.string.login_success_message))
                     }
 
-                    // leva informação do usuário logado para a HomeFragment()
-                    val bundle = Bundle().apply {
-                        putString("username", userFound.name)
-                    }
+                    userViewModel.setUser(userFound)
 
                     val fragment = HomeFragment()
-                    fragment.arguments = bundle
 
                     parentFragmentManager.beginTransaction()
                         .setCustomTransition(TransitionType.SLIDE)
 
                         .replace(R.id.fragment_container, fragment)
-                        .commit() // finaliza a transação
+                        .commit()
                 } else {
-                    // mostra a mensagem de erro
                     safeShowDialog(getString(R.string.login_error_message))
                 }
             } else {
