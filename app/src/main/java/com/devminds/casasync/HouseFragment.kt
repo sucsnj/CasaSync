@@ -15,7 +15,7 @@ class HouseFragment : Fragment(R.layout.fragment_house) {
         val name: String
     )
 
-    private val memberList = listOf(
+    private val memberList = mutableListOf<Member>(
         Member("1", "Membro 1"),
         Member("2", "Membro 2"),
         Member("3", "Membro 3")
@@ -27,7 +27,7 @@ class HouseFragment : Fragment(R.layout.fragment_house) {
         val btnAddMember = view.findViewById<TextView>(R.id.btnAddMember)
         btnAddMember.setOnClickListener {
 
-            // lógica para add membro
+            // TODO lógica para add membro
         }
 
         val recyclerMembers = view.findViewById<RecyclerView>(R.id.recyclerMembers)

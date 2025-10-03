@@ -3,6 +3,7 @@ package com.devminds.casasync
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import com.devminds.casasync.HouseFragment.Member
 import com.devminds.casasync.Utils.safeShowDialog
 import com.devminds.casasync.R
 
@@ -11,7 +12,9 @@ class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
 
     // banco de dados (em memória)
     companion object {
-        var users = mutableListOf<User>() // lista de usuários (arrayList)
+        var users = mutableListOf<User>(
+            User("admin", "admin", "admin")
+        ) // lista de usuários (arrayList)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

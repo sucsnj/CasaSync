@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
 class GenericAdapter<T>(
-    private val items: List<T>,
+    private val items: MutableList<T>,
     private val layoutResId: Int,
     private val bind: (View, T) -> Unit,
     private val onItemClick: (T) -> Unit
@@ -29,4 +29,9 @@ class GenericAdapter<T>(
     }
 
     override fun getItemCount() = items.size
+
+    fun addItem(item: T) {
+        items.add(item)
+        notifyItemInserted(items.size - 1)
+    }
 }
