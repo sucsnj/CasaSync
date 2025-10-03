@@ -15,18 +15,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private lateinit var adapter: GenericAdapter<House>
     private val userViewModel: UserViewModel by activityViewModels()
-
-    // casas mockadas
-    class House(
-        val id: String,
-        val name: String
-    )
-
-    private val houseList = mutableListOf<House>(
-        House("1", "Casa 1"),
-        House("2", "Casa 2"),
-        House("3", "Casa 3")
-    )
+    private val houseList: MutableList<House>
+        get() = userViewModel.user.value?.houses ?: mutableListOf()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -54,7 +44,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                             id = UUID.randomUUID().toString(),
                             name = houseName
                         )
-                        adapter.addItem(newHouse)
+                        userViewModel.user.value?.houses?.add(newHouse)
+                        adapter.notifyItemInserted(houseList.size - 1)
                     }
                 }
                 .setNegativeButton("Cancelar", null)
