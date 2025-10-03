@@ -35,18 +35,22 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                 // se o usuário for encontrado
                 if (userFound != null) {
 
-                    // mostra a mensagem de sucesso e troca de tela
                     context?.let {
                         safeShowDialog(getString(R.string.login_success_message))
                     }
 
-                    // troca de tela para a tela inicial
+                    // leva informação do usuário logado para a HomeFragment()
+                    val bundle = Bundle().apply {
+                        putString("username", userFound.name)
+                    }
+
+                    val fragment = HomeFragment()
+                    fragment.arguments = bundle
+
                     parentFragmentManager.beginTransaction()
                         .setCustomTransition(TransitionType.SLIDE)
 
-                        // muda o fragmento (tela)
-                        .replace(R.id.fragment_container, HomeFragment())
-                        .addToBackStack(null) // guarda a tela atual para voltar quando precisar
+                        .replace(R.id.fragment_container, fragment)
                         .commit() // finaliza a transação
                 } else {
                     // mostra a mensagem de erro
