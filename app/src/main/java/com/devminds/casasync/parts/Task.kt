@@ -1,7 +1,7 @@
 package com.devminds.casasync.parts
 
-data class House(
+data class Task(
     val id: String,
     val name: String,
-    val dependent: MutableList<Dependent> = mutableListOf()
+    val description: String,
 )

@@ -6,8 +6,10 @@ import android.widget.TextView
 import com.devminds.casasync.utils.Utils.safeShowDialog
 import com.devminds.casasync.R
 import com.devminds.casasync.TransitionType
+import com.devminds.casasync.parts.House
 import com.devminds.casasync.parts.User
 import com.devminds.casasync.setCustomTransition
+import java.util.UUID
 
 class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
 
@@ -43,7 +45,12 @@ class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
 
             // se estiver tudo preenchido, cadastra o usuário
             if (name.isNotEmpty() && login.isNotEmpty() && password.isNotEmpty()) {
-                userList.add(User(name, login, password)) // adiciona o usuário à lista
+                userList.add(User(
+                    id = UUID.randomUUID().toString(),
+                    name,
+                    login,
+                    password
+                )) // adiciona o usuário à lista
                 safeShowDialog(getString(R.string.cadastro_success_message))
 
                 parentFragmentManager.beginTransaction() // troca de tela para o login
