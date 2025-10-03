@@ -1,14 +1,19 @@
-package com.devminds.casasync
+package com.devminds.casasync.fragments
 
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
-import com.devminds.casasync.Utils.safeShowDialog
+import com.devminds.casasync.utils.Utils.safeShowDialog
 import androidx.fragment.app.activityViewModels
+import com.devminds.casasync.R
+import com.devminds.casasync.TransitionType
+import com.devminds.casasync.utils.User
+import com.devminds.casasync.views.UserViewModel
+import com.devminds.casasync.setCustomTransition
 
 class LoginFragment : BaseFragment(R.layout.fragment_login) {
 
-    val userList = User.users
+    val userList = User.Companion.users
     private val userViewModel: UserViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -1,4 +1,4 @@
-package com.devminds.casasync
+package com.devminds.casasync.utils
 
 import android.app.Dialog
 import android.content.Context

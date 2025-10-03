@@ -1,4 +1,4 @@
-package com.devminds.casasync
+package com.devminds.casasync.fragments
 
 import android.os.Bundle
 import android.view.View
@@ -6,6 +6,8 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.devminds.casasync.GenericAdapter
+import com.devminds.casasync.R
 
 class HouseFragment : Fragment(R.layout.fragment_house) {
 

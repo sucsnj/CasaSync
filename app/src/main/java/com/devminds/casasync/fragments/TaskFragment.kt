@@ -1,11 +1,7 @@
-package com.devminds.casasync
+package com.devminds.casasync.fragments
 
 import android.os.Bundle
 import android.view.View
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ListView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.devminds.casasync.R

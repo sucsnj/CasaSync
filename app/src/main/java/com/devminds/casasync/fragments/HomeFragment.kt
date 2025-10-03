@@ -1,4 +1,4 @@
-package com.devminds.casasync
+package com.devminds.casasync.fragments
 
 import android.os.Bundle
 import android.view.View
@@ -9,6 +9,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.devminds.casasync.GenericAdapter
+import com.devminds.casasync.utils.House
+import com.devminds.casasync.R
+import com.devminds.casasync.views.UserViewModel
 import java.util.UUID
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
@@ -78,7 +82,3 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         recyclerHouses.adapter = adapter
     }
 }
-
-
-
-

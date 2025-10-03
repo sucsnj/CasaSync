@@ -1,4 +1,4 @@
-package com.devminds.casasync
+package com.devminds.casasync.utils
 
 import android.content.Context
 import android.view.Gravity

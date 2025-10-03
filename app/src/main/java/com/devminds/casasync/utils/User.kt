@@ -1,4 +1,4 @@
-package com.devminds.casasync
+package com.devminds.casasync.utils
 
 // classe que representa um usuário (em memória)
 data class User(

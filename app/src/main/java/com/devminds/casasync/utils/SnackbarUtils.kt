@@ -1,4 +1,4 @@
-package com.devminds.casasync
+package com.devminds.casasync.utils
 
 import android.app.Activity
 import android.content.res.Resources
@@ -12,6 +12,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.google.android.material.snackbar.Snackbar
 import android.content.Context
+import android.graphics.Color
 import android.os.Build
 import android.widget.Toast
 import com.devminds.casasync.R
@@ -66,7 +67,7 @@ object SnackbarUtils {
 
         // define o layout do snackbar
         val snackbarLayout = snackbar.view as ViewGroup
-        snackbarLayout.setBackgroundColor(android.graphics.Color.TRANSPARENT) // remove o fundo padrão
+        snackbarLayout.setBackgroundColor(Color.TRANSPARENT) // remove o fundo padrão
         snackbarLayout.setPadding(0, 0, 0, 0) // remove o padding padrão
         snackbarLayout.removeAllViews() // remove todas as views padrão
         snackbarLayout.addView(customView) // adiciona a view customizada
@@ -78,7 +79,7 @@ object SnackbarUtils {
     // função para mostrar um toast "snackbar" com base na versão do android
     fun showMessage(context: Context, message: String, iconResId: Int? = null) {
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) { // se for android 14 ou inferior
-            SnackbarUtils.show(context as Activity, message, iconResId) // chama a função "show"
+            show(context as Activity, message, iconResId) // chama a função "show"
         } else {
             Toast.makeText(context, message, Toast.LENGTH_SHORT).show() // mostra o toast padrão
         }
