@@ -5,60 +5,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!--  permite rolagem vertical na tela  -->
-    <ScrollView
+    <LinearLayout
+        android:id="@+id/layoutMember"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/background_layout"
+        android:gravity="center"
         android:orientation="vertical"
+        android:padding="28dp">
 
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <!--    cadastro de usuário    -->
-        <LinearLayout
-            android:id="@+id/layoutMember"
+        <Button
+            android:id="@+id/btnAddTask"
+            style="@style/BotaoAzul"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:background="@drawable/background_layout"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="28dp">
+            android:text="Adicionar Tarefa"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.8" />
 
-            <Button
-                android:id="@+id/btnNewTask"
-                style="@style/BotaoAzul"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Add novo membro"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintWidth_percent="0.8" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerTasks"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
-            <Button
-                android:id="@+id/btnTask1"
-                style="@style/BotaoAzul"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="tarefa 1"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintWidth_percent="0.8" />
-
-            <Button
-                android:id="@+id/btnTask2"
-                style="@style/BotaoAzul"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="tarefa 2"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintWidth_percent="0.8" />
-
-
-        </LinearLayout>
-    </ScrollView>
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -15,30 +15,10 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val btnNewHouse = view.findViewById<TextView>(R.id.btnNewMember)
+        val btnNewHouse = view.findViewById<TextView>(R.id.btnAddTaskName)
         btnNewHouse.setOnClickListener {
 
-            // lógica para add membro
-        }
-
-        val btnMember1 = view.findViewById<TextView>(R.id.btnMember1)
-        btnMember1.setOnClickListener {
-
-            parentFragmentManager.beginTransaction()
-                .setCustomTransition(TransitionType.SLIDE)
-                .replace(R.id.fragment_container, MemberFragment())
-                .addToBackStack(null)
-                .commit()
-        }
-
-        val btnMember2 = view.findViewById<TextView>(R.id.btnMember2)
-        btnMember2.setOnClickListener {
-
-            parentFragmentManager.beginTransaction()
-                .setCustomTransition(TransitionType.SLIDE)
-                .replace(R.id.fragment_container, MemberFragment())
-                .addToBackStack(null)
-                .commit()
+            // lógica para add nome da tarefa
         }
     }
 }
