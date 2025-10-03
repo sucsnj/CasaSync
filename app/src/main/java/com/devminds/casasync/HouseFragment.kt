@@ -40,7 +40,7 @@ class HouseFragment : Fragment(R.layout.fragment_house) {
                 itemView.findViewById<TextView>(R.id.itemName).text = member.name
             },
             onItemClick = { selectedMember ->
-                val fragment = MemberFragment().apply {
+                val fragment = DependentFragment().apply {
                     arguments = Bundle().apply {
                         putString("memberId", selectedMember.id)
                     }
