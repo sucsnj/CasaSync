@@ -6,7 +6,7 @@ import android.widget.TextView
 import com.devminds.casasync.utils.Utils.safeShowDialog
 import com.devminds.casasync.R
 import com.devminds.casasync.TransitionType
-import com.devminds.casasync.utils.User
+import com.devminds.casasync.parts.User
 import com.devminds.casasync.setCustomTransition
 
 class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {

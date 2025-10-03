@@ -10,7 +10,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.devminds.casasync.GenericAdapter
-import com.devminds.casasync.utils.House
+import com.devminds.casasync.parts.House
 import com.devminds.casasync.R
 import com.devminds.casasync.views.UserViewModel
 import java.util.UUID

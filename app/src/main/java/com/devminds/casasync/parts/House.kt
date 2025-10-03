@@ -1,4 +1,4 @@
-package com.devminds.casasync.utils
+package com.devminds.casasync.parts
 
 data class House(
     val id: String,

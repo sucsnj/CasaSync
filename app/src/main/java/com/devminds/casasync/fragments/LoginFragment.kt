@@ -7,7 +7,7 @@ import com.devminds.casasync.utils.Utils.safeShowDialog
 import androidx.fragment.app.activityViewModels
 import com.devminds.casasync.R
 import com.devminds.casasync.TransitionType
-import com.devminds.casasync.utils.User
+import com.devminds.casasync.parts.User
 import com.devminds.casasync.views.UserViewModel
 import com.devminds.casasync.setCustomTransition
 
