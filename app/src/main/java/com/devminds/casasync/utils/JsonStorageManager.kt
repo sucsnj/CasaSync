@@ -9,10 +9,8 @@ object JsonStorageManager {
     fun saveUser(context: Context, user: User, fileName: String = "user_data.json") {
 
         val gson = Gson()
-        val json = gson.toJson(user)
-        context.openFileOutput(fileName, Context.MODE_PRIVATE).use {
-            it.write(json.toByteArray())
-        }
+        val user = userViewModel.user.value
+        val jsonString = gson.toJson(user)
     }
 
     fun loadUser(context: Context, fileName: String = "user_data.json"): User? {

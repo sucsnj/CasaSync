@@ -29,8 +29,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         val txtWelcome = view.findViewById<TextView>(R.id.welcomeText)
 
         // carrega o usuário do json
-//        val user = JsonStorageManager.loadUser(requireContext())
-//        user?.let { userViewModel.setUser(it) }
+        val jsonString = context.openFileInput("user_data.json").bufferedReader().use { it.readText }
+        val user = Gson().fromJson(jsonString, User::class.java)
+        userViewModel.setUser(user)
 
         userViewModel.user.observe(viewLifecycleOwner) { user ->
             txtWelcome.text = "Bem-vindo, ${user?.name ?: "Usuário"}"
@@ -60,7 +61,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                         adapter.notifyItemInserted(houseList.size - 1)
 
                         // persiste o usuário em json
-//                        JsonStorageManager.saveUser(requireContext(), userViewModel.user.value!!)
+                       context.openFileOutput("user_data.json", Context.MODE_PRIVATE).use {
+                            it.write(jsonString.toByteArray())
+                       }
                     }
                 }
                 .setNegativeButton("Cancelar", null)
