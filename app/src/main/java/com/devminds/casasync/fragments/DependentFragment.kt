@@ -105,6 +105,9 @@ class DependentFragment : Fragment(R.layout.fragment_dependent) {
                         )
                         currentDependent?.tasks?.add(newTask)
                         adapter.notifyItemInserted(taskList.size - 1)
+
+                        // persiste o usuário em json
+                        JsonStorageManager.saveUser(requireContext(), userViewModel.user.value!!)
                     }
                 }
                 .setNegativeButton("Cancelar", null)

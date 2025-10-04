@@ -88,6 +88,9 @@ class HouseFragment : Fragment(R.layout.fragment_house) {
                         )
                         houseViewModel.house.value?.dependents?.add(newDependent)
                         adapter.notifyItemInserted(dependentList.size - 1)
+
+                        // persiste o usuário em json
+                        JsonStorageManager.saveUser(requireContext(), userViewModel.user.value!!)
                     }
                 }
                 .setNegativeButton("Cancelar", null)
