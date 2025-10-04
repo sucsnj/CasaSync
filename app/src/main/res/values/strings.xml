@@ -62,5 +62,23 @@
     <string name="never">_Nunca chegará aqui_</string>
     <string name="main_text">para bens sozinho no meio da tela</string>
 
+    <string name="user_photo">Foto do usuário</string>
+    <string name="welcome_user_text">Bem-vindo, </string>
+    <string name="user_text">Gandalf</string>
+    <string name="add_house">Adicionar Casa</string>
+    <string name="house_name">Nome da Casa</string>
+
+    <string name="add_task">Adicionar Tarefa</string>
+    <string name="house_img">Imagem da Casa</string>
+    <string name="enter_house">Você está na casa, </string>
+    <string name="house_text">Bolsão</string>
+
+    <string name="add_dependent">Adicionar Dependente</string>
+    <string name="task_name">Nome da Tarefa</string>
+    
+    
+    <string name="add_buttom">Adicionar</string>
+    <string name="cancel_buttom">Cancelar</string>
+    <string name="dependent_name">Nome do dependente</string>
 
 </resources>
