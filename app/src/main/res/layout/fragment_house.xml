@@ -15,6 +15,24 @@
         android:orientation="vertical"
         android:padding="28dp">
 
+        <!--    entrou na casa    -->
+        <ImageView
+            android:id="@+id/housePhoto"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:contentDescription="Foto do usuário"
+            android:scaleType="centerCrop"
+            android:src="@drawable/devminds" />
+
+        <TextView
+            android:id="@+id/houseName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="Bem-vindo, Gandalf"
+            android:textColor="@android:color/black"
+            android:textSize="18sp" />
+
         <Button
             android:id="@+id/btnAddDependent"
             style="@style/BotaoAzul"
@@ -27,7 +45,7 @@
             app:layout_constraintWidth_percent="0.8" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerDependent"
+            android:id="@+id/recyclerDependents"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
