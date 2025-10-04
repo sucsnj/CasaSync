@@ -46,7 +46,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     if (houseName.isNotEmpty()) {
                         val newHouse = House(
                             id = UUID.randomUUID().toString(),
-                            name = houseName
+                            name = houseName,
+                            ownerId = userViewModel.user.value?.id ?: "devminds"
                         )
                         userViewModel.user.value?.houses?.add(newHouse)
                         adapter.notifyItemInserted(houseList.size - 1)
