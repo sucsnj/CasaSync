@@ -20,7 +20,7 @@
         <ImageView
             android:layout_width="160dp"
             android:layout_height="160dp"
-            android:contentDescription="@string/casasync_image_description"
+            android:contentDescription="@string/image_logo_casasync_description"
             android:src="@drawable/casasyncnome" />
 
         <TextView
@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:layout_marginTop="16dp"
-            android:text="@string/enter_text"
+            android:text="@string/text_enter"
             android:textStyle="bold"
             android:textSize="36sp" />
 
@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:autofillHints="username"
-            android:hint="@string/login_prompt"
+            android:hint="@string/login_email_prompt"
             android:drawableStart="@drawable/ico_email"
             android:drawablePadding="10dp"
             android:inputType="textEmailAddress" />
@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:autofillHints="password"
-            android:hint="@string/password_prompt"
+            android:hint="@string/login_password_prompt"
             android:drawableStart="@drawable/ico_password"
             android:drawablePadding="10dp"
             android:inputType="textPassword" />
@@ -60,7 +60,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:layout_marginTop="2dp"
-            android:text="@string/forgot_password_text" />
+            android:text="@string/login_forgot_password_text" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -85,7 +85,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
-            android:text="@string/or_text"
+            android:text="@string/text_or"
             android:textSize="14sp" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -112,14 +112,14 @@
                     android:layout_height="16dp"
                     android:layout_marginEnd="8dp"
                     android:src="@drawable/ico_google16"
-                    android:contentDescription="@string/google_img_desc"
+                    android:contentDescription="@string/image_logo_google_description"
                     />
 
                 <TextView
                     android:id="@+id/btnGoogleLoginText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/login_google_text"
+                    android:text="@string/login_google_button"
                     android:textColor="@color/black"
                     android:textStyle="bold"
                     android:textSize="14sp" />
@@ -139,7 +139,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:gravity="center"
-                android:text="@string/create_account_text"
+                android:text="@string/new_account_text"
                 android:textSize="14sp" />
 
             <TextView
@@ -151,7 +151,7 @@
                 android:textStyle="bold"
                 android:gravity="center"
                 android:textColor="@color/azul_escuro"
-                android:text="@string/create_account_btn"
+                android:text="@string/new_account_button"
                 android:textSize="15sp" />
         </LinearLayout>
 
@@ -169,7 +169,7 @@
                 android:id="@+id/imgFooter"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:contentDescription="@string/my_image_description"
+                android:contentDescription="@string/image_logo_devminds_description"
                 android:src="@drawable/devminds" />
 
             <TextView
@@ -177,7 +177,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="@string/devminds_message"
+                android:text="@string/text_powered_by_devminds"
                 android:textSize="11sp" />
 
         </LinearLayout>

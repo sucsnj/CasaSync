@@ -1,14 +1,23 @@
-package com.devminds.casasync
+package com.devminds.casasync.fragments
 
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
-import com.devminds.casasync.CadastroFragment.Companion.users
-import com.devminds.casasync.Utils.safeShowDialog
+import androidx.fragment.app.activityViewModels
+import com.devminds.casasync.utils.Utils.safeShowDialog
 import com.devminds.casasync.R
+import com.devminds.casasync.TransitionType
+import com.devminds.casasync.parts.User
+import com.devminds.casasync.setCustomTransition
+import com.devminds.casasync.utils.JsonStorageManager
+import com.devminds.casasync.views.UserViewModel
+import java.util.UUID
+import kotlin.getValue
 
 // declaração de classe para recuperação de senha
 class RecoveryFragment : BaseFragment(R.layout.fragment_recovery) {
+
+    private val userViewModel: UserViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -22,23 +31,23 @@ class RecoveryFragment : BaseFragment(R.layout.fragment_recovery) {
         val txtLoginPromptRecovery = view.findViewById<TextView>(R.id.txtLoginPromptRecovery)
         val btnRecovery = view.findViewById<TextView>(R.id.btnRecovery)
 
-        var loginEncontrado: User? = null
+        var userFound: User? = null
 
         btnRecovery.setOnClickListener {
 
             val login = txtLoginPromptRecovery.text.toString()
-            loginEncontrado = users.find { it.login == login }
+            userFound = JsonStorageManager.recoveryUser(requireContext(), login)
 
             if (login.isNotEmpty()) {
-                if (loginEncontrado != null) {
-                    safeShowDialog(getString(R.string.login_found_recovery))
+                if (userFound != null) {
+                    safeShowDialog(getString(R.string.recovery_login_found_message))
 
                     promptChangePassword.visibility =
                         View.VISIBLE // mostra o prompt para troca de senha
                     btnChangePassword.visibility =
                         View.VISIBLE // mostra o botão para troca de senha
                 } else {
-                    safeShowDialog(getString(R.string.login_not_found_recovery))
+                    safeShowDialog(getString(R.string.recovery_login_not_found_message))
 
                     promptChangePassword.visibility =
                         View.INVISIBLE // esconde o prompt para troca de senha
@@ -46,7 +55,7 @@ class RecoveryFragment : BaseFragment(R.layout.fragment_recovery) {
                         View.INVISIBLE // esconde o botão para troca de senha
                 }
             } else {
-                safeShowDialog(getString(R.string.login_empty_recovery))
+                safeShowDialog(getString(R.string.recovery_login_empty_message))
 
                 promptChangePassword.visibility = View.INVISIBLE
                 btnChangePassword.visibility = View.INVISIBLE
@@ -58,8 +67,13 @@ class RecoveryFragment : BaseFragment(R.layout.fragment_recovery) {
 
             val password = promptChangePassword.text.toString()
             if (password.isNotEmpty()) {
-                loginEncontrado?.password = password
-                safeShowDialog(getString(R.string.password_changed))
+
+                userFound?.let {
+                    it.password = password
+                    JsonStorageManager.saveUser(requireContext(), it)
+                }
+
+                safeShowDialog(getString(R.string.recovery_password_changed_message))
 
                 parentFragmentManager.beginTransaction()
                     .setCustomTransition(TransitionType.SLIDE)
@@ -67,7 +81,7 @@ class RecoveryFragment : BaseFragment(R.layout.fragment_recovery) {
                     .addToBackStack(null)
                     .commit()
             } else {
-                safeShowDialog(getString(R.string.password_empty_recovery))
+                safeShowDialog(getString(R.string.recovery_password_empty_message))
             }
         }
 

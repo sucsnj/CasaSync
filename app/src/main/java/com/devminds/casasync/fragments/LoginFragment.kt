@@ -1,11 +1,20 @@
-package com.devminds.casasync
+package com.devminds.casasync.fragments
 
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
-import com.devminds.casasync.Utils.safeShowDialog
+import com.devminds.casasync.utils.Utils.safeShowDialog
+import androidx.fragment.app.activityViewModels
+import com.devminds.casasync.R
+import com.devminds.casasync.TransitionType
+import com.devminds.casasync.parts.User
+import com.devminds.casasync.views.UserViewModel
+import com.devminds.casasync.setCustomTransition
+import com.devminds.casasync.utils.JsonStorageManager
+import com.devminds.casasync.utils.Utils
 
 class LoginFragment : BaseFragment(R.layout.fragment_login) {
+    private val userViewModel: UserViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -31,29 +40,25 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
             // se estiver tudo preenchido
             if (login.isNotEmpty() && password.isNotEmpty()) {
 
-                // pega o usuário com os dados de login e senha
-                val userFound = CadastroFragment.users.find {
-                    it.login == login && it.password == password
-                }
+                // carrega o usuário do json
+                val userFound = JsonStorageManager.authenticateUser(requireContext(), login, password)
 
                 // se o usuário for encontrado
                 if (userFound != null) {
 
-                    // mostra a mensagem de sucesso e troca de tela
+                    userViewModel.setUser(userFound)
+
                     context?.let {
                         safeShowDialog(getString(R.string.login_success_message))
                     }
 
-                    // troca de tela para a tela inicial
+                    val fragment = HomeFragment()
+                    Utils.clearBackStack(requireActivity().supportFragmentManager)
                     parentFragmentManager.beginTransaction()
                         .setCustomTransition(TransitionType.SLIDE)
-
-                        // muda o fragmento (tela)
-                        .replace(R.id.fragment_container, HomeFragment())
-                        .addToBackStack(null) // guarda a tela atual para voltar quando precisar
-                        .commit() // finaliza a transação
+                        .replace(R.id.fragment_container, fragment)
+                        .commit()
                 } else {
-                    // mostra a mensagem de erro
                     safeShowDialog(getString(R.string.login_error_message))
                 }
             } else {
