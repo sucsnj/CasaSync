@@ -30,6 +30,8 @@ class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
         val newLoginPrompt = view.findViewById<TextView>(R.id.newLoginPrompt) // login (email)
         val newPasswordPrompt = view.findViewById<TextView>(R.id.newPasswordPrompt) // senha
 
+        var userFound: User? = null
+
         val btnCadastro = view.findViewById<TextView>(R.id.btnCadastro) // botão de cadastro
 
         btnCadastro.setOnClickListener {
@@ -39,11 +41,11 @@ class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
             val login = newLoginPrompt.text.toString()
             val password = newPasswordPrompt.text.toString()
 
-            // verifica se o login já existe
-            val loginEncontrado = userViewModel.user.value?.login
+            userFound = JsonStorageManager.recoveryUser(requireContext(), login)
 
+            // verifica se o login já existe
             // se o login já existe, mostra a mensagem de erro
-            if (loginEncontrado != null) {
+            if (userFound != null) {
                 safeShowDialog(getString(R.string.login_exists_message))
                 return@setOnClickListener // sai da função, impedindo o cadastro
             }
