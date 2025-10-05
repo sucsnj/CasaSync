@@ -10,11 +10,10 @@ import com.devminds.casasync.TransitionType
 import com.devminds.casasync.parts.User
 import com.devminds.casasync.views.UserViewModel
 import com.devminds.casasync.setCustomTransition
+import com.devminds.casasync.utils.JsonStorageManager
 import com.devminds.casasync.utils.Utils
 
 class LoginFragment : BaseFragment(R.layout.fragment_login) {
-
-    val userList = User.Companion.users
     private val userViewModel: UserViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -37,26 +36,22 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
             // se estiver tudo preenchido
             if (login.isNotEmpty() && password.isNotEmpty()) {
 
-                // pega o usuário com os dados de login e senha
-                val userFound = userList.find {
-                    it.login == login && it.password == password
-                }
+                // carrega o usuário do json
+                val userFound = JsonStorageManager.authenticateUser(requireContext(), login, password)
 
                 // se o usuário for encontrado
                 if (userFound != null) {
+
+                    userViewModel.setUser(userFound)
 
                     context?.let {
                         safeShowDialog(getString(R.string.login_success_message))
                     }
 
-                    userViewModel.setUser(userFound)
-
                     val fragment = HomeFragment()
-
                     Utils.clearBackStack(requireActivity().supportFragmentManager)
                     parentFragmentManager.beginTransaction()
                         .setCustomTransition(TransitionType.SLIDE)
-
                         .replace(R.id.fragment_container, fragment)
                         .commit()
                 } else {

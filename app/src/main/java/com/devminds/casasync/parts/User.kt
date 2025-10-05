@@ -6,11 +6,6 @@ data class User(
     val name: String,
     var login: String,
     var password: String,
-    val houses: MutableList<House> = mutableListOf()
-) {
-    companion object {
-        val users = mutableListOf(
-            User("devminds","admin", "admin", "admin")
-        )
-    }
-}
+    val houses: MutableList<House> = mutableListOf(),
+    val dependents: MutableList<Dependent> = mutableListOf()
+)

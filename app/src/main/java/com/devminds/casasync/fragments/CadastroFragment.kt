@@ -3,17 +3,21 @@ package com.devminds.casasync.fragments
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import androidx.fragment.app.activityViewModels
 import com.devminds.casasync.utils.Utils.safeShowDialog
 import com.devminds.casasync.R
 import com.devminds.casasync.TransitionType
 import com.devminds.casasync.parts.House
 import com.devminds.casasync.parts.User
 import com.devminds.casasync.setCustomTransition
+import com.devminds.casasync.utils.JsonStorageManager
+import com.devminds.casasync.views.UserViewModel
 import java.util.UUID
+import kotlin.getValue
 
 class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
 
-    val userList = User.Companion.users
+    private val userViewModel: UserViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -32,10 +36,8 @@ class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
             val login = newLoginPrompt.text.toString()
             val password = newPasswordPrompt.text.toString()
 
-            // verificação contra duplicidade de cadastro
-
             // verifica se o login já existe
-            val loginEncontrado = userList.find { it.login == login }
+            val loginEncontrado = userViewModel.user.value?.login
 
             // se o login já existe, mostra a mensagem de erro
             if (loginEncontrado != null) {
@@ -45,13 +47,16 @@ class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
 
             // se estiver tudo preenchido, cadastra o usuário
             if (name.isNotEmpty() && login.isNotEmpty() && password.isNotEmpty()) {
-                userList.add(User(
+                val newUser = User(
                     id = UUID.randomUUID().toString(),
-                    name,
-                    login,
-                    password
-                )) // adiciona o usuário à lista
+                    name = name,
+                    login = login,
+                    password = password
+                ) // adiciona o usuário à lista
                 safeShowDialog(getString(R.string.cadastro_success_message))
+
+                // persiste o usuário em json
+                JsonStorageManager.saveUser(requireContext(), newUser)
 
                 parentFragmentManager.beginTransaction() // troca de tela para o login
                     .setCustomTransition(TransitionType.FADE)

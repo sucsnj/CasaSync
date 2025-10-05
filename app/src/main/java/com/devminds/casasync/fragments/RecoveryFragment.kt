@@ -3,16 +3,21 @@ package com.devminds.casasync.fragments
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import androidx.fragment.app.activityViewModels
 import com.devminds.casasync.utils.Utils.safeShowDialog
 import com.devminds.casasync.R
 import com.devminds.casasync.TransitionType
 import com.devminds.casasync.parts.User
 import com.devminds.casasync.setCustomTransition
+import com.devminds.casasync.utils.JsonStorageManager
+import com.devminds.casasync.views.UserViewModel
+import java.util.UUID
+import kotlin.getValue
 
 // declaração de classe para recuperação de senha
 class RecoveryFragment : BaseFragment(R.layout.fragment_recovery) {
 
-    val userList = User.Companion.users
+    private val userViewModel: UserViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -26,15 +31,15 @@ class RecoveryFragment : BaseFragment(R.layout.fragment_recovery) {
         val txtLoginPromptRecovery = view.findViewById<TextView>(R.id.txtLoginPromptRecovery)
         val btnRecovery = view.findViewById<TextView>(R.id.btnRecovery)
 
-        var loginEncontrado: User? = null
+        var userFound: User? = null
 
         btnRecovery.setOnClickListener {
 
             val login = txtLoginPromptRecovery.text.toString()
-            loginEncontrado = userList.find { it.login == login }
+            userFound = JsonStorageManager.recoveryUser(requireContext(), login)
 
             if (login.isNotEmpty()) {
-                if (loginEncontrado != null) {
+                if (userFound != null) {
                     safeShowDialog(getString(R.string.login_found_recovery))
 
                     promptChangePassword.visibility =
@@ -62,7 +67,12 @@ class RecoveryFragment : BaseFragment(R.layout.fragment_recovery) {
 
             val password = promptChangePassword.text.toString()
             if (password.isNotEmpty()) {
-                loginEncontrado?.password = password
+
+                userFound?.let {
+                    it.password = password
+                    JsonStorageManager.saveUser(requireContext(), it)
+                }
+
                 safeShowDialog(getString(R.string.password_changed))
 
                 parentFragmentManager.beginTransaction()
