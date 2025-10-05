@@ -34,6 +34,17 @@
             android:textSize="18sp" />
 
         <Button
+            android:id="@+id/btnDeleteHouse"
+            style="@style/BotaoAzul"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Deletar Casa"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.8" />
+
+        <Button
             android:id="@+id/btnAddDependent"
             style="@style/BotaoAzul"
             android:layout_width="match_parent"
