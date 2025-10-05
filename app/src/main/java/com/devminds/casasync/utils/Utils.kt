@@ -31,7 +31,7 @@ object Utils {
         }
     }
 
-    fun delayTransition(fragmentParent: Fragment, targetFragment: Fragment,delay: Long) {
+    fun delayTransition(fragmentParent: Fragment, targetFragment: Fragment, delay: Long) {
         android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
             fragmentParent.parentFragmentManager.beginTransaction()
                 .setCustomTransition(TransitionType.FADE)
@@ -41,8 +41,10 @@ object Utils {
         }, delay)
     }
 
-    fun deleteDialog(title: String, message: String, context: Context, postiveAction: () -> Unit,
-                     negativeAction: (() -> Unit)? = null) {
+    fun deleteDialog(
+        title: String, message: String, context: Context, postiveAction: () -> Unit,
+        negativeAction: (() -> Unit)? = null
+    ) {
         val builder = android.app.AlertDialog.Builder(context)
         builder.setTitle(title)
         builder.setMessage(message)
