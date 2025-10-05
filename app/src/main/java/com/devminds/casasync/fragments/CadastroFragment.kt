@@ -3,7 +3,7 @@ package com.devminds.casasync.fragments
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
-import com.devminds.casasync.Utils.safeShowDialog
+import com.devminds.casasync.utils.Utils.safeShowDialog
 import com.google.firebase.firestore.FirebaseFirestore
 import androidx.fragment.app.activityViewModels
 import com.devminds.casasync.utils.Utils.safeShowDialog

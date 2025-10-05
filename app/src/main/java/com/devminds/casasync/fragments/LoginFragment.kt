@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.TextView
 import com.devminds.casasync.utils.Utils.safeShowDialog
 import androidx.fragment.app.activityViewModels
+import com.devminds.casasync.FirestoreHelper
 import com.devminds.casasync.R
 import com.devminds.casasync.TransitionType
 import com.devminds.casasync.parts.User
@@ -20,8 +21,8 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         super.onViewCreated(view, savedInstanceState)
 
         // testando o firestore
-        FirestoreHelper.escreverUsuario()
-        FirestoreHelper.lerUsuarios()
+//        FirestoreHelper.escreverUsuario()
+//        FirestoreHelper.lerUsuarios()
 
         // guarda os dados de login e senha
         val txtLoginPrompt = view.findViewById<TextView>(R.id.txtLoginPrompt)
