@@ -11,8 +11,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.devminds.casasync.GenericAdapter
 import com.devminds.casasync.R
+import com.devminds.casasync.TransitionType
 import com.devminds.casasync.parts.Dependent
 import com.devminds.casasync.parts.House
+import com.devminds.casasync.setCustomTransition
 import com.devminds.casasync.utils.JsonStorageManager
 import com.devminds.casasync.views.HouseViewModel
 import com.devminds.casasync.views.UserViewModel
@@ -55,6 +57,7 @@ class HouseFragment : Fragment(R.layout.fragment_house) {
                     }
 
                     parentFragmentManager.beginTransaction()
+                        .setCustomTransition(TransitionType.SLIDE)
                         .replace(R.id.fragment_container, fragment)
                         .addToBackStack(null)
                         .commit()
