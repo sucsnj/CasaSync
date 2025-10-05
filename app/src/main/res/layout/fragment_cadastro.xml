@@ -28,7 +28,7 @@
             <ImageView
                 android:layout_width="160dp"
                 android:layout_height="160dp"
-                android:contentDescription="@string/casasync_image_description"
+                android:contentDescription="@string/image_logo_casasync_description"
                 android:src="@drawable/casasyncnome" />
 
             <TextView
@@ -68,7 +68,7 @@
                     android:autofillHints="username"
                     android:drawableStart="@drawable/icon_user"
                     android:drawablePadding="10dp"
-                    android:hint="@string/name_prompt"
+                    android:hint="@string/user_name_prompt"
                     android:inputType="text" />
 
                 <EditText
@@ -81,7 +81,7 @@
                     android:drawableStart="@drawable/ico_calendar"
                     android:drawablePadding="10dp"
                     android:focusable="false"
-                    android:hint="@string/date_prompt"
+                    android:hint="@string/user_birthdate_prompt"
                     android:inputType="none" />
 
                 <RadioGroup
@@ -94,19 +94,19 @@
                         android:id="@+id/male"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/male" />
+                        android:text="@string/gender_male_text" />
 
                     <RadioButton
                         android:id="@+id/female"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/female" />
+                        android:text="@string/gender_female_text" />
 
                     <RadioButton
                         android:id="@+id/another"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/another" />
+                        android:text="@string/gender_other_text" />
                 </RadioGroup>
             </LinearLayout>
 
@@ -126,7 +126,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
                     android:layout_marginTop="10dp"
-                    android:text="@string/contact_security_text"
+                    android:text="@string/contact_security_title_text"
                     android:textSize="30sp"
                     android:textStyle="bold" />
 
@@ -138,7 +138,7 @@
                     android:autofillHints="none"
                     android:drawableStart="@drawable/ico_email"
                     android:drawablePadding="10dp"
-                    android:hint="@string/login_prompt"
+                    android:hint="@string/login_email_prompt"
                     android:inputType="textEmailAddress" />
 
                 <EditText
@@ -149,7 +149,7 @@
                     android:autofillHints="none"
                     android:drawableStart="@drawable/ico_email2"
                     android:drawablePadding="10dp"
-                    android:hint="@string/login_prompt_confirm"
+                    android:hint="@string/login_email_confirm_prompt"
                     android:inputType="textEmailAddress" />
 
                 <EditText
@@ -160,7 +160,7 @@
                     android:autofillHints="none"
                     android:drawableStart="@drawable/ico_password"
                     android:drawablePadding="10dp"
-                    android:hint="@string/password_prompt"
+                    android:hint="@string/login_password_prompt"
                     android:inputType="textPassword" />
 
                 <EditText
@@ -171,7 +171,7 @@
                     android:autofillHints="none"
                     android:drawableStart="@drawable/ico_password2"
                     android:drawablePadding="10dp"
-                    android:hint="@string/password_prompt_confirm"
+                    android:hint="@string/login_password_confirm_prompt"
                     android:inputType="textPassword" />
 
                 <EditText
@@ -183,7 +183,7 @@
                     android:drawableStart="@drawable/ico_phone"
                     android:drawablePadding="10dp"
                     android:ems="10"
-                    android:hint="@string/phone_prompt"
+                    android:hint="@string/user_phone_prompt"
                     android:inputType="phone"
                     android:maxLength="11" />
 
@@ -205,7 +205,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
                     android:layout_marginTop="10dp"
-                    android:text="@string/address_text"
+                    android:text="@string/address_title_text"
                     android:textSize="30sp"
                     android:textStyle="bold" />
 
@@ -218,7 +218,7 @@
                     android:drawableStart="@drawable/ico_cep"
                     android:drawablePadding="10dp"
                     android:ems="8"
-                    android:hint="@string/cep_prompt"
+                    android:hint="@string/address_cep_prompt"
                     android:inputType="number"
                     android:maxLength="8" />
 
@@ -230,7 +230,7 @@
                     android:autofillHints="postalAddress"
                     android:drawableStart="@drawable/ico_street"
                     android:drawablePadding="10dp"
-                    android:hint="@string/street_prompt"
+                    android:hint="@string/address_street_prompt"
                     android:inputType="textPostalAddress"
                     android:maxLines="1" />
 
@@ -242,7 +242,7 @@
                     android:autofillHints="addressLocality"
                     android:drawableStart="@drawable/ico_city"
                     android:drawablePadding="10dp"
-                    android:hint="@string/city_prompt"
+                    android:hint="@string/address_city_prompt"
                     android:inputType="textCapWords"
                     android:maxLines="1" />
 
@@ -254,7 +254,7 @@
                     android:autofillHints="addressRegion"
                     android:drawableStart="@drawable/ico_district"
                     android:drawablePadding="10dp"
-                    android:hint="@string/district_prompt"
+                    android:hint="@string/address_district_prompt"
                     android:inputType="textCapWords"
                     android:maxLines="1" />
 
@@ -266,7 +266,7 @@
                     android:autofillHints="postalAddress"
                     android:drawableStart="@drawable/ico_street_number"
                     android:drawablePadding="10dp"
-                    android:hint="@string/number_address_prompt"
+                    android:hint="@string/address_number_prompt"
                     android:inputType="number"
                     android:maxLines="1" />
 
@@ -278,7 +278,7 @@
                     android:autofillHints="none"
                     android:drawableStart="@drawable/ico_street_more"
                     android:drawablePadding="10dp"
-                    android:hint="@string/complement_prompt"
+                    android:hint="@string/address_complement_prompt"
                     android:inputType="text" />
 
             </LinearLayout>

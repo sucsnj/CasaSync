@@ -5,7 +5,7 @@
 
     <!-- Login -->
     <string name="login_email_prompt">Digite seu e-mail</string>
-    <string name="login_email_confirm_prompt">Confirme seu email</string>
+    <string name="login_email_confirm_prompt">Confirme seu e-mail</string>
     <string name="login_password_prompt">Digite sua senha</string>
     <string name="login_password_confirm_prompt">Confirme sua senha</string>
     <string name="login_button">Acessar</string>
@@ -20,6 +20,7 @@
 
     <!-- Cadastro -->
     <string name="new_user_text">Novo usuário</string>
+    <string name="personal_data_text">Dados Pessoais</string>
     <string name="new_account_text">Ainda não possui uma conta?</string>
     <string name="new_account_button"><u>Cadastre-se!</u></string>
     <string name="new_account_success_message">Cadastro realizado com sucesso!</string>
