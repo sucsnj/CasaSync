@@ -41,7 +41,7 @@ class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
 
             // se o login já existe, mostra a mensagem de erro
             if (loginEncontrado != null) {
-                safeShowDialog(getString(R.string.login_found_message))
+                safeShowDialog(getString(R.string.login_exists_message))
                 return@setOnClickListener // sai da função, impedindo o cadastro
             }
 
@@ -53,7 +53,7 @@ class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
                     login = login,
                     password = password
                 ) // adiciona o usuário à lista
-                safeShowDialog(getString(R.string.cadastro_success_message))
+                safeShowDialog(getString(R.string.new_account_success_message))
 
                 // persiste o usuário em json
                 JsonStorageManager.saveUser(requireContext(), newUser)
@@ -65,7 +65,7 @@ class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
                     .commit()
 
             } else {
-                safeShowDialog(getString(R.string.cadastro_error_message))
+                safeShowDialog(getString(R.string.new_account_error_message))
             }
         }
 

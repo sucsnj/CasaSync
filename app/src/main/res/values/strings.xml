@@ -55,7 +55,7 @@
     <string name="address_city_prompt">Nome da Cidade</string>
     <string name="address_district_prompt">Nome do Bairro</string>
     <string name="address_number_prompt">Número do endereço</string>
-    <string name="address_complement_prompt">Complemento (casa, apartamento...)</string>
+    <string name="address_complement_prompt">Complemento (casa, apartamento…)</string>
 
     <!-- House -->
     <string name="new_house_button">Adicionar Casa</string>
@@ -79,6 +79,7 @@
     <string name="button_decline_terms">Recusar Termos de uso</string>
     <string name="button_admin">Responsável</string>
     <string name="button_dependent">Dependente</string>
+    <string name="register_buttom">Cadastrar</string>
 
     <!-- UI Texts -->
     <string name="text_enter">Entrar</string>

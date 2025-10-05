@@ -299,7 +299,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
                     android:layout_marginTop="10dp"
-                    android:text="@string/configs_text"
+                    android:text="@string/config_title_text"
                     android:textSize="30sp"
                     android:textStyle="bold" />
 
@@ -313,13 +313,13 @@
                         android:id="@+id/adm"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/adm_buttom" />
+                        android:text="@string/button_admin" />
 
                     <RadioButton
                         android:id="@+id/dependent"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/dependent_buttom" />
+                        android:text="@string/button_dependent" />
                 </RadioGroup>
 
                 <RadioGroup
@@ -332,13 +332,13 @@
                         android:id="@+id/acceptButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/accept_buttom" />
+                        android:text="@string/button_accept_terms" />
 
                     <RadioButton
                         android:id="@+id/declineButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/decline_buttom" />
+                        android:text="@string/button_decline_terms" />
                 </RadioGroup>
 
             </LinearLayout>
@@ -354,7 +354,7 @@
                     style="@style/BotaoAzul"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/cadastro_button"
+                    android:text="@string/register_buttom"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -384,7 +384,7 @@
                     android:gravity="center"
                     android:paddingStart="2dp"
                     android:paddingEnd="2dp"
-                    android:text="@string/login_account_btn"
+                    android:text="@string/login_account_button"
                     android:textColor="@color/azul_escuro"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -406,7 +406,7 @@
                     android:id="@+id/imgFooter"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:contentDescription="@string/my_image_description"
+                    android:contentDescription="@string/image_logo_devminds_description"
                     android:src="@drawable/devminds" />
 
                 <TextView
@@ -414,7 +414,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="@string/devminds_message"
+                    android:text="@string/text_powered_by_devminds"
                     android:textSize="11sp" />
 
             </LinearLayout>

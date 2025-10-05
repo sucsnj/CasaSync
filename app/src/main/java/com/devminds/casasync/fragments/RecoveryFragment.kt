@@ -40,14 +40,14 @@ class RecoveryFragment : BaseFragment(R.layout.fragment_recovery) {
 
             if (login.isNotEmpty()) {
                 if (userFound != null) {
-                    safeShowDialog(getString(R.string.login_found_recovery))
+                    safeShowDialog(getString(R.string.recovery_login_found_message))
 
                     promptChangePassword.visibility =
                         View.VISIBLE // mostra o prompt para troca de senha
                     btnChangePassword.visibility =
                         View.VISIBLE // mostra o botão para troca de senha
                 } else {
-                    safeShowDialog(getString(R.string.login_not_found_recovery))
+                    safeShowDialog(getString(R.string.recovery_login_not_found_message))
 
                     promptChangePassword.visibility =
                         View.INVISIBLE // esconde o prompt para troca de senha
@@ -55,7 +55,7 @@ class RecoveryFragment : BaseFragment(R.layout.fragment_recovery) {
                         View.INVISIBLE // esconde o botão para troca de senha
                 }
             } else {
-                safeShowDialog(getString(R.string.login_empty_recovery))
+                safeShowDialog(getString(R.string.recovery_login_empty_message))
 
                 promptChangePassword.visibility = View.INVISIBLE
                 btnChangePassword.visibility = View.INVISIBLE
@@ -73,7 +73,7 @@ class RecoveryFragment : BaseFragment(R.layout.fragment_recovery) {
                     JsonStorageManager.saveUser(requireContext(), it)
                 }
 
-                safeShowDialog(getString(R.string.password_changed))
+                safeShowDialog(getString(R.string.recovery_password_changed_message))
 
                 parentFragmentManager.beginTransaction()
                     .setCustomTransition(TransitionType.SLIDE)
@@ -81,7 +81,7 @@ class RecoveryFragment : BaseFragment(R.layout.fragment_recovery) {
                     .addToBackStack(null)
                     .commit()
             } else {
-                safeShowDialog(getString(R.string.password_empty_recovery))
+                safeShowDialog(getString(R.string.recovery_password_empty_message))
             }
         }
 
