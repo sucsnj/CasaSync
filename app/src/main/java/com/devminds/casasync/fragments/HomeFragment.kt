@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -97,6 +98,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     .replace(R.id.fragment_container, fragment)
                     .addToBackStack(null)
                     .commit()
+            },
+            onItemLongClick = { selectedHouse ->
+                Toast.makeText(requireContext(), "Clique longo detectado (implementação)!", Toast.LENGTH_SHORT)
+                    .show()
+                true
             }
         )
 

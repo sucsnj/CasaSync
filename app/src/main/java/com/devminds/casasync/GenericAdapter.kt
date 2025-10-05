@@ -9,13 +9,19 @@ class GenericAdapter<T>(
     private val items: MutableList<T>,
     private val layoutResId: Int,
     private val bind: (View, T) -> Unit,
-    private val onItemClick: (T) -> Unit
+    private val onItemClick: (T) -> Unit,
+    private val onItemLongClick: ((T) -> Boolean)? = null
 ) : RecyclerView.Adapter<GenericAdapter<T>.GenericViewHolder>() {
 
     inner class GenericViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bindItem(item: T) {
             bind(itemView, item)
             itemView.setOnClickListener { onItemClick(item) }
+            onItemLongClick?.let { longClick ->
+                itemView.setOnLongClickListener {
+                    longClick(item)
+                }
+            }
         }
     }
 

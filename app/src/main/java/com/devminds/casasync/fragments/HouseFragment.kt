@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -16,6 +17,7 @@ import com.devminds.casasync.parts.Dependent
 import com.devminds.casasync.parts.House
 import com.devminds.casasync.setCustomTransition
 import com.devminds.casasync.utils.JsonStorageManager
+import com.devminds.casasync.utils.Utils
 import com.devminds.casasync.views.HouseViewModel
 import com.devminds.casasync.views.UserViewModel
 import java.util.UUID
@@ -76,33 +78,20 @@ class HouseFragment : Fragment(R.layout.fragment_house) {
         val btnDeleteHouse = view.findViewById<TextView>(R.id.btnDeleteHouse)
 
         btnDeleteHouse.setOnClickListener {
-            val house = houseViewModel.house.value
+            val element = houseViewModel.house.value
 
-            AlertDialog.Builder(requireContext())
-                .setTitle("Apagar Casa")
-                .setMessage("Tem certeza que deseja apagar a casa ${house?.name}?")
-                .setPositiveButton("Sim") { _, _ ->
-                    house?.let {
-                        // Remove a casa do usuário
-                        userViewModel.user.value?.houses?.remove(it)
-
-                        // Persiste a alteração no JSON
-                        userViewModel.user.value?.let { updatedUser ->
-                            JsonStorageManager.saveUser(requireContext(), updatedUser)
-                        }
+            Utils.deleteDialog(
+                "Apagar Casa",
+                "Tem certeza que deseja apagar a casa ${element?.name}?",
+                requireContext(),
+                {
+                    // deleta a casa do usuário e do json
+                    element?.let {
+                        userViewModel.deleteHouse(it, requireContext())
+                        Utils.delayTransition(this, HomeFragment(), 100)
                     }
-
-                    // Aguarda 100ms antes de fazer a transição
-                    android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
-                        parentFragmentManager.beginTransaction()
-                            .setCustomTransition(TransitionType.SLIDE)
-                            .replace(R.id.fragment_container, HomeFragment())
-                            .addToBackStack(null)
-                            .commit()
-                    }, 100)
                 }
-                .setNegativeButton("Cancelar", null)
-                .show()
+            )
         }
 
         val btnAddDependent = view.findViewById<TextView>(R.id.btnAddDependent)

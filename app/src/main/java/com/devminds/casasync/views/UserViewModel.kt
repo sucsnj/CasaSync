@@ -1,9 +1,13 @@
 package com.devminds.casasync.views
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.devminds.casasync.parts.House
 import com.devminds.casasync.parts.User
+import com.devminds.casasync.utils.JsonStorageManager
+import kotlin.collections.remove
 
 class UserViewModel : ViewModel() {
     private val _user = MutableLiveData<User?>()
@@ -15,5 +19,12 @@ class UserViewModel : ViewModel() {
 
     fun clearUser() {
         _user.value = null
+    }
+
+    fun deleteHouse(house: House, context: Context) {
+        user.value?.let { user ->
+            user.houses.remove(house)
+            JsonStorageManager.saveUser(context, user)
+        }
     }
 }
