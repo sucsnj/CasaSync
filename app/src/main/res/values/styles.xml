@@ -7,4 +7,17 @@
     <style name="BotaoCinza">
         <item name="android:background">@color/cinza</item>
     </style>
+    <style name="BotaoAzulClaro">
+        <item name="android:backgroundTint">#2471FF</item>
+        <item name="android:textColor">@color/branco</item>
+    </style>
+    <style name="CustomDialog" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
+        <!-- Remove completamente o fundo padrão -->
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowMinWidthMajor">90%</item>
+        <item name="android:windowMinWidthMinor">90%</item>
+    </style>
 </resources>

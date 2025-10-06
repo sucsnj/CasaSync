@@ -1,11 +1,14 @@
 package com.devminds.casasync.fragments
 
+import android.graphics.Color
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.view.ContextThemeWrapper
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -46,15 +49,26 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         val btnNewHouse = view.findViewById<TextView>(R.id.btnAddHouse)
         btnNewHouse.setOnClickListener {
             val context = requireContext()
-            val input = EditText(context).apply {
-                hint = "Nome da casa"
-            }
+            val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_add_house, null)
+            val input = dialogView.findViewById<EditText>(R.id.inputHouse)
 
-            // dialogo para dar nome a casa
-            AlertDialog.Builder(context)
-                .setTitle("Adicionar nova casa")
-                .setView(input)
-                .setPositiveButton("Adicionar") { _, _ ->
+            // diálogo para criar uma nova casa
+            val dialog = AlertDialog.Builder(
+                ContextThemeWrapper(context, R.style.CustomDialog)
+            )
+                .setView(dialogView)
+                .setPositiveButton("Adicionar", null)
+                .setNegativeButton("Cancelar", null)
+                .create()
+
+            dialog.show()
+
+            // estilos dos botões
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE)?.apply {
+                setBackgroundResource(R.drawable.button_primary)
+                setTextColor(Color.BLACK)
+                setPadding(40, 12, 40, 12)
+                setOnClickListener {
                     val houseName = input.text.toString().trim()
                     if (houseName.isNotEmpty()) {
                         val newHouse = House(
@@ -65,15 +79,25 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                         userViewModel.user.value?.houses?.add(newHouse)
                         adapter.notifyItemInserted(houseList.size - 1)
 
-                        // persiste o usuário em json
-                        val user = userViewModel.user.value
-                        user?.let {
+                        userViewModel.user.value?.let {
                             JsonStorageManager.saveUser(requireContext(), it)
                         }
+
+                        dialog.dismiss()
+                    } else {
+                        input.error = "Digite um nome válido"
                     }
                 }
-                .setNegativeButton("Cancelar", null)
-                .show()
+            }
+
+            dialog.getButton(AlertDialog.BUTTON_NEGATIVE)?.apply {
+                setBackgroundResource(R.drawable.button_secondary)
+                setTextColor(Color.BLACK)
+                setPadding(40, 12, 40, 12)
+                setOnClickListener {
+                    dialog.dismiss()
+                }
+            }
         }
 
         // lista das casas
@@ -100,7 +124,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     .commit()
             },
             onItemLongClick = { selectedHouse ->
-                Toast.makeText(requireContext(), "Clique longo detectado (implementação)!", Toast.LENGTH_SHORT)
+                Toast.makeText(
+                    requireContext(),
+                    "Clique longo detectado (implementação)!",
+                    Toast.LENGTH_SHORT
+                )
                     .show()
                 true
             }
