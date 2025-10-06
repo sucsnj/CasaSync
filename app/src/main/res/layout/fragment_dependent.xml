@@ -3,51 +3,97 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/dependent"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/background_layout">
 
     <LinearLayout
         android:id="@+id/layoutDependent"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="30dp"
-        android:background="@drawable/background_layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:gravity="center"
         android:orientation="vertical"
-        android:padding="28dp">
+        android:padding="28dp"
+        app:layout_constraintBottom_toTopOf="@id/btnAddTask"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <!--    info do dependente    -->
-        <ImageView
-            android:id="@+id/dependentPhoto"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:contentDescription="Foto do usuário"
-            android:scaleType="centerCrop"
-            android:src="@drawable/devminds" />
-
-        <TextView
-            android:id="@+id/dependentName"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnDeleteDependent"
+            style="@style/BotaoAzulClaro"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:text="Bem-vindo, Gandalf"
-            android:textColor="@android:color/black"
-            android:textSize="18sp" />
+            android:layout_gravity="end"
+            app:icon="@drawable/delete"
+            app:iconGravity="textStart"
+            app:iconPadding="0dp" />
 
-        <Button
-            android:id="@+id/btnAddTask"
-            style="@style/BotaoAzul"
+        <!--    entrou no dependente    -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Adicionar Tarefa"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.8" />
+            android:layout_marginBottom="16dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
+            <TextView
+                android:id="@+id/dependentName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Olá, Frodo"
+                android:textColor="@android:color/black"
+                android:textSize="40sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/dependentPhoto"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="12dp"
+                android:contentDescription="Foto do Dependente"
+                android:scaleType="centerCrop"
+                android:src="@drawable/devminds" />
+
+        </LinearLayout>
+
+        <!--    Lista de tarefas    -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerTasks"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
+            android:layout_height="0dp"
+            android:layout_marginTop="16dp"
+            android:layout_weight="1" />
     </LinearLayout>
+
+    <!-- Botão para adicionar -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.02" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.98" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnAddTask"
+        style="@style/BotaoAzulClaro"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="Adicionar Tarefa"
+        android:textSize="24sp"
+        app:icon="@drawable/add_circle"
+        app:iconGravity="textStart"
+        app:iconPadding="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
+        app:layout_constraintHeight_percent="0.10"
+        app:layout_constraintStart_toStartOf="@id/guidelineStart" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

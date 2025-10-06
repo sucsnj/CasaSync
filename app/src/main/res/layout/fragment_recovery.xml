@@ -99,7 +99,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:gravity="center"
-                android:text="@string/login_account_text"
+                android:text="@string/new_account_text"
                 android:textSize="14sp" />
 
             <TextView
@@ -111,7 +111,7 @@
                 android:textStyle="bold"
                 android:gravity="center"
                 android:textColor="@color/azul_escuro"
-                android:text="@string/login_account_button"
+                android:text="@string/new_account_button"
                 android:textSize="15sp" />
         </LinearLayout>
 
