@@ -18,16 +18,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnDeleteHouse"
-            style="@style/BotaoAzulClaro"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            app:icon="@drawable/delete"
-            app:iconGravity="textStart"
-            app:iconPadding="0dp" />
-
         <!--    entrou na casa    -->
         <LinearLayout
             android:layout_width="match_parent"
