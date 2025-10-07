@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -64,6 +65,51 @@ class DependentFragment : Fragment(R.layout.fragment_dependent) {
                         .replace(R.id.fragment_container, fragment)
                         .addToBackStack(null)
                         .commit()
+                },
+                // clique longo para ser implementado, retorna apenas um toast
+                onItemLongClick = { selectedTask ->
+                    val options = arrayOf("Renomear", "Apagar")
+
+                    AlertDialog.Builder(requireContext())
+                        .setTitle("Opções para a tarefa \"${selectedTask.name}\"")
+                        .setItems(options) { _, which ->
+                            when (which) {
+                                0 -> {
+                                    Toast.makeText(
+                                        requireContext(),
+                                        "Renomear tarefa (em breve)",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                                1 -> {
+                                    AlertDialog.Builder(requireContext())
+                                        .setTitle("Apagar Tarefa")
+                                        .setMessage("Tem certeza que deseja apagar a tarefa \"${selectedTask.name}\"?")
+                                        .setPositiveButton("Apagar") { _, _ ->
+                                            val index = taskList.indexOfFirst { it.id == selectedTask.id }
+                                            if (index != -1) {
+                                                taskList.removeAt(index)
+                                                adapter.notifyItemRemoved(index)
+
+                                                // salva o usuário com a tarefa removida
+                                                userViewModel.user.value?.let {
+                                                    JsonStorageManager.saveUser(requireContext(), it)
+                                                }
+
+                                                Toast.makeText(
+                                                    requireContext(),
+                                                    "Tarefa apagada com sucesso",
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
+                                            }
+                                        }
+                                        .setNegativeButton("Cancelar", null)
+                                        .show()
+                                }
+                            }
+                        }
+                        .show()
+                    true
                 }
             )
 
