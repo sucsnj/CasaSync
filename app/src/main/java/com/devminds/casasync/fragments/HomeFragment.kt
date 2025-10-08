@@ -35,7 +35,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         val txtWelcome = view.findViewById<TextView>(R.id.welcomeText)
 
         // carrega o usuário do json
-        val userId = userViewModel.user.value?.id ?: "devminds"
+        val userId = activity?.intent?.getStringExtra("userId") ?: userViewModel.user.value?.id ?: "devminds"
         val user = JsonStorageManager.loadUser(requireContext(), userId)
         user?.let {
             userViewModel.setUser(it)

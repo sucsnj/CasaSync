@@ -65,7 +65,7 @@ class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
 
                 parentFragmentManager.beginTransaction() // troca de tela para o login
                     .setCustomTransition(TransitionType.FADE)
-                    .replace(R.id.fragment_container, LoginFragment())
+                    .replace(R.id.fragment_container_main, LoginFragment())
                     .addToBackStack(null)
                     .commit()
 
@@ -80,7 +80,7 @@ class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
         btnLoginAccount.setOnClickListener {
             parentFragmentManager.beginTransaction()
                 .setCustomTransition(TransitionType.FADE)
-                .replace(R.id.fragment_container, LoginFragment())
+                .replace(R.id.fragment_container_main, LoginFragment())
                 .addToBackStack(null)
                 .commit()
         }
