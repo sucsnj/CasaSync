@@ -59,33 +59,69 @@ class DependentFragment : Fragment(R.layout.fragment_dependent) {
                     editText.isEnabled = false
                     editText.isFocusable = false
 
-                        itemView.setOnLongClickListener {
-                            editText.isEnabled = true
-                            editText.isFocusableInTouchMode = true
-                            editText.requestFocus()
-                            editText.setSelection(editText.text.length)
+                    itemView.setOnLongClickListener {
+                        val options = arrayOf("Renomear", "Apagar")
 
-                            val imm = itemView.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                            imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
+                        AlertDialog.Builder(itemView.context)
+                            .setTitle("Opções para a tarefa \"${task.name}\"")
+                            .setItems(options) { _, which ->
+                                when (which) {
+                                    0 -> {
+                                        editText.isEnabled = true
+                                        editText.isFocusableInTouchMode = true
+                                        editText.requestFocus()
+                                        editText.setSelection(editText.text.length)
 
-                            editText.setOnEditorActionListener { _, actionId, _ ->
-                                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                                    val newName = editText.text.toString().trim()
-                                    if (newName.isNotEmpty()) {
-                                        task.name = newName
-                                        JsonStorageManager.saveUser(itemView.context, userViewModel.user.value!!)
-                                        adapter.notifyItemChanged(position)
-                                        Toast.makeText(itemView.context, "Casa renomeada", Toast.LENGTH_SHORT).show()
+                                        val imm = itemView.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                                        imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
+
+                                        editText.setOnEditorActionListener { _, actionId, _ ->
+                                            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                                                val newName = editText.text.toString().trim()
+                                                if (newName.isNotEmpty()) {
+                                                    task.name = newName
+                                                    JsonStorageManager.saveUser(itemView.context, userViewModel.user.value!!)
+                                                    adapter.notifyItemChanged(position)
+                                                    Toast.makeText(itemView.context, "Tarefa renomeada", Toast.LENGTH_SHORT).show()
+                                                }
+                                                editText.isEnabled = false
+                                                editText.isFocusable = false
+                                                true
+                                            } else {
+                                                false
+                                            }
+                                        }
                                     }
-                                    editText.isEnabled = false
-                                    editText.isFocusable = false
-                                    true
-                                } else {
-                                    false
+                                    1 -> {
+                                        // Apagar
+                                        AlertDialog.Builder(itemView.context)
+                                            .setTitle("Apagar Tarefa")
+                                            .setMessage("Tem certeza que deseja apagar a tarefa \"${task.name}\"?")
+                                            .setPositiveButton("Apagar") { _, _ ->
+                                                val index = taskList.indexOfFirst { it.id == task.id }
+                                                if (index != -1) {
+                                                    taskList.removeAt(index)
+                                                    adapter.notifyItemRemoved(index)
+
+                                                    userViewModel.user.value?.let {
+                                                        JsonStorageManager.saveUser(itemView.context, it)
+                                                    }
+
+                                                    Toast.makeText(
+                                                        itemView.context,
+                                                        "Tarefa apagada com sucesso",
+                                                        Toast.LENGTH_SHORT
+                                                    ).show()
+                                                }
+                                            }
+                                            .setNegativeButton("Cancelar", null)
+                                            .show()
+                                    }
                                 }
                             }
-                            true
-                        }
+                            .show()
+                        true
+                    }
                 },
                 onItemClick = { task ->
                     val fragment = TaskFragment().apply {

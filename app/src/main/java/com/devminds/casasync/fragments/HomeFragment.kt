@@ -117,47 +117,83 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 editText.isFocusable = false
 
                     itemView.setOnLongClickListener {
-                        editText.isEnabled = true
-                        editText.isFocusableInTouchMode = true
-                        editText.requestFocus()
-                        editText.setSelection(editText.text.length)
+                        val options = arrayOf("Renomear", "Apagar")
 
-                        val imm = itemView.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                        imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
+                        AlertDialog.Builder(itemView.context)
+                            .setTitle("Opções para a casa \"${house.name}\"")
+                            .setItems(options) { _, which ->
+                                when (which) {
+                                    0 -> {
+                                        editText.isEnabled = true
+                                        editText.isFocusableInTouchMode = true
+                                        editText.requestFocus()
+                                        editText.setSelection(editText.text.length)
 
-                        editText.setOnEditorActionListener { _, actionId, _ ->
-                            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                                val newName = editText.text.toString().trim()
-                                if (newName.isNotEmpty()) {
-                                    house.name = newName
-                                    JsonStorageManager.saveUser(itemView.context, userViewModel.user.value!!)
-                                    adapter.notifyItemChanged(position)
-                                    Toast.makeText(itemView.context, "Casa renomeada", Toast.LENGTH_SHORT).show()
+                                        val imm = itemView.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                                        imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
+
+                                        editText.setOnEditorActionListener { _, actionId, _ ->
+                                            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                                                val newName = editText.text.toString().trim()
+                                                if (newName.isNotEmpty()) {
+                                                    house.name = newName
+                                                    JsonStorageManager.saveUser(itemView.context, userViewModel.user.value!!)
+                                                    adapter.notifyItemChanged(position)
+                                                    Toast.makeText(itemView.context, "Casa renomeada", Toast.LENGTH_SHORT).show()
+                                                }
+                                                editText.isEnabled = false
+                                                editText.isFocusable = false
+                                                true
+                                            } else {
+                                                false
+                                            }
+                                        }
+                                    }
+                                    1 -> {
+                                        // Apagar
+                                        AlertDialog.Builder(itemView.context)
+                                            .setTitle("Apagar Casa")
+                                            .setMessage("Tem certeza que deseja apagar a casa \"${house.name}\"?")
+                                            .setPositiveButton("Apagar") { _, _ ->
+                                                val index = houseList.indexOfFirst { it.id == house.id }
+                                                if (index != -1) {
+                                                    houseList.removeAt(index)
+                                                    adapter.notifyItemRemoved(index)
+
+                                                    userViewModel.user.value?.let {
+                                                        JsonStorageManager.saveUser(itemView.context, it)
+                                                    }
+
+                                                    Toast.makeText(
+                                                        itemView.context,
+                                                        "Casa apagada com sucesso",
+                                                        Toast.LENGTH_SHORT
+                                                    ).show()
+                                                }
+                                            }
+                                            .setNegativeButton("Cancelar", null)
+                                            .show()
+                                    }
                                 }
-                                editText.isEnabled = false
-                                editText.isFocusable = false
-                                true
-                            } else {
-                                false
                             }
-                        }
+                            .show()
                         true
                     }
-            },
-            onItemClick = { selectedHouse ->
-                val fragment = HouseFragment().apply {
-                    arguments = Bundle().apply {
-                        putString("houseId", selectedHouse.id)
+                },
+                onItemClick = { selectedHouse ->
+                    val fragment = HouseFragment().apply {
+                        arguments = Bundle().apply {
+                            putString("houseId", selectedHouse.id)
+                        }
                     }
-                }
 
-                parentFragmentManager.beginTransaction()
-                    .setCustomTransition(TransitionType.SLIDE)
-                    .replace(R.id.fragment_container, fragment)
-                    .addToBackStack(null)
-                    .commit()
-            }
-        )
+                    parentFragmentManager.beginTransaction()
+                        .setCustomTransition(TransitionType.SLIDE)
+                        .replace(R.id.fragment_container, fragment)
+                        .addToBackStack(null)
+                        .commit()
+                }
+            )
 
         recyclerHouses.adapter = adapter
     }
