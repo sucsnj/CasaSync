@@ -8,14 +8,14 @@ import androidx.recyclerview.widget.RecyclerView
 class GenericAdapter<T>(
     private val items: MutableList<T>,
     private val layoutResId: Int,
-    private val bind: (View, T) -> Unit,
+    private val (View, T, Int, GenericViewHolder) -> Unit,
     private val onItemClick: (T) -> Unit,
     private val onItemLongClick: ((T) -> Boolean)? = null
 ) : RecyclerView.Adapter<GenericAdapter<T>.GenericViewHolder>() {
 
     inner class GenericViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bindItem(item: T) {
-            bind(itemView, item)
+        fun bindItem(item: T, position: In) {
+            bind(itemView, item, position, this)
             itemView.setOnClickListener { onItemClick(item) }
             onItemLongClick?.let { longClick ->
                 itemView.setOnLongClickListener {
@@ -31,7 +31,7 @@ class GenericAdapter<T>(
     }
 
     override fun onBindViewHolder(holder: GenericViewHolder, position: Int) {
-        holder.bindItem(items[position])
+        holder.bindItem(items[position], position)
     }
 
     override fun getItemCount() = items.size
