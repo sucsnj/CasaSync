@@ -21,6 +21,9 @@ import com.devminds.casasync.setCustomTransition
 import com.devminds.casasync.utils.JsonStorageManager
 import com.devminds.casasync.views.UserViewModel
 import java.util.UUID
+import android.content.Context
+import android.view.inputmethod.InputMethodManager
+import android.view.inputmethod.EditorInfo
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
@@ -128,7 +131,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                                 if (newName.isNotEmpty()) {
                                     house.name = newName
                                     JsonStorageManager.saveUser(itemView.context, userViewModel.user.value!!)
-                                    notifyItemChanged(position)
+                                    adapter.notifyItemChanged(position)
                                     Toast.makeText(itemView.context, "Casa renomeada", Toast.LENGTH_SHORT).show()
                                 }
                                 editText.isEnabled = false

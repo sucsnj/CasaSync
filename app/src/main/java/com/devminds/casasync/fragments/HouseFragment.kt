@@ -21,6 +21,9 @@ import com.devminds.casasync.utils.Utils
 import com.devminds.casasync.views.HouseViewModel
 import com.devminds.casasync.views.UserViewModel
 import java.util.UUID
+import android.content.Context
+import android.view.inputmethod.InputMethodManager
+import android.view.inputmethod.EditorInfo
 
 class HouseFragment : Fragment(R.layout.fragment_house) {
 
@@ -48,9 +51,40 @@ class HouseFragment : Fragment(R.layout.fragment_house) {
             adapter = GenericAdapter(
                 items = dependentList,
                 layoutResId = R.layout.item_generic,
-                bind = { itemView, dependent ->
-                    itemView.findViewById<TextView>(R.id.itemName).text = dependent.name
-                },
+                bind = { itemView, dependent, position, viewHolder ->
+                                val editText = itemView.findViewById<EditText>(R.id.itemName)
+                                editText.setText(dependent.name)
+                                editText.isEnabled = false
+                                editText.isFocusable = false
+
+                                    itemView.setOnLongClickListener {
+                                        editText.isEnabled = true
+                                        editText.isFocusableInTouchMode = true
+                                        editText.requestFocus()
+                                        editText.setSelection(editText.text.length)
+
+                                        val imm = itemView.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                                        imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
+
+                                        editText.setOnEditorActionListener { _, actionId, _ ->
+                                            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                                                val newName = editText.text.toString().trim()
+                                                if (newName.isNotEmpty()) {
+                                                    dependent.name = newName
+                                                    JsonStorageManager.saveUser(itemView.context, userViewModel.user.value!!)
+                                                    adapter.notifyItemChanged(position)
+                                                    Toast.makeText(itemView.context, "Dependente renomeado", Toast.LENGTH_SHORT).show()
+                                                }
+                                                editText.isEnabled = false
+                                                editText.isFocusable = false
+                                                true
+                                            } else {
+                                                false
+                                            }
+                                        }
+                                        true
+                                    }
+                            },
                 onItemClick = { selectedDependent ->
                     val fragment = DependentFragment().apply {
                         arguments = Bundle().apply {

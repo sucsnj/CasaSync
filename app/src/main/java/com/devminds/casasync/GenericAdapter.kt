@@ -8,13 +8,13 @@ import androidx.recyclerview.widget.RecyclerView
 class GenericAdapter<T>(
     private val items: MutableList<T>,
     private val layoutResId: Int,
-    private val (View, T, Int, GenericViewHolder) -> Unit,
+    private val bind: (View, T, Int, GenericViewHolder) -> Unit,
     private val onItemClick: (T) -> Unit,
     private val onItemLongClick: ((T) -> Boolean)? = null
 ) : RecyclerView.Adapter<GenericAdapter<T>.GenericViewHolder>() {
 
     inner class GenericViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bindItem(item: T, position: In) {
+        fun bindItem(item: T, position: Int) {
             bind(itemView, item, position, this)
             itemView.setOnClickListener { onItemClick(item) }
             onItemLongClick?.let { longClick ->
