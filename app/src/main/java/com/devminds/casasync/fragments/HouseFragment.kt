@@ -52,39 +52,39 @@ class HouseFragment : Fragment(R.layout.fragment_house) {
                 items = dependentList,
                 layoutResId = R.layout.item_generic,
                 bind = { itemView, dependent, position, viewHolder ->
-                                val editText = itemView.findViewById<EditText>(R.id.itemName)
-                                editText.setText(dependent.name)
-                                editText.isEnabled = false
-                                editText.isFocusable = false
+                    val editText = itemView.findViewById<EditText>(R.id.itemName)
+                    editText.setText(dependent.name)
+                    editText.isEnabled = false
+                    editText.isFocusable = false
 
-                                    itemView.setOnLongClickListener {
-                                        editText.isEnabled = true
-                                        editText.isFocusableInTouchMode = true
-                                        editText.requestFocus()
-                                        editText.setSelection(editText.text.length)
+                        itemView.setOnLongClickListener {
+                            editText.isEnabled = true
+                            editText.isFocusableInTouchMode = true
+                            editText.requestFocus()
+                            editText.setSelection(editText.text.length)
 
-                                        val imm = itemView.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                                        imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
+                            val imm = itemView.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                            imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
 
-                                        editText.setOnEditorActionListener { _, actionId, _ ->
-                                            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                                                val newName = editText.text.toString().trim()
-                                                if (newName.isNotEmpty()) {
-                                                    dependent.name = newName
-                                                    JsonStorageManager.saveUser(itemView.context, userViewModel.user.value!!)
-                                                    adapter.notifyItemChanged(position)
-                                                    Toast.makeText(itemView.context, "Dependente renomeado", Toast.LENGTH_SHORT).show()
-                                                }
-                                                editText.isEnabled = false
-                                                editText.isFocusable = false
-                                                true
-                                            } else {
-                                                false
-                                            }
-                                        }
-                                        true
+                            editText.setOnEditorActionListener { _, actionId, _ ->
+                                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                                    val newName = editText.text.toString().trim()
+                                    if (newName.isNotEmpty()) {
+                                        dependent.name = newName
+                                        JsonStorageManager.saveUser(itemView.context, userViewModel.user.value!!)
+                                        adapter.notifyItemChanged(position)
+                                        Toast.makeText(itemView.context, "Casa renomeada", Toast.LENGTH_SHORT).show()
                                     }
-                            },
+                                    editText.isEnabled = false
+                                    editText.isFocusable = false
+                                    true
+                                } else {
+                                    false
+                                }
+                            }
+                            true
+                        }
+                },
                 onItemClick = { selectedDependent ->
                     val fragment = DependentFragment().apply {
                         arguments = Bundle().apply {
@@ -97,50 +97,6 @@ class HouseFragment : Fragment(R.layout.fragment_house) {
                         .replace(R.id.fragment_container, fragment)
                         .addToBackStack(null)
                         .commit()
-                },
-                onItemLongClick = { selectedDependent ->
-                    val options = arrayOf("Renomear", "Apagar")
-
-                    AlertDialog.Builder(requireContext())
-                        .setTitle("Opções para o dependente \"${selectedDependent.name}\"")
-                        .setItems(options) { _, which ->
-                            when (which) {
-                                0 -> {
-                                    Toast.makeText(
-                                        requireContext(),
-                                        "Renomear dependente (em breve)",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                                1 -> {
-                                    AlertDialog.Builder(requireContext())
-                                        .setTitle("Apagar Dependente")
-                                        .setMessage("Tem certeza que deseja apagar o dependente \"${selectedDependent.name}\"?")
-                                        .setPositiveButton("Apagar") { _, _ ->
-                                            val index = dependentList.indexOfFirst { it.id == selectedDependent.id }
-                                            if (index != -1) {
-                                                dependentList.removeAt(index)
-                                                adapter.notifyItemRemoved(index)
-
-                                                // salva o usuário com dependente removido
-                                                userViewModel.user.value?.let {
-                                                    JsonStorageManager.saveUser(requireContext(), it)
-                                                }
-
-                                                Toast.makeText(
-                                                    requireContext(),
-                                                    "Dependente apagado com sucesso",
-                                                    Toast.LENGTH_SHORT
-                                                ).show()
-                                            }
-                                        }
-                                        .setNegativeButton("Cancelar", null)
-                                        .show()
-                                }
-                            }
-                        }
-                        .show()
-                    true
                 }
             )
 
