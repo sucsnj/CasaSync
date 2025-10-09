@@ -14,15 +14,15 @@
         android:orientation="vertical"
         android:padding="28dp">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnDeleteTask"
-            style="@style/BotaoAzulClaro"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            app:icon="@drawable/delete"
-            app:iconGravity="textStart"
-            app:iconPadding="0dp" />
+<!--        <com.google.android.material.button.MaterialButton-->
+<!--            android:id="@+id/btnDeleteTask"-->
+<!--            style="@style/BotaoAzulClaro"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="end"-->
+<!--            app:icon="@drawable/delete"-->
+<!--            app:iconGravity="textStart"-->
+<!--            app:iconPadding="0dp" />-->
 
         <!--    entrou na tarefa    -->
         <LinearLayout
