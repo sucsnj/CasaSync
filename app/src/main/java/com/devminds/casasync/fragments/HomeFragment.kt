@@ -116,84 +116,95 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 editText.isEnabled = false
                 editText.isFocusable = false
 
-                    itemView.setOnLongClickListener {
-                        val options = arrayOf("Renomear", "Apagar")
+                itemView.setOnLongClickListener {
+                    val options = arrayOf("Renomear", "Apagar")
 
-                        AlertDialog.Builder(itemView.context)
-                            .setTitle("Opções para a casa \"${house.name}\"")
-                            .setItems(options) { _, which ->
-                                when (which) {
-                                    0 -> {
-                                        editText.isEnabled = true
-                                        editText.isFocusableInTouchMode = true
-                                        editText.requestFocus()
-                                        editText.setSelection(editText.text.length)
+                    AlertDialog.Builder(itemView.context)
+                        .setTitle("Opções para a casa \"${house.name}\"")
+                        .setItems(options) { _, which ->
+                            when (which) {
+                                0 -> {
 
-                                        val imm = itemView.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                                        imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
+                                    // infla um layout de diálogo para editar o nome da casa
+                                    val dialogView = LayoutInflater.from(itemView.context)
+                                        .inflate(R.layout.dialog_rename_item, null)
+                                    val editText =
+                                        dialogView.findViewById<EditText>(R.id.newNameItem)
+                                    editText.setText(house.name)
+                                    editText.setSelection(0, house.name.length)
 
-                                        editText.setOnEditorActionListener { _, actionId, _ ->
-                                            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                                                val newName = editText.text.toString().trim()
-                                                if (newName.isNotEmpty()) {
-                                                    house.name = newName
-                                                    JsonStorageManager.saveUser(itemView.context, userViewModel.user.value!!)
-                                                    adapter.notifyItemChanged(position)
-                                                    Toast.makeText(itemView.context, "Casa renomeada", Toast.LENGTH_SHORT).show()
-                                                }
-                                                editText.isEnabled = false
-                                                editText.isFocusable = false
-                                                true
-                                            } else {
-                                                false
+                                    // cria o diálogo para editar o nome da casa
+                                    val dialog = AlertDialog.Builder(itemView.context)
+                                        .setTitle("Renomear Casa")
+                                        .setView(dialogView)
+                                        .setPositiveButton("Aceitar") { _, _ ->
+                                            val newName = editText.text.toString().trim()
+                                            if (newName.isNotEmpty()) {
+                                                house.name = newName
+                                                JsonStorageManager.saveUser(itemView.context, userViewModel.user.value!!)
+                                                adapter.notifyItemChanged(position)
+                                                Toast.makeText(itemView.context, "Casa renomeada", Toast.LENGTH_SHORT).show()
                                             }
                                         }
-                                    }
-                                    1 -> {
-                                        // Apagar
-                                        AlertDialog.Builder(itemView.context)
-                                            .setTitle("Apagar Casa")
-                                            .setMessage("Tem certeza que deseja apagar a casa \"${house.name}\"?")
-                                            .setPositiveButton("Apagar") { _, _ ->
-                                                val index = houseList.indexOfFirst { it.id == house.id }
-                                                if (index != -1) {
-                                                    houseList.removeAt(index)
-                                                    adapter.notifyItemRemoved(index)
+                                        .setNegativeButton("Cancelar", null)
+                                        .create()
 
-                                                    userViewModel.user.value?.let {
-                                                        JsonStorageManager.saveUser(itemView.context, it)
-                                                    }
+                                    dialog.show()
 
-                                                    Toast.makeText(
-                                                        itemView.context,
-                                                        "Casa apagada com sucesso",
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
-                                                }
-                                            }
-                                            .setNegativeButton("Cancelar", null)
-                                            .show()
+                                    editText.post {
+                                        editText.requestFocus()
+                                        val imm = itemView.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                                        imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
                                     }
                                 }
-                            }
-                            .show()
-                        true
-                    }
-                },
-                onItemClick = { selectedHouse ->
-                    val fragment = HouseFragment().apply {
-                        arguments = Bundle().apply {
-                            putString("houseId", selectedHouse.id)
-                        }
-                    }
+                                1 -> {
+                                    // Apagar
+                                    AlertDialog.Builder(itemView.context)
+                                        .setTitle("Apagar Casa")
+                                        .setMessage("Tem certeza que deseja apagar a casa \"${house.name}\"?")
+                                        .setPositiveButton("Apagar") { _, _ ->
+                                            val index = houseList.indexOfFirst { it.id == house.id }
+                                            if (index != -1) {
+                                                houseList.removeAt(index)
+                                                adapter.notifyItemRemoved(index)
 
-                    parentFragmentManager.beginTransaction()
-                        .setCustomTransition(TransitionType.SLIDE)
-                        .replace(R.id.fragment_container, fragment)
-                        .addToBackStack(null)
-                        .commit()
+                                                userViewModel.user.value?.let {
+                                                    JsonStorageManager.saveUser(
+                                                        itemView.context,
+                                                        it
+                                                    )
+                                                }
+
+                                                Toast.makeText(
+                                                    itemView.context,
+                                                    "Casa apagada com sucesso",
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
+                                            }
+                                        }
+                                        .setNegativeButton("Cancelar", null)
+                                        .show()
+                                }
+                            }
+                        }
+                        .show()
+                    true
                 }
-            )
+            },
+            onItemClick = { selectedHouse ->
+                val fragment = HouseFragment().apply {
+                    arguments = Bundle().apply {
+                        putString("houseId", selectedHouse.id)
+                    }
+                }
+
+                parentFragmentManager.beginTransaction()
+                    .setCustomTransition(TransitionType.SLIDE)
+                    .replace(R.id.fragment_container, fragment)
+                    .addToBackStack(null)
+                    .commit()
+            }
+        )
 
         recyclerHouses.adapter = adapter
     }
