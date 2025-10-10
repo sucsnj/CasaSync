@@ -24,6 +24,7 @@ import java.util.UUID
 import android.content.Context
 import android.view.inputmethod.InputMethodManager
 import android.view.inputmethod.EditorInfo
+import android.app.Activity
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
@@ -111,51 +112,59 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             items = houseList,
             layoutResId = R.layout.item_generic,
             bind = { itemView, house, position, viewHolder ->
-                val editText = itemView.findViewById<EditText>(R.id.itemName)
-                editText.setText(house.name)
-                editText.isEnabled = false
-                editText.isFocusable = false
+
+                // val editText = itemView.findViewById<EditText>(R.id.itemName)
+                // editText.setText(house.name)
+                // editText.isEnabled = false
+                // editText.isFocusable = false
+
+                val textView = itemView.findViewById<TextView>(R.id.itemName)
+                textView.text = house.name
 
                 itemView.setOnLongClickListener {
+                    val context = itemView.context
+                    if (context !is Activity) return@setOnLongClickListener false
+                    val activity = context
+
                     val options = arrayOf("Renomear", "Apagar")
 
-                    AlertDialog.Builder(itemView.context)
+                    AlertDialog.Builder(activity)
                         .setTitle("Opções para a casa \"${house.name}\"")
                         .setItems(options) { _, which ->
                             when (which) {
                                 0 -> {
-
+                                    
                                     // infla um layout de diálogo para editar o nome da casa
-                                    val dialogView = LayoutInflater.from(itemView.context)
+                                    val dialogView = LayoutInflater.from(activity)
                                         .inflate(R.layout.dialog_rename_item, null)
-                                    val editText =
-                                        dialogView.findViewById<EditText>(R.id.newNameItem)
+                                    val editText = dialogView.findViewById<EditText>(R.id.newNameItem)
                                     editText.setText(house.name)
                                     editText.setSelection(0, house.name.length)
 
                                     // cria o diálogo para editar o nome da casa
-                                    val dialog = AlertDialog.Builder(itemView.context)
+                                    val dialog = AlertDialog.Builder(activity)
                                         .setTitle("Renomear Casa")
                                         .setView(dialogView)
                                         .setPositiveButton("Aceitar") { _, _ ->
                                             val newName = editText.text.toString().trim()
                                             if (newName.isNotEmpty()) {
                                                 house.name = newName
-                                                JsonStorageManager.saveUser(itemView.context, userViewModel.user.value!!)
+                                                JsonStorageManager.saveUser(activity, userViewModel.user.value!!)
                                                 adapter.notifyItemChanged(position)
-                                                Toast.makeText(itemView.context, "Casa renomeada", Toast.LENGTH_SHORT).show()
+                                                Toast.makeText(activity, "Casa renomeada", Toast.LENGTH_SHORT).show()
                                             }
                                         }
                                         .setNegativeButton("Cancelar", null)
                                         .create()
-
-                                    dialog.show()
-
-                                    editText.post {
+                                    dialog.setOnShowListener {
                                         editText.requestFocus()
-                                        val imm = itemView.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                                        imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
+                                        editText.postDelayed({
+                                            val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                                            imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
+                                        }, 100)
                                     }
+                                    dialog.show()
+                                    true
                                 }
                                 1 -> {
                                     // Apagar

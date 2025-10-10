@@ -13,6 +13,9 @@
         android:background="@drawable/rounded_recycler"
         android:gravity="center_vertical"
         android:orientation="horizontal"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
         android:padding="24dp">
 
         <!-- Bloco de textos -->
@@ -22,9 +25,9 @@
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <EditText
+            <TextView
                 android:id="@+id/itemName"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Nome da Casa"
                 android:textColor="@android:color/black"
