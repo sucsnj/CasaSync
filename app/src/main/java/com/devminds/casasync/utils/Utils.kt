@@ -2,17 +2,23 @@ package com.devminds.casasync.utils
 
 import android.app.Activity
 import android.content.Context
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.recyclerview.widget.RecyclerView
+import com.devminds.casasync.GenericAdapter
 import com.devminds.casasync.R
 import com.devminds.casasync.TransitionType
-import com.devminds.casasync.fragments.HomeFragment
+import com.devminds.casasync.parts.House
 import com.devminds.casasync.setCustomTransition
+import com.devminds.casasync.views.UserViewModel
 
 // classe utilitária
 object Utils {
@@ -59,5 +65,109 @@ object Utils {
         editText.setText(itemName)
         editText.setSelection(0, itemName.length)
         return Pair(dialogView, editText)
+    }
+
+    fun createHouseAdapter(
+        recycler: RecyclerView,
+        list: MutableList<House>,
+        fragment: Fragment,
+        itemId: String,
+        itemOptions: String,
+        successRenameToast: String,
+        userViewModel: UserViewModel,
+        context: Context
+    ): GenericAdapter<House> {
+        return GenericAdapter(
+            items = list,
+            layoutResId = R.layout.item_generic,
+            bind = { itemView, item, position, viewHolder ->
+
+                val textView = itemView.findViewById<TextView>(R.id.itemName)
+                textView.text = item.name
+
+                itemView.setOnLongClickListener {
+                    if (context !is Activity) return@setOnLongClickListener false
+                    val activity = context
+
+                    val options = arrayOf(
+                        activity.getString(R.string.rename_dialog),
+                        activity.getString(R.string.delete_dialog)
+                    )
+
+                    AlertDialog.Builder(activity)
+                        .setTitle("$itemOptions ${item.name}")
+                        .setItems(options) { _, which ->
+                            when (which) {
+                                0 -> {
+                                    val (dialogView, editTextDialog) = Utils.renameDialogItem(activity, item.name)
+                                    val dialogNameEdit = AlertDialog.Builder(activity)
+                                        .setTitle(activity.getString(R.string.rename_dialog))
+                                        .setView(dialogView)
+                                        .setPositiveButton(activity.getString(R.string.accept_dialog)) { _, _ ->
+                                            val newName = editTextDialog.text.toString().trim()
+                                            if (newName.isNotEmpty()) {
+                                                item.name = newName
+                                                JsonStorageManager.saveUser(activity, userViewModel.user.value!!)
+                                                recycler.adapter?.notifyItemChanged(position)
+                                                Toast.makeText(activity, successRenameToast, Toast.LENGTH_SHORT).show()
+                                            }
+                                        }
+                                        .setNegativeButton(activity.getString(R.string.cancel_dialog), null)
+                                        .create()
+                                    dialogNameEdit.setOnShowListener {
+                                        editTextDialog.requestFocus()
+                                        editTextDialog.keyboardDelay(activity, 100)
+                                    }
+                                    dialogNameEdit.show()
+                                }
+                                1 -> {
+                                    val itemNameDelete = item.name
+                                    AlertDialog.Builder(context)
+                                        .setTitle(context.getString(R.string.delete_dialog))
+                                        .setMessage(
+                                            context.getString(R.string.confirm_delete_dialog) +
+                                                    itemNameDelete +
+                                                    context.getString(R.string.question_mark)
+                                        )
+                                        .setPositiveButton(context.getString(R.string.delete_dialog)) { _, _ ->
+                                            val index = list.indexOfFirst { it.id == item.id }
+                                            if (index != -1) {
+                                                list.removeAt(index)
+                                                recycler.adapter?.notifyItemRemoved(index)
+
+                                                userViewModel.user.value?.let {
+                                                    JsonStorageManager.saveUser(context, it)
+                                                }
+
+                                                Toast.makeText(
+                                                    context,
+                                                    itemNameDelete + context.getString(R.string.success_delete_dialog),
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
+                                            }
+                                        }
+                                        .setNegativeButton(context.getString(R.string.cancel_dialog), null)
+                                        .show()
+                                }
+
+                            }
+                        }
+                        .show()
+                    true
+                }
+            },
+            onItemClick = { selectedItem ->
+                val targetFragment = fragment.apply {
+                    arguments = Bundle().apply {
+                        putString(itemId, selectedItem.id)
+                    }
+                }
+                fragment.parentFragmentManager.beginTransaction()
+                    .setCustomTransition(TransitionType.SLIDE)
+                    .replace(R.id.fragment_container, targetFragment)
+                    .addToBackStack(null)
+                    .commit()
+            }
+        )
     }
 }

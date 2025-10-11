@@ -113,5 +113,6 @@
     <string name="question_mark">\?</string>
     <string name="success_delete_dialog">, apagado com sucesso!</string>
     <string name="devminds_text">DevMinds</string>
+    <string name="welcome_text">Olá,&#160;</string>
 
 </resources>
