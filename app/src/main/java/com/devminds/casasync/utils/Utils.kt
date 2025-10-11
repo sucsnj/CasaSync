@@ -1,6 +1,10 @@
 package com.devminds.casasync.utils
 
+import android.app.Activity
 import android.content.Context
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.devminds.casasync.R
@@ -59,4 +63,18 @@ object Utils {
         val dialog = builder.create()
         dialog.show()
     }
+
+    // chamar teclado com delay
+    fun TextView.keyboardDelay(context: Context, delay: Long) {
+        if (context is Activity) {
+            this.requestFocus()
+            this.postDelayed({
+                val imm =
+                    context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
+            }, delay)
+        }
+    }
+
+
 }

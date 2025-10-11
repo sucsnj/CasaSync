@@ -25,6 +25,9 @@ import android.content.Context
 import android.view.inputmethod.InputMethodManager
 import android.view.inputmethod.EditorInfo
 import android.app.Activity
+import androidx.annotation.StringRes
+import com.devminds.casasync.utils.Utils
+import com.devminds.casasync.utils.Utils.keyboardDelay
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
@@ -108,60 +111,57 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         val recyclerHouses = view.findViewById<RecyclerView>(R.id.recyclerHouses)
         recyclerHouses.layoutManager = LinearLayoutManager(requireContext())
 
-        adapter = GenericAdapter(
-            items = houseList,
-            layoutResId = R.layout.item_generic,
-            bind = { itemView, house, position, viewHolder ->
+        val list = houseList
+        val itemOptions = getString(R.string.house_options)
+        val renameItem  = getString(R.string.rename_house)
+        val successRenameToast = getString(R.string.rename_success_house_toast)
 
-                // val editText = itemView.findViewById<EditText>(R.id.itemName)
-                // editText.setText(house.name)
-                // editText.isEnabled = false
-                // editText.isFocusable = false
+        adapter = GenericAdapter(
+            items = list,
+            layoutResId = R.layout.item_generic,
+            bind = { itemView, item, position, viewHolder ->
 
                 val textView = itemView.findViewById<TextView>(R.id.itemName)
-                textView.text = house.name
+                textView.text = item.name
 
                 itemView.setOnLongClickListener {
                     val context = itemView.context
                     if (context !is Activity) return@setOnLongClickListener false
                     val activity = context
 
-                    val options = arrayOf("Renomear", "Apagar")
+                    val options = arrayOf(getString(R.string.rename_dialog), getString(R.string.delete_dialog))
 
                     AlertDialog.Builder(activity)
-                        .setTitle("Opções para a casa \"${house.name}\"")
+                        .setTitle("$itemOptions ${item.name}")
                         .setItems(options) { _, which ->
                             when (which) {
                                 0 -> {
-                                    
-                                    // infla um layout de diálogo para editar o nome da casa
+                                    // infla um layout de diálogo para editar o item
                                     val dialogView = LayoutInflater.from(activity)
                                         .inflate(R.layout.dialog_rename_item, null)
-                                    val editText = dialogView.findViewById<EditText>(R.id.newNameItem)
-                                    editText.setText(house.name)
-                                    editText.setSelection(0, house.name.length)
+                                    val editTextDialog = dialogView.findViewById<EditText>(R.id.newNameItem)
+                                    editTextDialog.setText(item.name)
+                                    editTextDialog.setSelection(0, item.name.length)
 
                                     // cria o diálogo para editar o nome da casa
                                     val dialog = AlertDialog.Builder(activity)
-                                        .setTitle("Renomear Casa")
+                                        .setTitle(renameItem)
                                         .setView(dialogView)
-                                        .setPositiveButton("Aceitar") { _, _ ->
-                                            val newName = editText.text.toString().trim()
+                                        .setPositiveButton(getString(R.string.accept_dialog)) { _, _ ->
+                                            val newName = editTextDialog.text.toString().trim()
                                             if (newName.isNotEmpty()) {
-                                                house.name = newName
+                                                item.name = newName
                                                 JsonStorageManager.saveUser(activity, userViewModel.user.value!!)
                                                 adapter.notifyItemChanged(position)
-                                                Toast.makeText(activity, "Casa renomeada", Toast.LENGTH_SHORT).show()
+                                                Toast.makeText(activity, successRenameToast, Toast.LENGTH_SHORT).show()
                                             }
                                         }
-                                        .setNegativeButton("Cancelar", null)
+                                        .setNegativeButton(getString(R.string.cancel_dialog), null)
                                         .create()
                                     dialog.setOnShowListener {
-                                        editText.requestFocus()
-                                        editText.postDelayed({
-                                            val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                                            imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
-                                        }, 100)
+
+                                        editTextDialog.requestFocus()
+                                        editTextDialog.keyboardDelay(activity, 100)
                                     }
                                     dialog.show()
                                     true
@@ -170,11 +170,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                                     // Apagar
                                     AlertDialog.Builder(itemView.context)
                                         .setTitle("Apagar Casa")
-                                        .setMessage("Tem certeza que deseja apagar a casa \"${house.name}\"?")
+                                        .setMessage("Tem certeza que deseja apagar a casa \"${item.name}\"?")
                                         .setPositiveButton("Apagar") { _, _ ->
-                                            val index = houseList.indexOfFirst { it.id == house.id }
+                                            val index = list.indexOfFirst { it.id == item.id }
                                             if (index != -1) {
-                                                houseList.removeAt(index)
+                                                list.removeAt(index)
                                                 adapter.notifyItemRemoved(index)
 
                                                 userViewModel.user.value?.let {
@@ -200,10 +200,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     true
                 }
             },
-            onItemClick = { selectedHouse ->
+            onItemClick = { selectedItem ->
                 val fragment = HouseFragment().apply {
                     arguments = Bundle().apply {
-                        putString("houseId", selectedHouse.id)
+                        putString("houseId", selectedItem.id)
                     }
                 }
 
