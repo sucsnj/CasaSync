@@ -136,15 +136,16 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                         .setItems(options) { _, which ->
                             when (which) {
                                 0 -> {
+                                    val (dialogView, editTextDialog) = Utils.renameDialogItem(activity, item.name)
                                     // infla um layout de diálogo para editar o item
-                                    val dialogView = LayoutInflater.from(activity)
-                                        .inflate(R.layout.dialog_rename_item, null)
-                                    val editTextDialog = dialogView.findViewById<EditText>(R.id.newNameItem)
-                                    editTextDialog.setText(item.name)
-                                    editTextDialog.setSelection(0, item.name.length)
+//                                    val dialogView = LayoutInflater.from(activity)
+//                                        .inflate(R.layout.dialog_rename_item, null)
+//                                    val editTextDialog = dialogView.findViewById<EditText>(R.id.newNameItem)
+//                                    editTextDialog.setText(item.name)
+//                                    editTextDialog.setSelection(0, item.name.length)
 
                                     // cria o diálogo para editar o nome da casa
-                                    val dialog = AlertDialog.Builder(activity)
+                                    val dialogNameEdit = AlertDialog.Builder(activity)
                                         .setTitle(renameItem)
                                         .setView(dialogView)
                                         .setPositiveButton(getString(R.string.accept_dialog)) { _, _ ->
@@ -158,12 +159,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                                         }
                                         .setNegativeButton(getString(R.string.cancel_dialog), null)
                                         .create()
-                                    dialog.setOnShowListener {
+                                    dialogNameEdit.setOnShowListener {
 
                                         editTextDialog.requestFocus()
                                         editTextDialog.keyboardDelay(activity, 100)
                                     }
-                                    dialog.show()
+                                    dialogNameEdit.show()
                                     true
                                 }
                                 1 -> {
