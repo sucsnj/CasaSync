@@ -71,7 +71,10 @@ class DependentFragment : Fragment(R.layout.fragment_dependent) {
             )
 
             recycler.adapter = adapter
-            adapter.notifyDataSetChanged()
+            val position = taskList.indexOfFirst { it.id == dependentId }
+            if (position != -1) {
+                adapter.notifyItemChanged(position)
+            }
         }
 
         dependentViewModel.dependent.observe(viewLifecycleOwner) { dependent ->

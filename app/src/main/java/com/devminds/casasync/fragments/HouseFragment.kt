@@ -68,7 +68,10 @@ class HouseFragment : Fragment(R.layout.fragment_house) {
             )
 
             recycler.adapter = adapter
-            adapter.notifyDataSetChanged()
+            val position = dependentList.indexOfFirst { it.id == houseId }
+            if (position != -1) {
+                adapter.notifyItemChanged(position)
+            }
         }
 
         houseViewModel.house.observe(viewLifecycleOwner) { house ->
