@@ -70,8 +70,8 @@ object Utils {
     fun createHouseAdapter(
         recycler: RecyclerView,
         list: MutableList<House>,
-        fragment: Fragment,
-        itemId: String,
+        fragmentFactory: (String) -> Fragment,
+        fragmentManager: FragmentManager,
         itemOptions: String,
         successRenameToast: String,
         userViewModel: UserViewModel,
@@ -157,12 +157,9 @@ object Utils {
                 }
             },
             onItemClick = { selectedItem ->
-                val targetFragment = fragment.apply {
-                    arguments = Bundle().apply {
-                        putString(itemId, selectedItem.id)
-                    }
-                }
-                fragment.parentFragmentManager.beginTransaction()
+                val targetFragment = fragmentFactory(selectedItem.id)
+
+                fragmentManager.beginTransaction()
                     .setCustomTransition(TransitionType.SLIDE)
                     .replace(R.id.fragment_container, targetFragment)
                     .addToBackStack(null)

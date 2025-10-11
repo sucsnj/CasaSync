@@ -114,11 +114,17 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         val recycler = recyclerHouses
 
-        adapter =Utils.createHouseAdapter(
+        adapter = Utils.createHouseAdapter(
             recycler = recyclerHouses,
             list = houseList,
-            fragment = HouseFragment(),
-            itemId = "houseId",
+            fragmentFactory = { houseId ->
+                HouseFragment().apply {
+                    arguments = Bundle().apply {
+                        putString("houseId", houseId)
+                    }
+                }
+            },
+            fragmentManager = parentFragmentManager,
             itemOptions = getString(R.string.house_options),
             successRenameToast = getString(R.string.rename_success_house_toast),
             userViewModel = userViewModel,
