@@ -64,8 +64,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 ContextThemeWrapper(context, R.style.CustomDialog)
             )
                 .setView(dialogView)
-                .setPositiveButton("Adicionar", null)
-                .setNegativeButton("Cancelar", null)
+                .setPositiveButton(getString(R.string.button_add), null)
+                .setNegativeButton(getString(R.string.button_cancel), null)
                 .create()
 
             dialog.show()
@@ -111,9 +111,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         val recyclerHouses = view.findViewById<RecyclerView>(R.id.recyclerHouses)
         recyclerHouses.layoutManager = LinearLayoutManager(requireContext())
 
+        val recycler = recyclerHouses
         val list = houseList
+        val fragment = HouseFragment()
+        val itemId = "houseId"
+
         val itemOptions = getString(R.string.house_options)
-        val renameItem  = getString(R.string.rename_house)
         val successRenameToast = getString(R.string.rename_success_house_toast)
 
         adapter = GenericAdapter(
@@ -136,17 +139,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                         .setItems(options) { _, which ->
                             when (which) {
                                 0 -> {
+                                    // chama a função de renomear e retorna dialogView e editTextDialog
                                     val (dialogView, editTextDialog) = Utils.renameDialogItem(activity, item.name)
-                                    // infla um layout de diálogo para editar o item
-//                                    val dialogView = LayoutInflater.from(activity)
-//                                        .inflate(R.layout.dialog_rename_item, null)
-//                                    val editTextDialog = dialogView.findViewById<EditText>(R.id.newNameItem)
-//                                    editTextDialog.setText(item.name)
-//                                    editTextDialog.setSelection(0, item.name.length)
 
                                     // cria o diálogo para editar o nome da casa
                                     val dialogNameEdit = AlertDialog.Builder(activity)
-                                        .setTitle(renameItem)
+                                        .setTitle(getString(R.string.rename_dialog))
                                         .setView(dialogView)
                                         .setPositiveButton(getString(R.string.accept_dialog)) { _, _ ->
                                             val newName = editTextDialog.text.toString().trim()
@@ -169,10 +167,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                                 }
                                 1 -> {
                                     // Apagar
+                                    val itemNameDelete = item.name
                                     AlertDialog.Builder(itemView.context)
-                                        .setTitle("Apagar Casa")
-                                        .setMessage("Tem certeza que deseja apagar a casa \"${item.name}\"?")
-                                        .setPositiveButton("Apagar") { _, _ ->
+                                        .setTitle(getString(R.string.delete_dialog))
+                                        .setMessage(getString(R.string.confirm_delete_dialog) + itemNameDelete + getString(R.string.question_mark))
+                                        .setPositiveButton(getString(R.string.delete_dialog)) { _, _ ->
                                             val index = list.indexOfFirst { it.id == item.id }
                                             if (index != -1) {
                                                 list.removeAt(index)
@@ -187,12 +186,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
                                                 Toast.makeText(
                                                     itemView.context,
-                                                    "Casa apagada com sucesso",
+                                                    itemNameDelete + getString(R.string.success_delete_dialog),
                                                     Toast.LENGTH_SHORT
                                                 ).show()
                                             }
                                         }
-                                        .setNegativeButton("Cancelar", null)
+                                        .setNegativeButton(getString(R.string.cancel_dialog), null)
                                         .show()
                                 }
                             }
@@ -202,9 +201,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 }
             },
             onItemClick = { selectedItem ->
-                val fragment = HouseFragment().apply {
+                val fragment = fragment.apply {
                     arguments = Bundle().apply {
-                        putString("houseId", selectedItem.id)
+                        putString(itemId, selectedItem.id)
                     }
                 }
 
@@ -216,6 +215,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             }
         )
 
-        recyclerHouses.adapter = adapter
+        recycler.adapter = adapter
     }
 }

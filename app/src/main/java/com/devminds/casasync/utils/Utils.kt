@@ -49,10 +49,11 @@ object Utils {
         }
     }
 
+    // precisa de uma variável activity e uma String pro itemName
     fun renameDialogItem(
         activity: Activity,
         itemName: String
-    ): Pair<View, EditText> {
+    ): Pair<View, EditText> { // retorna uma View e um EditText
         val dialogView = LayoutInflater.from(activity).inflate(R.layout.dialog_rename_item, null)
         val editText = dialogView.findViewById<EditText>(R.id.newNameItem)
         editText.setText(itemName)

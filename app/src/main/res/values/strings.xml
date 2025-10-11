@@ -97,10 +97,21 @@
     <string name="text_main_screen">para bens sozinho no meio da tela</string>
     <string name="rename_dialog">Renomear</string>
     <string name="delete_dialog">Apagar</string>
+
     <string name="house_options">Opções para a casa: </string>
-    <string name="rename_house">Renomear Casa</string>"
+    <string name="rename_success_house_toast">Casa renomeada</string>
+
+    <string name="dependent_options">Opções para o dependente: </string>
+    <string name="rename_success_dependent_toast">Depentende renomeada</string>
+
+    <string name="task_options">Opções para a tarefa: </string>
+    <string name="rename_success_task_toast">Tarefa renomeada</string>
+
     <string name="accept_dialog">Aceitar</string>
     <string name="cancel_dialog">Cancelar</string>
-    <string name="rename_success_house_toast">Casa renomeada</string>
+    <string name="confirm_delete_dialog">Quer mesmo apagar:&#160;</string>
+    <string name="question_mark">\?</string>
+    <string name="success_delete_dialog">, apagado com sucesso!</string>
+    <string name="devminds_text">DevMinds</string>
 
 </resources>
