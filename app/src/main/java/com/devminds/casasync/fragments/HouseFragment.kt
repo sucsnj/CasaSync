@@ -48,95 +48,26 @@ class HouseFragment : Fragment(R.layout.fragment_house) {
             currentHouse = user?.houses?.find { it.id == houseId }
             currentHouse?.let { houseViewModel.setHouse(it) }
 
-            adapter = GenericAdapter(
-                items = dependentList,
-                layoutResId = R.layout.item_generic,
-                bind = { itemView, dependent, position, viewHolder ->
-                    val editText = itemView.findViewById<EditText>(R.id.itemName)
-                    editText.setText(dependent.name)
-                    editText.isEnabled = false
-                    editText.isFocusable = false
+            val recycler = recyclerDependents
 
-                    itemView.setOnLongClickListener {
-                        val options = arrayOf("Renomear", "Apagar")
-
-                        AlertDialog.Builder(itemView.context)
-                            .setTitle("Opções para o Dependente \"${dependent.name}\"")
-                            .setItems(options) { _, which ->
-                                when (which) {
-                                    0 -> {
-                                        editText.isEnabled = true
-                                        editText.isFocusableInTouchMode = true
-                                        editText.requestFocus()
-                                        editText.setSelection(editText.text.length)
-
-                                        val imm = itemView.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                                        imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
-
-                                        editText.setOnEditorActionListener { _, actionId, _ ->
-                                            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                                                val newName = editText.text.toString().trim()
-                                                if (newName.isNotEmpty()) {
-                                                    dependent.name = newName
-                                                    JsonStorageManager.saveUser(itemView.context, userViewModel.user.value!!)
-                                                    adapter.notifyItemChanged(position)
-                                                    Toast.makeText(itemView.context, "Dependente renomeado", Toast.LENGTH_SHORT).show()
-                                                }
-                                                editText.isEnabled = false
-                                                editText.isFocusable = false
-                                                true
-                                            } else {
-                                                false
-                                            }
-                                        }
-                                    }
-                                    1 -> {
-                                        // Apagar
-                                        AlertDialog.Builder(itemView.context)
-                                            .setTitle("Apagar Dependente")
-                                            .setMessage("Tem certeza que deseja apagar o dependente \"${dependent.name}\"?")
-                                            .setPositiveButton("Apagar") { _, _ ->
-                                                val index = dependentList.indexOfFirst { it.id == dependent.id }
-                                                if (index != -1) {
-                                                    dependentList.removeAt(index)
-                                                    adapter.notifyItemRemoved(index)
-
-                                                    userViewModel.user.value?.let {
-                                                        JsonStorageManager.saveUser(itemView.context, it)
-                                                    }
-
-                                                    Toast.makeText(
-                                                        itemView.context,
-                                                        "Dependente apagado com sucesso",
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
-                                                }
-                                            }
-                                            .setNegativeButton("Cancelar", null)
-                                            .show()
-                                    }
-                                }
-                            }
-                            .show()
-                        true
-                    }
-                },
-                onItemClick = { selectedDependent ->
-                    val fragment = DependentFragment().apply {
+            adapter = Utils.createDependentAdapter(
+                recycler = recyclerDependents,
+                list = dependentList,
+                fragmentFactory = { dependentId ->
+                    DependentFragment().apply {
                         arguments = Bundle().apply {
-                            putString("dependentId", selectedDependent.id)
+                            putString("dependentId", dependentId)
                         }
                     }
-
-                    parentFragmentManager.beginTransaction()
-                        .setCustomTransition(TransitionType.SLIDE)
-                        .replace(R.id.fragment_container, fragment)
-                        .addToBackStack(null)
-                        .commit()
-                }
+                },
+                fragmentManager = parentFragmentManager,
+                itemOptions = getString(R.string.dependent_options),
+                successRenameToast = getString(R.string.rename_success_dependent_toast),
+                userViewModel = userViewModel,
+                context = requireContext()
             )
 
-            recyclerDependents.adapter = adapter
+            recycler.adapter = adapter
             adapter.notifyDataSetChanged()
         }
 

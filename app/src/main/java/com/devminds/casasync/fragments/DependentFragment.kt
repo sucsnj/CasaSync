@@ -24,6 +24,7 @@ import java.util.UUID
 import android.content.Context
 import android.view.inputmethod.InputMethodManager
 import android.view.inputmethod.EditorInfo
+import com.devminds.casasync.utils.Utils
 
 class DependentFragment : Fragment(R.layout.fragment_dependent) {
 
@@ -50,95 +51,26 @@ class DependentFragment : Fragment(R.layout.fragment_dependent) {
 
             currentDependent?.let { dependentViewModel.setDependent(it) }
 
-            adapter = GenericAdapter(
-                items = taskList,
-                layoutResId = R.layout.item_generic,
-                bind = { itemView, task, position, viewHolder ->
-                    val editText = itemView.findViewById<EditText>(R.id.itemName)
-                    editText.setText(task.name)
-                    editText.isEnabled = false
-                    editText.isFocusable = false
+            val recycler = recyclerTasks
 
-                    itemView.setOnLongClickListener {
-                        val options = arrayOf("Renomear", "Apagar")
-
-                        AlertDialog.Builder(itemView.context)
-                            .setTitle("Opções para a tarefa \"${task.name}\"")
-                            .setItems(options) { _, which ->
-                                when (which) {
-                                    0 -> {
-                                        editText.isEnabled = true
-                                        editText.isFocusableInTouchMode = true
-                                        editText.requestFocus()
-                                        editText.setSelection(editText.text.length)
-
-                                        val imm = itemView.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                                        imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
-
-                                        editText.setOnEditorActionListener { _, actionId, _ ->
-                                            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                                                val newName = editText.text.toString().trim()
-                                                if (newName.isNotEmpty()) {
-                                                    task.name = newName
-                                                    JsonStorageManager.saveUser(itemView.context, userViewModel.user.value!!)
-                                                    adapter.notifyItemChanged(position)
-                                                    Toast.makeText(itemView.context, "Tarefa renomeada", Toast.LENGTH_SHORT).show()
-                                                }
-                                                editText.isEnabled = false
-                                                editText.isFocusable = false
-                                                true
-                                            } else {
-                                                false
-                                            }
-                                        }
-                                    }
-                                    1 -> {
-                                        // Apagar
-                                        AlertDialog.Builder(itemView.context)
-                                            .setTitle("Apagar Tarefa")
-                                            .setMessage("Tem certeza que deseja apagar a tarefa \"${task.name}\"?")
-                                            .setPositiveButton("Apagar") { _, _ ->
-                                                val index = taskList.indexOfFirst { it.id == task.id }
-                                                if (index != -1) {
-                                                    taskList.removeAt(index)
-                                                    adapter.notifyItemRemoved(index)
-
-                                                    userViewModel.user.value?.let {
-                                                        JsonStorageManager.saveUser(itemView.context, it)
-                                                    }
-
-                                                    Toast.makeText(
-                                                        itemView.context,
-                                                        "Tarefa apagada com sucesso",
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
-                                                }
-                                            }
-                                            .setNegativeButton("Cancelar", null)
-                                            .show()
-                                    }
-                                }
-                            }
-                            .show()
-                        true
-                    }
-                },
-                onItemClick = { task ->
-                    val fragment = TaskFragment().apply {
+            adapter = Utils.createTaskAdapter(
+                recycler = recyclerTasks,
+                list = taskList,
+                fragmentFactory = { taskId ->
+                    TaskFragment().apply {
                         arguments = Bundle().apply {
-                            putString("taskId", task.id)
+                            putString("taskId", taskId)
                         }
                     }
-
-                    parentFragmentManager.beginTransaction()
-                        .setCustomTransition(TransitionType.SLIDE)
-                        .replace(R.id.fragment_container, fragment)
-                        .addToBackStack(null)
-                        .commit()
-                }
+                },
+                fragmentManager = parentFragmentManager,
+                itemOptions = getString(R.string.task_options),
+                successRenameToast = getString(R.string.rename_success_task_toast),
+                userViewModel = userViewModel,
+                context = requireContext()
             )
 
-            recyclerTasks.adapter = adapter
+            recycler.adapter = adapter
             adapter.notifyDataSetChanged()
         }
 
