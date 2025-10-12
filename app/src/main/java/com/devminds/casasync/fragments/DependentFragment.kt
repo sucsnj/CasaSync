@@ -5,7 +5,6 @@ import android.view.View
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -13,28 +12,20 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.devminds.casasync.GenericAdapter
 import com.devminds.casasync.R
-import com.devminds.casasync.TransitionType
 import com.devminds.casasync.parts.Dependent
 import com.devminds.casasync.parts.Task
-import com.devminds.casasync.setCustomTransition
 import com.devminds.casasync.utils.JsonStorageManager
+import com.devminds.casasync.utils.Utils
 import com.devminds.casasync.views.DependentViewModel
 import com.devminds.casasync.views.UserViewModel
-import java.util.UUID
-import android.content.Context
-import android.view.inputmethod.InputMethodManager
-import android.view.inputmethod.EditorInfo
-import android.widget.ImageButton
-import com.devminds.casasync.utils.Utils
-import com.devminds.casasync.views.HouseViewModel
 import com.google.android.material.appbar.MaterialToolbar
+import java.util.UUID
 
 class DependentFragment : Fragment(R.layout.fragment_dependent) {
 
     private lateinit var adapter: GenericAdapter<Task>
     private val userViewModel: UserViewModel by activityViewModels()
     private val dependentViewModel: DependentViewModel by activityViewModels()
-    private val houseViewModel: HouseViewModel by activityViewModels()
     private var currentDependent: Dependent? = null
     private val taskList: MutableList<Task>
         get() = currentDependent?.tasks ?: mutableListOf()

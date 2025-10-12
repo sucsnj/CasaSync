@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import com.devminds.casasync.parts.House
 import com.devminds.casasync.parts.User
 import com.devminds.casasync.utils.JsonStorageManager
-import kotlin.collections.remove
 
 class UserViewModel : ViewModel() {
     private val _user = MutableLiveData<User?>()

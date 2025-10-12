@@ -2,25 +2,18 @@ package com.devminds.casasync.fragments
 
 import android.os.Bundle
 import android.view.View
-import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
-import androidx.fragment.app.activityViewModels
-import com.devminds.casasync.utils.Utils.safeShowDialog
 import com.devminds.casasync.R
 import com.devminds.casasync.TransitionType
 import com.devminds.casasync.parts.User
 import com.devminds.casasync.setCustomTransition
 import com.devminds.casasync.utils.JsonStorageManager
-import com.devminds.casasync.views.UserViewModel
+import com.devminds.casasync.utils.Utils.safeShowDialog
 import com.google.android.material.appbar.MaterialToolbar
-import java.util.UUID
-import kotlin.getValue
 
 // declaração de classe para recuperação de senha
 class RecoveryFragment : BaseFragment(R.layout.fragment_recovery) {
-
-    private val userViewModel: UserViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

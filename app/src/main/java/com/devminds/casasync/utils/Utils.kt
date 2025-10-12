@@ -2,7 +2,6 @@ package com.devminds.casasync.utils
 
 import android.app.Activity
 import android.content.Context
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.InputMethodManager
