@@ -21,6 +21,11 @@ import com.devminds.casasync.utils.Utils
 import com.devminds.casasync.views.HouseViewModel
 import com.devminds.casasync.views.UserViewModel
 import java.util.UUID
+import android.content.Context
+import android.view.inputmethod.InputMethodManager
+import android.view.inputmethod.EditorInfo
+import android.widget.ImageButton
+import com.google.android.material.appbar.MaterialToolbar
 
 class HouseFragment : Fragment(R.layout.fragment_house) {
 
@@ -34,7 +39,14 @@ class HouseFragment : Fragment(R.layout.fragment_house) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val houseName = view.findViewById<TextView>(R.id.houseName)
+        val toolbar = view.findViewById<MaterialToolbar>(R.id.topBar)
+        houseViewModel.house.observe(viewLifecycleOwner) { house ->
+            toolbar.title = house?.name ?: "Bolsão"
+        }
+
+        toolbar.setNavigationOnClickListener {
+            parentFragmentManager.popBackStack()
+        }
 
         val recyclerDependents = view.findViewById<RecyclerView>(R.id.recyclerDependents)
         recyclerDependents.layoutManager = LinearLayoutManager(requireContext())
@@ -45,77 +57,30 @@ class HouseFragment : Fragment(R.layout.fragment_house) {
             currentHouse = user?.houses?.find { it.id == houseId }
             currentHouse?.let { houseViewModel.setHouse(it) }
 
-            adapter = GenericAdapter(
-                items = dependentList,
-                layoutResId = R.layout.item_generic,
-                bind = { itemView, dependent ->
-                    itemView.findViewById<TextView>(R.id.itemName).text = dependent.name
-                },
-                onItemClick = { selectedDependent ->
-                    val fragment = DependentFragment().apply {
+            val recycler = recyclerDependents
+
+            adapter = Utils.createDependentAdapter(
+                recycler = recyclerDependents,
+                list = dependentList,
+                fragmentFactory = { dependentId ->
+                    DependentFragment().apply {
                         arguments = Bundle().apply {
-                            putString("dependentId", selectedDependent.id)
+                            putString("dependentId", dependentId)
                         }
                     }
-
-                    parentFragmentManager.beginTransaction()
-                        .setCustomTransition(TransitionType.SLIDE)
-                        .replace(R.id.fragment_container, fragment)
-                        .addToBackStack(null)
-                        .commit()
                 },
-                onItemLongClick = { selectedDependent ->
-                    val options = arrayOf("Renomear", "Apagar")
-
-                    AlertDialog.Builder(requireContext())
-                        .setTitle("Opções para o dependente \"${selectedDependent.name}\"")
-                        .setItems(options) { _, which ->
-                            when (which) {
-                                0 -> {
-                                    Toast.makeText(
-                                        requireContext(),
-                                        "Renomear dependente (em breve)",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                                1 -> {
-                                    AlertDialog.Builder(requireContext())
-                                        .setTitle("Apagar Dependente")
-                                        .setMessage("Tem certeza que deseja apagar o dependente \"${selectedDependent.name}\"?")
-                                        .setPositiveButton("Apagar") { _, _ ->
-                                            val index = dependentList.indexOfFirst { it.id == selectedDependent.id }
-                                            if (index != -1) {
-                                                dependentList.removeAt(index)
-                                                adapter.notifyItemRemoved(index)
-
-                                                // salva o usuário com dependente removido
-                                                userViewModel.user.value?.let {
-                                                    JsonStorageManager.saveUser(requireContext(), it)
-                                                }
-
-                                                Toast.makeText(
-                                                    requireContext(),
-                                                    "Dependente apagado com sucesso",
-                                                    Toast.LENGTH_SHORT
-                                                ).show()
-                                            }
-                                        }
-                                        .setNegativeButton("Cancelar", null)
-                                        .show()
-                                }
-                            }
-                        }
-                        .show()
-                    true
-                }
+                fragmentManager = parentFragmentManager,
+                itemOptions = getString(R.string.dependent_options),
+                successRenameToast = getString(R.string.rename_success_dependent_toast),
+                userViewModel = userViewModel,
+                context = requireContext()
             )
 
-            recyclerDependents.adapter = adapter
-            adapter.notifyDataSetChanged()
-        }
-
-        houseViewModel.house.observe(viewLifecycleOwner) { house ->
-            houseName.text = "Você está na casa, ${house?.name ?: "Bolsão"}"
+            recycler.adapter = adapter
+            val position = dependentList.indexOfFirst { it.id == houseId }
+            if (position != -1) {
+                adapter.notifyItemChanged(position)
+            }
         }
 
         val btnAddDependent = view.findViewById<TextView>(R.id.btnAddDependent)

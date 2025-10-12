@@ -21,12 +21,20 @@ import com.devminds.casasync.utils.JsonStorageManager
 import com.devminds.casasync.views.DependentViewModel
 import com.devminds.casasync.views.UserViewModel
 import java.util.UUID
+import android.content.Context
+import android.view.inputmethod.InputMethodManager
+import android.view.inputmethod.EditorInfo
+import android.widget.ImageButton
+import com.devminds.casasync.utils.Utils
+import com.devminds.casasync.views.HouseViewModel
+import com.google.android.material.appbar.MaterialToolbar
 
 class DependentFragment : Fragment(R.layout.fragment_dependent) {
 
     private lateinit var adapter: GenericAdapter<Task>
     private val userViewModel: UserViewModel by activityViewModels()
     private val dependentViewModel: DependentViewModel by activityViewModels()
+    private val houseViewModel: HouseViewModel by activityViewModels()
     private var currentDependent: Dependent? = null
     private val taskList: MutableList<Task>
         get() = currentDependent?.tasks ?: mutableListOf()
@@ -34,7 +42,16 @@ class DependentFragment : Fragment(R.layout.fragment_dependent) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val dependentName = view.findViewById<TextView>(R.id.dependentName)
+        val toolbar = view.findViewById<MaterialToolbar>(R.id.topBar)
+        dependentViewModel.dependent.observe(viewLifecycleOwner) { dependent ->
+            val text = "Tarefas para " + (dependent?.name ?: "Bilbo")
+            toolbar.title = text
+        }
+
+        toolbar.setNavigationOnClickListener {
+            parentFragmentManager.popBackStack()
+        }
+
         val recyclerTasks = view.findViewById<RecyclerView>(R.id.recyclerTasks)
         recyclerTasks.layoutManager = LinearLayoutManager(requireContext())
 
@@ -47,78 +64,30 @@ class DependentFragment : Fragment(R.layout.fragment_dependent) {
 
             currentDependent?.let { dependentViewModel.setDependent(it) }
 
-            adapter = GenericAdapter(
-                items = taskList,
-                layoutResId = R.layout.item_generic,
-                bind = { itemView, task ->
-                    itemView.findViewById<TextView>(R.id.itemName).text = task.name
-                },
-                onItemClick = { selectedTask ->
-                    val fragment = TaskFragment().apply {
+            val recycler = recyclerTasks
+
+            adapter = Utils.createTaskAdapter(
+                recycler = recyclerTasks,
+                list = taskList,
+                fragmentFactory = { taskId ->
+                    TaskFragment().apply {
                         arguments = Bundle().apply {
-                            putString("taskId", selectedTask.id)
+                            putString("taskId", taskId)
                         }
                     }
-
-                    parentFragmentManager.beginTransaction()
-                        .setCustomTransition(TransitionType.SLIDE)
-                        .replace(R.id.fragment_container, fragment)
-                        .addToBackStack(null)
-                        .commit()
                 },
-                // clique longo para ser implementado, retorna apenas um toast
-                onItemLongClick = { selectedTask ->
-                    val options = arrayOf("Renomear", "Apagar")
-
-                    AlertDialog.Builder(requireContext())
-                        .setTitle("Opções para a tarefa \"${selectedTask.name}\"")
-                        .setItems(options) { _, which ->
-                            when (which) {
-                                0 -> {
-                                    Toast.makeText(
-                                        requireContext(),
-                                        "Renomear tarefa (em breve)",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                                1 -> {
-                                    AlertDialog.Builder(requireContext())
-                                        .setTitle("Apagar Tarefa")
-                                        .setMessage("Tem certeza que deseja apagar a tarefa \"${selectedTask.name}\"?")
-                                        .setPositiveButton("Apagar") { _, _ ->
-                                            val index = taskList.indexOfFirst { it.id == selectedTask.id }
-                                            if (index != -1) {
-                                                taskList.removeAt(index)
-                                                adapter.notifyItemRemoved(index)
-
-                                                // salva o usuário com a tarefa removida
-                                                userViewModel.user.value?.let {
-                                                    JsonStorageManager.saveUser(requireContext(), it)
-                                                }
-
-                                                Toast.makeText(
-                                                    requireContext(),
-                                                    "Tarefa apagada com sucesso",
-                                                    Toast.LENGTH_SHORT
-                                                ).show()
-                                            }
-                                        }
-                                        .setNegativeButton("Cancelar", null)
-                                        .show()
-                                }
-                            }
-                        }
-                        .show()
-                    true
-                }
+                fragmentManager = parentFragmentManager,
+                itemOptions = getString(R.string.task_options),
+                successRenameToast = getString(R.string.rename_success_task_toast),
+                userViewModel = userViewModel,
+                context = requireContext()
             )
 
-            recyclerTasks.adapter = adapter
-            adapter.notifyDataSetChanged()
-        }
-
-        dependentViewModel.dependent.observe(viewLifecycleOwner) { dependent ->
-            dependentName.text = "Você é o, ${dependent?.name ?: "Smeagol"}"
+            recycler.adapter = adapter
+            val position = taskList.indexOfFirst { it.id == dependentId }
+            if (position != -1) {
+                adapter.notifyItemChanged(position)
+            }
         }
 
         val btnAddTask = view.findViewById<TextView>(R.id.btnAddTask)

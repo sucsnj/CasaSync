@@ -2,7 +2,9 @@ package com.devminds.casasync.fragments
 
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import com.devminds.casasync.utils.Utils.safeShowDialog
 import com.google.firebase.firestore.FirebaseFirestore
 import androidx.fragment.app.activityViewModels
@@ -14,8 +16,10 @@ import com.devminds.casasync.parts.User
 import com.devminds.casasync.setCustomTransition
 import com.devminds.casasync.utils.JsonStorageManager
 import com.devminds.casasync.views.UserViewModel
+import com.google.android.material.appbar.MaterialToolbar
 import java.util.UUID
 import kotlin.getValue
+import androidx.navigation.fragment.findNavController
 
 // declaração de classe com fragmento para o cadastro
 class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
@@ -84,5 +88,36 @@ class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
                 .addToBackStack(null)
                 .commit()
         }
+
+        val toolbar = view.findViewById<MaterialToolbar>(R.id.topBar)
+
+        toolbar.setNavigationOnClickListener {
+            parentFragmentManager.popBackStack() // volta para login
+        }
+
+        toolbar.inflateMenu(R.menu.topbar_menu)
+
+        toolbar.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.action_settings -> {
+                    Toast.makeText(
+                        context,
+                        "implementando settings",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    true
+                }
+                R.id.action_help -> {
+                    Toast.makeText(
+                        context,
+                        "implementando ajuda",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    true
+                }
+                else -> false
+            }
+        }
+
     }
 }
