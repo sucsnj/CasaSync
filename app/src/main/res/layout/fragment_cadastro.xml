@@ -5,19 +5,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageButton
-        android:id="@+id/btnBack"
-        android:layout_width="wrap_content"
+    <!-- barra fixa no top-->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="@string/button_back"
-        android:src="@drawable/ico_arrow_back"
-        app:tint="@android:color/black"
+        android:background="@drawable/background_layout"
         android:elevation="8dp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:navigationIcon="@drawable/ico_arrow_back"
+        app:navigationContentDescription="@string/button_back"
+        app:title="Cadastro"
+        app:titleTextColor="@android:color/black"
         app:layout_constraintTop_toTopOf="parent" />
+
 
     <!--  permite rolagem vertical na tela  -->
     <ScrollView
@@ -25,15 +25,14 @@
         android:layout_height="0dp"
         android:orientation="vertical"
 
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/topBar"
+        app:layout_constraintBottom_toBottomOf="parent" >
 
         <!--    cadastro de usuário    -->
         <LinearLayout
             android:id="@+id/layoutNewUser"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
             android:background="@drawable/background_layout"
             android:gravity="center"
             android:orientation="vertical"
