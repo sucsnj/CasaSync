@@ -21,8 +21,8 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
 
 
         // testando o firestore
-//        FirestoreHelper.escreverUsuario()
-//        FirestoreHelper.lerUsuarios()
+//        FirestoreHelper.writeUser()
+//        FirestoreHelper.readUsers()
 
         // guarda os dados de login e senha
         val txtLoginPrompt = view.findViewById<TextView>(R.id.txtLoginPrompt)

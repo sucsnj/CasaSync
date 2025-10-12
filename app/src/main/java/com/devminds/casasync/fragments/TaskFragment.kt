@@ -25,7 +25,8 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
         val taskDescription = view.findViewById<TextView>(R.id.taskDescription)
         taskViewModel.task.observe(viewLifecycleOwner) { task ->
             toolbar.title = task?.name ?: "Tarefa"
-            taskDescription.text = "O que fazer? ${task?.description ?: "Um Anel para a todos governar"}"
+            taskDescription.text =
+                getString(R.string.to_do, task?.description ?: "Descrição")
         }
 
         toolbar.setNavigationOnClickListener {
@@ -36,7 +37,7 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
 
         val dependentName = view.findViewById<TextView>(R.id.dependentName)
         dependentViewModel.dependent.observe(viewLifecycleOwner) { dependent ->
-            dependentName.text = dependent?.name ?: "Smeagol"
+            dependentName.text = dependent?.name ?: "Dependente"
 
             currentTask = dependent?.tasks?.find { it.id == taskId }
             currentTask?.let { taskViewModel.setTask(it) }

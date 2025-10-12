@@ -35,7 +35,7 @@ class DependentFragment : Fragment(R.layout.fragment_dependent) {
 
         val toolbar = view.findViewById<MaterialToolbar>(R.id.topBar)
         dependentViewModel.dependent.observe(viewLifecycleOwner) { dependent ->
-            val text = "Tarefas para " + (dependent?.name ?: "Bilbo")
+            val text = getString(R.string.tasks_to) + (dependent?.name ?: "Dependente")
             toolbar.title = text
         }
 
@@ -91,20 +91,20 @@ class DependentFragment : Fragment(R.layout.fragment_dependent) {
             }
 
             val inputName = EditText(context).apply {
-                hint = "Nome da tarefa"
+                hint = context.getString(R.string.task_name)
             }
 
             val inputDescription = EditText(context).apply {
-                hint = "Descrição da tarefa"
+                hint = context.getString(R.string.task_description)
             }
 
             layout.addView(inputName)
             layout.addView(inputDescription)
 
             AlertDialog.Builder(context)
-                .setTitle("Adicionar nova tarefa")
+                .setTitle(getString(R.string.add_task_dialog))
                 .setView(layout)
-                .setPositiveButton("Adicionar") { _, _ ->
+                .setPositiveButton(getString(R.string.button_add)) { _, _ ->
                     val name = inputName.text.toString().trim()
                     val description = inputDescription.text.toString().trim()
                     if (name.isNotEmpty()) {
@@ -123,7 +123,7 @@ class DependentFragment : Fragment(R.layout.fragment_dependent) {
                         }
                     }
                 }
-                .setNegativeButton("Cancelar", null)
+                .setNegativeButton(getString(R.string.button_cancel), null)
                 .show()
         }
     }

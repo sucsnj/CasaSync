@@ -115,5 +115,12 @@
     <string name="devminds_text">DevMinds</string>
     <string name="welcome_text">Olá,&#160;</string>
     <string name="button_back">Voltar</string>
+    <string name="tasks_to">"Tarefas para&#160;"</string>
+    <string name="task_name">Nome da tarefa</string>
+    <string name="task_description">Descrição da tarefa</string>
+    <string name="add_task_dialog">Adicionar nova tarefa</string>
+    <string name="invalid_house_name">Digite um nome válido</string>
+    <string name="btn_add_dependent">Adicionar novo dependente</string>
+    <string name="to_do">O que fazer? %1$s</string>
 
 </resources>

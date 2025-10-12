@@ -34,7 +34,7 @@ class HouseFragment : Fragment(R.layout.fragment_house) {
 
         val toolbar = view.findViewById<MaterialToolbar>(R.id.topBar)
         houseViewModel.house.observe(viewLifecycleOwner) { house ->
-            toolbar.title = house?.name ?: "Bolsão"
+            toolbar.title = house?.name ?: "Casa"
         }
 
         toolbar.setNavigationOnClickListener {
@@ -81,13 +81,13 @@ class HouseFragment : Fragment(R.layout.fragment_house) {
 
             val context = requireContext()
             val input = EditText(context).apply {
-                hint = "Nome do dependente"
+                hint = getString(R.string.dependent_name_prompt)
             }
 
             AlertDialog.Builder(context)
-                .setTitle("Adicionar novo dependente")
+                .setTitle(getString(R.string.btn_add_dependent))
                 .setView(input)
-                .setPositiveButton("Adicionar") { _, _ ->
+                .setPositiveButton(getString(R.string.button_add)) { _, _ ->
                     val dependentName = input.text.toString().trim()
                     if (dependentName.isNotEmpty()) {
                         val newDependent = Dependent(
@@ -104,7 +104,7 @@ class HouseFragment : Fragment(R.layout.fragment_house) {
                         }
                     }
                 }
-                .setNegativeButton("Cancelar", null)
+                .setNegativeButton(getString(R.string.button_cancel), null)
                 .show()
         }
     }

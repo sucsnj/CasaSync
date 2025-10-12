@@ -34,7 +34,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         val txtWelcome = view.findViewById<MaterialToolbar>(R.id.topBar)
 
         // carrega o usuário do json
-        val userId = activity?.intent?.getStringExtra("userId") ?: userViewModel.user.value?.id ?: "devminds"
+        val userId =
+            activity?.intent?.getStringExtra("userId") ?: userViewModel.user.value?.id ?: getString(
+                R.string.devminds_text
+            )
         val user = JsonStorageManager.loadUser(requireContext(), userId)
         user?.let {
             userViewModel.setUser(it)
@@ -74,7 +77,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                         val newHouse = House(
                             id = UUID.randomUUID().toString(),
                             name = houseName,
-                            ownerId = userViewModel.user.value?.id ?: "devminds"
+                            ownerId = userViewModel.user.value?.id ?: getString(R.string.devminds_text)
                         )
                         userViewModel.user.value?.houses?.add(newHouse)
                         adapter.notifyItemInserted(houseList.size - 1)
@@ -85,7 +88,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
                         dialog.dismiss()
                     } else {
-                        input.error = "Digite um nome válido"
+                        input.error = context.getString(R.string.invalid_house_name)
                     }
                 }
             }
