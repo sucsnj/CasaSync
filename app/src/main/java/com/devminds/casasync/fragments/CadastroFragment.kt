@@ -2,6 +2,7 @@ package com.devminds.casasync.fragments
 
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageButton
 import android.widget.TextView
 import com.devminds.casasync.utils.Utils.safeShowDialog
 import com.google.firebase.firestore.FirebaseFirestore
@@ -83,6 +84,11 @@ class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
                 .replace(R.id.fragment_container, LoginFragment())
                 .addToBackStack(null)
                 .commit()
+        }
+
+        val btnBack = view.findViewById<ImageButton>(R.id.btnBack)
+        btnBack.setOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
         }
     }
 }

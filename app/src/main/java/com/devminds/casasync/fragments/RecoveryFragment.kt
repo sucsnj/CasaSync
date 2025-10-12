@@ -2,6 +2,7 @@ package com.devminds.casasync.fragments
 
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.fragment.app.activityViewModels
 import com.devminds.casasync.utils.Utils.safeShowDialog
@@ -94,6 +95,11 @@ class RecoveryFragment : BaseFragment(R.layout.fragment_recovery) {
                 .replace(R.id.fragment_container, CadastroFragment())
                 .addToBackStack(null)
                 .commit()
+        }
+
+        val btnBack = view.findViewById<ImageButton>(R.id.btnBack)
+        btnBack.setOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
         }
     }
 }
