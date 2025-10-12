@@ -2,29 +2,19 @@ package com.devminds.casasync.fragments
 
 import android.os.Bundle
 import android.view.View
-import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
-import com.devminds.casasync.utils.Utils.safeShowDialog
-import com.google.firebase.firestore.FirebaseFirestore
-import androidx.fragment.app.activityViewModels
-import com.devminds.casasync.utils.Utils.safeShowDialog
 import com.devminds.casasync.R
 import com.devminds.casasync.TransitionType
-import com.devminds.casasync.parts.House
 import com.devminds.casasync.parts.User
 import com.devminds.casasync.setCustomTransition
 import com.devminds.casasync.utils.JsonStorageManager
-import com.devminds.casasync.views.UserViewModel
+import com.devminds.casasync.utils.Utils.safeShowDialog
 import com.google.android.material.appbar.MaterialToolbar
 import java.util.UUID
-import kotlin.getValue
-import androidx.navigation.fragment.findNavController
 
 // declaração de classe com fragmento para o cadastro
 class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
-
-    private val userViewModel: UserViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -34,7 +24,7 @@ class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
         val newLoginPrompt = view.findViewById<TextView>(R.id.newLoginPrompt) // login (email)
         val newPasswordPrompt = view.findViewById<TextView>(R.id.newPasswordPrompt) // senha
 
-        var userFound: User? = null
+        var userFound: User?
 
         val btnCadastro = view.findViewById<TextView>(R.id.btnCadastro) // botão de cadastro
 

@@ -24,7 +24,7 @@ object JsonStorageManager {
             val fileName = "user_${userId}.json"
             val json = context.openFileInput(fileName).bufferedReader().use { it.readText() }
             gson.fromJson(json, User::class.java)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             null
         }
     }
@@ -33,7 +33,7 @@ object JsonStorageManager {
         return try {
             val json = context.openFileInput(INDEX_FILE).bufferedReader().use { it.readText() }
             Gson().fromJson(json, Array<UserIndexEntry>::class.java).toList()
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             emptyList()
         }
     }

@@ -5,7 +5,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 object FirestoreHelper {
 
-    fun escreverUsuario() {
+    fun writeUser() {
         val db = FirebaseFirestore.getInstance()
         val user = hashMapOf("nome" to "Carlos", "cidade" to "Jaboatão")
 
@@ -14,7 +14,7 @@ object FirestoreHelper {
             .addOnFailureListener { Log.e("Firestore", "Erro: ", it) }
     }
 
-    fun lerUsuarios() {
+    fun readUsers() {
         val db = FirebaseFirestore.getInstance()
         db.collection("usuarios").get()
             .addOnSuccessListener { result ->
