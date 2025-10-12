@@ -114,5 +114,6 @@
     <string name="success_delete_dialog">, apagado com sucesso!</string>
     <string name="devminds_text">DevMinds</string>
     <string name="welcome_text">Olá,&#160;</string>
+    <string name="button_back">Voltar</string>
 
 </resources>

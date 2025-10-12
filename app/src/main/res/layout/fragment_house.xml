@@ -6,6 +6,19 @@
     android:layout_height="match_parent"
     android:background="@drawable/background_layout">
 
+    <ImageButton
+        android:id="@+id/btnBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/button_back"
+        android:src="@drawable/ico_arrow_back"
+        app:tint="@android:color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <LinearLayout
         android:id="@+id/layoutHouse"
         android:layout_width="0dp"
@@ -16,7 +29,7 @@
         app:layout_constraintBottom_toTopOf="@id/btnAddDependent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/btnBack" >
 
         <!--    entrou na casa    -->
         <LinearLayout

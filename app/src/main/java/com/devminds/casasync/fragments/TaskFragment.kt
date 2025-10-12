@@ -2,6 +2,7 @@ package com.devminds.casasync.fragments
 
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -36,6 +37,11 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
         taskViewModel.task.observe(viewLifecycleOwner) { task ->
             taskName.text = "Tarefa: ${task?.name ?: "Sem nome"}"
             taskDescription.text = "Descrição: ${task?.description ?: "Um Anel para a todos governar"}"
+        }
+
+        val btnBack = view.findViewById<ImageButton>(R.id.btnBack)
+        btnBack.setOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
         }
     }
 }

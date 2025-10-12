@@ -24,6 +24,7 @@ import java.util.UUID
 import android.content.Context
 import android.view.inputmethod.InputMethodManager
 import android.view.inputmethod.EditorInfo
+import android.widget.ImageButton
 import com.devminds.casasync.utils.Utils
 
 class DependentFragment : Fragment(R.layout.fragment_dependent) {
@@ -125,6 +126,11 @@ class DependentFragment : Fragment(R.layout.fragment_dependent) {
                 }
                 .setNegativeButton("Cancelar", null)
                 .show()
+        }
+
+        val btnBack = view.findViewById<ImageButton>(R.id.btnBack)
+        btnBack.setOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
         }
     }
 }
