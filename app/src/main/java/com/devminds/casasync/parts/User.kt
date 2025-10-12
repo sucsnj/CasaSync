@@ -6,6 +6,5 @@ data class User(
     var name: String,
     var login: String,
     var password: String,
-    val houses: MutableList<House> = mutableListOf(),
-    val dependents: MutableList<Dependent> = mutableListOf()
+    val houses: MutableList<House> = mutableListOf()
 )
