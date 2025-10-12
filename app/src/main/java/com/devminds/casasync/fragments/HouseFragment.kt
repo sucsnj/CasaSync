@@ -25,6 +25,7 @@ import android.content.Context
 import android.view.inputmethod.InputMethodManager
 import android.view.inputmethod.EditorInfo
 import android.widget.ImageButton
+import com.google.android.material.appbar.MaterialToolbar
 
 class HouseFragment : Fragment(R.layout.fragment_house) {
 
@@ -38,7 +39,10 @@ class HouseFragment : Fragment(R.layout.fragment_house) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val houseName = view.findViewById<TextView>(R.id.houseName)
+        val houseTitle = view.findViewById<MaterialToolbar>(R.id.topBar)
+        houseViewModel.house.observe(viewLifecycleOwner) { house ->
+            houseTitle.title = house?.name ?: "Bolsão"
+        }
 
         val recyclerDependents = view.findViewById<RecyclerView>(R.id.recyclerDependents)
         recyclerDependents.layoutManager = LinearLayoutManager(requireContext())
@@ -75,10 +79,6 @@ class HouseFragment : Fragment(R.layout.fragment_house) {
             }
         }
 
-        houseViewModel.house.observe(viewLifecycleOwner) { house ->
-            houseName.text = "Você está na casa, ${house?.name ?: "Bolsão"}"
-        }
-
         val btnAddDependent = view.findViewById<TextView>(R.id.btnAddDependent)
         btnAddDependent.setOnClickListener {
 
@@ -109,11 +109,6 @@ class HouseFragment : Fragment(R.layout.fragment_house) {
                 }
                 .setNegativeButton("Cancelar", null)
                 .show()
-        }
-
-        val btnBack = view.findViewById<ImageButton>(R.id.btnBack)
-        btnBack.setOnClickListener {
-            requireActivity().onBackPressedDispatcher.onBackPressed()
         }
     }
 }

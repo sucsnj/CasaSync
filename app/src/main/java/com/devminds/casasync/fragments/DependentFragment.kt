@@ -26,12 +26,15 @@ import android.view.inputmethod.InputMethodManager
 import android.view.inputmethod.EditorInfo
 import android.widget.ImageButton
 import com.devminds.casasync.utils.Utils
+import com.devminds.casasync.views.HouseViewModel
+import com.google.android.material.appbar.MaterialToolbar
 
 class DependentFragment : Fragment(R.layout.fragment_dependent) {
 
     private lateinit var adapter: GenericAdapter<Task>
     private val userViewModel: UserViewModel by activityViewModels()
     private val dependentViewModel: DependentViewModel by activityViewModels()
+    private val houseViewModel: HouseViewModel by activityViewModels()
     private var currentDependent: Dependent? = null
     private val taskList: MutableList<Task>
         get() = currentDependent?.tasks ?: mutableListOf()
@@ -39,7 +42,12 @@ class DependentFragment : Fragment(R.layout.fragment_dependent) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val dependentName = view.findViewById<TextView>(R.id.dependentName)
+        val dependentTitle = view.findViewById<MaterialToolbar>(R.id.topBar)
+        dependentViewModel.dependent.observe(viewLifecycleOwner) { dependent ->
+            val text = "Tarefas para " + (dependent?.name ?: "Bilbo")
+            dependentTitle.title = text
+        }
+
         val recyclerTasks = view.findViewById<RecyclerView>(R.id.recyclerTasks)
         recyclerTasks.layoutManager = LinearLayoutManager(requireContext())
 
@@ -76,10 +84,6 @@ class DependentFragment : Fragment(R.layout.fragment_dependent) {
             if (position != -1) {
                 adapter.notifyItemChanged(position)
             }
-        }
-
-        dependentViewModel.dependent.observe(viewLifecycleOwner) { dependent ->
-            dependentName.text = "Você é o, ${dependent?.name ?: "Smeagol"}"
         }
 
         val btnAddTask = view.findViewById<TextView>(R.id.btnAddTask)
@@ -126,11 +130,6 @@ class DependentFragment : Fragment(R.layout.fragment_dependent) {
                 }
                 .setNegativeButton("Cancelar", null)
                 .show()
-        }
-
-        val btnBack = view.findViewById<ImageButton>(R.id.btnBack)
-        btnBack.setOnClickListener {
-            requireActivity().onBackPressedDispatcher.onBackPressed()
         }
     }
 }

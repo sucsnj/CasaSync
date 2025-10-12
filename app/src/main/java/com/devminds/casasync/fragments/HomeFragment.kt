@@ -28,6 +28,7 @@ import android.app.Activity
 import androidx.annotation.StringRes
 import com.devminds.casasync.utils.Utils
 import com.devminds.casasync.utils.Utils.keyboardDelay
+import com.google.android.material.appbar.MaterialToolbar
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
@@ -39,7 +40,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val txtWelcome = view.findViewById<TextView>(R.id.welcomeText)
+        val txtWelcome = view.findViewById<MaterialToolbar>(R.id.topBar)
 
         // carrega o usuário do json
         val userId = userViewModel.user.value?.id ?: "devminds"
@@ -50,7 +51,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         userViewModel.user.observe(viewLifecycleOwner) { user ->
             val welcome = getString(R.string.welcome_text) + (user?.name ?: "Usuário")
-            txtWelcome.text = welcome
+            txtWelcome.title = welcome
         }
 
         // cria uma casa
