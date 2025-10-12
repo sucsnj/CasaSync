@@ -95,37 +95,25 @@
     <!-- Misc -->
     <string name="text_never_reached">_Nunca chegará aqui_</string>
     <string name="text_main_screen">para bens sozinho no meio da tela</string>
+    <string name="rename_dialog">Renomear</string>
+    <string name="delete_dialog">Apagar</string>
 
-    <string name="text_about_devminds">A DevMinds nasceu durante o curso de Ciência da Computação e Análise e Desenvolvimento de Sistemas, formada por cinco amigos e colegas da Faculdade Nova Roma — referência em ensino de tecnologia. Unidos pela paixão por inovação, transformamos conhecimento em impacto social por meio da criação de projetos diversos, em múltiplas linguagens e plataformas.
+    <string name="house_options">Opções para a casa: </string>
+    <string name="rename_success_house_toast">Casa renomeada</string>
 
-Mais do que uma equipe, somos uma empresa comprometida com soluções acessíveis, eficientes e centradas no bem-estar dos nossos clientes. Nosso propósito é usar a tecnologia como ferramenta para gerar valor real à comunidade, sempre com criatividade, responsabilidade e excelência.</string>
-    <string name="text_about_casasync">O CasaSync nasceu com o propósito de promover equilíbrio e colaboração dentro das famílias, acreditando que uma boa convivência começa com uma rotina bem organizada. Por isso, desenvolvemos uma ferramenta simples, intuitiva e eficiente para distribuir tarefas de forma justa e prática.
+    <string name="dependent_options">Opções para o dependente: </string>
+    <string name="rename_success_dependent_toast">Depentende renomeada</string>
 
-Inicialmente voltado para o gerenciamento doméstico, o aplicativo rapidamente demonstrou seu potencial além do lar, sendo útil também em ambientes corporativos e comerciais. Com ele, é possível criar e gerenciar tarefas em casas, apartamentos, prédios, armazéns e muito mais — basta usar a imaginação, e o CasaSync faz o resto.
+    <string name="task_options">Opções para a tarefa: </string>
+    <string name="rename_success_task_toast">Tarefa renomeada</string>
 
-Seja para famílias, empresas ou comunidades, o CasaSync é a solução ideal para transformar a gestão de espaços em algo colaborativo, funcional e acessível.</string>
-
-    <!-- Desenvolvedores -->
-    <string name="dev_1">Anthony Rychard</string>
-    <string name="link_git_dev_1">https://github.com/Ryuki49</string>
-    <string name="dev_2">Alyson Thadeu</string>
-    <string name="link_git_dev_2">https://github.com/AlysonThadeu</string>
-    <string name="dev_3">Carlos Santana</string>
-    <string name="link_git_dev_3">https://github.com/sucsnj</string>
-    <string name="dev_4">Edvan Cordeiro</string>
-    <string name="link_git_dev_4">https://github.com/Edvan-Junior</string>
-    <string name="dev_5">Rogens Rocha</string>
-    <string name="link_git_dev_5">https://github.com/RogensRocha</string>
-
-    <string name="dependent_name_default">Gandalf</string>
-    <string name="dependent_photo_description">Foto do Dependente</string>
-    <string name="button_add_task">Adicionar Tarefa</string>
-    <string name="button_add_house">Adicionar Casa</string>
-    <string name="in_house_text">"Você está na casa, "</string>
-    <string name="button_add_dependent">Adicionar Dependente</string>
-    <string name="task_name">"Esta é a tarefa, "</string>
-    <string name="active_dependent">"Atarefado: "</string>
-    <string name="task_description">Descrição da tarefa</string>
-    <string name="details_text">Clique para ver detalhes</string>
+    <string name="accept_dialog">Aceitar</string>
+    <string name="cancel_dialog">Cancelar</string>
+    <string name="confirm_delete_dialog">Quer mesmo apagar:&#160;</string>
+    <string name="question_mark">\?</string>
+    <string name="success_delete_dialog">, apagado com sucesso!</string>
+    <string name="devminds_text">DevMinds</string>
+    <string name="welcome_text">Olá,&#160;</string>
+    <string name="button_back">Voltar</string>
 
 </resources>

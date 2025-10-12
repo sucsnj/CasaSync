@@ -6,6 +6,30 @@
     android:layout_height="match_parent"
     android:background="@drawable/background_layout">
 
+    <!-- barra fixa no top-->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_layout"
+        android:elevation="8dp"
+        app:navigationIcon="@drawable/ico_arrow_back"
+        app:navigationContentDescription="@string/button_back"
+        app:title="Bolsão"
+        app:titleTextAppearance="@style/ToolbarTitleStyle"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/housePhoto"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="end"
+            android:layout_marginEnd="12dp"
+            android:contentDescription="Foto da Casa"
+            android:scaleType="centerCrop"
+            android:src="@drawable/devminds" />
+    </com.google.android.material.appbar.MaterialToolbar>
+
     <LinearLayout
         android:id="@+id/layoutHouse"
         android:layout_width="0dp"
@@ -16,43 +40,14 @@
         app:layout_constraintBottom_toTopOf="@id/btnAddDependent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <!--    entrou na casa    -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/houseName"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Você está na casa, Bolsão"
-                android:textColor="@android:color/black"
-                android:textSize="40sp"
-                android:textStyle="bold" />
-
-            <ImageView
-                android:id="@+id/housePhoto"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginStart="12dp"
-                android:contentDescription="Foto da Casa"
-                android:scaleType="centerCrop"
-                android:src="@drawable/devminds" />
-
-        </LinearLayout>
+        app:layout_constraintTop_toTopOf="parent" >
 
         <!--    Lista de dependentes    -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerDependents"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="30dp"
             android:layout_weight="1" />
     </LinearLayout>
 

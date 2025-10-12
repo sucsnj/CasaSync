@@ -1,11 +1,13 @@
 package com.devminds.casasync.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import com.devminds.casasync.utils.Utils.safeShowDialog
 import androidx.fragment.app.activityViewModels
 import com.devminds.casasync.FirestoreHelper
+import com.devminds.casasync.HomeActivity
 import com.devminds.casasync.R
 import com.devminds.casasync.TransitionType
 import com.devminds.casasync.parts.User
@@ -19,6 +21,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
 
         // testando o firestore
 //        FirestoreHelper.escreverUsuario()
@@ -49,16 +52,11 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
 
                     userViewModel.setUser(userFound)
 
-                    context?.let {
-                        safeShowDialog(getString(R.string.login_success_message))
-                    }
+                    val intent = Intent(requireContext(), HomeActivity::class.java)
+                    intent.putExtra("userId", userFound.id)
+                    startActivity(intent)
+                    requireActivity().finish()
 
-                    val fragment = HomeFragment()
-                    Utils.clearBackStack(requireActivity().supportFragmentManager)
-                    parentFragmentManager.beginTransaction()
-                        .setCustomTransition(TransitionType.SLIDE)
-                        .replace(R.id.fragment_container, fragment)
-                        .commit()
                 } else {
                     safeShowDialog(getString(R.string.login_error_message))
                 }
@@ -80,7 +78,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                 .setCustomTransition(TransitionType.SLIDE)
 
                 // muda o fragmento (tela)
-                .replace(R.id.fragment_container, CadastroFragment())
+                .replace(R.id.fragment_container_main, CadastroFragment())
                 .addToBackStack(null) // guarda a tela atual para voltar quando precisar
                 .commit() // finaliza a transação
         }
@@ -92,7 +90,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         btnForgotPassword.setOnClickListener {
             parentFragmentManager.beginTransaction()
                 .setCustomTransition(TransitionType.SLIDE) // animação de troca de tela
-                .replace(R.id.fragment_container, RecoveryFragment())
+                .replace(R.id.fragment_container_main, RecoveryFragment())
                 .addToBackStack(null) // guarda a tela atual para voltar quando precisar
                 .commit() // finaliza a transação
         }

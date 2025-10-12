@@ -1,146 +1,164 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/recovery"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent">
 
-    <LinearLayout
+    <!-- barra fixa no top-->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/topBar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
+        android:layout_height="wrap_content"
+        android:elevation="8dp"
+        app:navigationIcon="@drawable/ico_arrow_back"
+        app:navigationContentDescription="@string/button_back"
+        app:title="Cadastro"
+        app:titleTextColor="@android:color/black"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!--  permite rolagem vertical na tela  -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:orientation="vertical"
-        android:padding="28dp"
-        android:layout_marginTop="70dp"
-        tools:layout_editor_absoluteX="32dp"
-        tools:layout_editor_absoluteY="-76dp">
 
-        <ImageView
-            android:layout_width="160dp"
-            android:layout_height="160dp"
-            android:contentDescription="@string/image_logo_casasync_description"
-            android:src="@drawable/casasyncnome" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:layout_marginTop="16dp"
-            android:text="@string/recovery_title_text"
-            android:textStyle="bold"
-            android:textSize="34sp" />
-
-        <EditText
-            android:id="@+id/txtLoginPromptRecovery"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:autofillHints="username"
-            android:hint="@string/login_email_prompt"
-            android:drawableStart="@drawable/ico_email"
-            android:drawablePadding="10dp"
-            android:inputType="textEmailAddress" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp">
-
-            <Button
-                android:id="@+id/btnRecovery"
-                style="@style/BotaoAzul"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/recovery_validate_button"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintWidth_percent="0.8" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <EditText
-            android:id="@+id/promptChangePassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:autofillHints="password"
-            android:hint="@string/recovery_new_password_prompt"
-            android:drawableStart="@drawable/ico_password"
-            android:drawablePadding="10dp"
-            android:inputType="textPassword" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp">
-
-            <Button
-                android:id="@+id/btnChangePassword"
-                style="@style/BotaoAzul"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/recovery_change_password_button"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintWidth_percent="0.8" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-        >
-            <TextView
-                android:id="@+id/txtCreatAccount"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:gravity="center"
-                android:text="@string/new_account_text"
-                android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/btnCreatAccount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:paddingStart="2dp"
-                android:textStyle="bold"
-                android:gravity="center"
-                android:textColor="@color/azul_escuro"
-                android:text="@string/new_account_button"
-                android:textSize="15sp" />
-        </LinearLayout>
-
-        <!-- Este LinearLayout contém um problema com a imagem muito grande
-               e por isso não pode ser resumido num único TextView-->
-        <LinearLayout
-            android:id="@+id/footer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="bottom|center_horizontal"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="28dp">
 
             <ImageView
-                android:id="@+id/imgFooter"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:contentDescription="@string/image_logo_devminds_description"
-                android:src="@drawable/devminds" />
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:contentDescription="@string/image_logo_casasync_description"
+                android:src="@drawable/casasyncnome" />
 
             <TextView
-                android:id="@+id/txtFooter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@string/text_powered_by_devminds"
-                android:textSize="11sp" />
+                android:layout_gravity="start"
+                android:layout_marginTop="16dp"
+                android:text="@string/recovery_title_text"
+                android:textSize="34sp"
+                android:textStyle="bold" />
 
+            <EditText
+                android:id="@+id/txtLoginPromptRecovery"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:autofillHints="username"
+                android:drawableStart="@drawable/ico_email"
+                android:drawablePadding="10dp"
+                android:hint="@string/login_email_prompt"
+                android:inputType="textEmailAddress" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp">
+
+                <Button
+                    android:id="@+id/btnRecovery"
+                    style="@style/BotaoAzul"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/recovery_validate_button"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_percent="0.8" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <EditText
+                android:id="@+id/promptChangePassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:autofillHints="password"
+                android:drawableStart="@drawable/ico_password"
+                android:drawablePadding="10dp"
+                android:hint="@string/recovery_new_password_prompt"
+                android:inputType="textPassword" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp">
+
+                <Button
+                    android:id="@+id/btnChangePassword"
+                    style="@style/BotaoAzul"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/recovery_change_password_button"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_percent="0.8" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/txtCreatAccount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:gravity="center"
+                    android:text="@string/new_account_text"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/btnCreatAccount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:gravity="center"
+                    android:paddingStart="2dp"
+                    android:text="@string/new_account_button"
+                    android:textColor="@color/azul_escuro"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- Este LinearLayout contém um problema com a imagem muito grande
+                   e por isso não pode ser resumido num único TextView-->
+            <LinearLayout
+                android:id="@+id/footer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="bottom|center_horizontal"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <ImageView
+                    android:id="@+id/imgFooter"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:contentDescription="@string/image_logo_devminds_description"
+                    android:src="@drawable/devminds" />
+
+                <TextView
+                    android:id="@+id/txtFooter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/text_powered_by_devminds"
+                    android:textSize="11sp" />
+
+            </LinearLayout>
         </LinearLayout>
-
-    </LinearLayout>
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

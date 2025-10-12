@@ -2,6 +2,6 @@ package com.devminds.casasync.parts
 
 data class Task(
     val id: String,
-    val name: String,
+    var name: String,
     val description: String,
 )

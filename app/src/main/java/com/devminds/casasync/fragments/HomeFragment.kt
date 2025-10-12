@@ -21,6 +21,14 @@ import com.devminds.casasync.setCustomTransition
 import com.devminds.casasync.utils.JsonStorageManager
 import com.devminds.casasync.views.UserViewModel
 import java.util.UUID
+import android.content.Context
+import android.view.inputmethod.InputMethodManager
+import android.view.inputmethod.EditorInfo
+import android.app.Activity
+import androidx.annotation.StringRes
+import com.devminds.casasync.utils.Utils
+import com.devminds.casasync.utils.Utils.keyboardDelay
+import com.google.android.material.appbar.MaterialToolbar
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
@@ -32,17 +40,18 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val txtWelcome = view.findViewById<TextView>(R.id.welcomeText)
+        val txtWelcome = view.findViewById<MaterialToolbar>(R.id.topBar)
 
         // carrega o usuário do json
-        val userId = userViewModel.user.value?.id ?: "devminds"
+        val userId = activity?.intent?.getStringExtra("userId") ?: userViewModel.user.value?.id ?: "devminds"
         val user = JsonStorageManager.loadUser(requireContext(), userId)
         user?.let {
             userViewModel.setUser(it)
         }
 
         userViewModel.user.observe(viewLifecycleOwner) { user ->
-            txtWelcome.text = "Bem-vindo, ${user?.name ?: "Usuário"}"
+            val welcome = getString(R.string.welcome_text) + (user?.name ?: "Usuário")
+            txtWelcome.title = welcome
         }
 
         // cria uma casa
@@ -57,8 +66,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 ContextThemeWrapper(context, R.style.CustomDialog)
             )
                 .setView(dialogView)
-                .setPositiveButton("Adicionar", null)
-                .setNegativeButton("Cancelar", null)
+                .setPositiveButton(getString(R.string.button_add), null)
+                .setNegativeButton(getString(R.string.button_cancel), null)
                 .create()
 
             dialog.show()
@@ -104,67 +113,25 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         val recyclerHouses = view.findViewById<RecyclerView>(R.id.recyclerHouses)
         recyclerHouses.layoutManager = LinearLayoutManager(requireContext())
 
-        adapter = GenericAdapter(
-            items = houseList,
-            layoutResId = R.layout.item_generic,
-            bind = { itemView, house ->
-                itemView.findViewById<TextView>(R.id.itemName).text = house.name
-            },
-            onItemClick = { selectedHouse ->
-                val fragment = HouseFragment().apply {
+        val recycler = recyclerHouses
+
+        adapter = Utils.createHouseAdapter(
+            recycler = recyclerHouses,
+            list = houseList,
+            fragmentFactory = { houseId ->
+                HouseFragment().apply {
                     arguments = Bundle().apply {
-                        putString("houseId", selectedHouse.id)
+                        putString("houseId", houseId)
                     }
                 }
-
-                parentFragmentManager.beginTransaction()
-                    .setCustomTransition(TransitionType.SLIDE)
-                    .replace(R.id.fragment_container, fragment)
-                    .addToBackStack(null)
-                    .commit()
             },
-            onItemLongClick = { selectedHouse ->
-                val options = arrayOf("Renomear", "Apagar") // opções de menu de contexto
-
-                AlertDialog.Builder(requireContext())
-                    .setTitle("Opções para a casa \"${selectedHouse.name}\"")
-                    .setItems(options) { _, which ->
-                        when (which) {
-                            0 -> {
-                                // Renomear (ainda não implementado)
-                                Toast.makeText(
-                                    requireContext(),
-                                    "Renomear casa (em breve)",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                            1 -> {
-                                // Apagar
-                                AlertDialog.Builder(requireContext())
-                                    .setTitle("Apagar Casa")
-                                    .setMessage("Tem certeza que deseja apagar a casa \"${selectedHouse.name}\"?")
-                                    .setPositiveButton("Apagar") { _, _ ->
-                                        userViewModel.user.value?.let { user ->
-                                            user.houses.remove(selectedHouse)
-                                            adapter.notifyDataSetChanged()
-                                            JsonStorageManager.saveUser(requireContext(), user)
-                                            Toast.makeText(
-                                                requireContext(),
-                                                "Casa apagada com sucesso",
-                                                Toast.LENGTH_SHORT
-                                            ).show()
-                                        }
-                                    }
-                                    .setNegativeButton("Cancelar", null)
-                                    .show()
-                            }
-                        }
-                    }
-                    .show()
-                true
-            }
+            fragmentManager = parentFragmentManager,
+            itemOptions = getString(R.string.house_options),
+            successRenameToast = getString(R.string.rename_success_house_toast),
+            userViewModel = userViewModel,
+            context = requireContext()
         )
 
-        recyclerHouses.adapter = adapter
+        recycler.adapter = adapter
     }
 }

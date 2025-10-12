@@ -2,6 +2,7 @@ package com.devminds.casasync.fragments
 
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -9,6 +10,7 @@ import com.devminds.casasync.R
 import com.devminds.casasync.parts.Task
 import com.devminds.casasync.views.DependentViewModel
 import com.devminds.casasync.views.TaskViewModel
+import com.google.android.material.appbar.MaterialToolbar
 
 class TaskFragment : Fragment(R.layout.fragment_task) {
 
@@ -20,22 +22,25 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val taskName = view.findViewById<TextView>(R.id.taskName)
+        val toolbar = view.findViewById<MaterialToolbar>(R.id.topBar)
         val taskDescription = view.findViewById<TextView>(R.id.taskDescription)
-        val dependentName = view.findViewById<TextView>(R.id.dependentName)
+        taskViewModel.task.observe(viewLifecycleOwner) { task ->
+            toolbar.title = task?.name ?: "Tarefa"
+            taskDescription.text = "O que fazer? ${task?.description ?: "Um Anel para a todos governar"}"
+        }
+
+        toolbar.setNavigationOnClickListener {
+            parentFragmentManager.popBackStack()
+        }
 
         val taskId = arguments?.getString("taskId")
 
+        val dependentName = view.findViewById<TextView>(R.id.dependentName)
         dependentViewModel.dependent.observe(viewLifecycleOwner) { dependent ->
-            dependentName.text = "Atarefado: ${dependent?.name ?: "Smeagol"}"
+            dependentName.text = dependent?.name ?: "Smeagol"
 
             currentTask = dependent?.tasks?.find { it.id == taskId }
             currentTask?.let { taskViewModel.setTask(it) }
-        }
-
-        taskViewModel.task.observe(viewLifecycleOwner) { task ->
-            taskName.text = "Tarefa: ${task?.name ?: "Sem nome"}"
-            taskDescription.text = "Descrição: ${task?.description ?: "Um Anel para a todos governar"}"
         }
     }
 }

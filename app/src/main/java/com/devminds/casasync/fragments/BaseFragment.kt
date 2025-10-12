@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment
 
 // passa um fragmento como parâmetro para a classe
 // herda de fragment
-abstract class BaseFragment(@LayoutRes private val layoutRes: Int) : Fragment() {
+abstract class BaseFragment(@param:LayoutRes private val layoutRes: Int) : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

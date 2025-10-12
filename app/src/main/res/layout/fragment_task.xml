@@ -6,52 +6,38 @@
     android:layout_height="match_parent"
     android:background="@drawable/background_layout">
 
+    <!-- barra fixa no top-->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_layout"
+        android:elevation="8dp"
+        app:navigationIcon="@drawable/ico_arrow_back"
+        app:navigationContentDescription="@string/button_back"
+        app:title="Tarefas"
+        app:titleTextAppearance="@style/ToolbarTitleStyle"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/dependentPhoto"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="end"
+            android:layout_marginEnd="12dp"
+            android:contentDescription="Foto do dependente"
+            android:scaleType="centerCrop"
+            android:src="@drawable/devminds" />
+    </com.google.android.material.appbar.MaterialToolbar>
+
     <LinearLayout
         android:id="@+id/layoutTask"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="top"
+        android:layout_marginTop="65dp"
         android:orientation="vertical"
-        android:padding="28dp">
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnDeleteTask"
-            style="@style/BotaoAzulClaro"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            app:icon="@drawable/delete"
-            app:iconGravity="textStart"
-            app:iconPadding="0dp" />
-
-        <!--    entrou na tarefa    -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/taskName"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Esta é a tarefa, ..."
-                android:textColor="@android:color/black"
-                android:textSize="40sp"
-                android:textStyle="bold" />
-
-            <ImageView
-                android:id="@+id/taskPhoto"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginStart="12dp"
-                android:contentDescription="Foto da Casa"
-                android:scaleType="centerCrop"
-                android:src="@drawable/devminds" />
-
-        </LinearLayout>
+        android:padding="28dp" >
 
         <TextView
             android:id="@+id/dependentName"
@@ -74,7 +60,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerTasks"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
