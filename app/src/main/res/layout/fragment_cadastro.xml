@@ -10,14 +10,12 @@
         android:id="@+id/topBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/background_layout"
         android:elevation="8dp"
         app:navigationIcon="@drawable/ico_arrow_back"
         app:navigationContentDescription="@string/button_back"
         app:title="Cadastro"
         app:titleTextColor="@android:color/black"
         app:layout_constraintTop_toTopOf="parent" />
-
 
     <!--  permite rolagem vertical na tela  -->
     <ScrollView
@@ -33,7 +31,6 @@
             android:id="@+id/layoutNewUser"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/background_layout"
             android:gravity="center"
             android:orientation="vertical"
             android:padding="28dp">
