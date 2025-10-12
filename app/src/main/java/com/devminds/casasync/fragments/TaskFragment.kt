@@ -22,11 +22,15 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val taskName = view.findViewById<MaterialToolbar>(R.id.topBar)
+        val toolbar = view.findViewById<MaterialToolbar>(R.id.topBar)
         val taskDescription = view.findViewById<TextView>(R.id.taskDescription)
         taskViewModel.task.observe(viewLifecycleOwner) { task ->
-            taskName.title = task?.name ?: "Tarefa"
+            toolbar.title = task?.name ?: "Tarefa"
             taskDescription.text = "O que fazer? ${task?.description ?: "Um Anel para a todos governar"}"
+        }
+
+        toolbar.setNavigationOnClickListener {
+            parentFragmentManager.popBackStack()
         }
 
         val taskId = arguments?.getString("taskId")

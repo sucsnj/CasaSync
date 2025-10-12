@@ -42,10 +42,14 @@ class DependentFragment : Fragment(R.layout.fragment_dependent) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val dependentTitle = view.findViewById<MaterialToolbar>(R.id.topBar)
+        val toolbar = view.findViewById<MaterialToolbar>(R.id.topBar)
         dependentViewModel.dependent.observe(viewLifecycleOwner) { dependent ->
             val text = "Tarefas para " + (dependent?.name ?: "Bilbo")
-            dependentTitle.title = text
+            toolbar.title = text
+        }
+
+        toolbar.setNavigationOnClickListener {
+            parentFragmentManager.popBackStack()
         }
 
         val recyclerTasks = view.findViewById<RecyclerView>(R.id.recyclerTasks)

@@ -39,9 +39,13 @@ class HouseFragment : Fragment(R.layout.fragment_house) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val houseTitle = view.findViewById<MaterialToolbar>(R.id.topBar)
+        val toolbar = view.findViewById<MaterialToolbar>(R.id.topBar)
         houseViewModel.house.observe(viewLifecycleOwner) { house ->
-            houseTitle.title = house?.name ?: "Bolsão"
+            toolbar.title = house?.name ?: "Bolsão"
+        }
+
+        toolbar.setNavigationOnClickListener {
+            parentFragmentManager.popBackStack()
         }
 
         val recyclerDependents = view.findViewById<RecyclerView>(R.id.recyclerDependents)

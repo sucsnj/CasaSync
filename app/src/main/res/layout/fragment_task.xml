@@ -13,6 +13,8 @@
         android:layout_height="wrap_content"
         android:background="@drawable/background_layout"
         android:elevation="8dp"
+        app:navigationIcon="@drawable/ico_arrow_back"
+        app:navigationContentDescription="@string/button_back"
         app:title="Tarefas"
         app:titleTextAppearance="@style/ToolbarTitleStyle"
         app:layout_constraintTop_toTopOf="parent">
