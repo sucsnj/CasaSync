@@ -13,9 +13,7 @@
         android:gravity="center"
         android:orientation="vertical"
         android:padding="28dp"
-        android:layout_marginTop="70dp"
-        tools:layout_editor_absoluteX="32dp"
-        tools:layout_editor_absoluteY="-76dp">
+        android:layout_marginTop="70dp">
 
         <ImageView
             android:layout_width="160dp"

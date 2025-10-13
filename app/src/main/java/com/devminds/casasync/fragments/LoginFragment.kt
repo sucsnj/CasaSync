@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import com.devminds.casasync.HomeActivity
 import com.devminds.casasync.R
@@ -12,6 +13,7 @@ import com.devminds.casasync.setCustomTransition
 import com.devminds.casasync.utils.JsonStorageManager
 import com.devminds.casasync.utils.Utils.safeShowDialog
 import com.devminds.casasync.views.UserViewModel
+import android.widget.LinearLayout
 
 class LoginFragment : BaseFragment(R.layout.fragment_login) {
     private val userViewModel: UserViewModel by activityViewModels()
@@ -27,6 +29,16 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         // guarda os dados de login e senha
         val txtLoginPrompt = view.findViewById<TextView>(R.id.txtLoginPrompt)
         val txtPasswordPrompt = view.findViewById<TextView>(R.id.txtPasswordPrompt)
+
+        val btnGoogleLogin = view.findViewById<LinearLayout>(R.id.btnGoogleLogin)
+
+        btnGoogleLogin.setOnClickListener {
+            Toast.makeText(
+                context,
+                "implementando google login",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
 
         // representa o botão de login
         val btnLogin = view.findViewById<TextView>(R.id.btnLogin)
@@ -53,6 +65,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                     intent.putExtra("userId", userFound.id)
                     startActivity(intent)
                     requireActivity().finish()
+                    Toast.makeText(context, "Logado com sucesso!", Toast.LENGTH_SHORT).show()
 
                 } else {
                     safeShowDialog(getString(R.string.login_error_message))

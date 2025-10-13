@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -15,10 +16,14 @@ import com.devminds.casasync.parts.Dependent
 import com.devminds.casasync.parts.House
 import com.devminds.casasync.utils.JsonStorageManager
 import com.devminds.casasync.utils.Utils
+import android.widget.Toast
 import com.devminds.casasync.views.HouseViewModel
 import com.devminds.casasync.views.UserViewModel
 import com.google.android.material.appbar.MaterialToolbar
 import java.util.UUID
+import com.devminds.casasync.TransitionType
+import com.devminds.casasync.setCustomTransition
+import com.devminds.casasync.fragments.HomeFragment
 
 class HouseFragment : Fragment(R.layout.fragment_house) {
 
@@ -39,6 +44,38 @@ class HouseFragment : Fragment(R.layout.fragment_house) {
 
         toolbar.setNavigationOnClickListener {
             parentFragmentManager.popBackStack()
+        }
+
+        toolbar.inflateMenu(R.menu.topbar_menu)
+
+        toolbar.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.action_settings -> {
+                    Toast.makeText(
+                        context,
+                        "implementando settings",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    true
+                }
+                R.id.action_help -> {
+                    Toast.makeText(
+                        context,
+                        "implementando ajuda",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    true
+                }
+                R.id.action_homepage -> {
+                    Toast.makeText(
+                        context,
+                        "implementando homepage",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    true
+                }
+                else -> false
+            }
         }
 
         val recyclerDependents = view.findViewById<RecyclerView>(R.id.recyclerDependents)
@@ -80,15 +117,23 @@ class HouseFragment : Fragment(R.layout.fragment_house) {
         btnAddDependent.setOnClickListener {
 
             val context = requireContext()
-            val input = EditText(context).apply {
-                hint = getString(R.string.dependent_name_prompt)
+
+            val layout = LinearLayout(context).apply {
+                orientation = LinearLayout.VERTICAL
+                setPadding(50, 40, 50, 10)
             }
+
+            val inputName = EditText(context).apply {
+                hint = context.getString(R.string.dependent_name_prompt)
+            }
+
+            layout.addView(inputName)
 
             AlertDialog.Builder(context)
                 .setTitle(getString(R.string.btn_add_dependent))
-                .setView(input)
+                .setView(layout)
                 .setPositiveButton(getString(R.string.button_add)) { _, _ ->
-                    val dependentName = input.text.toString().trim()
+                    val dependentName = inputName.text.toString().trim()
                     if (dependentName.isNotEmpty()) {
                         val newDependent = Dependent(
                             id = UUID.randomUUID().toString(),

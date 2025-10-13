@@ -14,7 +14,8 @@
         android:elevation="8dp"
         app:navigationIcon="@drawable/ico_arrow_back"
         app:navigationContentDescription="@string/button_back"
-        app:title="Cadastro"
+        app:navigationIconTint="@android:color/black"
+        app:title=""
         app:titleTextColor="@android:color/black"
         app:layout_constraintTop_toTopOf="parent" />
 

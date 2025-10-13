@@ -15,6 +15,7 @@
         android:elevation="8dp"
         app:navigationIcon="@drawable/ico_arrow_back"
         app:navigationContentDescription="@string/button_back"
+        app:navigationIconTint="@android:color/black"
         app:title="Tarefas para Bilbo"
         app:titleTextAppearance="@style/ToolbarTitleStyle"
         app:layout_constraintTop_toTopOf="parent">

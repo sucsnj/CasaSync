@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.Toast
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
@@ -31,7 +32,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val txtWelcome = view.findViewById<MaterialToolbar>(R.id.topBar)
+        val toolbar = view.findViewById<MaterialToolbar>(R.id.topBar)
 
         // carrega o usuário do json
         val userId =
@@ -45,7 +46,33 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         userViewModel.user.observe(viewLifecycleOwner) { user ->
             val welcome = getString(R.string.welcome_text) + (user?.name ?: "Usuário")
-            txtWelcome.title = welcome
+            toolbar.title = welcome
+        }
+
+        toolbar.inflateMenu(R.menu.topbar_menu)
+        val menu = toolbar.menu // para controlar a visibilidade dos itens
+        menu.findItem(R.id.action_homepage).isVisible = false
+
+        toolbar.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.action_settings -> {
+                    Toast.makeText(
+                        context,
+                        "implementando settings",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    true
+                }
+                R.id.action_help -> {
+                    Toast.makeText(
+                        context,
+                        "implementando ajuda",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    true
+                }
+                else -> false
+            }
         }
 
         // cria uma casa
