@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/background_layout">
 
-    <!-- barra fixa no top-->
+    <!-- barra fixa no topo - botões inseridos via kotlin -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/topBar"
         android:layout_width="match_parent"
@@ -14,18 +14,19 @@
         android:background="@drawable/background_layout"
         android:elevation="8dp"
         app:title="Olá, Gandalf"
-        app:titleTextAppearance="@style/ToolbarTitleStyle"
+        app:titleTextAppearance="@style/ToolbarTitleStyleMain"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:id="@+id/userPhoto"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_gravity="end"
-            android:layout_marginEnd="12dp"
-            android:contentDescription="Foto do usuário"
-            android:scaleType="centerCrop"
-            android:src="@drawable/devminds" />
+        <!--    ImageView removido para inserir imagem via kotlin    -->
+        <!--        <ImageView-->
+        <!--            android:id="@+id/userPhoto"-->
+        <!--            android:layout_width="36dp"-->
+        <!--            android:layout_height="36dp"-->
+        <!--            android:layout_gravity="end"-->
+        <!--            android:layout_marginEnd="12dp"-->
+        <!--            android:contentDescription="Foto do usuário"-->
+        <!--            android:scaleType="centerInside"-->
+        <!--            android:src="@drawable/devminds" />-->
     </com.google.android.material.appbar.MaterialToolbar>
 
     <LinearLayout
@@ -45,7 +46,7 @@
             android:id="@+id/recyclerHouses"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="60dp"
             android:layout_weight="1" />
     </LinearLayout>
 

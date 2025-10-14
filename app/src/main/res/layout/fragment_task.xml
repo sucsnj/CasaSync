@@ -27,7 +27,7 @@
             android:layout_gravity="end"
             android:layout_marginEnd="12dp"
             android:contentDescription="Foto do dependente"
-            android:scaleType="centerCrop"
+            android:scaleType="centerInside"
             android:src="@drawable/devminds" />
     </com.google.android.material.appbar.MaterialToolbar>
 
@@ -62,7 +62,7 @@
             android:id="@+id/recyclerTasks"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="10dp" />
+            android:layout_marginTop="20dp" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -15,7 +15,7 @@
         android:foreground="?attr/selectableItemBackground"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="24dp">
+        android:padding="15dp">
 
         <!-- Bloco de textos -->
         <LinearLayout
@@ -50,7 +50,7 @@
             android:layout_height="48dp"
             android:layout_marginStart="12dp"
             android:contentDescription="Imagem da casa"
-            android:scaleType="centerCrop"
+            android:scaleType="centerInside"
             android:src="@drawable/devminds" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

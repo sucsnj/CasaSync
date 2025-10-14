@@ -21,7 +21,11 @@
         <item name="android:windowMinWidthMinor">90%</item>
     </style>
     <style name="ToolbarTitleStyle" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
-        <item name="android:textSize">36sp</item>
+        <item name="android:textSize">32sp</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+    <style name="ToolbarTitleStyleMain" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">18sp</item>
         <item name="android:textColor">@android:color/black</item>
     </style>
 </resources>
