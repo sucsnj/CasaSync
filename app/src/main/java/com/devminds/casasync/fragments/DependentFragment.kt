@@ -13,8 +13,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.devminds.casasync.GenericAdapter
 import com.devminds.casasync.R
+import com.devminds.casasync.TransitionType
 import com.devminds.casasync.parts.Dependent
 import com.devminds.casasync.parts.Task
+import com.devminds.casasync.setCustomTransition
 import com.devminds.casasync.utils.JsonStorageManager
 import com.devminds.casasync.utils.Utils
 import com.devminds.casasync.views.DependentViewModel
@@ -36,7 +38,7 @@ class DependentFragment : Fragment(R.layout.fragment_dependent) {
 
         val toolbar = view.findViewById<MaterialToolbar>(R.id.topBar)
         dependentViewModel.dependent.observe(viewLifecycleOwner) { dependent ->
-            val text = getString(R.string.tasks_to) + (dependent?.name ?: "Dependente")
+            val text = dependent?.name ?: "Dependente"
             toolbar.title = text
         }
 
@@ -45,15 +47,16 @@ class DependentFragment : Fragment(R.layout.fragment_dependent) {
         }
 
         toolbar.inflateMenu(R.menu.topbar_menu)
+        val menu = toolbar.menu
+        menu.findItem(R.id.more_options).isVisible = false
 
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
-                R.id.more_options -> {
-                    Toast.makeText(
-                        context,
-                        "implementando mais opções",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                R.id.action_homepage -> {
+                    parentFragmentManager.beginTransaction()
+                        .setCustomTransition(TransitionType.FADE)
+                        .replace(R.id.fragment_container, HomeFragment())
+                        .commit()
                     true
                 }
                 else -> false

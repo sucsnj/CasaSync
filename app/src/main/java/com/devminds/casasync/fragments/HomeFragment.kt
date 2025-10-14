@@ -1,6 +1,8 @@
 package com.devminds.casasync.fragments
 
+import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +11,9 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.view.ContextThemeWrapper
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -21,6 +25,8 @@ import com.devminds.casasync.utils.Utils
 import com.devminds.casasync.views.UserViewModel
 import com.google.android.material.appbar.MaterialToolbar
 import java.util.UUID
+import androidx.core.graphics.scale
+import androidx.core.graphics.drawable.toDrawable
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
@@ -32,7 +38,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val toolbar = view.findViewById<MaterialToolbar>(R.id.topBar)
+        requireActivity().supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
 
         // carrega o usuário do json
         val userId =
@@ -44,6 +50,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             userViewModel.setUser(it)
         }
 
+        val toolbar = view.findViewById<MaterialToolbar>(R.id.topBar)
+
         userViewModel.user.observe(viewLifecycleOwner) { user ->
             val welcome = getString(R.string.welcome_text) + (user?.name ?: "Usuário")
             toolbar.title = welcome
@@ -51,7 +59,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         toolbar.inflateMenu(R.menu.topbar_menu)
         val menu = toolbar.menu // para controlar a visibilidade dos itens
-//        menu.findItem(R.id.action_homepage).isVisible = false
+        menu.findItem(R.id.action_homepage).isVisible = false
 
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {

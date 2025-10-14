@@ -6,27 +6,31 @@
     android:layout_height="match_parent"
     android:background="@drawable/background_layout">
 
-    <!-- barra fixa no topo - botões inseridos via kotlin -->
+    <ImageView
+        android:id="@+id/userPhoto"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="15dp"
+        android:elevation="8dp"
+        android:contentDescription="Foto do usuário"
+        android:scaleType="centerInside"
+        android:src="@drawable/devminds"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- barra fixa no topo -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/topBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/background_layout"
-        android:elevation="8dp"
+        android:layout_marginStart="30dp"
         app:title="Olá, Gandalf"
+        app:subtitle="Meu perfil"
         app:titleTextAppearance="@style/ToolbarTitleStyleMain"
         app:layout_constraintTop_toTopOf="parent">
-
-        <!--    ImageView removido para inserir imagem via kotlin    -->
-        <!--        <ImageView-->
-        <!--            android:id="@+id/userPhoto"-->
-        <!--            android:layout_width="36dp"-->
-        <!--            android:layout_height="36dp"-->
-        <!--            android:layout_gravity="end"-->
-        <!--            android:layout_marginEnd="12dp"-->
-        <!--            android:contentDescription="Foto do usuário"-->
-        <!--            android:scaleType="centerInside"-->
-        <!--            android:src="@drawable/devminds" />-->
     </com.google.android.material.appbar.MaterialToolbar>
 
     <LinearLayout

@@ -100,7 +100,7 @@ class RecoveryFragment : BaseFragment(R.layout.fragment_recovery) {
 
         toolbar.inflateMenu(R.menu.topbar_menu)
         val menu = toolbar.menu // para controlar a visibilidade dos itens
-//        menu.findItem(R.id.action_homepage).isVisible = false
+        menu.findItem(R.id.action_homepage).isVisible = false
 
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {

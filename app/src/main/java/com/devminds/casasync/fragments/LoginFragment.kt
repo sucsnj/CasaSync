@@ -14,6 +14,7 @@ import com.devminds.casasync.utils.JsonStorageManager
 import com.devminds.casasync.utils.Utils.safeShowDialog
 import com.devminds.casasync.views.UserViewModel
 import android.widget.LinearLayout
+import androidx.fragment.app.FragmentManager
 
 class LoginFragment : BaseFragment(R.layout.fragment_login) {
     private val userViewModel: UserViewModel by activityViewModels()
@@ -21,6 +22,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        requireActivity().supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
 
         // testando o firestore
 //        FirestoreHelper.writeUser()

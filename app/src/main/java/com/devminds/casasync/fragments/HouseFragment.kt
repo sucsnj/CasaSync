@@ -47,15 +47,17 @@ class HouseFragment : Fragment(R.layout.fragment_house) {
         }
 
         toolbar.inflateMenu(R.menu.topbar_menu)
+        val menu = toolbar.menu
+        menu.findItem(R.id.more_options).isVisible = false
 
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
-                R.id.more_options -> {
-                    Toast.makeText(
-                        context,
-                        "implementando mais opções",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                R.id.action_homepage -> {
+                    parentFragmentManager.beginTransaction()
+                        .setCustomTransition(TransitionType.FADE)
+                        .replace(R.id.fragment_container, HomeFragment())
+                        .addToBackStack(null)
+                        .commit()
                     true
                 }
                 else -> false

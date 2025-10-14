@@ -2,6 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/action_homepage"
+        android:title="Início"
+        android:icon="@drawable/ico_homepage"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/more_options"
         android:title="Mais opções"
         android:icon="@drawable/ico_more_vert"
