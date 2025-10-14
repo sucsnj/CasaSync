@@ -125,5 +125,6 @@
     <string name="add_new_house">Adicionar nova casa</string>
     <string name="house_name">Nome da casa</string>
     <string name="devminds_team_description">descrição do casasync</string>
+    <string name="casasync_app_description">descrição do app casasync</string>
 
 </resources>
