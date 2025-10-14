@@ -121,6 +121,9 @@
     <string name="add_task_dialog">Adicionar nova tarefa</string>
     <string name="invalid_house_name">Digite um nome válido</string>
     <string name="btn_add_dependent">Adicionar novo dependente</string>
-    <string name="to_do">O que fazer? %1$s</string>
+    <string name="to_do">O que fazer?&#160;</string>
+    <string name="add_new_house">Adicionar nova casa</string>
+    <string name="house_name">Nome da casa</string>
+    <string name="devminds_team_description">descrição do casasync</string>
 
 </resources>
