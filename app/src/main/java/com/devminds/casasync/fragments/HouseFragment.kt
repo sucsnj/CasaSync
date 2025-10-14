@@ -50,26 +50,10 @@ class HouseFragment : Fragment(R.layout.fragment_house) {
 
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
-                R.id.action_settings -> {
+                R.id.more_options -> {
                     Toast.makeText(
                         context,
-                        "implementando settings",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    true
-                }
-                R.id.action_help -> {
-                    Toast.makeText(
-                        context,
-                        "implementando ajuda",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    true
-                }
-                R.id.action_homepage -> {
-                    Toast.makeText(
-                        context,
-                        "implementando homepage",
+                        "implementando mais opções",
                         Toast.LENGTH_SHORT
                     ).show()
                     true

@@ -3,6 +3,7 @@ package com.devminds.casasync.fragments
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.devminds.casasync.R
@@ -31,6 +32,22 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
 
         toolbar.setNavigationOnClickListener {
             parentFragmentManager.popBackStack()
+        }
+
+        toolbar.inflateMenu(R.menu.topbar_menu)
+
+        toolbar.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.more_options -> {
+                    Toast.makeText(
+                        context,
+                        "implementando mais opções",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    true
+                }
+                else -> false
+            }
         }
 
         val taskId = arguments?.getString("taskId")

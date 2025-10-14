@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -41,6 +42,22 @@ class DependentFragment : Fragment(R.layout.fragment_dependent) {
 
         toolbar.setNavigationOnClickListener {
             parentFragmentManager.popBackStack()
+        }
+
+        toolbar.inflateMenu(R.menu.topbar_menu)
+
+        toolbar.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.more_options -> {
+                    Toast.makeText(
+                        context,
+                        "implementando mais opções",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    true
+                }
+                else -> false
+            }
         }
 
         val recyclerTasks = view.findViewById<RecyclerView>(R.id.recyclerTasks)

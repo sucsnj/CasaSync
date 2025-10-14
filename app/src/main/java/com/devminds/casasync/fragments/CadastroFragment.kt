@@ -87,22 +87,14 @@ class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
 
         toolbar.inflateMenu(R.menu.topbar_menu)
         val menu = toolbar.menu // para controlar a visibilidade dos itens
-        menu.findItem(R.id.action_homepage).isVisible = false
+//        menu.findItem(R.id.action_homepage).isVisible = false
 
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
-                R.id.action_settings -> {
+                R.id.more_options -> {
                     Toast.makeText(
                         context,
-                        "implementando settings",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    true
-                }
-                R.id.action_help -> {
-                    Toast.makeText(
-                        context,
-                        "implementando ajuda",
+                        "implementando mais opções",
                         Toast.LENGTH_SHORT
                     ).show()
                     true
