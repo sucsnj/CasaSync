@@ -27,6 +27,7 @@ import com.google.android.material.appbar.MaterialToolbar
 import java.util.UUID
 import androidx.core.graphics.scale
 import androidx.core.graphics.drawable.toDrawable
+import com.devminds.casasync.utils.PopupMenu
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
@@ -61,14 +62,13 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         val menu = toolbar.menu // para controlar a visibilidade dos itens
         menu.findItem(R.id.action_homepage).isVisible = false
 
+        // lógica do menu de opções
+        val menuItemView = toolbar.findViewById<View>(R.id.more_options)
+
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.more_options -> {
-                    Toast.makeText(
-                        context,
-                        "implementando mais opções",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    PopupMenu.show(requireContext(), menuItemView)
                     true
                 }
                 else -> false
