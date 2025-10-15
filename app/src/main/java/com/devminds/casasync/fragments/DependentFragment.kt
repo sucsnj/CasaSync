@@ -1,11 +1,11 @@
 package com.devminds.casasync.fragments
 
 import android.os.Bundle
+import android.view.Menu
 import android.view.View
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -32,11 +32,16 @@ class DependentFragment : Fragment(R.layout.fragment_dependent) {
     private var currentDependent: Dependent? = null
     private val taskList: MutableList<Task>
         get() = currentDependent?.tasks ?: mutableListOf()
+    private lateinit var toolbar: MaterialToolbar
+    private lateinit var menu: Menu
+    private lateinit var recyclerTasks: RecyclerView
+    private var dependentId: String? = null
+    private lateinit var btnAddTask: TextView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val toolbar = view.findViewById<MaterialToolbar>(R.id.topBar)
+        toolbar = view.findViewById(R.id.topBar)
         dependentViewModel.dependent.observe(viewLifecycleOwner) { dependent ->
             val text = dependent?.name ?: "Dependente"
             toolbar.title = text
@@ -47,7 +52,7 @@ class DependentFragment : Fragment(R.layout.fragment_dependent) {
         }
 
         toolbar.inflateMenu(R.menu.topbar_menu)
-        val menu = toolbar.menu
+        menu = toolbar.menu
         menu.findItem(R.id.more_options).isVisible = false
 
         toolbar.setOnMenuItemClickListener { item ->
@@ -63,10 +68,10 @@ class DependentFragment : Fragment(R.layout.fragment_dependent) {
             }
         }
 
-        val recyclerTasks = view.findViewById<RecyclerView>(R.id.recyclerTasks)
+        recyclerTasks = view.findViewById(R.id.recyclerTasks)
         recyclerTasks.layoutManager = LinearLayoutManager(requireContext())
 
-        val dependentId = arguments?.getString("dependentId")
+        dependentId = arguments?.getString("dependentId")
 
         userViewModel.user.observe(viewLifecycleOwner) { user ->
             currentDependent = user?.houses
@@ -101,7 +106,7 @@ class DependentFragment : Fragment(R.layout.fragment_dependent) {
             }
         }
 
-        val btnAddTask = view.findViewById<TextView>(R.id.btnAddTask)
+        btnAddTask = view.findViewById(R.id.btnAddTask)
         btnAddTask.setOnClickListener {
             val context = requireContext()
 

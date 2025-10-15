@@ -1,6 +1,7 @@
 package com.devminds.casasync.fragments
 
 import android.os.Bundle
+import android.view.Menu
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
@@ -16,14 +17,11 @@ import com.devminds.casasync.parts.Dependent
 import com.devminds.casasync.parts.House
 import com.devminds.casasync.utils.JsonStorageManager
 import com.devminds.casasync.utils.Utils
-import android.widget.Toast
 import com.devminds.casasync.views.HouseViewModel
 import com.devminds.casasync.views.UserViewModel
 import com.google.android.material.appbar.MaterialToolbar
 import java.util.UUID
 import com.devminds.casasync.TransitionType
-import com.devminds.casasync.setCustomTransition
-import com.devminds.casasync.fragments.HomeFragment
 
 class HouseFragment : Fragment(R.layout.fragment_house) {
 
@@ -33,11 +31,16 @@ class HouseFragment : Fragment(R.layout.fragment_house) {
     private var currentHouse: House? = null
     private val dependentList: MutableList<Dependent>
         get() = currentHouse?.dependents ?: mutableListOf()
+    private lateinit var toolbar: MaterialToolbar
+    private lateinit var menu: Menu
+    private lateinit var recyclerDependents: RecyclerView
+    private var houseId: String? = null
+    private lateinit var btnAddDependent: TextView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val toolbar = view.findViewById<MaterialToolbar>(R.id.topBar)
+        toolbar = view.findViewById(R.id.topBar)
         houseViewModel.house.observe(viewLifecycleOwner) { house ->
             toolbar.title = house?.name ?: "Casa"
         }
@@ -47,27 +50,23 @@ class HouseFragment : Fragment(R.layout.fragment_house) {
         }
 
         toolbar.inflateMenu(R.menu.topbar_menu)
-        val menu = toolbar.menu
+        menu = toolbar.menu
         menu.findItem(R.id.more_options).isVisible = false
 
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.action_homepage -> {
-                    parentFragmentManager.beginTransaction()
-                        .setCustomTransition(TransitionType.FADE)
-                        .replace(R.id.fragment_container, HomeFragment())
-                        .addToBackStack(null)
-                        .commit()
+                    Utils.replaceFragment(parentFragmentManager, HomeFragment(), TransitionType.FADE)
                     true
                 }
                 else -> false
             }
         }
 
-        val recyclerDependents = view.findViewById<RecyclerView>(R.id.recyclerDependents)
+        recyclerDependents = view.findViewById(R.id.recyclerDependents)
         recyclerDependents.layoutManager = LinearLayoutManager(requireContext())
 
-        val houseId = arguments?.getString("houseId")
+        houseId = arguments?.getString("houseId")
 
         userViewModel.user.observe(viewLifecycleOwner) { user ->
             currentHouse = user?.houses?.find { it.id == houseId }
@@ -99,7 +98,7 @@ class HouseFragment : Fragment(R.layout.fragment_house) {
             }
         }
 
-        val btnAddDependent = view.findViewById<TextView>(R.id.btnAddDependent)
+        btnAddDependent = view.findViewById(R.id.btnAddDependent)
         btnAddDependent.setOnClickListener {
 
             val context = requireContext()
