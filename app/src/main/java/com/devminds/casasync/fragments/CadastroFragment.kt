@@ -1,33 +1,41 @@
 package com.devminds.casasync.fragments
 
 import android.os.Bundle
+import android.view.Menu
 import android.view.View
 import android.widget.TextView
 import com.devminds.casasync.R
 import com.devminds.casasync.TransitionType
 import com.devminds.casasync.parts.User
-import com.devminds.casasync.setCustomTransition
 import com.devminds.casasync.utils.JsonStorageManager
 import com.devminds.casasync.utils.Utils.safeShowDialog
 import com.google.android.material.appbar.MaterialToolbar
 import java.util.UUID
 import com.devminds.casasync.utils.PopupMenu
+import com.devminds.casasync.utils.Utils
 
 // declaração de classe com fragmento para o cadastro
 class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
+
+    private lateinit var newUserPrompt: TextView
+    private lateinit var newLoginPrompt: TextView
+    private lateinit var newPasswordPrompt: TextView
+    private lateinit var btnCadastro: TextView
+    private lateinit var btnLoginAccount: TextView
+    private lateinit var toolbar: MaterialToolbar
+    private lateinit var menu: Menu
+    private lateinit var menuItemView: View
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         // guarda os dados de cadastro
-        val newUserPrompt = view.findViewById<TextView>(R.id.newUserPrompt) // nome
-        val newLoginPrompt = view.findViewById<TextView>(R.id.newLoginPrompt) // login (email)
-        val newPasswordPrompt = view.findViewById<TextView>(R.id.newPasswordPrompt) // senha
+        newUserPrompt = view.findViewById(R.id.newUserPrompt) // nome
+        newLoginPrompt = view.findViewById(R.id.newLoginPrompt) // login (email)
+        newPasswordPrompt = view.findViewById(R.id.newPasswordPrompt) // senha
 
         var userFound: User?
-
-        val btnCadastro = view.findViewById<TextView>(R.id.btnCadastro) // botão de cadastro
-
+        btnCadastro = view.findViewById(R.id.btnCadastro) // botão de cadastro
         btnCadastro.setOnClickListener {
 
             // transforma os dados em string
@@ -57,11 +65,7 @@ class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
                 // persiste o usuário em json
                 JsonStorageManager.saveUser(requireContext(), newUser)
 
-                parentFragmentManager.beginTransaction() // troca de tela para o login
-                    .setCustomTransition(TransitionType.FADE)
-                    .replace(R.id.fragment_container, LoginFragment())
-                    .addToBackStack(null)
-                    .commit()
+                Utils.replaceFragment(parentFragmentManager, LoginFragment(), TransitionType.SLIDE)
 
             } else {
                 safeShowDialog(getString(R.string.new_account_error_message))
@@ -69,28 +73,23 @@ class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
         }
 
         // lógica da troca de tela para o login
-        val btnLoginAccount = view.findViewById<TextView>(R.id.btnLoginAccount) // botão de login
-
+        btnLoginAccount = view.findViewById(R.id.btnLoginAccount) // botão de login
         btnLoginAccount.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .setCustomTransition(TransitionType.FADE)
-                .replace(R.id.fragment_container, LoginFragment())
-                .addToBackStack(null)
-                .commit()
+            Utils.replaceFragment(parentFragmentManager, LoginFragment(), TransitionType.SLIDE)
         }
 
-        val toolbar = view.findViewById<MaterialToolbar>(R.id.topBar)
-
+        toolbar = view.findViewById(R.id.topBar)
         toolbar.setNavigationOnClickListener {
             parentFragmentManager.popBackStack() // volta para login
         }
 
         toolbar.inflateMenu(R.menu.topbar_menu)
-        val menu = toolbar.menu // para controlar a visibilidade dos itens em toolbar
+
+        menu = toolbar.menu // para controlar a visibilidade dos itens em toolbar
         menu.findItem(R.id.action_homepage).isVisible = false
 
         // lógica do menu de opções
-        val menuItemView = toolbar.findViewById<View>(R.id.more_options)
+        menuItemView = toolbar.findViewById(R.id.more_options)
 
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
@@ -99,6 +98,7 @@ class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
 
                     // visibilidade dos itens em submenu
                     menuPopup.findItem(R.id.user_settings).isVisible = false
+                    menuPopup.findItem(R.id.app_settings).isVisible = false
                     true
                 }
                 else -> false

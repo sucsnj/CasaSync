@@ -1,34 +1,40 @@
 package com.devminds.casasync.fragments
 
 import android.os.Bundle
+import android.view.Menu
 import android.view.View
 import android.widget.TextView
 import com.devminds.casasync.R
 import com.devminds.casasync.TransitionType
 import com.devminds.casasync.parts.User
-import com.devminds.casasync.setCustomTransition
 import com.devminds.casasync.utils.JsonStorageManager
 import com.devminds.casasync.utils.PopupMenu
+import com.devminds.casasync.utils.Utils
 import com.devminds.casasync.utils.Utils.safeShowDialog
 import com.google.android.material.appbar.MaterialToolbar
 
 // declaração de classe para recuperação de senha
 class RecoveryFragment : BaseFragment(R.layout.fragment_recovery) {
 
+    private lateinit var promptChangePassword: TextView
+    private lateinit var btnChangePassword: TextView
+    private lateinit var txtLoginPromptRecovery: TextView
+    private lateinit var btnRecovery: TextView
+    private lateinit var btnCreateAccount: TextView
+    private lateinit var toolbar: MaterialToolbar
+    private lateinit var menu: Menu
+    private lateinit var menuItemView: View
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // esconde o prompt para trocar senha
-        val promptChangePassword = view.findViewById<TextView>(R.id.promptChangePassword)
-        val btnChangePassword = view.findViewById<TextView>(R.id.btnChangePassword)
+        promptChangePassword = view.findViewById(R.id.promptChangePassword)
         promptChangePassword.visibility = View.INVISIBLE
-        btnChangePassword.visibility = View.INVISIBLE
 
-        val txtLoginPromptRecovery = view.findViewById<TextView>(R.id.txtLoginPromptRecovery)
-        val btnRecovery = view.findViewById<TextView>(R.id.btnRecovery)
+        txtLoginPromptRecovery = view.findViewById(R.id.txtLoginPromptRecovery)
 
         var userFound: User? = null
-
+        btnRecovery = view.findViewById(R.id.btnRecovery)
         btnRecovery.setOnClickListener {
 
             val login = txtLoginPromptRecovery.text.toString()
@@ -58,7 +64,8 @@ class RecoveryFragment : BaseFragment(R.layout.fragment_recovery) {
             }
         }
 
-        // lógica para trocar senha
+        btnChangePassword = view.findViewById(R.id.btnChangePassword)
+        btnChangePassword.visibility = View.INVISIBLE
         btnChangePassword.setOnClickListener {
 
             val password = promptChangePassword.text.toString()
@@ -71,39 +78,29 @@ class RecoveryFragment : BaseFragment(R.layout.fragment_recovery) {
 
                 safeShowDialog(getString(R.string.recovery_password_changed_message))
 
-                parentFragmentManager.beginTransaction()
-                    .setCustomTransition(TransitionType.SLIDE)
-                    .replace(R.id.fragment_container, LoginFragment())
-                    .addToBackStack(null)
-                    .commit()
+                Utils.replaceFragment(parentFragmentManager, LoginFragment(), TransitionType.SLIDE)
             } else {
                 safeShowDialog(getString(R.string.recovery_password_empty_message))
             }
         }
 
         // lógica para criar conta
-        val btnCreateAccount = view.findViewById<TextView>(R.id.btnCreatAccount)
-
+        btnCreateAccount = view.findViewById(R.id.btnCreatAccount)
         btnCreateAccount.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .setCustomTransition(TransitionType.SLIDE)
-                .replace(R.id.fragment_container, CadastroFragment())
-                .addToBackStack(null)
-                .commit()
+            Utils.replaceFragment(parentFragmentManager, CadastroFragment(), TransitionType.SLIDE)
         }
 
-        val toolbar = view.findViewById<MaterialToolbar>(R.id.topBar)
-
+        toolbar = view.findViewById(R.id.topBar)
         toolbar.setNavigationOnClickListener {
             parentFragmentManager.popBackStack() // volta para login
         }
 
         toolbar.inflateMenu(R.menu.topbar_menu)
-        val menu = toolbar.menu // para controlar a visibilidade dos itens
+        menu = toolbar.menu // para controlar a visibilidade dos itens
         menu.findItem(R.id.action_homepage).isVisible = false
 
         // lógica do menu de opções
-        val menuItemView = toolbar.findViewById<View>(R.id.more_options)
+        menuItemView = toolbar.findViewById(R.id.more_options)
 
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
