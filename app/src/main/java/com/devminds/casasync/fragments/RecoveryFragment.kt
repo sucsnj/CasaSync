@@ -3,7 +3,6 @@ package com.devminds.casasync.fragments
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
-import android.widget.Toast
 import com.devminds.casasync.R
 import com.devminds.casasync.TransitionType
 import com.devminds.casasync.parts.User

@@ -1,17 +1,13 @@
 package com.devminds.casasync.fragments
 
-import android.graphics.Bitmap
 import android.graphics.Color
-import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.Toast
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.view.ContextThemeWrapper
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
@@ -25,8 +21,6 @@ import com.devminds.casasync.utils.Utils
 import com.devminds.casasync.views.UserViewModel
 import com.google.android.material.appbar.MaterialToolbar
 import java.util.UUID
-import androidx.core.graphics.scale
-import androidx.core.graphics.drawable.toDrawable
 import com.devminds.casasync.utils.PopupMenu
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
