@@ -9,6 +9,7 @@ import com.devminds.casasync.TransitionType
 import com.devminds.casasync.parts.User
 import com.devminds.casasync.setCustomTransition
 import com.devminds.casasync.utils.JsonStorageManager
+import com.devminds.casasync.utils.PopupMenu
 import com.devminds.casasync.utils.Utils.safeShowDialog
 import com.google.android.material.appbar.MaterialToolbar
 
@@ -102,14 +103,16 @@ class RecoveryFragment : BaseFragment(R.layout.fragment_recovery) {
         val menu = toolbar.menu // para controlar a visibilidade dos itens
         menu.findItem(R.id.action_homepage).isVisible = false
 
+        // lógica do menu de opções
+        val menuItemView = toolbar.findViewById<View>(R.id.more_options)
+
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.more_options -> {
-                    Toast.makeText(
-                        context,
-                        "implementando mais opções",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    val menuPopup = PopupMenu.show(requireContext(), menuItemView)
+
+                    // visibilidade dos itens em submenu
+                    menuPopup.findItem(R.id.user_settings).isVisible = false
                     true
                 }
                 else -> false

@@ -3,7 +3,6 @@ package com.devminds.casasync.fragments
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
-import android.widget.Toast
 import com.devminds.casasync.R
 import com.devminds.casasync.TransitionType
 import com.devminds.casasync.parts.User
@@ -12,6 +11,7 @@ import com.devminds.casasync.utils.JsonStorageManager
 import com.devminds.casasync.utils.Utils.safeShowDialog
 import com.google.android.material.appbar.MaterialToolbar
 import java.util.UUID
+import com.devminds.casasync.utils.PopupMenu
 
 // declaração de classe com fragmento para o cadastro
 class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
@@ -86,17 +86,19 @@ class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
         }
 
         toolbar.inflateMenu(R.menu.topbar_menu)
-        val menu = toolbar.menu // para controlar a visibilidade dos itens
+        val menu = toolbar.menu // para controlar a visibilidade dos itens em toolbar
         menu.findItem(R.id.action_homepage).isVisible = false
+
+        // lógica do menu de opções
+        val menuItemView = toolbar.findViewById<View>(R.id.more_options)
 
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.more_options -> {
-                    Toast.makeText(
-                        context,
-                        "implementando mais opções",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    val menuPopup = PopupMenu.show(requireContext(), menuItemView)
+
+                    // visibilidade dos itens em submenu
+                    menuPopup.findItem(R.id.user_settings).isVisible = false
                     true
                 }
                 else -> false
