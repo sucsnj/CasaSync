@@ -7,7 +7,6 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -24,7 +23,7 @@ import com.devminds.casasync.views.UserViewModel
 import com.google.android.material.appbar.MaterialToolbar
 import java.util.UUID
 
-class DependentFragment : Fragment(R.layout.fragment_dependent) {
+class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
 
     private lateinit var adapter: GenericAdapter<Task>
     private val userViewModel: UserViewModel by activityViewModels()

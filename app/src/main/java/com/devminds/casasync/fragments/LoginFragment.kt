@@ -13,8 +13,6 @@ import com.devminds.casasync.utils.JsonStorageManager
 import com.devminds.casasync.utils.Utils.safeShowDialog
 import com.devminds.casasync.views.UserViewModel
 import android.widget.LinearLayout
-import androidx.fragment.app.FragmentManager
-import com.devminds.casasync.utils.Utils
 
 class LoginFragment : BaseFragment(R.layout.fragment_login) {
     private val userViewModel: UserViewModel by activityViewModels()
@@ -28,8 +26,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // limpa o histórico de navegação
-        requireActivity().supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        clearNavHistory()
 
         // testando o firestore
 //        FirestoreHelper.writeUser()
@@ -83,12 +80,12 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
 
         btnCreateAccount = view.findViewById(R.id.btnCreatAccount)
         btnCreateAccount.setOnClickListener {
-            Utils.replaceFragment(parentFragmentManager, CadastroFragment(), TransitionType.SLIDE)
+            replaceFragment( CadastroFragment(), TransitionType.SLIDE)
         }
 
         btnForgotPassword = view.findViewById(R.id.txtForgotPassword)
         btnForgotPassword.setOnClickListener {
-            Utils.replaceFragment(parentFragmentManager, RecoveryFragment(), TransitionType.SLIDE)
+            replaceFragment( RecoveryFragment(), TransitionType.SLIDE)
         }
     }
 }

@@ -9,8 +9,6 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.view.ContextThemeWrapper
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -25,7 +23,7 @@ import com.google.android.material.appbar.MaterialToolbar
 import java.util.UUID
 import com.devminds.casasync.utils.PopupMenu
 
-class HomeFragment : Fragment(R.layout.fragment_home) {
+class HomeFragment : BaseFragment(R.layout.fragment_home) {
 
     private lateinit var adapter: GenericAdapter<House>
     private val userViewModel: UserViewModel by activityViewModels()
@@ -43,7 +41,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        requireActivity().supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        clearNavHistory()
 
         // carrega o usuário do json
         userId = activity?.intent?.getStringExtra("userId") ?: userViewModel.user.value?.id ?: getString(

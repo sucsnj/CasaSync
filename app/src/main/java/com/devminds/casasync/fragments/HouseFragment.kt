@@ -7,7 +7,6 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,7 +22,7 @@ import com.google.android.material.appbar.MaterialToolbar
 import java.util.UUID
 import com.devminds.casasync.TransitionType
 
-class HouseFragment : Fragment(R.layout.fragment_house) {
+class HouseFragment : BaseFragment(R.layout.fragment_house) {
 
     private lateinit var adapter: GenericAdapter<Dependent>
     private val userViewModel: UserViewModel by activityViewModels()
@@ -56,7 +55,7 @@ class HouseFragment : Fragment(R.layout.fragment_house) {
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.action_homepage -> {
-                    Utils.replaceFragment(parentFragmentManager, HomeFragment(), TransitionType.FADE)
+                    replaceFragment(HomeFragment(), TransitionType.FADE)
                     true
                 }
                 else -> false

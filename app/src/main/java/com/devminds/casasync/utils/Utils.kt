@@ -24,16 +24,6 @@ import com.devminds.casasync.views.UserViewModel
 // classe utilitária
 object Utils {
 
-    // função para mudar de fragmento
-    fun replaceFragment(fragmentManager: FragmentManager, fragment: Fragment, transitionType: TransitionType) {
-
-        val transaction = fragmentManager.beginTransaction()
-            .setCustomTransition(transitionType)
-        transaction.replace(R.id.fragment_container, fragment)
-            .addToBackStack(null)
-            .commit()
-    }
-
     // função para converter dp para pixels
     fun dpToPx(context: Context, dp: Int): Int {
         val scale = context.resources.displayMetrics.density
@@ -44,13 +34,6 @@ object Utils {
     fun Fragment.safeShowDialog(message: String, iconResId: Int? = null, duration: Long = 3000L) {
         if (isAdded) {
             DialogUtils.show(requireContext(), message, R.drawable.casasync, duration)
-        }
-    }
-
-    fun clearBackStack(fragmentManager: FragmentManager) {
-        if (fragmentManager.backStackEntryCount > 0) {
-            val first = fragmentManager.getBackStackEntryAt(0)
-            fragmentManager.popBackStack(first.id, FragmentManager.POP_BACK_STACK_INCLUSIVE)
         }
     }
 

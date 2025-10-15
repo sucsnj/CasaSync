@@ -4,17 +4,15 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.View
 import android.widget.TextView
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.devminds.casasync.R
 import com.devminds.casasync.TransitionType
 import com.devminds.casasync.parts.Task
-import com.devminds.casasync.utils.Utils
 import com.devminds.casasync.views.DependentViewModel
 import com.devminds.casasync.views.TaskViewModel
 import com.google.android.material.appbar.MaterialToolbar
 
-class TaskFragment : Fragment(R.layout.fragment_task) {
+class TaskFragment : BaseFragment(R.layout.fragment_task) {
 
     private val dependentViewModel: DependentViewModel by activityViewModels()
     private val taskViewModel: TaskViewModel by activityViewModels()
@@ -47,7 +45,7 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.action_homepage -> {
-                    Utils.replaceFragment(parentFragmentManager, HomeFragment(), TransitionType.FADE)
+                    replaceFragment( HomeFragment(), TransitionType.FADE)
                     true
                 }
                 else -> false

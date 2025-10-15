@@ -9,7 +9,6 @@ import com.devminds.casasync.TransitionType
 import com.devminds.casasync.parts.User
 import com.devminds.casasync.utils.JsonStorageManager
 import com.devminds.casasync.utils.PopupMenu
-import com.devminds.casasync.utils.Utils
 import com.devminds.casasync.utils.Utils.safeShowDialog
 import com.google.android.material.appbar.MaterialToolbar
 
@@ -78,7 +77,7 @@ class RecoveryFragment : BaseFragment(R.layout.fragment_recovery) {
 
                 safeShowDialog(getString(R.string.recovery_password_changed_message))
 
-                Utils.replaceFragment(parentFragmentManager, LoginFragment(), TransitionType.SLIDE)
+                replaceFragment( LoginFragment(), TransitionType.SLIDE)
             } else {
                 safeShowDialog(getString(R.string.recovery_password_empty_message))
             }
@@ -87,7 +86,7 @@ class RecoveryFragment : BaseFragment(R.layout.fragment_recovery) {
         // lógica para criar conta
         btnCreateAccount = view.findViewById(R.id.btnCreatAccount)
         btnCreateAccount.setOnClickListener {
-            Utils.replaceFragment(parentFragmentManager, CadastroFragment(), TransitionType.SLIDE)
+            replaceFragment( CadastroFragment(), TransitionType.SLIDE)
         }
 
         toolbar = view.findViewById(R.id.topBar)
@@ -109,6 +108,8 @@ class RecoveryFragment : BaseFragment(R.layout.fragment_recovery) {
 
                     // visibilidade dos itens em submenu
                     menuPopup.findItem(R.id.user_settings).isVisible = false
+                    menuPopup.findItem(R.id.app_settings).isVisible = false
+
                     true
                 }
                 else -> false

@@ -12,7 +12,6 @@ import com.devminds.casasync.utils.Utils.safeShowDialog
 import com.google.android.material.appbar.MaterialToolbar
 import java.util.UUID
 import com.devminds.casasync.utils.PopupMenu
-import com.devminds.casasync.utils.Utils
 
 // declaração de classe com fragmento para o cadastro
 class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
@@ -65,7 +64,7 @@ class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
                 // persiste o usuário em json
                 JsonStorageManager.saveUser(requireContext(), newUser)
 
-                Utils.replaceFragment(parentFragmentManager, LoginFragment(), TransitionType.SLIDE)
+                replaceFragment( LoginFragment(), TransitionType.SLIDE)
 
             } else {
                 safeShowDialog(getString(R.string.new_account_error_message))
@@ -75,7 +74,7 @@ class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
         // lógica da troca de tela para o login
         btnLoginAccount = view.findViewById(R.id.btnLoginAccount) // botão de login
         btnLoginAccount.setOnClickListener {
-            Utils.replaceFragment(parentFragmentManager, LoginFragment(), TransitionType.SLIDE)
+            replaceFragment( LoginFragment(), TransitionType.SLIDE)
         }
 
         toolbar = view.findViewById(R.id.topBar)

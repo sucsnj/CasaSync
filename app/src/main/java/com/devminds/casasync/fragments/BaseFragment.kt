@@ -6,6 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import com.devminds.casasync.R
+import com.devminds.casasync.TransitionType
+import com.devminds.casasync.setCustomTransition
 
 // classe abstrata para os fragmentos
 
@@ -18,5 +22,19 @@ abstract class BaseFragment(@param:LayoutRes private val layoutRes: Int) : Fragm
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(layoutRes, container, false)
+    }
+
+    fun replaceFragment(fragment: Fragment, transitionType: TransitionType) {
+
+        val transaction = parentFragmentManager.beginTransaction()
+            .setCustomTransition(transitionType)
+        transaction.replace(R.id.fragment_container, fragment)
+            .addToBackStack(null)
+            .commit()
+    }
+
+    // limpa o histórico de navegação
+    fun clearNavHistory() {
+        requireActivity().supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
     }
 }
