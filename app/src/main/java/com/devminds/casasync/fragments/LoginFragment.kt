@@ -35,10 +35,10 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
 //        FirestoreHelper.writeUser()
 //        FirestoreHelper.readUsers()
 
-        txtLoginPrompt = view.findViewById<TextView>(R.id.txtLoginPrompt)
-        txtPasswordPrompt = view.findViewById<TextView>(R.id.txtPasswordPrompt)
+        txtLoginPrompt = view.findViewById(R.id.txtLoginPrompt)
+        txtPasswordPrompt = view.findViewById(R.id.txtPasswordPrompt)
 
-        btnGoogleLogin = view.findViewById<LinearLayout>(R.id.btnGoogleLogin)
+        btnGoogleLogin = view.findViewById(R.id.btnGoogleLogin)
         btnGoogleLogin.setOnClickListener {
             Toast.makeText(
                 context,
@@ -47,7 +47,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
             ).show()
         }
 
-        btnLogin = view.findViewById<TextView>(R.id.btnLogin)
+        btnLogin = view.findViewById(R.id.btnLogin)
         btnLogin.setOnClickListener {
 
             // transforma os dados em string
@@ -81,12 +81,12 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
             }
         }
 
-        btnCreateAccount = view.findViewById<TextView>(R.id.btnCreatAccount)
+        btnCreateAccount = view.findViewById(R.id.btnCreatAccount)
         btnCreateAccount.setOnClickListener {
             Utils.replaceFragment(parentFragmentManager, CadastroFragment(), TransitionType.SLIDE)
         }
 
-        btnForgotPassword = view.findViewById<TextView>(R.id.txtForgotPassword)
+        btnForgotPassword = view.findViewById(R.id.txtForgotPassword)
         btnForgotPassword.setOnClickListener {
             Utils.replaceFragment(parentFragmentManager, RecoveryFragment(), TransitionType.SLIDE)
         }
