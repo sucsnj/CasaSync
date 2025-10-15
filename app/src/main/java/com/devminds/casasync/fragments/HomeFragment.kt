@@ -3,6 +3,7 @@ package com.devminds.casasync.fragments
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.devminds.casasync.GenericAdapter
 import com.devminds.casasync.R
 import com.devminds.casasync.parts.House
+import com.devminds.casasync.parts.User
 import com.devminds.casasync.utils.JsonStorageManager
 import com.devminds.casasync.utils.Utils
 import com.devminds.casasync.views.UserViewModel
@@ -29,6 +31,14 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private val userViewModel: UserViewModel by activityViewModels()
     private val houseList: MutableList<House>
         get() = userViewModel.user.value?.houses ?: mutableListOf()
+    private lateinit var userId: String
+    private var user: User? = null
+    private lateinit var toolbar: MaterialToolbar
+    private lateinit var menu: Menu
+    private lateinit var menuItemView: View
+    private lateinit var btnNewHouse: TextView
+    private lateinit var recyclerHouses: RecyclerView
+    private lateinit var recycler: RecyclerView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -36,16 +46,15 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         requireActivity().supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
 
         // carrega o usuário do json
-        val userId =
-            activity?.intent?.getStringExtra("userId") ?: userViewModel.user.value?.id ?: getString(
+        userId = activity?.intent?.getStringExtra("userId") ?: userViewModel.user.value?.id ?: getString(
                 R.string.devminds_text
             )
-        val user = JsonStorageManager.loadUser(requireContext(), userId)
+        user = JsonStorageManager.loadUser(requireContext(), userId)
         user?.let {
             userViewModel.setUser(it)
         }
 
-        val toolbar = view.findViewById<MaterialToolbar>(R.id.topBar)
+        toolbar = view.findViewById(R.id.topBar)
 
         userViewModel.user.observe(viewLifecycleOwner) { user ->
             val welcome = getString(R.string.welcome_text) + (user?.name ?: "Usuário")
@@ -53,11 +62,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
 
         toolbar.inflateMenu(R.menu.topbar_menu)
-        val menu = toolbar.menu // para controlar a visibilidade dos itens
+        menu = toolbar.menu // para controlar a visibilidade dos itens
         menu.findItem(R.id.action_homepage).isVisible = false
 
         // lógica do menu de opções
-        val menuItemView = toolbar.findViewById<View>(R.id.more_options)
+        menuItemView = toolbar.findViewById<View>(R.id.more_options)
 
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
@@ -70,7 +79,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
 
         // cria uma casa
-        val btnNewHouse = view.findViewById<TextView>(R.id.btnAddHouse)
+        btnNewHouse = view.findViewById<TextView>(R.id.btnAddHouse)
         btnNewHouse.setOnClickListener {
             val context = requireContext()
             val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_add_house, null)
@@ -125,10 +134,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
 
         // lista das casas
-        val recyclerHouses = view.findViewById<RecyclerView>(R.id.recyclerHouses)
+        recyclerHouses = view.findViewById<RecyclerView>(R.id.recyclerHouses)
         recyclerHouses.layoutManager = LinearLayoutManager(requireContext())
 
-        val recycler = recyclerHouses
+        recycler = recyclerHouses
 
         adapter = Utils.createHouseAdapter(
             recycler = recyclerHouses,
