@@ -36,22 +36,22 @@
                 android:contentDescription="@string/image_logo_casasync_description"
                 android:src="@drawable/casasyncnome" />
 
-            <!-- Texto sobre o app -->
-            <TextView
-                android:id="@+id/txtAboutApp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/casasync_app_description"
-                android:textSize="16sp"
-                android:textAlignment="center"
-                android:layout_marginTop="24dp" />
-
             <!-- Texto sobre o devminds -->
             <TextView
                 android:id="@+id/txtAboutDevs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/devminds_team_description"
+                android:textSize="16sp"
+                android:textAlignment="center"
+                android:layout_marginTop="24dp" />
+
+            <!-- Texto sobre o app -->
+            <TextView
+                android:id="@+id/txtAboutApp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/casasync_app_description"
                 android:textSize="16sp"
                 android:textAlignment="center"
                 android:layout_marginTop="24dp" />

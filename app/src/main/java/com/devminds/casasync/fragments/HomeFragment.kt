@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.view.ContextThemeWrapper
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.devminds.casasync.GenericAdapter
 import com.devminds.casasync.R
+import com.devminds.casasync.TransitionType
 import com.devminds.casasync.parts.House
 import com.devminds.casasync.parts.User
 import com.devminds.casasync.utils.JsonStorageManager
@@ -37,11 +39,31 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
     private lateinit var btnNewHouse: TextView
     private lateinit var recyclerHouses: RecyclerView
     private lateinit var recycler: RecyclerView
+    private lateinit var userPhoto: ImageView
+    private lateinit var title: TextView
+    private lateinit var subtitle: TextView
+
+    private fun openUserPerfil() {
+        userPhoto = view?.findViewById(R.id.userPhoto)!!
+        title = view?.findViewById(R.id.title)!!
+        subtitle = view?.findViewById(R.id.subtitle)!!
+        userPhoto.setOnClickListener {
+            replaceFragment(UserConfigFragment(), TransitionType.FADE)
+        }
+        title.setOnClickListener {
+            replaceFragment(UserConfigFragment(), TransitionType.FADE)
+        }
+        subtitle.setOnClickListener {
+            replaceFragment(UserConfigFragment(), TransitionType.FADE)
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         clearNavHistory()
+
+        openUserPerfil()
 
         // carrega o usuário do json
         userId = activity?.intent?.getStringExtra("userId") ?: userViewModel.user.value?.id ?: getString(

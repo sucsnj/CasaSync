@@ -3,12 +3,13 @@ package com.devminds.casasync.utils
 import android.content.Context
 import android.view.Menu
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.widget.PopupMenu
 import com.devminds.casasync.R
 import com.devminds.casasync.TransitionType
 import com.devminds.casasync.fragments.AboutFragment
+import com.devminds.casasync.fragments.AppConfigFragment
 import com.devminds.casasync.fragments.BaseFragment
+import com.devminds.casasync.fragments.UserConfigFragment
 
 object PopupMenu {
 
@@ -19,11 +20,11 @@ object PopupMenu {
         popup.setOnMenuItemClickListener { popupItem ->
             when (popupItem.itemId) {
                 R.id.app_settings -> {
-                    Toast.makeText(context, "implementando configurações do app", Toast.LENGTH_SHORT).show()
+                    baseFragment.replaceFragment(AppConfigFragment(), TransitionType.INFLATE_RIGHT_TOP)
                     true
                 }
                 R.id.user_settings -> {
-                    Toast.makeText(context, "implementando configurações do usuário", Toast.LENGTH_SHORT).show()
+                    baseFragment.replaceFragment(UserConfigFragment(), TransitionType.INFLATE_RIGHT_TOP)
                     true
                 }
                 R.id.about -> {

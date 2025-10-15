@@ -5,7 +5,7 @@ import android.view.View
 import com.devminds.casasync.R
 import com.google.android.material.appbar.MaterialToolbar
 
-class AboutFragment : BaseFragment(R.layout.fragment_about) {
+class UserConfigFragment : BaseFragment(R.layout.fragment_config_user) {
 
     private lateinit var toolbar: MaterialToolbar
 
