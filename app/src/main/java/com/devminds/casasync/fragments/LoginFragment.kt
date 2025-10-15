@@ -9,31 +9,36 @@ import androidx.fragment.app.activityViewModels
 import com.devminds.casasync.HomeActivity
 import com.devminds.casasync.R
 import com.devminds.casasync.TransitionType
-import com.devminds.casasync.setCustomTransition
 import com.devminds.casasync.utils.JsonStorageManager
 import com.devminds.casasync.utils.Utils.safeShowDialog
 import com.devminds.casasync.views.UserViewModel
 import android.widget.LinearLayout
 import androidx.fragment.app.FragmentManager
+import com.devminds.casasync.utils.Utils
 
 class LoginFragment : BaseFragment(R.layout.fragment_login) {
     private val userViewModel: UserViewModel by activityViewModels()
+    private lateinit var txtLoginPrompt: TextView
+    private lateinit var txtPasswordPrompt: TextView
+    private lateinit var btnGoogleLogin: LinearLayout
+    private lateinit var btnLogin: TextView
+    private lateinit var btnCreateAccount: TextView
+    private lateinit var btnForgotPassword: TextView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // limpa o histórico de navegação
         requireActivity().supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
 
         // testando o firestore
 //        FirestoreHelper.writeUser()
 //        FirestoreHelper.readUsers()
 
-        // guarda os dados de login e senha
-        val txtLoginPrompt = view.findViewById<TextView>(R.id.txtLoginPrompt)
-        val txtPasswordPrompt = view.findViewById<TextView>(R.id.txtPasswordPrompt)
+        txtLoginPrompt = view.findViewById<TextView>(R.id.txtLoginPrompt)
+        txtPasswordPrompt = view.findViewById<TextView>(R.id.txtPasswordPrompt)
 
-        val btnGoogleLogin = view.findViewById<LinearLayout>(R.id.btnGoogleLogin)
-
+        btnGoogleLogin = view.findViewById<LinearLayout>(R.id.btnGoogleLogin)
         btnGoogleLogin.setOnClickListener {
             Toast.makeText(
                 context,
@@ -42,10 +47,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
             ).show()
         }
 
-        // representa o botão de login
-        val btnLogin = view.findViewById<TextView>(R.id.btnLogin)
-
-        // o que fazer ao clicar no botão de login
+        btnLogin = view.findViewById<TextView>(R.id.btnLogin)
         btnLogin.setOnClickListener {
 
             // transforma os dados em string
@@ -79,32 +81,14 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
             }
         }
 
-        // representa o botão de criar conta
-        val btnCreateAccount = view.findViewById<TextView>(R.id.btnCreatAccount)
-
-        // o que fazer ao clicar no botão de criar conta
+        btnCreateAccount = view.findViewById<TextView>(R.id.btnCreatAccount)
         btnCreateAccount.setOnClickListener {
-
-            // troca de tela para o cadastro
-            parentFragmentManager.beginTransaction()
-                .setCustomTransition(TransitionType.SLIDE)
-
-                // muda o fragmento (tela)
-                .replace(R.id.fragment_container_main, CadastroFragment())
-                .addToBackStack(null) // guarda a tela atual para voltar quando precisar
-                .commit() // finaliza a transação
+            Utils.replaceFragment(parentFragmentManager, CadastroFragment(), TransitionType.SLIDE)
         }
 
-        // representa o botão de recuperar senha
-        val btnForgotPassword = view.findViewById<TextView>(R.id.txtForgotPassword)
-
-        // o que fazer ao clicar no botão de recuperar senha
+        btnForgotPassword = view.findViewById<TextView>(R.id.txtForgotPassword)
         btnForgotPassword.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .setCustomTransition(TransitionType.SLIDE) // animação de troca de tela
-                .replace(R.id.fragment_container_main, RecoveryFragment())
-                .addToBackStack(null) // guarda a tela atual para voltar quando precisar
-                .commit() // finaliza a transação
+            Utils.replaceFragment(parentFragmentManager, RecoveryFragment(), TransitionType.SLIDE)
         }
     }
 }

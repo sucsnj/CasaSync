@@ -40,10 +40,10 @@ class MainActivity : AppCompatActivity() {
 //        }
     }
 
-    private fun replaceFragment(fragment: Fragment) {
+    private fun replaceFragment(fragment: Fragment, transitionType: TransitionType) {
         supportFragmentManager.beginTransaction()
-            .setCustomTransition(TransitionType.INFLATE)
-            .replace(R.id.fragment_container_main, fragment)
+            .setCustomTransition(transitionType)
+            .replace(R.id.fragment_container, fragment)
             .addToBackStack(null)
             .commit()
     }

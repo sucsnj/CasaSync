@@ -24,6 +24,16 @@ import com.devminds.casasync.views.UserViewModel
 // classe utilitária
 object Utils {
 
+    // função para mudar de fragmento
+    fun replaceFragment(fragmentManager: FragmentManager, fragment: Fragment, transitionType: TransitionType) {
+
+        val transaction = fragmentManager.beginTransaction()
+            .setCustomTransition(transitionType)
+        transaction.replace(R.id.fragment_container, fragment)
+            .addToBackStack(null)
+            .commit()
+    }
+
     // função para converter dp para pixels
     fun dpToPx(context: Context, dp: Int): Int {
         val scale = context.resources.displayMetrics.density

@@ -9,7 +9,7 @@
     tools:context=".MainActivity">
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragment_container_main"
+        android:id="@+id/fragment_container"
         android:name="com.devminds.casasync.fragments.LoginFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"

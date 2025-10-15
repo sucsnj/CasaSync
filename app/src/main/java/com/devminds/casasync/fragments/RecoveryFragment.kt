@@ -73,7 +73,7 @@ class RecoveryFragment : BaseFragment(R.layout.fragment_recovery) {
 
                 parentFragmentManager.beginTransaction()
                     .setCustomTransition(TransitionType.SLIDE)
-                    .replace(R.id.fragment_container_main, LoginFragment())
+                    .replace(R.id.fragment_container, LoginFragment())
                     .addToBackStack(null)
                     .commit()
             } else {
@@ -87,7 +87,7 @@ class RecoveryFragment : BaseFragment(R.layout.fragment_recovery) {
         btnCreateAccount.setOnClickListener {
             parentFragmentManager.beginTransaction()
                 .setCustomTransition(TransitionType.SLIDE)
-                .replace(R.id.fragment_container_main, CadastroFragment())
+                .replace(R.id.fragment_container, CadastroFragment())
                 .addToBackStack(null)
                 .commit()
         }
