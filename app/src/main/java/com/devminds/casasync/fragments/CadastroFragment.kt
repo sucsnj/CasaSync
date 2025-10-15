@@ -93,7 +93,7 @@ class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.more_options -> {
-                    val menuPopup = PopupMenu.show(requireContext(), menuItemView)
+                    val menuPopup = PopupMenu.show(requireContext(), menuItemView, this)
 
                     // visibilidade dos itens em submenu
                     menuPopup.findItem(R.id.user_settings).isVisible = false

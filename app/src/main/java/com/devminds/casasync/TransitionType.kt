@@ -3,7 +3,7 @@ package com.devminds.casasync
 import androidx.fragment.app.FragmentTransaction
 
 enum class TransitionType {
-    SLIDE, FADE, INFLATE
+    SLIDE, FADE, INFLATE, INFLATE_RIGHT_TOP
 }
 
 fun FragmentTransaction.setCustomTransition(type: TransitionType): FragmentTransaction {
@@ -25,6 +25,12 @@ fun FragmentTransaction.setCustomTransition(type: TransitionType): FragmentTrans
             R.anim.inflate_out,    // exit
             R.anim.inflate_in,     // popEnter
             R.anim.inflate_out     // popExit
+        )
+        TransitionType.INFLATE_RIGHT_TOP -> setCustomAnimations(
+            R.anim.inflate_right_top_in,
+            R.anim.inflate_right_top_out,
+            R.anim.inflate_right_top_in,
+            R.anim.inflate_right_top_out
         )
     }
 }

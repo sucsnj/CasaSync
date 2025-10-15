@@ -69,7 +69,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.more_options -> {
-                    PopupMenu.show(requireContext(), menuItemView)
+                    PopupMenu.show(requireContext(), menuItemView, this)
                     true
                 }
                 else -> false

@@ -126,5 +126,15 @@
     <string name="house_name">Nome da casa</string>
     <string name="devminds_team_description">descrição do casasync</string>
     <string name="casasync_app_description">descrição do app casasync</string>
+    <string name="dev_name1">Anthony Rychard</string>
+    <string name="dev_link1">https://github.com/Ryuki49</string>
+    <string name="dev_name2">Alyson Thadeu</string>
+    <string name="dev_link2">https://github.com/AlysonThadeu</string>
+    <string name="dev_name3">Carlos Santana</string>
+    <string name="dev_link3">https://github.com/sucsnj</string>
+    <string name="dev_name4">Edvan Cordeiro</string>
+    <string name="dev_link4">https://github.com/Edvan-Junior</string>
+    <string name="dev_name5">Rogens Rocha</string>
+    <string name="dev_link5">https://github.com/RogensRocha</string>
 
 </resources>
