@@ -3,17 +3,29 @@ package com.devminds.casasync.fragments
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
+import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.activityViewModels
 import com.devminds.casasync.R
 import com.devminds.casasync.TransitionType
 import com.devminds.casasync.parts.Task
+import com.devminds.casasync.utils.JsonStorageManager
 import com.devminds.casasync.views.DependentViewModel
 import com.devminds.casasync.views.TaskViewModel
+import com.devminds.casasync.views.UserViewModel
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.timepicker.MaterialTimePicker
+import com.google.android.material.timepicker.TimeFormat
+import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.time.LocalDateTime
+import java.util.Locale
 
 class TaskFragment : BaseFragment(R.layout.fragment_task) {
 
+    private val userViewModel: UserViewModel by activityViewModels()
     private val dependentViewModel: DependentViewModel by activityViewModels()
     private val taskViewModel: TaskViewModel by activityViewModels()
     private var currentTask: Task? = null
@@ -23,7 +35,20 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
     private var taskId: String? = null
     private lateinit var title: TextView
     private lateinit var subtitle: TextView
-    private lateinit var finishDate: TextView
+    private lateinit var finishDate: EditText
+    private lateinit var finishDateHour: EditText
+    private lateinit var startDate: TextView
+
+    fun timePicker(): MaterialTimePicker {
+        val timePicker = MaterialTimePicker.Builder()
+            .setTimeFormat(TimeFormat.CLOCK_24H)
+            .setHour(12)
+            .setMinute(0)
+            .setTitleText("Selecione a hora de conclusão")
+            .build()
+
+        return timePicker
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -34,13 +59,44 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
         taskDescription = view.findViewById(R.id.taskDescription)
         taskViewModel.task.observe(viewLifecycleOwner) { task ->
             title.text = task?.name ?: "Tarefa"
-            taskDescription.text =
-                getString(R.string.to_do, task?.description ?: "Descrição")
+            taskDescription.text = getString(R.string.to_do, task?.description ?: "Descrição")
+            startDate = view.findViewById(R.id.startDate)
+            startDate.text = task?.date ?: "Data"
         }
+
+        val hourFinish = timePicker()
 
         // data de conclusão
         finishDate = view.findViewById(R.id.finishDate)
-        
+        finishDate.setOnClickListener {
+
+            val datePicker = MaterialDatePicker.Builder.datePicker()
+                .setTitleText("Selecione a data de conclusão")
+                .build()
+
+            datePicker.addOnPositiveButtonClickListener { selection ->
+                val instant = Instant.ofEpochMilli(selection).plusSeconds(12 * 60 * 60)
+                val zoneId = ZoneId.systemDefault()
+                val localDate = instant.atZone(zoneId).toLocalDate()
+
+                val formattedDate = localDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                finishDate.setText(formattedDate)
+
+            }
+            datePicker.show(parentFragmentManager, "DATE_PICKER")
+        }
+
+        finishDateHour = view.findViewById(R.id.finishDateHour)
+        finishDateHour.setOnClickListener {
+            hourFinish.show(parentFragmentManager, "TIME_PICKER")
+        }
+
+        hourFinish.addOnPositiveButtonClickListener {
+            val hour = hourFinish.hour
+            val minute = hourFinish.minute
+            val formattedTime = String.format(Locale.getDefault(), "%02d:%02d", hour, minute)
+            finishDateHour.setText(formattedTime)
+        }
 
         toolbar.setNavigationOnClickListener {
             parentFragmentManager.popBackStack()

@@ -21,6 +21,8 @@ import com.devminds.casasync.utils.Utils
 import com.devminds.casasync.views.DependentViewModel
 import com.devminds.casasync.views.UserViewModel
 import com.google.android.material.appbar.MaterialToolbar
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.UUID
 
 class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
@@ -36,6 +38,15 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
     private lateinit var recyclerTasks: RecyclerView
     private var dependentId: String? = null
     private lateinit var btnAddTask: TextView
+
+    // data atual para criação
+    fun date(): String {
+        val dateNow = LocalDateTime.now()
+        val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
+        val formattedDate = dateNow.format(formatter)
+
+        return formattedDate
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -109,6 +120,7 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
         btnAddTask.setOnClickListener {
             val context = requireContext()
 
+            // layout do diálogo
             val layout = LinearLayout(context).apply {
                 orientation = LinearLayout.VERTICAL
                 setPadding(50, 40, 50, 10)
@@ -135,7 +147,8 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
                         val newTask = Task(
                             id = UUID.randomUUID().toString(),
                             name = name,
-                            description = description
+                            description = description,
+                            date = date()
                         )
                         currentDependent?.tasks?.add(newTask)
                         adapter.notifyItemInserted(taskList.size - 1)
