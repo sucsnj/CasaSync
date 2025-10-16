@@ -21,18 +21,26 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
     private lateinit var taskDescription: TextView
     private lateinit var menu: Menu
     private var taskId: String? = null
-    private lateinit var dependentName: TextView
+    private lateinit var title: TextView
+    private lateinit var subtitle: TextView
+    private lateinit var finishDate: TextView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         toolbar = view.findViewById(R.id.topBar)
+        title = view.findViewById(R.id.title)
+        subtitle = view.findViewById(R.id.subtitle)
         taskDescription = view.findViewById(R.id.taskDescription)
         taskViewModel.task.observe(viewLifecycleOwner) { task ->
-            toolbar.title = task?.name ?: "Tarefa"
+            title.text = task?.name ?: "Tarefa"
             taskDescription.text =
                 getString(R.string.to_do, task?.description ?: "Descrição")
         }
+
+        // data de conclusão
+        finishDate = view.findViewById(R.id.finishDate)
+        
 
         toolbar.setNavigationOnClickListener {
             parentFragmentManager.popBackStack()
@@ -54,9 +62,9 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
 
         taskId = arguments?.getString("taskId")
 
-        dependentName = view.findViewById(R.id.dependentName)
+        subtitle = view.findViewById(R.id.subtitle)
         dependentViewModel.dependent.observe(viewLifecycleOwner) { dependent ->
-            dependentName.text = dependent?.name ?: "Dependente"
+            subtitle.text = dependent?.name ?: "Dependente"
 
             currentTask = dependent?.tasks?.find { it.id == taskId }
             currentTask?.let { taskViewModel.setTask(it) }

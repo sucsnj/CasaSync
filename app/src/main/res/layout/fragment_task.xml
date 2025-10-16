@@ -6,6 +6,20 @@
     android:layout_height="match_parent"
     android:background="@drawable/background_layout">
 
+    <!-- <ImageView
+        android:id="@+id/dependentPhoto"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="15dp"
+        android:elevation="8dp"
+        android:contentDescription="Foto do usuário"
+        android:scaleType="centerInside"
+        android:src="@drawable/devminds"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" /> -->
+
     <!-- barra fixa no top-->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/topBar"
@@ -16,19 +30,44 @@
         app:navigationIcon="@drawable/ico_arrow_back"
         app:navigationContentDescription="@string/button_back"
         app:navigationIconTint="@android:color/black"
-        app:title="Tarefas"
         app:titleTextAppearance="@style/ToolbarTitleStyle"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/dependentPhoto"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:layout_gravity="end"
-            android:layout_marginEnd="12dp"
+            android:layout_marginStart="12dp"
             android:contentDescription="Foto do dependente"
             android:scaleType="centerInside"
             android:src="@drawable/devminds" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:text="Tarefa"
+                android:textSize="28sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:text="Dependente"
+                android:textSize="14sp" />
+        </LinearLayout>
+
     </com.google.android.material.appbar.MaterialToolbar>
 
     <LinearLayout
@@ -41,15 +80,6 @@
         android:padding="28dp" >
 
         <TextView
-            android:id="@+id/dependentName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:text="Atarefado"
-            android:textColor="@android:color/black"
-            android:textSize="18sp" />
-
-        <TextView
             android:id="@+id/taskDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -58,11 +88,19 @@
             android:textColor="@android:color/black"
             android:textSize="18sp" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerTasks"
+        <EditText
+            android:id="@+id/finishDate"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="20dp" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:autofillHints="date"
+            android:clickable="true"
+            android:drawableStart="@drawable/ico_calendar"
+            android:drawablePadding="10dp"
+            android:focusable="false"
+            android:hint="@string/user_birthdate_prompt"
+            android:inputType="none" />
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
