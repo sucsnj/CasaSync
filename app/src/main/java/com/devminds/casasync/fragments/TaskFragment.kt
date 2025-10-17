@@ -16,6 +16,8 @@ import com.devminds.casasync.views.UserViewModel
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
+import com.google.android.material.timepicker.TimeFormat.CLOCK_24H
+
 import com.google.android.material.timepicker.TimeFormat
 import java.time.Instant
 import java.time.ZoneId
@@ -36,7 +38,7 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
     private lateinit var title: TextView
     private lateinit var subtitle: TextView
     private lateinit var finishDate: EditText
-    private lateinit var finishDateHour: EditText
+    private lateinit var finishHour: EditText
     private lateinit var startDate: TextView
 
     fun timePicker(): MaterialTimePicker {
@@ -62,9 +64,10 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
             taskDescription.text = getString(R.string.to_do, task?.description ?: "Descrição")
             startDate = view.findViewById(R.id.startDate)
             startDate.text = task?.date ?: "Data"
-        }
 
-        val hourFinish = timePicker()
+            finishDate.setText(task?.finishDate ?: "")
+            finishHour.setText(task?.hourFinish ?: "")
+        }
 
         // data de conclusão
         finishDate = view.findViewById(R.id.finishDate)
@@ -82,20 +85,37 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
                 val formattedDate = localDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
                 finishDate.setText(formattedDate)
 
+                currentTask?.let {
+                    it.finishDate = formattedDate
+                    dependentViewModel.updateTask(it)
+                    userViewModel.persistUser(requireContext(), userViewModel.user.value)
+                }
             }
             datePicker.show(parentFragmentManager, "DATE_PICKER")
         }
 
-        finishDateHour = view.findViewById(R.id.finishDateHour)
-        finishDateHour.setOnClickListener {
-            hourFinish.show(parentFragmentManager, "TIME_PICKER")
-        }
+        finishHour = view.findViewById(R.id.finishHour)
+        finishHour.setOnClickListener {
+            val hourPicker = MaterialTimePicker.Builder()
+                .setTimeFormat(TimeFormat.CLOCK_24H)
+                .setHour(12)
+                .setMinute(0)
+                .setTitleText("Selecione a hora de conclusão")
+                .build()
 
-        hourFinish.addOnPositiveButtonClickListener {
-            val hour = hourFinish.hour
-            val minute = hourFinish.minute
-            val formattedTime = String.format(Locale.getDefault(), "%02d:%02d", hour, minute)
-            finishDateHour.setText(formattedTime)
+            hourPicker.addOnPositiveButtonClickListener {
+                val hour = hourPicker.hour
+                val minute = hourPicker.minute
+                val formattedTime = String.format(Locale.getDefault(), "%02d:%02d", hour, minute)
+                finishHour.setText(formattedTime)
+
+                currentTask?.let {
+                    it.hourFinish = formattedTime
+                    dependentViewModel.updateTask(it)
+                    userViewModel.persistUser(requireContext(), userViewModel.user.value)
+                }
+            }
+            hourPicker.show(parentFragmentManager, "HOUR_PICKER")
         }
 
         toolbar.setNavigationOnClickListener {

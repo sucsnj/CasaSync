@@ -26,4 +26,10 @@ class UserViewModel : ViewModel() {
             JsonStorageManager.saveUser(context, user)
         }
     }
+
+    fun persistUser(context: Context, user: User?) {
+        user?.let {
+            JsonStorageManager.saveUser(context, it)
+        }
+    }
 }

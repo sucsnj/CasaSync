@@ -130,7 +130,7 @@
                 android:hint="Data" />
 
             <EditText
-                android:id="@+id/finishDateHour"
+                android:id="@+id/finishHour"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
