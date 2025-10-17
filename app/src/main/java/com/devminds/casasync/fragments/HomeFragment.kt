@@ -75,10 +75,11 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
         }
 
         toolbar = view.findViewById(R.id.topBar)
+        title = view.findViewById(R.id.title)
 
         userViewModel.user.observe(viewLifecycleOwner) { user ->
             val welcome = getString(R.string.welcome_text) + (user?.name ?: "Usuário")
-            toolbar.title = welcome
+            title.setText(welcome)
         }
 
         toolbar.inflateMenu(R.menu.topbar_menu)
