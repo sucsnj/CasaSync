@@ -148,10 +148,10 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
                             id = UUID.randomUUID().toString(),
                             name = name,
                             description = description,
-                            date = date(),
-                            startDate = null,
-                            finishDate = null,
-                            hourFinish = null
+                            startDate = date(),
+                            previsionDate = null,
+                            previsionHour = null,
+                            finishDate = null
                         )
                         currentDependent?.tasks?.add(newTask)
                         adapter.notifyItemInserted(taskList.size - 1)

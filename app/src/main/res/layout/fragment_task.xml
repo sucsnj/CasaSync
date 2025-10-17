@@ -89,16 +89,24 @@
             android:textSize="18sp" />
 
         <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:autofillHints="date"
+            android:clickable="true"
+            android:text="Data de criação"
+            android:drawablePadding="10dp"
+            android:focusable="false" />
+
+        <TextView
             android:id="@+id/startDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
             android:autofillHints="date"
             android:clickable="true"
-            android:drawableStart="@drawable/ico_calendar"
             android:drawablePadding="10dp"
             android:focusable="false" />
-
 
         <TextView
             android:layout_width="match_parent"
@@ -106,8 +114,7 @@
             android:layout_marginTop="6dp"
             android:autofillHints="date"
             android:clickable="true"
-            android:text="Data de conclusão"
-            android:drawableStart="@drawable/ico_calendar"
+            android:text="Data prevista de conclusão"
             android:drawablePadding="10dp"
             android:focusable="false" />
 
@@ -118,7 +125,7 @@
             android:layout_marginTop="6dp">
 
             <EditText
-                android:id="@+id/finishDate"
+                android:id="@+id/previsionDate"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -130,7 +137,7 @@
                 android:hint="Data" />
 
             <EditText
-                android:id="@+id/finishHour"
+                android:id="@+id/previsionHour"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -140,7 +147,27 @@
                 android:drawablePadding="10dp"
                 android:focusable="false"
                 android:hint="Hora" />
+
         </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:autofillHints="date"
+            android:clickable="true"
+            android:text="Data de conclusão"
+            android:drawablePadding="10dp"
+            android:focusable="false" />
+
+        <TextView
+            android:id="@+id/finishDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:autofillHints="date"
+            android:drawablePadding="10dp"
+            android:focusable="false" />
 
     </LinearLayout>
 

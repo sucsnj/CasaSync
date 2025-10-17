@@ -37,9 +37,10 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
     private var taskId: String? = null
     private lateinit var title: TextView
     private lateinit var subtitle: TextView
-    private lateinit var finishDate: EditText
-    private lateinit var finishHour: EditText
+    private lateinit var previsionDate: EditText
+    private lateinit var previsionHour: EditText
     private lateinit var startDate: TextView
+    private lateinit var finishDate: TextView
 
     fun timePicker(): MaterialTimePicker {
         val timePicker = MaterialTimePicker.Builder()
@@ -63,18 +64,19 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
             title.text = task?.name ?: "Tarefa"
             taskDescription.text = getString(R.string.to_do, task?.description ?: "Descrição")
             startDate = view.findViewById(R.id.startDate)
-            startDate.text = task?.date ?: "Data"
+            startDate.setText(task?.startDate ?: "Data")
 
-            finishDate.setText(task?.finishDate ?: "")
-            finishHour.setText(task?.hourFinish ?: "")
+            previsionDate.setText(task?.previsionDate ?: "")
+            previsionHour.setText(task?.previsionHour ?: "")
+            // finishDate.setText(task?.finishDate ?: "")
         }
 
-        // data de conclusão
-        finishDate = view.findViewById(R.id.finishDate)
-        finishDate.setOnClickListener {
+        // data de conclusão prevista
+        previsionDate = view.findViewById(R.id.previsionDate)
+        previsionDate.setOnClickListener {
 
             val datePicker = MaterialDatePicker.Builder.datePicker()
-                .setTitleText("Selecione a data de conclusão")
+                .setTitleText("Previsão da data de conclusão")
                 .build()
 
             datePicker.addOnPositiveButtonClickListener { selection ->
@@ -83,10 +85,10 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
                 val localDate = instant.atZone(zoneId).toLocalDate()
 
                 val formattedDate = localDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-                finishDate.setText(formattedDate)
+                previsionDate.setText(formattedDate)
 
                 currentTask?.let {
-                    it.finishDate = formattedDate
+                    it.previsionDate = formattedDate
                     dependentViewModel.updateTask(it)
                     userViewModel.persistUser(requireContext(), userViewModel.user.value)
                 }
@@ -94,29 +96,33 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
             datePicker.show(parentFragmentManager, "DATE_PICKER")
         }
 
-        finishHour = view.findViewById(R.id.finishHour)
-        finishHour.setOnClickListener {
+        // hora de conclusão prevista
+        previsionHour = view.findViewById(R.id.previsionHour)
+        previsionHour.setOnClickListener {
             val hourPicker = MaterialTimePicker.Builder()
                 .setTimeFormat(TimeFormat.CLOCK_24H)
                 .setHour(12)
                 .setMinute(0)
-                .setTitleText("Selecione a hora de conclusão")
+                .setTitleText("Previsão da hora de conclusão")
                 .build()
 
             hourPicker.addOnPositiveButtonClickListener {
                 val hour = hourPicker.hour
                 val minute = hourPicker.minute
                 val formattedTime = String.format(Locale.getDefault(), "%02d:%02d", hour, minute)
-                finishHour.setText(formattedTime)
+                previsionHour.setText(formattedTime)
 
                 currentTask?.let {
-                    it.hourFinish = formattedTime
+                    it.previsionHour = formattedTime
                     dependentViewModel.updateTask(it)
                     userViewModel.persistUser(requireContext(), userViewModel.user.value)
                 }
             }
             hourPicker.show(parentFragmentManager, "HOUR_PICKER")
         }
+
+        // data de conclusão
+        finishDate = view.findViewById(R.id.finishDate)
 
         toolbar.setNavigationOnClickListener {
             parentFragmentManager.popBackStack()

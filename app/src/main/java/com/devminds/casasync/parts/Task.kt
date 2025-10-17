@@ -4,8 +4,8 @@ data class Task(
     val id: String,
     var name: String,
     val description: String,
-    val date: String,
-    var finishDate: String?,
-    var hourFinish: String?,
-    var startDate: String?
+    var previsionDate: String?,
+    var previsionHour: String?,
+    var startDate: String?,
+    var finishDate: String?
 )
