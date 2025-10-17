@@ -147,7 +147,7 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
                 isFocusable = false
                 isClickable = true
 
-                hint = context.getString(R.string.task_description)
+                hint = context.getString(R.string.prevision_date)
 
                 setOnClickListener {
                     val datePicker = MaterialDatePicker.Builder.datePicker()
@@ -162,13 +162,33 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
                         val formattedDate = localDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
                         setText(formattedDate)
                     }
-
                     datePicker.show(parentFragmentManager, "DATE_PICKER")
                 }
             }
 
             val inputPrevisionHour = EditText(context).apply {
-                hint = context.getString(R.string.task_description)
+                inputType = InputType.TYPE_NULL
+                isFocusable = false
+                isClickable = true
+
+                hint = context.getString(R.string.prevision_hour)
+
+                setOnClickListener {
+                    val hourPicker = MaterialTimePicker.Builder()
+                        .setTimeFormat(TimeFormat.CLOCK_24H)
+                        .setHour(12)
+                        .setMinute(0)
+                        .setTitleText("Insira a hora prevista de conclusão")
+                        .build()
+
+                    hourPicker.addOnPositiveButtonClickListener {
+                        val hour = hourPicker.hour
+                        val minute = hourPicker.minute
+                        val formattedTime = String.format(Locale.getDefault(), "%02d:%02d", hour, minute)
+                        setText(formattedTime)
+                    }
+                    hourPicker.show(parentFragmentManager, "HOUR_PICKER")
+                }
             }
 
             layout.addView(inputName)

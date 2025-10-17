@@ -136,5 +136,7 @@
     <string name="dev_link4">https://github.com/Edvan-Junior</string>
     <string name="dev_name5">Rogens Rocha</string>
     <string name="dev_link5">https://github.com/RogensRocha</string>
+    <string name="prevision_date">Data prevista</string>
+    <string name="prevision_hour">Hora prevista</string>
 
 </resources>
