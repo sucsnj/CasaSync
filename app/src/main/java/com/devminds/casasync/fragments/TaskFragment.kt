@@ -1,28 +1,27 @@
 package com.devminds.casasync.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.activityViewModels
 import com.devminds.casasync.R
 import com.devminds.casasync.TransitionType
 import com.devminds.casasync.parts.Task
-import com.devminds.casasync.utils.JsonStorageManager
 import com.devminds.casasync.views.DependentViewModel
 import com.devminds.casasync.views.TaskViewModel
 import com.devminds.casasync.views.UserViewModel
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
-import com.google.android.material.timepicker.TimeFormat.CLOCK_24H
-
 import com.google.android.material.timepicker.TimeFormat
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.time.LocalDateTime
 import java.util.Locale
 
 class TaskFragment : BaseFragment(R.layout.fragment_task) {
@@ -60,11 +59,14 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
         title = view.findViewById(R.id.title)
         subtitle = view.findViewById(R.id.subtitle)
         taskDescription = view.findViewById(R.id.taskDescription)
+
         taskViewModel.task.observe(viewLifecycleOwner) { task ->
             title.text = task?.name ?: "Tarefa"
-            taskDescription.text = getString(R.string.to_do, task?.description ?: "Descrição")
+            taskDescription.text = task?.description ?: "Descrição"
+
+
             startDate = view.findViewById(R.id.startDate)
-            startDate.setText(task?.startDate ?: "Data")
+            startDate.text = task?.startDate ?: "Data"
 
             previsionDate.setText(task?.previsionDate ?: "")
             previsionHour.setText(task?.previsionHour ?: "")

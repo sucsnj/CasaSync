@@ -26,7 +26,6 @@ import java.time.format.DateTimeFormatter
 import java.util.UUID
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
-import com.google.android.material.timepicker.TimeFormat.CLOCK_24H
 import android.text.InputType
 import com.google.android.material.timepicker.TimeFormat
 import java.time.Instant
