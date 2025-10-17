@@ -24,6 +24,14 @@ import com.google.android.material.appbar.MaterialToolbar
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.UUID
+import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.timepicker.MaterialTimePicker
+import com.google.android.material.timepicker.TimeFormat.CLOCK_24H
+import android.text.InputType
+import com.google.android.material.timepicker.TimeFormat
+import java.time.Instant
+import java.time.ZoneId
+import java.util.Locale
 
 class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
 
@@ -134,8 +142,39 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
                 hint = context.getString(R.string.task_description)
             }
 
+            val inputPrevisionDate = EditText(context).apply {
+                inputType = InputType.TYPE_NULL
+                isFocusable = false
+                isClickable = true
+
+                hint = context.getString(R.string.task_description)
+
+                setOnClickListener {
+                    val datePicker = MaterialDatePicker.Builder.datePicker()
+                        .setTitleText("Insira a data prevista de conclusão")
+                        .build()
+
+                    datePicker.addOnPositiveButtonClickListener { selection ->
+                        val instant = Instant.ofEpochMilli(selection).plusSeconds(12 * 60 * 60)
+                        val zoneId = ZoneId.systemDefault()
+                        val localDate = instant.atZone(zoneId).toLocalDate()
+
+                        val formattedDate = localDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                        setText(formattedDate)
+                    }
+
+                    datePicker.show(parentFragmentManager, "DATE_PICKER")
+                }
+            }
+
+            val inputPrevisionHour = EditText(context).apply {
+                hint = context.getString(R.string.task_description)
+            }
+
             layout.addView(inputName)
             layout.addView(inputDescription)
+            layout.addView(inputPrevisionDate)
+            layout.addView(inputPrevisionHour)
 
             AlertDialog.Builder(context)
                 .setTitle(getString(R.string.add_task_dialog))
@@ -143,14 +182,17 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
                 .setPositiveButton(getString(R.string.button_add)) { _, _ ->
                     val name = inputName.text.toString().trim()
                     val description = inputDescription.text.toString().trim()
+                    val previsionDate = inputPrevisionDate.text.toString().trim()
+                    val previsionHour = inputPrevisionHour.text.toString().trim()
+
                     if (name.isNotEmpty()) {
                         val newTask = Task(
                             id = UUID.randomUUID().toString(),
                             name = name,
                             description = description,
                             startDate = date(),
-                            previsionDate = null,
-                            previsionHour = null,
+                            previsionDate = previsionDate,
+                            previsionHour = previsionHour,
                             finishDate = null
                         )
                         currentDependent?.tasks?.add(newTask)
