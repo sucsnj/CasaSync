@@ -1,10 +1,9 @@
 package com.devminds.casasync.fragments
 
-import android.content.Context
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
-import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -12,6 +11,7 @@ import androidx.fragment.app.activityViewModels
 import com.devminds.casasync.R
 import com.devminds.casasync.TransitionType
 import com.devminds.casasync.parts.Task
+import com.devminds.casasync.utils.Utils
 import com.devminds.casasync.views.DependentViewModel
 import com.devminds.casasync.views.TaskViewModel
 import com.devminds.casasync.views.UserViewModel
@@ -64,6 +64,38 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
             title.text = task?.name ?: "Tarefa"
             taskDescription.text = task?.description ?: "Descrição"
 
+            taskDescription.setOnClickListener {
+                val context = requireContext()
+                Utils.run {
+                    taskDescription.keyboardDelay(requireContext(), 200)
+                }
+
+                val editText = EditText(context).apply {
+                    setText(taskDescription.text)
+                    layoutParams = LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                    )
+                }
+
+                AlertDialog.Builder(context)
+                    .setTitle("Editar Descrição")
+                    .setView(editText)
+                    .setNegativeButton("Cancelar") { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                    .setPositiveButton("Salvar") { dialog, _ ->
+                        val newDescription = editText.text.toString()
+                        taskDescription.text = newDescription
+                        currentTask?.let {
+                            it.description = newDescription
+                            dependentViewModel.updateTask(it)
+                            userViewModel.persistUser(context, userViewModel.user.value)
+                        }
+                        dialog.dismiss()
+                    }
+                    .show()
+            }
 
             startDate = view.findViewById(R.id.startDate)
             startDate.text = task?.startDate ?: "Data"

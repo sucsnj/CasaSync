@@ -74,15 +74,21 @@
             android:layout_height="wrap_content"
             android:text="Descrição da tarefa"
             android:textColor="@android:color/black"
-            android:textSize="18sp" />
+            android:textSize="20sp"
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/taskDescription"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
             android:text="Descrição aqui"
             android:textColor="@android:color/black"
-            android:textSize="18sp" />
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:textSize="18sp"
+            android:maxLines="10"
+            android:minLines="1"
+            android:clickable="true" />
 
         <TextView
             android:layout_width="match_parent"
@@ -90,16 +96,21 @@
             android:layout_marginTop="6dp"
             android:autofillHints="date"
             android:clickable="true"
+            android:layout_marginBottom="6dp"
             android:text="Data de criação"
             android:drawablePadding="10dp"
-            android:focusable="false" />
+            android:focusable="false"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/startDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
+            android:layout_marginBottom="6dp"
             android:autofillHints="date"
+            android:textSize="20sp"
             android:text="data"
             android:clickable="true"
             android:drawablePadding="10dp"
@@ -109,10 +120,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
+            android:layout_marginBottom="6dp"
             android:autofillHints="date"
             android:clickable="true"
             android:text="Data prevista de conclusão"
             android:drawablePadding="10dp"
+            android:textSize="20sp"
+            android:textStyle="bold"
             android:focusable="false" />
 
         <LinearLayout
@@ -151,9 +165,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
+            android:layout_marginBottom="6dp"
             android:autofillHints="date"
             android:clickable="true"
             android:text="Data de conclusão"
+            android:textSize="20sp"
+            android:textStyle="bold"
             android:drawablePadding="10dp"
             android:focusable="false" />
 
@@ -162,10 +179,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:text="data"
+            android:text="Não concluído"
             android:autofillHints="date"
             android:drawablePadding="10dp"
             android:focusable="false" />
+
+
 
     </LinearLayout>
 
