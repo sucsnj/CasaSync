@@ -35,9 +35,9 @@ object Utils {
     }
 
     // garantia de chamar a função apenas se o fragmento estiver adicionado ao container
-    fun Fragment.safeShowDialog(message: String, iconResId: Int? = null, duration: Long = 3000L) {
+    fun Fragment.safeShowDialog(message: String, iconResId: Int? = null) {
         if (isAdded) {
-            DialogUtils.show(requireContext(), message, R.drawable.casasync, duration)
+            DialogUtils.showMessage(requireContext(), message, R.drawable.casasync)
         }
     }
 

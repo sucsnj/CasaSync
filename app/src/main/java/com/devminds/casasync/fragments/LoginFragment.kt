@@ -1,7 +1,10 @@
 package com.devminds.casasync.fragments
 
+import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
@@ -61,12 +64,19 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                 if (userFound != null) {
 
                     userViewModel.setUser(userFound)
+                    safeShowDialog(getString(R.string.login_success_message))
+                    val loadingDialog = LoadingDialogFragment()
+                    loadingDialog.show(parentFragmentManager, "loading")
+
+                    Handler(Looper.getMainLooper()).postDelayed({
+                    loadingDialog.dismiss()
 
                     val intent = Intent(requireContext(), HomeActivity::class.java)
                     intent.putExtra("userId", userFound.id)
                     startActivity(intent)
                     requireActivity().finish()
-                    Toast.makeText(context, "Logado com sucesso!", Toast.LENGTH_SHORT).show()
+                    }, 2000)
+
 
                 } else {
                     safeShowDialog(getString(R.string.login_error_message))

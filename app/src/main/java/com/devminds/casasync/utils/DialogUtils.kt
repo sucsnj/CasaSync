@@ -1,8 +1,10 @@
 package com.devminds.casasync.utils
 
+import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.view.Gravity
@@ -14,12 +16,13 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.graphics.drawable.toDrawable
 import com.devminds.casasync.R
 
 object DialogUtils {
 
-    fun show(context: Context, message: String, iconResId: Int? = null, duration: Long = 3000L) {
+    fun show(context: Context, message: String, iconResId: Int? = null, duration: Long = 1800L) {
 
         val dialog = Dialog(context)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -64,5 +67,13 @@ object DialogUtils {
         dialog.show()
 
         Handler(Looper.getMainLooper()).postDelayed({ dialog.dismiss() }, duration)
+    }
+
+    fun showMessage(context: Context, message: String, iconResId: Int? = null) {
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) { // se for android 14 ou inferior
+            show(context as Activity, message, iconResId) // chama a função "show"
+        } else {
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show() // mostra o toast padrão
+        }
     }
 }
