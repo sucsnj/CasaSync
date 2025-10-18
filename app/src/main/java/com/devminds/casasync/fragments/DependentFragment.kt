@@ -45,14 +45,21 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
     private lateinit var recyclerTasks: RecyclerView
     private var dependentId: String? = null
     private lateinit var btnAddTask: TextView
+    private lateinit var title: TextView
+    private lateinit var subtitle: TextView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // title e subtitle
+        title = view.findViewById(R.id.title)
+        subtitle = view.findViewById(R.id.subtitle)
+
         toolbar = view.findViewById(R.id.topBar)
         dependentViewModel.dependent.observe(viewLifecycleOwner) { dependent ->
-            val text = dependent?.name ?: "Dependente"
-            toolbar.title = text
+            // val text = dependent?.name ?: "Dependente"
+            // toolbar.title = text
+            title.text = dependent?.name ?: "Dependente"
         }
 
         toolbar.setNavigationOnClickListener {
