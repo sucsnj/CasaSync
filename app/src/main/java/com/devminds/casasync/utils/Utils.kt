@@ -26,6 +26,8 @@ import java.time.format.DateTimeFormatter
 // classe utilitária
 object Utils {
 
+    private lateinit var options: Array<String>
+
     // função para converter dp para pixels
     fun dpToPx(context: Context, dp: Int): Int {
         val scale = context.resources.displayMetrics.density
@@ -330,11 +332,19 @@ object Utils {
                     if (context !is Activity) return@setOnLongClickListener false
                     val activity = context
 
-                    val options = arrayOf(
-                        activity.getString(R.string.rename_dialog),
-                        activity.getString(R.string.delete_dialog),
-                        activity.getString(R.string.finish_dialog)
-                    )
+                    // lógica para fazer aparecer o "Concluir tarefa"
+                    options = if (item.finishDate != null) {
+                        arrayOf(
+                            activity.getString(R.string.rename_dialog),
+                            activity.getString(R.string.delete_dialog)
+                        )
+                    } else {
+                        arrayOf(
+                            activity.getString(R.string.rename_dialog),
+                            activity.getString(R.string.delete_dialog),
+                            activity.getString(R.string.finish_dialog)
+                        )
+                    }
 
                     AlertDialog.Builder(activity)
                         .setTitle("$itemOptions ${item.name}")
