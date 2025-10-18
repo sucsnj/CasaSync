@@ -4,16 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/notification_background"
-    android:gravity="center_vertical"
+    android:gravity="center"
     android:orientation="horizontal"
-    android:padding="12dp">
+    android:padding="12dp" >
 
     <ImageView
         android:id="@+id/notification_icon"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_marginStart="10dp"
-        android:layout_marginEnd="7dp"
+        android:gravity="center"
         android:contentDescription="@string/image_logo_casasync_description"
         android:src="@drawable/casasync"
         android:visibility="gone" />
@@ -22,8 +22,8 @@
         android:id="@+id/notification_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
         android:layout_weight="1"
+        android:gravity="center"
         android:textColor="@android:color/white"
         android:textSize="14sp" />
 </LinearLayout>

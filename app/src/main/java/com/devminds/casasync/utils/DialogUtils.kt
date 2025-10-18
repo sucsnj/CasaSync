@@ -69,9 +69,9 @@ object DialogUtils {
         Handler(Looper.getMainLooper()).postDelayed({ dialog.dismiss() }, duration)
     }
 
-    fun showMessage(context: Context, message: String, iconResId: Int? = null) {
+    fun showMessage(context: Context, message: String) {
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) { // se for android 14 ou inferior
-            show(context as Activity, message, iconResId) // chama a função "show"
+            show(context as Activity, message, R.drawable.casasync) // chama a função "show"
         } else {
             Toast.makeText(context, message, Toast.LENGTH_SHORT).show() // mostra o toast padrão
         }

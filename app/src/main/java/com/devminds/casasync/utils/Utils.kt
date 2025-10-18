@@ -7,7 +7,6 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -32,13 +31,6 @@ object Utils {
     fun dpToPx(context: Context, dp: Int): Int {
         val scale = context.resources.displayMetrics.density
         return (dp * scale).toInt()
-    }
-
-    // garantia de chamar a função apenas se o fragmento estiver adicionado ao container
-    fun Fragment.safeShowDialog(message: String, iconResId: Int? = null) {
-        if (isAdded) {
-            DialogUtils.showMessage(requireContext(), message, R.drawable.casasync)
-        }
     }
 
     // chamar teclado com delay
@@ -122,11 +114,11 @@ object Utils {
                                                     userViewModel.user.value!!
                                                 )
                                                 recycler.adapter?.notifyItemChanged(position)
-                                                Toast.makeText(
+
+                                                DialogUtils.showMessage(
                                                     activity,
-                                                    successRenameToast,
-                                                    Toast.LENGTH_SHORT
-                                                ).show()
+                                                    successRenameToast
+                                                )
                                             }
                                         }
                                         .setNegativeButton(
@@ -160,11 +152,9 @@ object Utils {
                                                     JsonStorageManager.saveUser(context, it)
                                                 }
 
-                                                Toast.makeText(
-                                                    context,
-                                                    itemNameDelete + context.getString(R.string.success_delete_dialog),
-                                                    Toast.LENGTH_SHORT
-                                                ).show()
+                                                DialogUtils.showMessage(context,
+                                                    itemNameDelete + context.getString(R.string.success_delete_dialog)
+                                                )
                                             }
                                         }
                                         .setNegativeButton(
@@ -240,11 +230,10 @@ object Utils {
                                                     userViewModel.user.value!!
                                                 )
                                                 recycler.adapter?.notifyItemChanged(position)
-                                                Toast.makeText(
+                                                DialogUtils.showMessage(
                                                     activity,
-                                                    successRenameToast,
-                                                    Toast.LENGTH_SHORT
-                                                ).show()
+                                                    successRenameToast
+                                                )
                                             }
                                         }
                                         .setNegativeButton(
@@ -278,11 +267,9 @@ object Utils {
                                                     JsonStorageManager.saveUser(context, it)
                                                 }
 
-                                                Toast.makeText(
-                                                    context,
-                                                    itemNameDelete + context.getString(R.string.success_delete_dialog),
-                                                    Toast.LENGTH_SHORT
-                                                ).show()
+                                                DialogUtils.showMessage(context,
+                                                    itemNameDelete + context.getString(R.string.success_delete_dialog)
+                                                )
                                             }
                                         }
                                         .setNegativeButton(
@@ -367,11 +354,10 @@ object Utils {
                                                     userViewModel.user.value!!
                                                 )
                                                 recycler.adapter?.notifyItemChanged(position)
-                                                Toast.makeText(
+                                                DialogUtils.showMessage(
                                                     activity,
-                                                    successRenameToast,
-                                                    Toast.LENGTH_SHORT
-                                                ).show()
+                                                    successRenameToast
+                                                )
                                             }
                                         }
                                         .setNegativeButton(
@@ -405,11 +391,9 @@ object Utils {
                                                     JsonStorageManager.saveUser(context, it)
                                                 }
 
-                                                Toast.makeText(
-                                                    context,
-                                                    itemNameDelete + context.getString(R.string.success_delete_dialog),
-                                                    Toast.LENGTH_SHORT
-                                                ).show()
+                                                DialogUtils.showMessage(context,
+                                                    itemNameDelete + context.getString(R.string.success_delete_dialog)
+                                                )
                                             }
                                         }
                                         .setNegativeButton(
