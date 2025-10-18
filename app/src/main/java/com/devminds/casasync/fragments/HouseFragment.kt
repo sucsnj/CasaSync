@@ -41,13 +41,11 @@ class HouseFragment : BaseFragment(R.layout.fragment_house) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // title e subtitle
+        // title
         title = view.findViewById(R.id.title)
-        subtitle = view.findViewById(R.id.subtitle)
 
         toolbar = view.findViewById(R.id.topBar)
         houseViewModel.house.observe(viewLifecycleOwner) { house ->
-            // toolbar.title = house?.name ?: "Casa"
             title.text = house?.name ?: "Casa"
         }
 
