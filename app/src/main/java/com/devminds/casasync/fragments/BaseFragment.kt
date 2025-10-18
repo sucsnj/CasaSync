@@ -11,10 +11,7 @@ import com.devminds.casasync.R
 import com.devminds.casasync.TransitionType
 import com.devminds.casasync.setCustomTransition
 
-// classe abstrata para os fragmentos
-
 // passa um fragmento como parâmetro para a classe
-// herda de fragment
 abstract class BaseFragment(@param:LayoutRes private val layoutRes: Int) : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -24,8 +21,8 @@ abstract class BaseFragment(@param:LayoutRes private val layoutRes: Int) : Fragm
         return inflater.inflate(layoutRes, container, false)
     }
 
+    // substitui o fragmento atual
     fun replaceFragment(fragment: Fragment, transitionType: TransitionType) {
-
         val transaction = parentFragmentManager.beginTransaction()
             .setCustomTransition(transitionType)
         transaction.replace(R.id.fragment_container, fragment)

@@ -12,7 +12,9 @@ class AppConfigFragment : BaseFragment(R.layout.fragment_config_app) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // toolbar - cabeçalho
         toolbar = view.findViewById(R.id.topBar)
+        // botão de voltar
         toolbar.setNavigationOnClickListener {
             parentFragmentManager.popBackStack()
         }

@@ -13,9 +13,9 @@ import com.google.android.material.appbar.MaterialToolbar
 import java.util.UUID
 import com.devminds.casasync.utils.PopupMenu
 
-// declaração de classe com fragmento para o cadastro
 class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
 
+    // variáveis de classe
     private lateinit var newUserPrompt: TextView
     private lateinit var newLoginPrompt: TextView
     private lateinit var newPasswordPrompt: TextView
@@ -28,76 +28,80 @@ class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // guarda os dados de cadastro
-        newUserPrompt = view.findViewById(R.id.newUserPrompt) // nome
-        newLoginPrompt = view.findViewById(R.id.newLoginPrompt) // login (email)
-        newPasswordPrompt = view.findViewById(R.id.newPasswordPrompt) // senha
-
+        // variáveis locais
         var userFound: User?
-        btnCadastro = view.findViewById(R.id.btnCadastro) // botão de cadastro
-        btnCadastro.setOnClickListener {
 
-            // transforma os dados em string
+        // inicialização das variáveis
+        newUserPrompt = view.findViewById(R.id.newUserPrompt)
+        newLoginPrompt = view.findViewById(R.id.newLoginPrompt)
+        newPasswordPrompt = view.findViewById(R.id.newPasswordPrompt)
+        btnCadastro = view.findViewById(R.id.btnCadastro)
+        btnLoginAccount = view.findViewById(R.id.btnLoginAccount)
+        toolbar = view.findViewById(R.id.topBar) // cabeçalho
+        menu = toolbar.menu
+        menuItemView = toolbar.findViewById(R.id.more_options) // menu suspenso (3 pontos)
+
+        // cadastro de usuário
+        btnCadastro.setOnClickListener {
+            // guarda os dados de cadastro
             val name = newUserPrompt.text.toString()
             val login = newLoginPrompt.text.toString()
             val password = newPasswordPrompt.text.toString()
 
-            userFound = JsonStorageManager.recoveryUser(requireContext(), login)
-
             // verifica se o login já existe
-            // se o login já existe, mostra a mensagem de erro
+            userFound = JsonStorageManager.recoveryUser(requireContext(), login)
+            // se já existe
             if (userFound != null) {
                 DialogUtils.showMessage(requireContext(), getString(R.string.login_exists_message))
                 return@setOnClickListener // sai da função, impedindo o cadastro
             }
 
-            // se estiver tudo preenchido, cadastra o usuário
+            // verifica se todos os campos obrigatórios estão preenchidos
             if (name.isNotEmpty() && login.isNotEmpty() && password.isNotEmpty()) {
+                // cria o novo usuário
                 val newUser = User(
-                    id = UUID.randomUUID().toString(),
+                    id = UUID.randomUUID().toString(), // ID gerado aleatóriamente
                     name = name,
                     login = login,
                     password = password
-                ) // adiciona o usuário à lista
+                )
                 DialogUtils.showMessage(requireContext(), getString(R.string.new_account_success_message))
 
                 // persiste o usuário em json
                 JsonStorageManager.saveUser(requireContext(), newUser)
-
+                // redireciona para a página de login
                 replaceFragment( LoginFragment(), TransitionType.SLIDE)
-
             } else {
                 DialogUtils.showMessage(requireContext(), getString(R.string.new_account_error_message))
             }
         }
 
-        // lógica da troca de tela para o login
-        btnLoginAccount = view.findViewById(R.id.btnLoginAccount) // botão de login
+        // login de usuário
         btnLoginAccount.setOnClickListener {
             replaceFragment( LoginFragment(), TransitionType.SLIDE)
         }
-
-        toolbar = view.findViewById(R.id.topBar)
+        
+        // botão de voltar
         toolbar.setNavigationOnClickListener {
-            parentFragmentManager.popBackStack() // volta para login
+            parentFragmentManager.popBackStack()
         }
 
+        // infla o menu suspenso
         toolbar.inflateMenu(R.menu.topbar_menu)
 
-        menu = toolbar.menu // para controlar a visibilidade dos itens em toolbar
+        // dentro do menu, esconde o item de voltar para o início
         menu.findItem(R.id.action_homepage).isVisible = false
 
-        // lógica do menu de opções
-        menuItemView = toolbar.findViewById(R.id.more_options)
-
+        // cabeçalho
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.more_options -> {
+                    // exibe o menu suspenso
                     val menuPopup = PopupMenu.show(requireContext(), menuItemView, this)
 
-                    // visibilidade dos itens em submenu
-                    menuPopup.findItem(R.id.user_settings).isVisible = false
-                    menuPopup.findItem(R.id.app_settings).isVisible = false
+                    // esconde os itens do menu suspenso
+                    menuPopup.findItem(R.id.user_settings).isVisible = false // configurações do usuário
+                    menuPopup.findItem(R.id.app_settings).isVisible = false // configurações do app
                     true
                 }
                 else -> false

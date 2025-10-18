@@ -34,42 +34,47 @@ import java.util.Locale
 
 class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
 
-    private lateinit var adapter: GenericAdapter<Task>
+    private var dependentId: String? = null
     private val userViewModel: UserViewModel by activityViewModels()
     private val dependentViewModel: DependentViewModel by activityViewModels()
     private var currentDependent: Dependent? = null
     private val taskList: MutableList<Task>
         get() = currentDependent?.tasks ?: mutableListOf()
+
+    private lateinit var adapter: GenericAdapter<Task> // adaptador para a lista de tarefas TODO (lateinit)
     private lateinit var toolbar: MaterialToolbar
     private lateinit var menu: Menu
     private lateinit var recyclerTasks: RecyclerView
-    private var dependentId: String? = null
     private lateinit var btnAddTask: TextView
     private lateinit var title: TextView
-    private lateinit var subtitle: TextView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // title
+        toolbar = view.findViewById(R.id.topBar) // cabeçalho
+        menu = toolbar.menu
+        recyclerTasks = view.findViewById(R.id.recyclerTasks)
+        btnAddTask = view.findViewById(R.id.btnAddTask)
         title = view.findViewById(R.id.title)
-
-        toolbar = view.findViewById(R.id.topBar)
+        
+        // muda o título do cabeçalho
         dependentViewModel.dependent.observe(viewLifecycleOwner) { dependent ->
             title.text = dependent?.name ?: "Dependente"
         }
-
+        // botão de voltar
         toolbar.setNavigationOnClickListener {
             parentFragmentManager.popBackStack()
         }
-
+        // influê o menu suspenso em toolbar
         toolbar.inflateMenu(R.menu.topbar_menu)
-        menu = toolbar.menu
+        // esconde o item de mais opções em toolbar
         menu.findItem(R.id.more_options).isVisible = false
 
+        // botão de homepage (ínicio)
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.action_homepage -> {
+                    // redireciona para o ínicio TODO (novo método)
                     parentFragmentManager.beginTransaction()
                         .setCustomTransition(TransitionType.FADE)
                         .replace(R.id.fragment_container, HomeFragment())
@@ -80,23 +85,26 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
             }
         }
 
-        recyclerTasks = view.findViewById(R.id.recyclerTasks)
+        // manuseia a lista de tarefas
         recyclerTasks.layoutManager = LinearLayoutManager(requireContext())
-
         dependentId = arguments?.getString("dependentId")
-
+        // observa o usuário e o dependente selecionado
         userViewModel.user.observe(viewLifecycleOwner) { user ->
-            currentDependent = user?.houses
-                ?.flatMap { it.dependents }
-                ?.find { it.id == dependentId }
+            // Busca o dependente atual com base no ID recebido, percorrendo todas as casas do usuário
+            currentDependent = user?.houses // casas do usuário
+                ?.flatMap { it.dependents } // todos os dependentes
+                ?.find { it.id == dependentId } // dependente selecionado
 
+            // Atualiza o ViewModel de dependente com o dependente selecionado
             currentDependent?.let { dependentViewModel.setDependent(it) }
 
+            // coloca o recyclerTasks no recycler
             val recycler = recyclerTasks
 
+            // cria o adaptador
             adapter = Utils.createTaskAdapter(
-                recycler = recyclerTasks,
-                list = taskList,
+                recycler = recyclerTasks, // TODO (faz sentido colocar o recycler aqui? de novo?)
+                list = taskList, // lista de tarefas
                 fragmentFactory = { taskId ->
                     TaskFragment().apply {
                         arguments = Bundle().apply {
@@ -110,7 +118,8 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
                 userViewModel = userViewModel,
                 context = requireContext()
             )
-
+            
+            // Aplica o adaptador à RecyclerView para exibir as tarefas
             recycler.adapter = adapter
             val position = taskList.indexOfFirst { it.id == dependentId }
             if (position != -1) {
@@ -119,7 +128,6 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
         }
 
         // adicionar tarefa
-        btnAddTask = view.findViewById(R.id.btnAddTask)
         btnAddTask.setOnClickListener {
             val context = requireContext()
 
@@ -129,35 +137,37 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
                 setPadding(50, 40, 50, 10)
             }
 
+            // campos do diálogo
             val inputName = EditText(context).apply {
-                hint = context.getString(R.string.task_name)
+                hint = context.getString(R.string.task_name) // texto de ajuda
             }
-
             val inputDescription = EditText(context).apply {
                 hint = context.getString(R.string.task_description)
             }
-
             val inputPrevisionDate = EditText(context).apply {
-                inputType = InputType.TYPE_NULL
-                isFocusable = false
-                isClickable = true
-
+                inputType = InputType.TYPE_NULL // desabilita o teclado
+                isFocusable = false // desabilita o foco do campo
+                isClickable = true // permite que o campo seja clicado
                 hint = context.getString(R.string.prevision_date)
 
+                // quando inputPrevisionDate for clicado, exibe o diálogo de seleção de data
                 setOnClickListener {
+                    // MaterialDatePicker é um diálogo de seleção de data
                     val datePicker = MaterialDatePicker.Builder.datePicker()
                         .setTitleText("Insira a data prevista de conclusão")
                         .build()
 
+                    // quando o usuário clicar em OK, o valor é salvo no campo inputPrevisionDate
                     datePicker.addOnPositiveButtonClickListener { selection ->
+                        // converter a data selecionada para uma data local
                         val instant = Instant.ofEpochMilli(selection).plusSeconds(12 * 60 * 60)
-                        val zoneId = ZoneId.systemDefault()
-                        val localDate = instant.atZone(zoneId).toLocalDate()
+                        val zoneId = ZoneId.systemDefault() // o fuso horário padrão do dispositivo
+                        val localDate = instant.atZone(zoneId).toLocalDate() // converter para data local
 
                         val formattedDate = localDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
                         setText(formattedDate)
                     }
-                    datePicker.show(parentFragmentManager, "DATE_PICKER")
+                    datePicker.show(parentFragmentManager, "DATE_PICKER") // exibe o diálogo
                 }
             }
 
@@ -165,10 +175,10 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
                 inputType = InputType.TYPE_NULL
                 isFocusable = false
                 isClickable = true
-
                 hint = context.getString(R.string.prevision_hour)
 
                 setOnClickListener {
+                    // MaterialTimePicker é um diálogo de seleção de hora
                     val hourPicker = MaterialTimePicker.Builder()
                         .setTimeFormat(TimeFormat.CLOCK_24H)
                         .setHour(12)
@@ -186,39 +196,43 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
                 }
             }
 
+            // adiciona os campos ao layout
             layout.addView(inputName)
             layout.addView(inputDescription)
             layout.addView(inputPrevisionDate)
             layout.addView(inputPrevisionHour)
 
+            // dialogo principal
             AlertDialog.Builder(context)
                 .setTitle(getString(R.string.add_task_dialog))
-                .setView(layout)
+                .setView(layout) // layout criado acima
                 .setPositiveButton(getString(R.string.button_add)) { _, _ ->
                     val name = inputName.text.toString().trim()
                     val description = inputDescription.text.toString().trim()
                     val previsionDate = inputPrevisionDate.text.toString().trim()
                     var previsionHour = inputPrevisionHour.text.toString().trim()
 
-                    // impede que hora seja escrito sem uma data
+                    // impede que hora seja escrita sem uma data
                     if (previsionDate.isEmpty()) {
                         previsionHour = ""
                     }
 
+                    // se houver pelo menos um nome, cria a tarefa
                     if (name.isNotEmpty()) {
                         val newTask = Task(
                             id = UUID.randomUUID().toString(),
                             name = name,
                             description = description,
-                            startDate = Utils.date(),
+                            startDate = Utils.date(), // data atual
                             previsionDate = previsionDate,
                             previsionHour = previsionHour,
-                            finishDate = null
+                            finishDate = null // inicia 'em progresso'
                         )
+                        // adiciona a tarefa à lista e notifica o adapter
                         currentDependent?.tasks?.add(newTask)
                         adapter.notifyItemInserted(taskList.size - 1)
 
-                        // persiste o usuário em json
+                        // persiste o usuário TODO (novo método)
                         val user = userViewModel.user.value
                         user?.let {
                             JsonStorageManager.saveUser(requireContext(), it)
