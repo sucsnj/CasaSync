@@ -56,22 +56,12 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
 
                 // se o usuário for encontrado
                 if (userFound != null) {
-
                     userViewModel.setUser(userFound)
-                    DialogUtils.showMessage(requireContext(), getString(R.string.login_success_message))
-
-                    val loadingDialog = LoadingDialogFragment()
-                    loadingDialog.show(parentFragmentManager, "loading")
-
-                    Handler(Looper.getMainLooper()).postDelayed({
-                    loadingDialog.dismiss()
 
                     val intent = Intent(requireContext(), HomeActivity::class.java)
                     intent.putExtra("userId", userFound.id)
                     startActivity(intent)
                     requireActivity().finish()
-                    }, 2000)
-
 
                 } else {
                     DialogUtils.showMessage(requireContext(), getString(R.string.login_error_message))
