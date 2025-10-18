@@ -20,6 +20,8 @@ import com.devminds.casasync.parts.House
 import com.devminds.casasync.parts.Task
 import com.devminds.casasync.setCustomTransition
 import com.devminds.casasync.views.UserViewModel
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 // classe utilitária
 object Utils {
@@ -47,6 +49,15 @@ object Utils {
                 imm.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
             }, delay)
         }
+    }
+
+    // data atual
+    fun date(): String {
+        val dateNow = LocalDateTime.now()
+        val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
+        val formattedDate = dateNow.format(formatter)
+
+        return formattedDate
     }
 
     // precisa de uma variável activity e uma String pro itemName
@@ -93,7 +104,7 @@ object Utils {
                         .setItems(options) { _, which ->
                             when (which) {
                                 0 -> {
-                                    val (dialogView, editTextDialog) = Utils.renameDialogItem(
+                                    val (dialogView, editTextDialog) = renameDialogItem(
                                         activity,
                                         item.name
                                     )
@@ -211,7 +222,7 @@ object Utils {
                         .setItems(options) { _, which ->
                             when (which) {
                                 0 -> {
-                                    val (dialogView, editTextDialog) = Utils.renameDialogItem(
+                                    val (dialogView, editTextDialog) = renameDialogItem(
                                         activity,
                                         item.name
                                     )
@@ -321,7 +332,8 @@ object Utils {
 
                     val options = arrayOf(
                         activity.getString(R.string.rename_dialog),
-                        activity.getString(R.string.delete_dialog)
+                        activity.getString(R.string.delete_dialog),
+                        activity.getString(R.string.finish_dialog)
                     )
 
                     AlertDialog.Builder(activity)
@@ -329,7 +341,7 @@ object Utils {
                         .setItems(options) { _, which ->
                             when (which) {
                                 0 -> {
-                                    val (dialogView, editTextDialog) = Utils.renameDialogItem(
+                                    val (dialogView, editTextDialog) = renameDialogItem(
                                         activity,
                                         item.name
                                     )
@@ -397,6 +409,15 @@ object Utils {
                                         .show()
                                 }
 
+                                2 -> {
+                                    item.finishDate = date()
+                                    recycler.adapter?.notifyItemChanged(position)
+
+                                    val user = userViewModel.user.value
+                                    user?.let {
+                                        JsonStorageManager.saveUser(activity, it)
+                                    }
+                                }
                             }
                         }
                         .show()

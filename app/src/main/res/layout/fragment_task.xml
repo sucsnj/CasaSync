@@ -110,7 +110,7 @@
             android:layout_marginTop="6dp"
             android:layout_marginBottom="6dp"
             android:autofillHints="date"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:text="data"
             android:clickable="true"
             android:drawablePadding="10dp"
@@ -181,10 +181,19 @@
             android:layout_marginTop="6dp"
             android:text="Não concluído"
             android:autofillHints="date"
+            android:textSize="16sp"
             android:drawablePadding="10dp"
             android:focusable="false" />
 
-
+        <CheckBox
+            android:id="@+id/checker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Não concluído"
+            android:layout_marginTop="10dp"
+            android:checked="false"
+            android:textSize="16sp"
+            android:padding="8dp" />
 
     </LinearLayout>
 

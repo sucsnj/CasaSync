@@ -46,15 +46,6 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
     private var dependentId: String? = null
     private lateinit var btnAddTask: TextView
 
-    // data atual para criação
-    fun date(): String {
-        val dateNow = LocalDateTime.now()
-        val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
-        val formattedDate = dateNow.format(formatter)
-
-        return formattedDate
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -123,6 +114,7 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
             }
         }
 
+        // adicionar tarefa
         btnAddTask = view.findViewById(R.id.btnAddTask)
         btnAddTask.setOnClickListener {
             val context = requireContext()
@@ -202,14 +194,19 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
                     val name = inputName.text.toString().trim()
                     val description = inputDescription.text.toString().trim()
                     val previsionDate = inputPrevisionDate.text.toString().trim()
-                    val previsionHour = inputPrevisionHour.text.toString().trim()
+                    var previsionHour = inputPrevisionHour.text.toString().trim()
+
+                    // impede que hora seja escrito sem uma data
+                    if (previsionDate.isEmpty()) {
+                        previsionHour = ""
+                    }
 
                     if (name.isNotEmpty()) {
                         val newTask = Task(
                             id = UUID.randomUUID().toString(),
                             name = name,
                             description = description,
-                            startDate = date(),
+                            startDate = Utils.date(),
                             previsionDate = previsionDate,
                             previsionHour = previsionHour,
                             finishDate = null

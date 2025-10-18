@@ -1,12 +1,16 @@
 package com.devminds.casasync.fragments
 
 import android.app.AlertDialog
+import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
+import android.view.inputmethod.InputMethodManager
+import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import com.devminds.casasync.R
 import com.devminds.casasync.TransitionType
@@ -40,6 +44,7 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
     private lateinit var previsionHour: EditText
     private lateinit var startDate: TextView
     private lateinit var finishDate: TextView
+    private lateinit var checker: CheckBox
 
     fun timePicker(): MaterialTimePicker {
         val timePicker = MaterialTimePicker.Builder()
@@ -55,19 +60,28 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbar = view.findViewById(R.id.topBar)
         title = view.findViewById(R.id.title)
         subtitle = view.findViewById(R.id.subtitle)
         taskDescription = view.findViewById(R.id.taskDescription)
+        checker = view.findViewById(R.id.checker)
 
+        // modelo do task
         taskViewModel.task.observe(viewLifecycleOwner) { task ->
             title.text = task?.name ?: "Tarefa"
-            taskDescription.text = task?.description ?: "Descrição"
+            taskDescription.text = task?.description ?: "Sem descrição"
+            // se a descrição estiver vazia, mostra "Sem descrição" na dica
+            if (task?.description.toString() == "") {
+                taskDescription.hint = "Sem descrição"
+            }
 
+            // alterar descrição
             taskDescription.setOnClickListener {
                 val context = requireContext()
-                Utils.run {
-                    taskDescription.keyboardDelay(requireContext(), 200)
+
+                // layout do diálogo
+                val layout = LinearLayout(context).apply {
+                    orientation = LinearLayout.VERTICAL
+                    setPadding(50, 40, 50, 10)
                 }
 
                 val editText = EditText(context).apply {
@@ -78,41 +92,91 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
                     )
                 }
 
+                // teclado com delay
+                editText.postDelayed({
+                    editText.requestFocus() // traz o foco
+
+                    // levanta o teclado
+                    val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
+                    editText.setSelection(0, editText.length()) // texto selecionado
+                },500)
+
+                layout.addView(editText)
+
+                // diálogo
                 AlertDialog.Builder(context)
                     .setTitle("Editar Descrição")
-                    .setView(editText)
+                    .setView(layout)
                     .setNegativeButton("Cancelar") { dialog, _ ->
                         dialog.dismiss()
                     }
                     .setPositiveButton("Salvar") { dialog, _ ->
                         val newDescription = editText.text.toString()
                         taskDescription.text = newDescription
+
+                        // atualizar descrição na task e no dependent e persiste no usuário
                         currentTask?.let {
                             it.description = newDescription
-                            dependentViewModel.updateTask(it)
-                            userViewModel.persistUser(context, userViewModel.user.value)
+                            dependentViewModel.updateTask(it) // atualiza a task
+                            userViewModel.persistUser(context, userViewModel.user.value) // persiste o usuário
                         }
-                        dialog.dismiss()
+                        dialog.dismiss() // fecha o diálogo
                     }
-                    .show()
+                    .show() // mostra o diálogo
+            }
+
+            // checkbox
+            checker.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    val date = Utils.date()
+
+                    finishDate.text = date
+                    checker.text = "Concluído"
+                    previsionDate.isEnabled = false
+                    previsionHour.isEnabled = false
+
+
+                    // preciso salvar as alterações aqui
+                    currentTask?.let {
+                        it.finishDate = date
+                        dependentViewModel.updateTask(it)
+                        userViewModel.persistUser(requireContext(), userViewModel.user.value)
+                    }
+                } else {
+                    finishDate.text = "Não concluído"
+                    checker.text = "Não concluído"
+                    previsionDate.isEnabled = true
+                    previsionHour.isEnabled = true
+
+                    // preciso salvar as alterações aqui
+                    currentTask?.let {
+                        it.finishDate = null
+                        dependentViewModel.updateTask(it)
+                        userViewModel.persistUser(requireContext(), userViewModel.user.value)
+                    }
+                }
             }
 
             startDate = view.findViewById(R.id.startDate)
-            startDate.text = task?.startDate ?: "Data"
-
-            previsionDate.setText(task?.previsionDate ?: "")
-            previsionHour.setText(task?.previsionHour ?: "")
-            // finishDate.setText(task?.finishDate ?: "")
+            startDate.text = task?.startDate ?: "Sem data"
+            previsionDate.setText(task?.previsionDate ?: "Sem data")
+            if (previsionDate.text.toString() == "") { // impede que hora seja escrito sem uma data
+                previsionHour.isEnabled = false
+            }
+            previsionHour.setText(task?.previsionHour ?: "Sem hora")
+            finishDate.text = task?.finishDate ?: "Sem data"
+            checker.isChecked = task?.finishDate != null
         }
 
         // data de conclusão prevista
         previsionDate = view.findViewById(R.id.previsionDate)
         previsionDate.setOnClickListener {
-
             val datePicker = MaterialDatePicker.Builder.datePicker()
                 .setTitleText("Previsão da data de conclusão")
                 .build()
 
+            // transformar data em string
             datePicker.addOnPositiveButtonClickListener { selection ->
                 val instant = Instant.ofEpochMilli(selection).plusSeconds(12 * 60 * 60)
                 val zoneId = ZoneId.systemDefault()
@@ -126,15 +190,16 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
                     dependentViewModel.updateTask(it)
                     userViewModel.persistUser(requireContext(), userViewModel.user.value)
                 }
+                previsionHour.isEnabled = true // permite editar hora após selecionar uma data
             }
-            datePicker.show(parentFragmentManager, "DATE_PICKER")
+            datePicker.show(parentFragmentManager, "DATE_PICKER") // mostra o datePicker (calendário)
         }
 
         // hora de conclusão prevista
         previsionHour = view.findViewById(R.id.previsionHour)
         previsionHour.setOnClickListener {
             val hourPicker = MaterialTimePicker.Builder()
-                .setTimeFormat(TimeFormat.CLOCK_24H)
+                .setTimeFormat(TimeFormat.CLOCK_24H) // formato de 24 horas
                 .setHour(12)
                 .setMinute(0)
                 .setTitleText("Previsão da hora de conclusão")
@@ -152,12 +217,15 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
                     userViewModel.persistUser(requireContext(), userViewModel.user.value)
                 }
             }
-            hourPicker.show(parentFragmentManager, "HOUR_PICKER")
+            hourPicker.show(parentFragmentManager, "HOUR_PICKER") // mostra o hourPicker (hora)
         }
 
         // data de conclusão
         finishDate = view.findViewById(R.id.finishDate)
 
+
+        // barra no topo
+        toolbar = view.findViewById(R.id.topBar)
         toolbar.setNavigationOnClickListener {
             parentFragmentManager.popBackStack()
         }
