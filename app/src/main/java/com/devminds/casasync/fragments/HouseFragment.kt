@@ -1,8 +1,10 @@
 package com.devminds.casasync.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.LinearLayout
@@ -115,6 +117,16 @@ class HouseFragment : BaseFragment(R.layout.fragment_house) {
             val inputName = EditText(context).apply {
                 hint = context.getString(R.string.dependent_name_prompt)
             }
+
+            // teclado com delay
+            inputName.postDelayed({
+                inputName.requestFocus() // traz o foco
+
+                // levanta o teclado
+                val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.showSoftInput(inputName, InputMethodManager.SHOW_IMPLICIT)
+                inputName.setSelection(0) // texto selecionado
+            },200)
 
             layout.addView(inputName)
 

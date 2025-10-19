@@ -1,5 +1,6 @@
 package com.devminds.casasync.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
@@ -24,6 +25,7 @@ import java.util.UUID
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
 import android.text.InputType
+import android.view.inputmethod.InputMethodManager
 import com.google.android.material.timepicker.TimeFormat
 import java.time.Instant
 import java.time.ZoneId
@@ -134,6 +136,17 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
             val inputName = EditText(context).apply {
                 hint = context.getString(R.string.task_name) // texto de ajuda
             }
+
+            // teclado com delay
+            inputName.postDelayed({
+                inputName.requestFocus() // traz o foco
+
+                // levanta o teclado
+                val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.showSoftInput(inputName, InputMethodManager.SHOW_IMPLICIT)
+                inputName.setSelection(0) // texto selecionado
+            },200)
+
             val inputDescription = EditText(context).apply {
                 hint = context.getString(R.string.task_description)
             }
