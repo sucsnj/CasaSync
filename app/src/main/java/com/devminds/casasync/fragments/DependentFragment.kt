@@ -48,6 +48,8 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val context = requireContext()
+
         toolbar = view.findViewById(R.id.topBar) // cabeçalho
         menu = toolbar.menu
         recyclerTasks = view.findViewById(R.id.recyclerTasks)
@@ -79,7 +81,7 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
         }
 
         // manuseia a lista de tarefas
-        recyclerTasks.layoutManager = LinearLayoutManager(requireContext())
+        recyclerTasks.layoutManager = LinearLayoutManager(context)
         dependentId = arguments?.getString("dependentId")
         // observa o usuário e o dependente selecionado
         userViewModel.user.observe(viewLifecycleOwner) { user ->
@@ -109,7 +111,7 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
                 itemOptions = getString(R.string.task_options),
                 successRenameToast = getString(R.string.rename_success_task_toast),
                 userViewModel = userViewModel,
-                context = requireContext()
+                context = context
             )
             
             // Aplica o adaptador à RecyclerView para exibir as tarefas
@@ -122,8 +124,6 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
 
         // adicionar tarefa
         btnAddTask.setOnClickListener {
-            val context = requireContext()
-
             // layout do diálogo
             val layout = LinearLayout(context).apply {
                 orientation = LinearLayout.VERTICAL
@@ -226,7 +226,7 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
                         adapter.notifyItemInserted(taskList.size - 1)
 
                         // persiste o usuário
-                        userViewModel.persistUser(requireContext(), userViewModel.user.value)
+                        userViewModel.persistUser(context, userViewModel.user.value)
                     }
                 }
                 .setNegativeButton(getString(R.string.button_cancel), null)

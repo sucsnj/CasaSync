@@ -58,19 +58,23 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
             replaceFragment(UserConfigFragment(), TransitionType.FADE)
         }
     }
+    private fun userId(): String { // retorna o id do usuário
+        userId = activity?.intent?.getStringExtra("userId") ?: userViewModel.user.value?.id ?: getString(
+            R.string.devminds_text
+        )
+        return userId
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val context = requireContext()
+
         clearNavHistory()
         openUserPerfil()
 
-        // pega o id do usuário
-        userId = activity?.intent?.getStringExtra("userId") ?: userViewModel.user.value?.id ?: getString(
-                R.string.devminds_text
-            )
         // carrega o usuário com base no id
-        user = JsonStorageManager.loadUser(requireContext(), userId)
+        user = JsonStorageManager.loadUser(context, userId())
         user?.let {
             userViewModel.setUser(it) // atualiza o usuário no ViewModel
         }
@@ -96,7 +100,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
             when (item.itemId) {
                 R.id.more_options -> {
                     // mostra o menu suspenso
-                    PopupMenu.show(requireContext(), menuItemView, this)
+                    PopupMenu.show(context, menuItemView, this)
                     true
                 }
                 else -> false
@@ -106,7 +110,6 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
         // cria uma casa
         btnNewHouse = view.findViewById<TextView>(R.id.btnAddHouse)
         btnNewHouse.setOnClickListener {
-            val context = requireContext()
             val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_add_house, null)
             val input = dialogView.findViewById<EditText>(R.id.inputHouse)
 
@@ -136,7 +139,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
                         adapter.notifyItemInserted(houseList.size - 1)
 
                         // persiste o usuário
-                        userViewModel.persistUser(requireContext(), userViewModel.user.value)
+                        userViewModel.persistUser(context, userViewModel.user.value)
 
                         dialog.dismiss()
                     } else {
@@ -157,7 +160,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
 
         // lista das casas
         recyclerHouses = view.findViewById<RecyclerView>(R.id.recyclerHouses)
-        recyclerHouses.layoutManager = LinearLayoutManager(requireContext())
+        recyclerHouses.layoutManager = LinearLayoutManager(context)
         recycler = recyclerHouses
 
         // manuseia a lista de casas
@@ -175,7 +178,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
             itemOptions = getString(R.string.house_options),
             successRenameToast = getString(R.string.rename_success_house_toast),
             userViewModel = userViewModel,
-            context = requireContext()
+            context = context
         )
         recycler.adapter = adapter
     }

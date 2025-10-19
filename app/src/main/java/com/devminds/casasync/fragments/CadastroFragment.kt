@@ -30,6 +30,7 @@ class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
 
         // variáveis locais
         var userFound: User?
+        val context = requireContext()
 
         // inicialização das variáveis
         newUserPrompt = view.findViewById(R.id.newUserPrompt)
@@ -38,9 +39,6 @@ class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
         btnCadastro = view.findViewById(R.id.btnCadastro)
         btnLoginAccount = view.findViewById(R.id.btnLoginAccount)
         toolbar = view.findViewById(R.id.topBar) // cabeçalho
-        menu = toolbar.menu
-        toolbar.inflateMenu(R.menu.topbar_menu) // infla o menu suspenso
-        menuItemView = toolbar.findViewById(R.id.more_options) // menu suspenso (3 pontos)
 
         // cadastro de usuário
         btnCadastro.setOnClickListener {
@@ -50,10 +48,10 @@ class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
             val password = newPasswordPrompt.text.toString()
 
             // verifica se o login já existe
-            userFound = JsonStorageManager.recoveryUser(requireContext(), login)
+            userFound = JsonStorageManager.recoveryUser(context, login)
             // se já existe
             if (userFound != null) {
-                DialogUtils.showMessage(requireContext(), getString(R.string.login_exists_message))
+                DialogUtils.showMessage(context, getString(R.string.login_exists_message))
                 return@setOnClickListener // sai da função, impedindo o cadastro
             }
 
@@ -66,14 +64,14 @@ class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
                     login = login,
                     password = password
                 )
-                DialogUtils.showMessage(requireContext(), getString(R.string.new_account_success_message))
+                DialogUtils.showMessage(context, getString(R.string.new_account_success_message))
 
                 // persiste o usuário em json
-                JsonStorageManager.saveUser(requireContext(), newUser)
+                JsonStorageManager.saveUser(context, newUser)
                 // redireciona para a página de login
                 replaceFragment( LoginFragment(), TransitionType.SLIDE)
             } else {
-                DialogUtils.showMessage(requireContext(), getString(R.string.new_account_error_message))
+                DialogUtils.showMessage(context, getString(R.string.new_account_error_message))
             }
         }
 
@@ -87,17 +85,20 @@ class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
             parentFragmentManager.popBackStack()
         }
 
-
+        toolbar.inflateMenu(R.menu.topbar_menu) // infla o menu suspenso
+        menu = toolbar.menu
 
         // dentro do menu, esconde o item de voltar para o início
         menu.findItem(R.id.action_homepage).isVisible = false
+
+        menuItemView = toolbar.findViewById(R.id.more_options) // menu suspenso (3 pontos)
 
         // cabeçalho
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.more_options -> {
                     // exibe o menu suspenso
-                    val menuPopup = PopupMenu.show(requireContext(), menuItemView, this)
+                    val menuPopup = PopupMenu.show(context, menuItemView, this)
 
                     // esconde os itens do menu suspenso
                     menuPopup.findItem(R.id.user_settings).isVisible = false // configurações do usuário
