@@ -27,12 +27,13 @@ import com.devminds.casasync.utils.PopupMenu
 
 class HomeFragment : BaseFragment(R.layout.fragment_home) {
 
-    private lateinit var adapter: GenericAdapter<House>
     private val userViewModel: UserViewModel by activityViewModels()
     private val houseList: MutableList<House>
         get() = userViewModel.user.value?.houses ?: mutableListOf()
-    private lateinit var userId: String
     private var user: User? = null
+
+    private lateinit var userId: String
+    private lateinit var adapter: GenericAdapter<House>
     private lateinit var toolbar: MaterialToolbar
     private lateinit var menu: Menu
     private lateinit var menuItemView: View
@@ -43,10 +44,10 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
     private lateinit var title: TextView
     private lateinit var subtitle: TextView
 
-    private fun openUserPerfil() {
-        userPhoto = view?.findViewById(R.id.userPhoto)!!
-        title = view?.findViewById(R.id.title)!!
-        subtitle = view?.findViewById(R.id.subtitle)!!
+    private fun openUserPerfil() { // permite abrir a tela de perfil do usuário
+        userPhoto = view?.findViewById(R.id.userPhoto)!! // foto
+        title = view?.findViewById(R.id.title)!! // nome
+        subtitle = view?.findViewById(R.id.subtitle)!! // perfil
         userPhoto.setOnClickListener {
             replaceFragment(UserConfigFragment(), TransitionType.FADE)
         }
@@ -62,36 +63,39 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
         super.onViewCreated(view, savedInstanceState)
 
         clearNavHistory()
-
         openUserPerfil()
 
-        // carrega o usuário do json
+        // pega o id do usuário
         userId = activity?.intent?.getStringExtra("userId") ?: userViewModel.user.value?.id ?: getString(
                 R.string.devminds_text
             )
+        // carrega o usuário com base no id
         user = JsonStorageManager.loadUser(requireContext(), userId)
         user?.let {
-            userViewModel.setUser(it)
+            userViewModel.setUser(it) // atualiza o usuário no ViewModel
         }
 
         toolbar = view.findViewById(R.id.topBar)
         title = view.findViewById(R.id.title)
 
+        // muda o título do cabeçalho para o nome do usuário atual
         userViewModel.user.observe(viewLifecycleOwner) { user ->
             val welcome = getString(R.string.welcome_text) + (user?.name ?: "Usuário")
-            title.setText(welcome)
+            title.text = welcome
         }
 
         toolbar.inflateMenu(R.menu.topbar_menu)
-        menu = toolbar.menu // para controlar a visibilidade dos itens
+        menu = toolbar.menu
+        // esconde o item de voltar para o início
         menu.findItem(R.id.action_homepage).isVisible = false
 
-        // lógica do menu de opções
+        // menu suspenso (3 pontos)
         menuItemView = toolbar.findViewById<View>(R.id.more_options)
 
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.more_options -> {
+                    // mostra o menu suspenso
                     PopupMenu.show(requireContext(), menuItemView, this)
                     true
                 }
@@ -107,17 +111,14 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
             val input = dialogView.findViewById<EditText>(R.id.inputHouse)
 
             // diálogo para criar uma nova casa
-            val dialog = AlertDialog.Builder(
-                ContextThemeWrapper(context, R.style.CustomDialog)
-            )
+            val dialog = AlertDialog.Builder(ContextThemeWrapper(context, R.style.CustomDialog))
                 .setView(dialogView)
                 .setPositiveButton(getString(R.string.button_add), null)
                 .setNegativeButton(getString(R.string.button_cancel), null)
                 .create()
-
             dialog.show()
 
-            // estilos dos botões
+            // estilos dos botões "Adicionar" e "Cancelar"
             dialog.getButton(AlertDialog.BUTTON_POSITIVE)?.apply {
                 setBackgroundResource(R.drawable.button_primary)
                 setTextColor(Color.BLACK)
@@ -128,11 +129,13 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
                         val newHouse = House(
                             id = UUID.randomUUID().toString(),
                             name = houseName,
-                            ownerId = userViewModel.user.value?.id ?: getString(R.string.devminds_text)
+                            ownerId = userViewModel.user.value?.id ?: getString(R.string.devminds_text) // id do usuário atual
                         )
+                        // adiciona a casa à lista e notifica o adapter
                         userViewModel.user.value?.houses?.add(newHouse)
                         adapter.notifyItemInserted(houseList.size - 1)
 
+                        // persiste o usuário TODO
                         userViewModel.user.value?.let {
                             JsonStorageManager.saveUser(requireContext(), it)
                         }
@@ -157,9 +160,9 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
         // lista das casas
         recyclerHouses = view.findViewById<RecyclerView>(R.id.recyclerHouses)
         recyclerHouses.layoutManager = LinearLayoutManager(requireContext())
-
         recycler = recyclerHouses
 
+        // manuseia a lista de casas
         adapter = Utils.createHouseAdapter(
             recycler = recyclerHouses,
             list = houseList,
@@ -176,7 +179,6 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
             userViewModel = userViewModel,
             context = requireContext()
         )
-
         recycler.adapter = adapter
     }
 }
