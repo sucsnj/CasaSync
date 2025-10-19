@@ -135,10 +135,8 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
                         userViewModel.user.value?.houses?.add(newHouse)
                         adapter.notifyItemInserted(houseList.size - 1)
 
-                        // persiste o usuário TODO
-                        userViewModel.user.value?.let {
-                            JsonStorageManager.saveUser(requireContext(), it)
-                        }
+                        // persiste o usuário
+                        userViewModel.persistUser(requireContext(), userViewModel.user.value)
 
                         dialog.dismiss()
                     } else {
