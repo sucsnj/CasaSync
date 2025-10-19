@@ -39,6 +39,7 @@ class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
         btnLoginAccount = view.findViewById(R.id.btnLoginAccount)
         toolbar = view.findViewById(R.id.topBar) // cabeçalho
         menu = toolbar.menu
+        toolbar.inflateMenu(R.menu.topbar_menu) // infla o menu suspenso
         menuItemView = toolbar.findViewById(R.id.more_options) // menu suspenso (3 pontos)
 
         // cadastro de usuário
@@ -86,8 +87,7 @@ class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
             parentFragmentManager.popBackStack()
         }
 
-        // infla o menu suspenso
-        toolbar.inflateMenu(R.menu.topbar_menu)
+
 
         // dentro do menu, esconde o item de voltar para o início
         menu.findItem(R.id.action_homepage).isVisible = false

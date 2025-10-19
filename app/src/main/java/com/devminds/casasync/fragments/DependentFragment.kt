@@ -15,13 +15,10 @@ import com.devminds.casasync.R
 import com.devminds.casasync.TransitionType
 import com.devminds.casasync.parts.Dependent
 import com.devminds.casasync.parts.Task
-import com.devminds.casasync.setCustomTransition
-import com.devminds.casasync.utils.JsonStorageManager
 import com.devminds.casasync.utils.Utils
 import com.devminds.casasync.views.DependentViewModel
 import com.devminds.casasync.views.UserViewModel
 import com.google.android.material.appbar.MaterialToolbar
-import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.UUID
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -41,7 +38,7 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
     private val taskList: MutableList<Task>
         get() = currentDependent?.tasks ?: mutableListOf()
 
-    private lateinit var adapter: GenericAdapter<Task> // adaptador para a lista de tarefas TODO (lateinit)
+    private lateinit var adapter: GenericAdapter<Task> // adaptador para a lista de tarefas
     private lateinit var toolbar: MaterialToolbar
     private lateinit var menu: Menu
     private lateinit var recyclerTasks: RecyclerView
@@ -65,7 +62,7 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
         toolbar.setNavigationOnClickListener {
             parentFragmentManager.popBackStack()
         }
-        // influê o menu suspenso em toolbar
+        // infla o menu suspenso em toolbar
         toolbar.inflateMenu(R.menu.topbar_menu)
         // esconde o item de mais opções em toolbar
         menu.findItem(R.id.more_options).isVisible = false
@@ -74,11 +71,7 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.action_homepage -> {
-                    // redireciona para o ínicio TODO (novo método)
-                    parentFragmentManager.beginTransaction()
-                        .setCustomTransition(TransitionType.FADE)
-                        .replace(R.id.fragment_container, HomeFragment())
-                        .commit()
+                    replaceFragment(HomeFragment(), TransitionType.FADE)
                     true
                 }
                 else -> false
@@ -103,7 +96,7 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
 
             // cria o adaptador
             adapter = Utils.createTaskAdapter(
-                recycler = recyclerTasks, // TODO (faz sentido colocar o recycler aqui? de novo?)
+                recycler = recyclerTasks,
                 list = taskList, // lista de tarefas
                 fragmentFactory = { taskId ->
                     TaskFragment().apply {
@@ -232,11 +225,8 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
                         currentDependent?.tasks?.add(newTask)
                         adapter.notifyItemInserted(taskList.size - 1)
 
-                        // persiste o usuário TODO (novo método)
-                        val user = userViewModel.user.value
-                        user?.let {
-                            JsonStorageManager.saveUser(requireContext(), it)
-                        }
+                        // persiste o usuário
+                        userViewModel.persistUser(requireContext(), userViewModel.user.value)
                     }
                 }
                 .setNegativeButton(getString(R.string.button_cancel), null)
