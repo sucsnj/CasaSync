@@ -11,8 +11,9 @@ import com.devminds.casasync.utils.DialogUtils
 import com.devminds.casasync.utils.JsonStorageManager
 import com.devminds.casasync.utils.PopupMenu
 import com.google.android.material.appbar.MaterialToolbar
+import androidx.fragment.app.activityViewModels
+import com.devminds.casasync.views.UserViewModel
 
-// declaração de classe para recuperação de senha
 class RecoveryFragment : BaseFragment(R.layout.fragment_recovery) {
 
     private lateinit var promptChangePassword: TextView
@@ -24,31 +25,34 @@ class RecoveryFragment : BaseFragment(R.layout.fragment_recovery) {
     private lateinit var menu: Menu
     private lateinit var menuItemView: View
 
+    private val userViewModel: UserViewModel by activityViewModels()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        promptChangePassword = view.findViewById(R.id.promptChangePassword)
-        promptChangePassword.visibility = View.INVISIBLE
+        val context = requireContext()
 
+        promptChangePassword = view.findViewById(R.id.promptChangePassword)
+        promptChangePassword.visibility = View.INVISIBLE // esconde o prompt para troca de senha
         txtLoginPromptRecovery = view.findViewById(R.id.txtLoginPromptRecovery)
 
+        // variável para armazenar o usuário encontrado
         var userFound: User? = null
         btnRecovery = view.findViewById(R.id.btnRecovery)
         btnRecovery.setOnClickListener {
-
             val login = txtLoginPromptRecovery.text.toString()
-            userFound = JsonStorageManager.recoveryUser(requireContext(), login)
-
+            userFound = JsonStorageManager.recoveryUser(context, login) // recupera o usuário
+            // se o usuário for encontrado
             if (login.isNotEmpty()) {
                 if (userFound != null) {
-                    DialogUtils.showMessage(requireContext(), getString(R.string.recovery_login_found_message))
+                    DialogUtils.showMessage(context, getString(R.string.recovery_login_found_message))
 
                     promptChangePassword.visibility =
                         View.VISIBLE // mostra o prompt para troca de senha
                     btnChangePassword.visibility =
                         View.VISIBLE // mostra o botão para troca de senha
                 } else {
-                    DialogUtils.showMessage(requireContext(), getString(R.string.recovery_login_not_found_message))
+                    DialogUtils.showMessage(context, getString(R.string.recovery_login_not_found_message))
 
                     promptChangePassword.visibility =
                         View.INVISIBLE // esconde o prompt para troca de senha
@@ -56,44 +60,40 @@ class RecoveryFragment : BaseFragment(R.layout.fragment_recovery) {
                         View.INVISIBLE // esconde o botão para troca de senha
                 }
             } else {
-                DialogUtils.showMessage(requireContext(), getString(R.string.recovery_login_empty_message))
+                DialogUtils.showMessage(context, getString(R.string.recovery_login_empty_message))
 
                 promptChangePassword.visibility = View.INVISIBLE
                 btnChangePassword.visibility = View.INVISIBLE
             }
         }
-
+        // botão para troca de senha
         btnChangePassword = view.findViewById(R.id.btnChangePassword)
         btnChangePassword.visibility = View.INVISIBLE
         btnChangePassword.setOnClickListener {
-
             val password = promptChangePassword.text.toString()
             if (password.isNotEmpty()) {
+                // persiste o usuário com a nova senha
+                userViewModel.persistUserPassword(context, userFound, password)
 
-                userFound?.let {
-                    it.password = password
-                    JsonStorageManager.saveUser(requireContext(), it)
-                }
-
-                DialogUtils.showMessage(requireContext(), getString(R.string.recovery_password_changed_message))
-
+                DialogUtils.showMessage(context, getString(R.string.recovery_password_changed_message))
                 replaceFragment( LoginFragment(), TransitionType.SLIDE)
             } else {
-                DialogUtils.showMessage(requireContext(), getString(R.string.recovery_password_empty_message))
+                DialogUtils.showMessage(context, getString(R.string.recovery_password_empty_message))
             }
         }
 
-        // lógica para criar conta
+        // botão para criar conta
         btnCreateAccount = view.findViewById(R.id.btnCreatAccount)
         btnCreateAccount.setOnClickListener {
             replaceFragment( CadastroFragment(), TransitionType.SLIDE)
         }
 
+        // cabeçalho
         toolbar = view.findViewById(R.id.topBar)
         toolbar.setNavigationOnClickListener {
-            parentFragmentManager.popBackStack() // volta para login
+            parentFragmentManager.popBackStack() // botão de voltar
         }
-
+        // menu suspenso (3 pontos)
         toolbar.inflateMenu(R.menu.topbar_menu)
         menu = toolbar.menu // para controlar a visibilidade dos itens
         menu.findItem(R.id.action_homepage).isVisible = false
@@ -101,10 +101,11 @@ class RecoveryFragment : BaseFragment(R.layout.fragment_recovery) {
         // lógica do menu de opções
         menuItemView = toolbar.findViewById(R.id.more_options)
 
+        // botão de menu suspenso
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.more_options -> {
-                    val menuPopup = PopupMenu.show(requireContext(), menuItemView, this)
+                    val menuPopup = PopupMenu.show(context, menuItemView, this)
 
                     // visibilidade dos itens em submenu
                     menuPopup.findItem(R.id.user_settings).isVisible = false

@@ -27,20 +27,18 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val context = requireContext()
+        // limpa o histórico de navegação
         clearNavHistory()
-
-        // testando o firestore
-//        FirestoreHelper.writeUser()
-//        FirestoreHelper.readUsers()
 
         txtLoginPrompt = view.findViewById(R.id.txtLoginPrompt)
         txtPasswordPrompt = view.findViewById(R.id.txtPasswordPrompt)
-
+        // botão de login com google
         btnGoogleLogin = view.findViewById(R.id.btnGoogleLogin)
         btnGoogleLogin.setOnClickListener {
-            DialogUtils.showMessage(requireContext(), "implementando google login")
+            DialogUtils.showMessage(context, "implementando google login")
         }
-
+        // botão de login
         btnLogin = view.findViewById(R.id.btnLogin)
         btnLogin.setOnClickListener {
 
@@ -52,30 +50,30 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
             if (login.isNotEmpty() && password.isNotEmpty()) {
 
                 // carrega o usuário do json
-                val userFound = JsonStorageManager.authenticateUser(requireContext(), login, password)
+                val userFound = JsonStorageManager.authenticateUser(context, login, password)
 
                 // se o usuário for encontrado
                 if (userFound != null) {
                     userViewModel.setUser(userFound)
 
-                    val intent = Intent(requireContext(), HomeActivity::class.java)
+                    val intent = Intent(context, HomeActivity::class.java)
                     intent.putExtra("userId", userFound.id)
                     startActivity(intent)
                     requireActivity().finish()
 
                 } else {
-                    DialogUtils.showMessage(requireContext(), getString(R.string.login_error_message))
+                    DialogUtils.showMessage(context, getString(R.string.login_error_message))
                 }
             } else {
-                DialogUtils.showMessage(requireContext(), getString(R.string.login_empty_message))
+                DialogUtils.showMessage(context, getString(R.string.login_empty_message))
             }
         }
-
+        // botão de criar conta
         btnCreateAccount = view.findViewById(R.id.btnCreatAccount)
         btnCreateAccount.setOnClickListener {
             replaceFragment( CadastroFragment(), TransitionType.SLIDE)
         }
-
+        // botão de recuperar senha
         btnForgotPassword = view.findViewById(R.id.txtForgotPassword)
         btnForgotPassword.setOnClickListener {
             replaceFragment( RecoveryFragment(), TransitionType.SLIDE)

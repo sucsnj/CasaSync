@@ -98,6 +98,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
         // menu suspenso (3 pontos)
         menuItemView = toolbar.findViewById<View>(R.id.more_options)
 
+        // botão de menu suspenso
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.more_options -> {
@@ -133,7 +134,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
                 .create()
             dialog.show()
 
-            // estilos dos botões "Adicionar" e "Cancelar"
+            // estilo do botão "Adicionar"
             dialog.getButton(AlertDialog.BUTTON_POSITIVE)?.apply {
                 setBackgroundResource(R.drawable.button_primary)
                 setTextColor(Color.BLACK)
@@ -160,6 +161,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
                 }
             }
 
+            // estilos do botão "Cancelar"
             dialog.getButton(AlertDialog.BUTTON_NEGATIVE)?.apply {
                 setBackgroundResource(R.drawable.button_secondary)
                 setTextColor(Color.BLACK)

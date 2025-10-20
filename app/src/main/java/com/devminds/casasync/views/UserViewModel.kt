@@ -32,4 +32,11 @@ class UserViewModel : ViewModel() {
             JsonStorageManager.saveUser(context, it)
         }
     }
+
+    fun persistUserPassword(context: Context, user: User?, password: String) {
+        user?.let {
+            it.password = password
+            JsonStorageManager.saveUser(context, it)
+        }
+    }
 }

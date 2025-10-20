@@ -43,46 +43,47 @@ class HouseFragment : BaseFragment(R.layout.fragment_house) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // title
-        title = view.findViewById(R.id.title)
+        val context = requireContext()
 
+        title = view.findViewById(R.id.title)
         toolbar = view.findViewById(R.id.topBar)
+        // muda o título do cabeçalho
         houseViewModel.house.observe(viewLifecycleOwner) { house ->
             title.text = house?.name ?: "Casa"
         }
-
+        // botão de voltar
         toolbar.setNavigationOnClickListener {
             parentFragmentManager.popBackStack()
         }
-
+        // menu suspenso (3 pontos)
         toolbar.inflateMenu(R.menu.topbar_menu)
         menu = toolbar.menu
         menu.findItem(R.id.more_options).isVisible = false
-
+        // botões em menu suspenso
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.action_homepage -> {
-                    replaceFragment(HomeFragment(), TransitionType.FADE)
+                    replaceFragment(HomeFragment(), TransitionType.FADE) // muda para a home
                     true
                 }
                 else -> false
             }
         }
-
+        // lista de dependentes
         recyclerDependents = view.findViewById(R.id.recyclerDependents)
-        recyclerDependents.layoutManager = LinearLayoutManager(requireContext())
+        recyclerDependents.layoutManager = LinearLayoutManager(context)
 
         houseId = arguments?.getString("houseId")
-
+        // observa o usuário e a casa selecionada
         userViewModel.user.observe(viewLifecycleOwner) { user ->
             currentHouse = user?.houses?.find { it.id == houseId }
             currentHouse?.let { houseViewModel.setHouse(it) }
-
+            // lista de dependentes
             val recycler = recyclerDependents
-
+            // cria o adaptador
             adapter = Utils.createDependentAdapter(
                 recycler = recyclerDependents,
-                list = dependentList,
+                list = dependentList, // lista que será usada no adaptador
                 fragmentFactory = { dependentId ->
                     DependentFragment().apply {
                         arguments = Bundle().apply {
@@ -94,21 +95,18 @@ class HouseFragment : BaseFragment(R.layout.fragment_house) {
                 itemOptions = getString(R.string.dependent_options),
                 successRenameToast = getString(R.string.rename_success_dependent_toast),
                 userViewModel = userViewModel,
-                context = requireContext()
+                context = context
             )
-
+            // aplica o adaptador à lista de dependentes
             recycler.adapter = adapter
             val position = dependentList.indexOfFirst { it.id == houseId }
             if (position != -1) {
                 adapter.notifyItemChanged(position)
             }
         }
-
+        // botão de adicionar dependente
         btnAddDependent = view.findViewById(R.id.btnAddDependent)
         btnAddDependent.setOnClickListener {
-
-            val context = requireContext()
-
             val layout = LinearLayout(context).apply {
                 orientation = LinearLayout.VERTICAL
                 setPadding(50, 40, 50, 10)
@@ -129,7 +127,7 @@ class HouseFragment : BaseFragment(R.layout.fragment_house) {
             },200)
 
             layout.addView(inputName)
-
+            // diálogo para adicionar dependente
             AlertDialog.Builder(context)
                 .setTitle(getString(R.string.btn_add_dependent))
                 .setView(layout)
@@ -146,7 +144,7 @@ class HouseFragment : BaseFragment(R.layout.fragment_house) {
                         // persiste o usuário em json
                         val user = userViewModel.user.value
                         user?.let {
-                            JsonStorageManager.saveUser(requireContext(), it)
+                            JsonStorageManager.saveUser(context, it)
                         }
                     }
                 }
