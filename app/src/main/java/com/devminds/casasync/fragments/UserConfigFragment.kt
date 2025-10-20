@@ -12,9 +12,10 @@ class UserConfigFragment : BaseFragment(R.layout.fragment_config_user) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // cabeçalho
         toolbar = view.findViewById(R.id.topBar)
         toolbar.setNavigationOnClickListener {
-            parentFragmentManager.popBackStack()
+            parentFragmentManager.popBackStack() // botão de voltar
         }
     }
 }

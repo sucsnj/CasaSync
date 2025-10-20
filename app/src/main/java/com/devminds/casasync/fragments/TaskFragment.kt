@@ -33,10 +33,11 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
     private val dependentViewModel: DependentViewModel by activityViewModels()
     private val taskViewModel: TaskViewModel by activityViewModels()
     private var currentTask: Task? = null
+    private var taskId: String? = null
+
     private lateinit var toolbar: MaterialToolbar
     private lateinit var taskDescription: TextView
     private lateinit var menu: Menu
-    private var taskId: String? = null
     private lateinit var title: TextView
     private lateinit var subtitle: TextView
     private lateinit var previsionDate: EditText
@@ -45,7 +46,7 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
     private lateinit var finishDate: TextView
     private lateinit var checker: CheckBox
 
-    fun timePicker(): MaterialTimePicker {
+    fun timePicker(): MaterialTimePicker { // ainda sem uso TODO
         val timePicker = MaterialTimePicker.Builder()
             .setTimeFormat(TimeFormat.CLOCK_24H)
             .setHour(12)
@@ -64,10 +65,10 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
         taskDescription = view.findViewById(R.id.taskDescription)
         checker = view.findViewById(R.id.checker)
 
-        // modelo do task
+        // observa a tarefa selecionada
         taskViewModel.task.observe(viewLifecycleOwner) { task ->
-            title.text = task?.name ?: "Tarefa"
-            taskDescription.text = task?.description ?: "Sem descrição"
+            title.text = task?.name ?: "Tarefa" // nome no título
+            taskDescription.text = task?.description ?: "Sem descrição" // descrição da tarefa
             // se a descrição estiver vazia, mostra "Sem descrição" na dica
             if (task?.description.toString() == "") {
                 taskDescription.hint = "Sem descrição"
@@ -125,18 +126,17 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
                     .show() // mostra o diálogo
             }
 
-            // checkbox
+            // checkbox de conclusão (se comunica com a data de conclusão)
             checker.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
-                    val date = Utils.date()
+                    val date = Utils.date() // data atual
 
                     finishDate.text = date
-                    checker.text = "Concluído"
-                    previsionDate.isEnabled = false
-                    previsionHour.isEnabled = false
+                    checker.text = "Concluído" // muda o texto do checkbox
+                    previsionDate.isEnabled = false // desabilita a data de previsão
+                    previsionHour.isEnabled = false // desabilita a hora de previsão
 
-
-                    // preciso salvar as alterações aqui
+                    // atualiza a tarefa e o usuário no json
                     currentTask?.let {
                         it.finishDate = date
                         dependentViewModel.updateTask(it)
@@ -148,7 +148,7 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
                     previsionDate.isEnabled = true
                     previsionHour.isEnabled = true
 
-                    // preciso salvar as alterações aqui
+                    // atualiza a tarefa e o usuário no json
                     currentTask?.let {
                         it.finishDate = null
                         dependentViewModel.updateTask(it)
@@ -183,7 +183,7 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
 
                 val formattedDate = localDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
                 previsionDate.setText(formattedDate)
-
+                // atualiza a tarefa e o usuário no json
                 currentTask?.let {
                     it.previsionDate = formattedDate
                     dependentViewModel.updateTask(it)
@@ -209,7 +209,7 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
                 val minute = hourPicker.minute
                 val formattedTime = String.format(Locale.getDefault(), "%02d:%02d", hour, minute)
                 previsionHour.setText(formattedTime)
-
+                // atualiza a tarefa e o usuário no json
                 currentTask?.let {
                     it.previsionHour = formattedTime
                     dependentViewModel.updateTask(it)
@@ -222,13 +222,12 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
         // data de conclusão
         finishDate = view.findViewById(R.id.finishDate)
 
-
         // barra no topo
         toolbar = view.findViewById(R.id.topBar)
         toolbar.setNavigationOnClickListener {
             parentFragmentManager.popBackStack()
         }
-
+        // menu suspenso (3 pontos)
         toolbar.inflateMenu(R.menu.topbar_menu)
         menu = toolbar.menu
         menu.findItem(R.id.more_options).isVisible = false
@@ -244,13 +243,13 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
         }
 
         taskId = arguments?.getString("taskId")
-
+        // observa o dependente selecionado
         subtitle = view.findViewById(R.id.subtitle)
         dependentViewModel.dependent.observe(viewLifecycleOwner) { dependent ->
-            subtitle.text = dependent?.name ?: "Dependente"
+            subtitle.text = dependent?.name ?: "Dependente" // nome do dependente no subtítulo
 
-            currentTask = dependent?.tasks?.find { it.id == taskId }
-            currentTask?.let { taskViewModel.setTask(it) }
+            currentTask = dependent?.tasks?.find { it.id == taskId } // tarefa selecionada (para que? TODO)
+            currentTask?.let { taskViewModel.setTask(it) } // atualiza a tarefa no ViewModel
         }
     }
 }
