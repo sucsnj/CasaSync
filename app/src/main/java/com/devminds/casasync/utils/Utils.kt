@@ -17,10 +17,9 @@ import com.devminds.casasync.TransitionType
 import com.devminds.casasync.parts.Dependent
 import com.devminds.casasync.parts.House
 import com.devminds.casasync.parts.Task
+import com.devminds.casasync.parts.date
 import com.devminds.casasync.setCustomTransition
 import com.devminds.casasync.views.UserViewModel
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 // classe utilitária
 object Utils {
@@ -45,20 +44,11 @@ object Utils {
         }
     }
 
-    // data atual
-    fun date(): String {
-        val dateNow = LocalDateTime.now()
-        val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
-        val formattedDate = dateNow.format(formatter)
-
-        return formattedDate
-    }
-
     // precisa de uma variável activity e uma String pro itemName
     fun renameDialogItem(
         activity: Activity,
         itemName: String
-    ): Pair<View, EditText> { // retorna uma View e um EditText
+    ): Pair<View, EditText> { // retorna um par, uma View e um EditText
         val dialogView = LayoutInflater.from(activity).inflate(R.layout.dialog_rename_item, null)
         val editText = dialogView.findViewById<EditText>(R.id.newNameItem)
         editText.setText(itemName)
@@ -404,7 +394,10 @@ object Utils {
                                 }
 
                                 2 -> {
-                                    item.finishDate = date()
+                                    item.finishDate = date().fullDate
+                                    item.previsionDate = ""
+                                    item.previsionHour = ""
+
                                     recycler.adapter?.notifyItemChanged(position)
 
                                     val user = userViewModel.user.value

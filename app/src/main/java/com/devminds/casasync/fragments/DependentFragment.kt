@@ -22,11 +22,11 @@ import com.devminds.casasync.views.UserViewModel
 import com.google.android.material.appbar.MaterialToolbar
 import java.time.format.DateTimeFormatter
 import java.util.UUID
-import com.google.android.material.datepicker.MaterialDatePicker
-import com.google.android.material.timepicker.MaterialTimePicker
 import android.text.InputType
 import android.view.inputmethod.InputMethodManager
-import com.google.android.material.timepicker.TimeFormat
+import com.devminds.casasync.parts.date
+import com.devminds.casasync.parts.datePicker
+import com.devminds.casasync.parts.hourPicker
 import java.time.Instant
 import java.time.ZoneId
 import java.util.Locale
@@ -159,9 +159,7 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
                 // quando inputPrevisionDate for clicado, exibe o diálogo de seleção de data
                 setOnClickListener {
                     // MaterialDatePicker é um diálogo de seleção de data
-                    val datePicker = MaterialDatePicker.Builder.datePicker()
-                        .setTitleText("Insira a data prevista de conclusão")
-                        .build()
+                    val datePicker = datePicker("Selecione a data prevista de conclusão")
 
                     // quando o usuário clicar em OK, o valor é salvo no campo inputPrevisionDate
                     datePicker.addOnPositiveButtonClickListener { selection ->
@@ -185,12 +183,7 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
 
                 setOnClickListener {
                     // MaterialTimePicker é um diálogo de seleção de hora
-                    val hourPicker = MaterialTimePicker.Builder()
-                        .setTimeFormat(TimeFormat.CLOCK_24H)
-                        .setHour(12)
-                        .setMinute(0)
-                        .setTitleText("Insira a hora prevista de conclusão")
-                        .build()
+                    val hourPicker = hourPicker("Selecione a hora prevista de conclusão")
 
                     hourPicker.addOnPositiveButtonClickListener {
                         val hour = hourPicker.hour
@@ -229,7 +222,7 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
                             id = UUID.randomUUID().toString(),
                             name = name,
                             description = description,
-                            startDate = Utils.date(), // data atual
+                            startDate = date().fullDate, // data atual
                             previsionDate = previsionDate,
                             previsionHour = previsionHour,
                             finishDate = null // inicia 'em progresso'
