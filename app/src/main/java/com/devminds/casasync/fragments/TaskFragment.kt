@@ -56,6 +56,18 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
 
         return timePicker
     }
+    fun saveTask(context: Context, item: String, itemValue: String?) {
+        taskViewModel.task.value?.let {
+            when (item) {
+                "description" -> itemValue?.let { value -> it.description = value }
+                "previsionDate" -> itemValue?.let { value -> it.previsionDate = value }
+                "previsionHour" -> itemValue?.let { value -> it.previsionHour = value }
+                "finishDate" -> it.finishDate = itemValue
+            }
+            dependentViewModel.updateTask(it)
+            userViewModel.persistUser(context, userViewModel.user.value)
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -116,11 +128,12 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
                         taskDescription.text = newDescription
 
                         // atualizar descrição na task e no dependent e persiste no usuário
-                        currentTask?.let {
-                            it.description = newDescription
-                            dependentViewModel.updateTask(it) // atualiza a task
-                            userViewModel.persistUser(context, userViewModel.user.value) // persiste o usuário
-                        }
+                        saveTask(requireContext(), item = "description", newDescription)
+                        // currentTask?.let {
+                        //     it.description = newDescription
+                        //     dependentViewModel.updateTask(it) // atualiza a task
+                        //     userViewModel.persistUser(context, userViewModel.user.value) // persiste o usuário
+                        // }
                         dialog.dismiss() // fecha o diálogo
                     }
                     .show() // mostra o diálogo
@@ -137,11 +150,7 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
                     previsionHour.isEnabled = false // desabilita a hora de previsão
 
                     // atualiza a tarefa e o usuário no json
-                    currentTask?.let {
-                        it.finishDate = date
-                        dependentViewModel.updateTask(it)
-                        userViewModel.persistUser(requireContext(), userViewModel.user.value)
-                    }
+                    saveTask(requireContext(), item = "finishDate", date)
                 } else {
                     finishDate.text = "Não concluído"
                     checker.text = "Não concluído"
@@ -149,11 +158,7 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
                     previsionHour.isEnabled = true
 
                     // atualiza a tarefa e o usuário no json
-                    currentTask?.let {
-                        it.finishDate = null
-                        dependentViewModel.updateTask(it)
-                        userViewModel.persistUser(requireContext(), userViewModel.user.value)
-                    }
+                    saveTask(requireContext(), item = "finishDate", null)
                 }
             }
 
@@ -184,11 +189,7 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
                 val formattedDate = localDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
                 previsionDate.setText(formattedDate)
                 // atualiza a tarefa e o usuário no json
-                currentTask?.let {
-                    it.previsionDate = formattedDate
-                    dependentViewModel.updateTask(it)
-                    userViewModel.persistUser(requireContext(), userViewModel.user.value)
-                }
+                saveTask(requireContext(), item = "previsionDate", formattedDate)
                 previsionHour.isEnabled = true // permite editar hora após selecionar uma data
             }
             datePicker.show(parentFragmentManager, "DATE_PICKER") // mostra o datePicker (calendário)
@@ -210,11 +211,7 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
                 val formattedTime = String.format(Locale.getDefault(), "%02d:%02d", hour, minute)
                 previsionHour.setText(formattedTime)
                 // atualiza a tarefa e o usuário no json
-                currentTask?.let {
-                    it.previsionHour = formattedTime
-                    dependentViewModel.updateTask(it)
-                    userViewModel.persistUser(requireContext(), userViewModel.user.value)
-                }
+                saveTask(requireContext(), item = "previsionHour", formattedTime)
             }
             hourPicker.show(parentFragmentManager, "HOUR_PICKER") // mostra o hourPicker (hora)
         }
