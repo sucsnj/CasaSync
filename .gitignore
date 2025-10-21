@@ -25,3 +25,6 @@ app/build/
 
 app/google-services.json
 server-apk.sh
+.vscode
+install-apk.sh
+adb.sh
