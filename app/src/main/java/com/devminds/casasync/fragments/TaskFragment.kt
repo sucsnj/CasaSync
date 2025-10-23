@@ -144,8 +144,8 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
                     // atualiza a tarefa e o usuário no json
                     saveTask(context, item = "finishDate", date)
                 } else {
-                    finishDate.text = "Não concluído"
-                    checker.text = "Não concluído"
+                    finishDate.text = "Concluído"
+                    checker.text = "Concluído"
                     previsionDate.isEnabled = true
                     previsionHour.isEnabled = true
 
