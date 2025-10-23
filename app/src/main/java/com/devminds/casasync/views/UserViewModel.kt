@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.devminds.casasync.parts.House
 import com.devminds.casasync.parts.User
 import com.devminds.casasync.utils.JsonStorageManager
+import com.devminds.casasync.FirestoreHelper
 
 class UserViewModel : ViewModel() {
     private val _user = MutableLiveData<User?>()
@@ -30,6 +31,9 @@ class UserViewModel : ViewModel() {
     fun persistUser(context: Context, user: User?) {
         user?.let {
             JsonStorageManager.saveUser(context, it)
+
+            // atualiza o firestore
+            FirestoreHelper.syncUserToFirestore(it)
         }
     }
 
