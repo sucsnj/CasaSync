@@ -43,6 +43,7 @@ android {
 
 dependencies {
 
+    implementation(libs.androidx.biometric)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
     implementation(libs.material.v1110)
     implementation(libs.firebase.firestore)
