@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import androidx.recyclerview.widget.GridLayoutManager
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.LinearLayout
@@ -71,7 +72,7 @@ class HouseFragment : BaseFragment(R.layout.fragment_house) {
         }
         // lista de dependentes
         recyclerDependents = view.findViewById(R.id.recyclerDependents)
-        recyclerDependents.layoutManager = LinearLayoutManager(context)
+        recyclerDependents.layoutManager = GridLayoutManager(context, 2)
 
         houseId = arguments?.getString("houseId")
         // observa o usuário e a casa selecionada
