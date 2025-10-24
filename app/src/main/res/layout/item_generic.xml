@@ -12,8 +12,8 @@
         android:layout_height="wrap_content"
         android:background="@drawable/rounded_recycler"
         android:focusable="true"
+        android:gravity="top|end"
         android:foreground="?attr/selectableItemBackground"
-        android:gravity="center_vertical"
         android:orientation="horizontal"
         android:padding="15dp">
 
@@ -48,8 +48,9 @@
             android:id="@+id/itemImage"
             android:layout_width="48dp"
             android:layout_height="48dp"
+            android:layout_gravity="top"
             android:layout_marginStart="12dp"
-            android:contentDescription="Imagem da casa"
+            android:contentDescription="Imagem do Item"
             android:scaleType="centerInside"
             android:src="@drawable/devminds" />
     </LinearLayout>
