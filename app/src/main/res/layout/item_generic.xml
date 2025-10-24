@@ -28,9 +28,11 @@
                 android:id="@+id/itemName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Nome da Casa"
+                android:text="Nome do Item"
+                android:maxLines="4"
+                android:ellipsize="end"
                 android:textColor="@android:color/black"
-                android:textSize="32sp"
+                android:textSize="28sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -46,8 +48,8 @@
         <!-- Imagem à direita -->
         <ImageView
             android:id="@+id/itemImage"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
             android:layout_gravity="top"
             android:layout_marginStart="12dp"
             android:contentDescription="Imagem do Item"
