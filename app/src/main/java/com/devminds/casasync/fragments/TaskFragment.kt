@@ -28,6 +28,7 @@ import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Locale
+import com.devminds.casasync.utils.DialogUtils
 
 class TaskFragment : BaseFragment(R.layout.fragment_task) {
 
@@ -47,6 +48,7 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
     private lateinit var startDate: TextView
     private lateinit var finishDate: TextView
     private lateinit var checker: CheckBox
+    private lateinit var btnSaveTask: TextView
 
     private fun saveTask(context: Context, item: String, itemValue: String?) {
         taskViewModel.task.value?.let {
@@ -232,6 +234,15 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
 
             currentTask = dependent?.tasks?.find { it.id == taskId } // tarefa selecionada (para que? TODO)
             currentTask?.let { taskViewModel.setTask(it) } // atualiza a tarefa no ViewModel
+        }
+
+        btnSaveTask = view.findViewById(R.id.btnSaveTask)
+        btnSaveTask.setOnClickListener {
+            val task = taskViewModel.task.value
+            if (task != null) {
+                userViewModel.persistUser(context, userViewModel.user.value)
+                DialogUtils.showMessage(context, "Tarefa salva com sucesso!")
+            }
         }
     }
 }

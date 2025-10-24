@@ -186,8 +186,19 @@
             android:text="Concluído"
             android:layout_marginTop="10dp"
             android:checked="false"
-            android:textSize="16sp"
-            android:padding="8dp" />
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/btnSaveTask"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="10dp"
+            android:drawablePadding="10dp"
+            android:drawableStart="@drawable/ico_save"
+            android:text="Salvar Alterações" 
+            android:textColor="@android:color/black"
+            android:textSize="16sp" />
 
     </LinearLayout>
 
