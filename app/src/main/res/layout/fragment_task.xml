@@ -193,11 +193,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            android:layout_marginTop="10dp"
-            android:drawablePadding="10dp"
+            android:layout_marginTop="20dp"
+            android:drawablePadding="3dp"
+            android:gravity="center_vertical"
             android:drawableStart="@drawable/ico_save"
             android:text="Salvar Alterações" 
             android:textColor="@android:color/black"
+            android:foreground="?attr/selectableItemBackground"
             android:textSize="16sp" />
 
     </LinearLayout>
