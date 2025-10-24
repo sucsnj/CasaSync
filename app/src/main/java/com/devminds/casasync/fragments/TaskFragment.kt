@@ -155,13 +155,13 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
             }
 
             startDate = view.findViewById(R.id.startDate)
-            startDate.text = task?.startDate ?: "Sem data"
-            previsionDate.setText(task?.previsionDate ?: "Sem data")
+            startDate.text = task?.startDate ?: "Não concluído"
+            previsionDate.setText(task?.previsionDate ?: "Não concluído")
             if (previsionDate.text.toString() == "") { // impede que hora seja escrito sem uma data
                 previsionHour.isEnabled = false
             }
             previsionHour.setText(task?.previsionHour ?: "Sem hora")
-            finishDate.text = task?.finishDate ?: "Sem data"
+            finishDate.text = task?.finishDate ?: "Não concluído"
             checker.isChecked = task?.finishDate != null
         }
 
