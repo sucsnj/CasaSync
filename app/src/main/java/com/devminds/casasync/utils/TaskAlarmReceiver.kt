@@ -55,4 +55,18 @@ class TaskAlarmReceiver : BroadcastReceiver() {
             pendingIntent // intent para notificação
         )
     }
+
+    // cancela a notificação em caso de modificação ou remoção do agendamento anteior
+    fun cancelSheduledNotification(context: Context, title: String) {
+        val intent = Intent(context, TaskAlarmReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            title.hashCode(), // deve ser o mesmo hashcode da intent
+            intent,
+            PendingIntent.FLAG_IMMUTABLE
+        )
+        // manuseia o alarme e cancela a notificação
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        alarmManager.cancel(pendingIntent)
+    }
 }
