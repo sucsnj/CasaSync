@@ -13,6 +13,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.devminds.casasync.GenericAdapter
 import com.devminds.casasync.R
 import com.devminds.casasync.parts.Dependent
@@ -72,7 +73,10 @@ class HouseFragment : BaseFragment(R.layout.fragment_house) {
         }
         // lista de dependentes
         recyclerDependents = view.findViewById(R.id.recyclerDependents)
-        recyclerDependents.layoutManager = GridLayoutManager(context, 2)
+        // recyclerDependents.layoutManager = GridLayoutManager(context, 2) // estilo grade
+        // recyclerDependents.layoutManager = LinearLayoutManager(context) // estilo lista
+        recyclerDependents.layoutManager = // estilo grade com espaçamento
+            StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
 
         houseId = arguments?.getString("houseId")
         // observa o usuário e a casa selecionada

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
@@ -187,6 +188,10 @@ object Utils {
             layoutResId = R.layout.item_generic,
             bind = { itemView, item, position, viewHolder ->
 
+                // esconde a imagem
+                val imageView = itemView.findViewById<ImageView>(R.id.itemImage)
+                imageView.visibility = View.GONE
+                
                 val textView = itemView.findViewById<TextView>(R.id.itemName)
                 textView.text = item.name
 
