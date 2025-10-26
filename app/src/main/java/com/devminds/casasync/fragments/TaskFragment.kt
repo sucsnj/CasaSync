@@ -39,6 +39,7 @@ import com.devminds.casasync.utils.TaskAlarmReceiver
 import android.provider.Settings
 import android.util.Log
 import androidx.core.net.toUri
+import java.time.LocalDateTime
 import java.util.Calendar
 import java.util.Date
 
@@ -62,6 +63,12 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
     private lateinit var checker: CheckBox
     private lateinit var btnSaveTask: TextView
 
+    fun formatter(date: String?, hour: String?): LocalDateTime {
+        val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
+        val previsionDateTime = LocalDateTime.parse("$date $hour", formatter)
+        return previsionDateTime
+    }
+
     private fun saveTask(context: Context, item: String, itemValue: String?) {
         taskViewModel.task.value?.let { task ->
             when (item) {
@@ -74,104 +81,41 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
             dependentViewModel.updateTask(task)
             userViewModel.persistUser(context, userViewModel.user.value)
 
-            // 1 é igual a 1 hora
-            fun hours(hours: Long): Long {
-                val seconds = hours * 1000
-                val secondToHour = seconds * 3600
-                return secondToHour // retorna horas
-            }
-
             // agenda notificações
-            // quando a tarefa for concluída (TODO teste)
-            if (task.finishDate != null) {
-                TaskAlarmReceiver().scheduleNotification(
-                    context,
-                    task.name,
-                    "Foi concluída",
-                    System.currentTimeMillis() + hours(1)
-                )
+
+            fun minusHour(hours: Long): Long {
+                val previsionDateTime = formatter(task.previsionDate, task.previsionHour)
+
+                val notifyTime = previsionDateTime.minusHours(hours)
+                val notifyMillis = notifyTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+                return notifyMillis
             }
+
+            fun minusDay(days: Long): Long {
+                val previsionDateTime = formatter(task.previsionDate, task.previsionHour)
+
+                val notifyTime = previsionDateTime.minusDays(days)
+                val notifyMillis = notifyTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+                return notifyMillis
+            }
+
             // quando a tarefa esta proxíma da data de conclusão (um dia antes)
-            if (task.previsionDate == date(1).tomorrow && task.finishDate == null) {
-                // verifica a data prevista
-                // se hoje for um dia antes de data previsionDate
+            if (task.finishDate == null && task.previsionHour != null) {
+                // notifica 1 hora antes da conclusão prevista
                 TaskAlarmReceiver().scheduleNotification(
                     context,
                     task.name,
-                    "Está perto de ser concluída",
-                    System.currentTimeMillis() + 5000
+                    "Menos de uma hora para ser concluída",
+                    minusHour(1)
                 )
-            }
-
-            fun minusHour(hours: Long): String { // diminui as horas
-                val hourSplit = task.previsionHour.toString().split(":")
-                val minusHour = (hourSplit[0].toInt() - hours)
-                var newHour = ""
-                if (minusHour < 10) {
-                    newHour = "0$minusHour" + ":" + hourSplit[1]
-                } else {
-                    newHour = "$minusHour" + ":" + hourSplit[1]
-                }
-                return newHour
-            }
-
-            Log.d("Previsão -1", minusHour(1))
-            Log.d("Previsão", task.previsionHour.toString())
-            Log.d("Hora atual", date(0).hourMinute)
-
-            fun getMillisBefore(previsionDate: String, previsionHour: String, hoursBefore: Int): Long? {
-                return try {
-                    val dateParts = previsionDate.split("-") // yyyy-MM-dd
-                    val hourParts = previsionHour.split(":") // HH:mm
-
-                    val calendar = Calendar.getInstance().apply {
-                        set(Calendar.YEAR, dateParts[0].toInt())
-                        set(Calendar.MONTH, dateParts[1].toInt() - 1)
-                        set(Calendar.DAY_OF_MONTH, dateParts[2].toInt())
-                        set(Calendar.HOUR_OF_DAY, hourParts[0].toInt())
-                        set(Calendar.MINUTE, hourParts[1].toInt())
-                        set(Calendar.SECOND, 0)
-                        set(Calendar.MILLISECOND, 0)
-                    }
-
-                    val notifyTime = calendar.timeInMillis - (hoursBefore * 60 * 60 * 1000)
-
-                    // ⚠️ Corrigido: só retorna se a data prevista for no futuro
-                    if (calendar.timeInMillis > System.currentTimeMillis()) notifyTime else null
-                } catch (e: Exception) {
-                    null
-                }
-            }
-
-
-            val notifyTime = getMillisBefore(task.previsionDate.toString(), task.previsionHour.toString(), 1)
-
-            if (notifyTime != null) {
-                Log.d("Agendamento", "Agendando para: ${Date(notifyTime)}")
+                // notifica 1 dia antes da conclusão prevista
                 TaskAlarmReceiver().scheduleNotification(
                     context,
                     task.name,
-                    "Falta 1 hora para ser concluída",
-                    notifyTime
+                    "Menos de um dia para ser concluída",
+                    minusDay(1)
                 )
-            } else {
-                Log.d("Agendamento", "Data/hora prevista já passou ou inválida")
             }
-
-
-
-            // notifica 1 hora antes da conclusão prevista
-       //     if (task.finishDate == null && task.previsionHour != null) {
-         //       if (date(0).hourMinute == minusHour(1)) {
-           //         Log.d("Ativou", "Sim")
-             //       TaskAlarmReceiver().scheduleNotification(
-               //         context,
-                 //       task.name,
-                   //     "Falta 1 hora para ser concluída",
-                     //   System.currentTimeMillis() + 5000
-                    //)
-              //  }
-           // }
         }
     }
 
