@@ -12,6 +12,7 @@ import androidx.annotation.RequiresPermission
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import android.provider.Settings
+import android.util.Log
 import androidx.core.net.toUri
 
 class TaskAlarmReceiver : BroadcastReceiver() {

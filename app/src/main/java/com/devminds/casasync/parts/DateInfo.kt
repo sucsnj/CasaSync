@@ -12,6 +12,7 @@ data class DateInfo(
     val yesterday: String,
     val hour: Int,
     val minute: Int,
+    val hourMinute: String,
     val fullDate: String,
 
     val dayPlus: String,
@@ -28,13 +29,14 @@ fun date(days: Long): DateInfo { // days representa os dias para somar ou subtra
     val yesterday = dateNow.minusDays(1).format(formatterDate)
     val hour = dateNow.format(DateTimeFormatter.ofPattern("HH")).toInt()
     val minute = dateNow.format(DateTimeFormatter.ofPattern("mm")).toInt()
+    val hourMinute = dateNow.format(DateTimeFormatter.ofPattern("HH:mm"))
     val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
     val fullDate = dateNow.format(formatter)
 
     val dayPlus = dateNow.plusDays(days).format(formatterDate) // soma dias
     val dayMinus = dateNow.minusDays(days).format(formatterDate) // diminui dias
 
-    return DateInfo(tomorrow, today, yesterday, hour, minute, fullDate, dayPlus, dayMinus)
+    return DateInfo(tomorrow, today, yesterday, hour, minute, hourMinute, fullDate, dayPlus, dayMinus)
 }
 
 fun hourPicker(message: String): MaterialTimePicker {
