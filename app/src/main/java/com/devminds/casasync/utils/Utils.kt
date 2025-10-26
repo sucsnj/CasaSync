@@ -399,7 +399,7 @@ object Utils {
                                 }
 
                                 2 -> {
-                                    item.finishDate = date().fullDate
+                                    item.finishDate = date(0).fullDate
                                     item.previsionDate = ""
                                     item.previsionHour = ""
 

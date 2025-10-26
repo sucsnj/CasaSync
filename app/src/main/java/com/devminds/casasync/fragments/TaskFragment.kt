@@ -83,19 +83,15 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
                 )
             }
             // quando a tarefa esta proxíma da data de conclusão (um dia antes)
-            if (task.previsionDate != null && task.finishDate == null) {
+            if (task.previsionDate == date(1).tomorrow && task.finishDate == null) {
                 // verifica a data prevista
                 // se hoje for um dia antes de data previsionDate
-                val previsionDate = task.previsionDate
-                val tomorrow = date().tomorrow
-                if (previsionDate.toString() == tomorrow) {
-                    TaskAlarmReceiver().scheduleNotification(
-                        context,
-                        task.name,
-                        "Está perto de ser concluída",
-                        System.currentTimeMillis() + 5000
-                    )
-                }
+                TaskAlarmReceiver().scheduleNotification(
+                    context,
+                    task.name,
+                    "Está perto de ser concluída",
+                    System.currentTimeMillis() + 5000
+                )
             }
         }
     }
@@ -173,7 +169,7 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
             // checkbox de conclusão (se comunica com a data de conclusão)
             checker.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
-                    val date = date().fullDate // data atual
+                    val date = date(0).fullDate // data atual
 
                     finishDate.text = date
                     checker.text = "Concluído" // muda o texto do checkbox

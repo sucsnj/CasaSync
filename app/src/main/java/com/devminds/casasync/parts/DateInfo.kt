@@ -12,24 +12,33 @@ data class DateInfo(
     val yesterday: String,
     val hour: Int,
     val minute: Int,
-    val fullDate: String
+    val fullDate: String,
+
+    val dayPlus: String,
+    val dayMinus: String
 )
 
-fun date(): DateInfo {
+// pode retornar vários tipos de data
+fun date(days: Long): DateInfo { // days representa os dias para somar ou subtrair
     val dateNow = LocalDateTime.now()
-    val tomorrow = dateNow.plusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-    val today = dateNow.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-    val yesterday = dateNow.minusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+    val formatterDate = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+
+    val tomorrow = dateNow.plusDays(1).format(formatterDate)
+    val today = dateNow.format(formatterDate)
+    val yesterday = dateNow.minusDays(1).format(formatterDate)
     val hour = dateNow.format(DateTimeFormatter.ofPattern("HH")).toInt()
     val minute = dateNow.format(DateTimeFormatter.ofPattern("mm")).toInt()
     val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
     val fullDate = dateNow.format(formatter)
 
-    return DateInfo(tomorrow, today, yesterday, hour, minute, fullDate)
+    val dayPlus = dateNow.plusDays(days).format(formatterDate) // soma dias
+    val dayMinus = dateNow.minusDays(days).format(formatterDate) // diminui dias
+
+    return DateInfo(tomorrow, today, yesterday, hour, minute, fullDate, dayPlus, dayMinus)
 }
 
 fun hourPicker(message: String): MaterialTimePicker {
-    val date = date()
+    val date = date(0)
     val hourPicker = MaterialTimePicker.Builder()
         .setTimeFormat(TimeFormat.CLOCK_24H) // tipo de relógio
         .setHour(date.hour) // hora atual

@@ -222,7 +222,7 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
                             id = UUID.randomUUID().toString(),
                             name = name,
                             description = description,
-                            startDate = date().fullDate, // data atual
+                            startDate = date(0).fullDate, // data atual
                             previsionDate = previsionDate,
                             previsionHour = previsionHour,
                             finishDate = null // inicia 'em progresso'
