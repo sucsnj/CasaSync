@@ -69,6 +69,32 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
         return previsionDateTime
     }
 
+    fun prevDateMillis(date: LocalDateTime): Long {
+        val prevDateHourMillis = date
+            .atZone(ZoneId.systemDefault())
+            .toInstant()
+            .toEpochMilli()
+        return prevDateHourMillis
+    }
+
+    fun minusHour(previsionDate: String?, previsionHour: String?, hours: Long): Long {
+        val previsionDateTime = formatter(previsionDate, previsionHour)
+
+        val notifyTime = previsionDateTime.minusHours(hours)
+        Log.d("Menos 1 hora", notifyTime.toString())
+        val notifyMillis = notifyTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+        return notifyMillis
+    }
+
+    fun minusDay(previsionDate: String?, previsionHour: String?, days: Long): Long {
+        val previsionDateTime = formatter(previsionDate, previsionHour)
+
+        val notifyTime = previsionDateTime.minusDays(days)
+        Log.d("Menos 1 dia", notifyTime.toString())
+        val notifyMillis = notifyTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+        return notifyMillis
+    }
+
     private fun saveTask(context: Context, item: String, itemValue: String?) {
         taskViewModel.task.value?.let { task ->
             when (item) {
@@ -83,38 +109,38 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
 
             // agenda notificações
 
-            fun minusHour(hours: Long): Long {
-                val previsionDateTime = formatter(task.previsionDate, task.previsionHour)
-
-                val notifyTime = previsionDateTime.minusHours(hours)
-                val notifyMillis = notifyTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
-                return notifyMillis
-            }
-
-            fun minusDay(days: Long): Long {
-                val previsionDateTime = formatter(task.previsionDate, task.previsionHour)
-
-                val notifyTime = previsionDateTime.minusDays(days)
-                val notifyMillis = notifyTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
-                return notifyMillis
-            }
-
             // quando a tarefa esta proxíma da data de conclusão (um dia antes)
             if (task.finishDate == null && task.previsionHour != null) {
                 // notifica 1 hora antes da conclusão prevista
-                TaskAlarmReceiver().scheduleNotification(
-                    context,
-                    task.name,
-                    "Menos de uma hora para ser concluída",
-                    minusHour(1)
-                )
-                // notifica 1 dia antes da conclusão prevista
-                TaskAlarmReceiver().scheduleNotification(
-                    context,
-                    task.name,
-                    "Menos de um dia para ser concluída",
-                    minusDay(1)
-                )
+
+
+                // converte dataHora em millis
+                val prevMillis = prevDateMillis(formatter(task.previsionDate, task.previsionHour))
+
+                if (prevMillis > System.currentTimeMillis()) {
+                    TaskAlarmReceiver().scheduleNotification(
+                        context,
+                        task.name,
+                        "Menos de uma hora para ser concluída",
+                        minusHour(
+                            task.previsionDate,
+                            task.previsionHour,
+                            1
+                        )
+                    )
+
+                    // notifica 1 dia antes da conclusão prevista
+                    TaskAlarmReceiver().scheduleNotification(
+                        context,
+                        task.name,
+                        "Menos de um dia para ser concluída",
+                        minusDay(
+                            task.previsionDate,
+                            task.previsionHour,
+                            1
+                        )
+                    )
+                }
             }
         }
     }
