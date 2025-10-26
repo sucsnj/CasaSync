@@ -72,6 +72,13 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
             dependentViewModel.updateTask(task)
             userViewModel.persistUser(context, userViewModel.user.value)
 
+            // 1 é igual a 1 hora
+            fun hours(hours: Long): Long {
+                val seconds = hours * 1000
+                val secondToHour = seconds * 3600
+                return secondToHour // retorna horas
+            }
+
             // agenda notificações
             // quando a tarefa for concluída (TODO teste)
             if (task.finishDate != null) {
@@ -79,7 +86,7 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
                     context,
                     task.name,
                     "Foi concluída",
-                    System.currentTimeMillis() + 5000
+                    System.currentTimeMillis() + hours(1)
                 )
             }
             // quando a tarefa esta proxíma da data de conclusão (um dia antes)
