@@ -1,7 +1,12 @@
 package com.devminds.casasync.fragments
 
+import android.Manifest
+import android.app.AlarmManager
 import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
@@ -10,6 +15,7 @@ import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.annotation.RequiresPermission
 import androidx.fragment.app.activityViewModels
 import com.devminds.casasync.R
 import com.devminds.casasync.TransitionType
@@ -29,6 +35,9 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 import com.devminds.casasync.utils.DialogUtils
+import com.devminds.casasync.utils.TaskAlarmReceiver
+import android.provider.Settings
+import androidx.core.net.toUri
 
 class TaskFragment : BaseFragment(R.layout.fragment_task) {
 
@@ -50,16 +59,49 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
     private lateinit var checker: CheckBox
     private lateinit var btnSaveTask: TextView
 
+    @RequiresPermission(Manifest.permission.SCHEDULE_EXACT_ALARM)
     private fun saveTask(context: Context, item: String, itemValue: String?) {
-        taskViewModel.task.value?.let {
+        taskViewModel.task.value?.let { task ->
             when (item) {
-                "description" -> itemValue?.let { value -> it.description = value }
-                "previsionDate" -> itemValue?.let { value -> it.previsionDate = value }
-                "previsionHour" -> itemValue?.let { value -> it.previsionHour = value }
-                "finishDate" -> it.finishDate = itemValue
+                "description" -> itemValue?.let { task.description = it }
+                "previsionDate" -> itemValue?.let { task.previsionDate = it }
+                "previsionHour" -> itemValue?.let { task.previsionHour = it }
+                "finishDate" -> task.finishDate = itemValue
             }
-            dependentViewModel.updateTask(it)
+
+            dependentViewModel.updateTask(task)
             userViewModel.persistUser(context, userViewModel.user.value)
+
+            // Agendamento de notificação se a tarefa foi concluída
+            if (task.finishDate != null) {
+                val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    if (alarmManager.canScheduleExactAlarms()) {
+                        TaskAlarmReceiver().scheduleNotification(
+                            context,
+                            task.name,
+                            "Foi concluída",
+                            System.currentTimeMillis() + 5000
+                        )
+                    } else {
+                        // Redireciona o usuário para permitir o uso de alarmes exatos
+                        val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM).apply {
+                            data = "package:${context.packageName}".toUri()
+                            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                        }
+                        context.startActivity(intent)
+                    }
+                } else {
+                    // Para versões abaixo do Android 12, não é necessário solicitar permissão
+                    TaskAlarmReceiver().scheduleNotification(
+                        context,
+                        task.name,
+                        "Foi concluída",
+                        System.currentTimeMillis() + 5000
+                    )
+                }
+            }
         }
     }
 

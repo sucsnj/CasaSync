@@ -6,12 +6,12 @@ import android.os.Build
 
 object NotificationUtils {
 
-    // cria o canal de notificação
+    // cria o canal de notificação (inicializa o sistema de notificação)
     fun createNotificationChannel(context: Context) {
-        val channelId = "notification_channel"
+        val channelId = "task_channel"
         val channelName = "Notificação de Tarefas"
         val channelDescription = "Canal para notificações de tarefas"
-        val channelImportance = NotificationManager.IMPORTANCE_DEFAULT // nível de importância da notificação
+        val channelImportance = NotificationManager.IMPORTANCE_HIGH // nível de importância da notificação
 
         // o canal de notificação em si
         val channel = android.app.NotificationChannel(channelId, channelName, channelImportance).apply {
