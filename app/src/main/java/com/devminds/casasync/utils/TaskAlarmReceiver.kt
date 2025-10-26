@@ -34,7 +34,6 @@ class TaskAlarmReceiver : BroadcastReceiver() {
         manager.notify(System.currentTimeMillis().toInt(), notification)
     }
 
-    @RequiresPermission(Manifest.permission.SCHEDULE_EXACT_ALARM) // permissão do usuário
     // agenda a notificação
     fun scheduleNotification(context: Context, title: String, message: String, dueTimeMillis: Long) {
         val intent = Intent(context, TaskAlarmReceiver::class.java).apply {
@@ -45,7 +44,7 @@ class TaskAlarmReceiver : BroadcastReceiver() {
         // intent para notificação
         val pendingIntent = PendingIntent.getBroadcast(
             context,
-            title.hashCode(),
+            title.hashCode(), // id para identificar a notificação
             intent,
             PendingIntent.FLAG_IMMUTABLE
         )

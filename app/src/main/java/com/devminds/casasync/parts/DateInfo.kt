@@ -7,6 +7,9 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 data class DateInfo(
+    val tomorrow: String,
+    val today: String,
+    val yesterday: String,
     val hour: Int,
     val minute: Int,
     val fullDate: String
@@ -14,12 +17,15 @@ data class DateInfo(
 
 fun date(): DateInfo {
     val dateNow = LocalDateTime.now()
+    val tomorrow = dateNow.plusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+    val today = dateNow.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+    val yesterday = dateNow.minusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
     val hour = dateNow.format(DateTimeFormatter.ofPattern("HH")).toInt()
     val minute = dateNow.format(DateTimeFormatter.ofPattern("mm")).toInt()
     val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
     val fullDate = dateNow.format(formatter)
 
-    return DateInfo(hour, minute, fullDate)
+    return DateInfo(tomorrow, today, yesterday, hour, minute, fullDate)
 }
 
 fun hourPicker(message: String): MaterialTimePicker {

@@ -37,6 +37,7 @@ import java.util.Locale
 import com.devminds.casasync.utils.DialogUtils
 import com.devminds.casasync.utils.TaskAlarmReceiver
 import android.provider.Settings
+import android.util.Log
 import androidx.core.net.toUri
 
 class TaskFragment : BaseFragment(R.layout.fragment_task) {
@@ -59,7 +60,6 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
     private lateinit var checker: CheckBox
     private lateinit var btnSaveTask: TextView
 
-    @RequiresPermission(Manifest.permission.SCHEDULE_EXACT_ALARM)
     private fun saveTask(context: Context, item: String, itemValue: String?) {
         taskViewModel.task.value?.let { task ->
             when (item) {
@@ -72,32 +72,27 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
             dependentViewModel.updateTask(task)
             userViewModel.persistUser(context, userViewModel.user.value)
 
-            // Agendamento de notificação se a tarefa foi concluída
+            // agenda notificações
+            // quando a tarefa for concluída (TODO teste)
             if (task.finishDate != null) {
-                val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    if (alarmManager.canScheduleExactAlarms()) {
-                        TaskAlarmReceiver().scheduleNotification(
-                            context,
-                            task.name,
-                            "Foi concluída",
-                            System.currentTimeMillis() + 5000
-                        )
-                    } else {
-                        // Redireciona o usuário para permitir o uso de alarmes exatos
-                        val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM).apply {
-                            data = "package:${context.packageName}".toUri()
-                            flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                        }
-                        context.startActivity(intent)
-                    }
-                } else {
-                    // Para versões abaixo do Android 12, não é necessário solicitar permissão
+                TaskAlarmReceiver().scheduleNotification(
+                    context,
+                    task.name,
+                    "Foi concluída",
+                    System.currentTimeMillis() + 5000
+                )
+            }
+            // quando a tarefa esta proxíma da data de conclusão (um dia antes)
+            if (task.previsionDate != null && task.finishDate == null) {
+                // verifica a data prevista
+                // se hoje for um dia antes de data previsionDate
+                val previsionDate = task.previsionDate
+                val tomorrow = date().tomorrow
+                if (previsionDate.toString() == tomorrow) {
                     TaskAlarmReceiver().scheduleNotification(
                         context,
                         task.name,
-                        "Foi concluída",
+                        "Está perto de ser concluída",
                         System.currentTimeMillis() + 5000
                     )
                 }
