@@ -65,8 +65,11 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
 
     fun formatter(date: String?, hour: String?): LocalDateTime {
         val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
-        val previsionDateTime = LocalDateTime.parse("$date $hour", formatter)
-        return previsionDateTime
+
+        val safeDate = if (date.isNullOrBlank()) "01/01/1970" else date
+        val safeHour = if (hour.isNullOrBlank()) "00:00" else hour
+
+        return LocalDateTime.parse("$safeDate $safeHour", formatter)
     }
 
     fun prevDateMillis(date: LocalDateTime): Long {
@@ -115,6 +118,7 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
 
 
                 // converte dataHora em millis
+                // se task.previsionDate não for nula
                 val prevMillis = prevDateMillis(formatter(task.previsionDate, task.previsionHour))
 
                 if (prevMillis > System.currentTimeMillis()) {
