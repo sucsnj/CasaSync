@@ -100,7 +100,7 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
         return notifyMillis
     }
 
-    private fun saveTask(context: Context, item: String, itemValue: String?) {
+    fun saveTask(context: Context, item: String, itemValue: String?) {
         taskViewModel.task.value?.let { task ->
             when (item) {
                 "description" -> itemValue?.let { task.description = it }
@@ -114,15 +114,12 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
 
             // agenda notificações
 
-            // quando a tarefa esta proxíma da data de conclusão (um dia antes)
             if (task.finishDate == null && task.previsionHour != null) {
-                // notifica 1 hora antes da conclusão prevista
-
-
                 // converte dataHora em millis
                 // se task.previsionDate não for nula
                 val prevMillis = prevDateMillis(formatter(task.previsionDate, task.previsionHour))
 
+                // notifica 1 hora antes da conclusão prevista
                 if (prevMillis > System.currentTimeMillis()) {
                     TaskAlarmReceiver().scheduleNotification(
                         context,

@@ -5,6 +5,8 @@ import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import android.util.Log
+import java.time.ZoneId
 
 data class DateInfo(
     val tomorrow: String,
@@ -57,4 +59,39 @@ fun datePicker(message: String): MaterialDatePicker<Long> {
         .build()
 
     return datePicker
+}
+
+fun formatter(date: String?, hour: String?): LocalDateTime {
+    val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
+
+    val safeDate = if (date.isNullOrBlank()) "01/01/1970" else date
+    val safeHour = if (hour.isNullOrBlank()) "00:00" else hour
+
+    return LocalDateTime.parse("$safeDate $safeHour", formatter)
+}
+
+fun prevDateMillis(date: LocalDateTime): Long {
+    val prevDateHourMillis = date
+        .atZone(ZoneId.systemDefault())
+        .toInstant()
+        .toEpochMilli()
+    return prevDateHourMillis
+}
+
+fun minusHour(previsionDate: String?, previsionHour: String?, hours: Long): Long {
+    val previsionDateTime = formatter(previsionDate, previsionHour)
+
+    val notifyTime = previsionDateTime.minusHours(hours)
+    Log.d("Menos 1 hora", notifyTime.toString())
+    val notifyMillis = notifyTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+    return notifyMillis
+}
+
+fun minusDay(previsionDate: String?, previsionHour: String?, days: Long): Long {
+    val previsionDateTime = formatter(previsionDate, previsionHour)
+
+    val notifyTime = previsionDateTime.minusDays(days)
+    Log.d("Menos 1 dia", notifyTime.toString())
+    val notifyMillis = notifyTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+    return notifyMillis
 }

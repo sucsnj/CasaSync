@@ -31,6 +31,13 @@ import com.devminds.casasync.parts.hourPicker
 import java.time.Instant
 import java.time.ZoneId
 import java.util.Locale
+import com.devminds.casasync.parts.DateInfo
+import com.devminds.casasync.parts.formatter
+import com.devminds.casasync.parts.prevDateMillis
+import com.devminds.casasync.parts.minusHour
+import com.devminds.casasync.parts.minusDay
+import com.devminds.casasync.utils.TaskAlarmReceiver
+import android.widget.Toast
 
 class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
 
@@ -226,6 +233,26 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
                         // adiciona a tarefa à lista e notifica o adapter
                         currentDependent?.tasks?.add(newTask)
                         adapter.notifyItemInserted(taskList.size - 1)
+
+                        val formatter = formatter(previsionDate, previsionHour)
+                        val prevMillis = prevDateMillis(formatter)
+
+                        if (prevMillis > System.currentTimeMillis()) {
+                            // notifica 1 hora antes da conclusão prevista
+                            TaskAlarmReceiver().scheduleNotification(
+                                context,
+                                name,
+                                "Menos de uma hora para ser concluída",
+                                minusHour(previsionDate, previsionHour, 1)
+                            )                        
+                            // notifica 1 dia antes da conclusão prevista
+                            TaskAlarmReceiver().scheduleNotification(
+                                context,
+                                name,
+                                "Menos de um dia para ser concluída",
+                                minusDay(previsionDate, previsionHour, 1)
+                            )
+                        }
 
                         // persiste o usuário
                         userViewModel.persistUser(context, userViewModel.user.value)
