@@ -166,6 +166,9 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
             if (task?.description.toString() == "") {
                 taskDescription.hint = "Sem descrição"
             }
+            if (task?.previsionDate != null) {
+                previsionHour.isEnabled = true
+            }
 
             // alterar descrição
             taskDescription.setOnClickListener {
