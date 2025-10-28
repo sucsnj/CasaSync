@@ -183,8 +183,13 @@
             android:textSize="16sp"
             android:drawablePadding="10dp"
             android:focusable="false" />
+        
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
 
-        <CheckBox
+            <CheckBox
             android:id="@+id/checker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -207,6 +212,10 @@
             android:textColor="@android:color/black"
             android:foreground="?attr/selectableItemBackground"
             android:textSize="16sp" />
+
+        </LinearLayout>
+
+        
 
     </LinearLayout>
 
