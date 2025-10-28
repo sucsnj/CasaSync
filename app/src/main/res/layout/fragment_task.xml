@@ -185,33 +185,31 @@
             android:focusable="false" />
         
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal" >
 
             <CheckBox
-            android:id="@+id/checker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Concluído"
-            android:layout_marginTop="10dp"
-            android:checked="false"
-            android:textSize="16sp" />
+                android:id="@+id/checker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Concluído"
+                android:checked="false"
+                android:textSize="16sp" />
 
-        <TextView
-            android:id="@+id/btnSaveTask"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="-5dp"
-            android:layout_marginTop="20dp"
-            android:padding="10dp"
-            android:drawablePadding="3dp"
-            android:gravity="center_vertical"
-            android:drawableStart="@drawable/ico_save"
-            android:text="Salvar Alterações" 
-            android:textColor="@android:color/black"
-            android:foreground="?attr/selectableItemBackground"
-            android:textSize="16sp" />
+            <TextView
+                android:id="@+id/btnSaveTask"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="3dp"
+                android:layout_marginStart="20dp"
+                android:gravity="center_vertical"
+                android:drawableStart="@drawable/ico_save"
+                android:text="Salvar Alterações"
+                android:textColor="@android:color/black"
+                android:foreground="?attr/selectableItemBackground"
+                android:textSize="16sp" />
 
         </LinearLayout>
 
