@@ -18,12 +18,9 @@ import com.devminds.casasync.TransitionType
 import com.devminds.casasync.parts.Dependent
 import com.devminds.casasync.parts.House
 import com.devminds.casasync.parts.Task
-import com.devminds.casasync.parts.date
 import com.devminds.casasync.setCustomTransition
 import com.devminds.casasync.views.UserViewModel
 import com.devminds.casasync.views.TaskViewModel
-import java.time.LocalDate
-import java.time.LocalTime
 
 // classe utilitária
 object Utils {
@@ -89,7 +86,6 @@ object Utils {
 
                     AlertDialog.Builder(activity)
                         .setTitle("$itemOptions ${item.name}")
-                        .setCancelable(false)
                         .setItems(options) { _, which ->
                             when (which) {
                                 0 -> {
@@ -212,7 +208,6 @@ object Utils {
 
                     AlertDialog.Builder(activity)
                         .setTitle("$itemOptions ${item.name}")
-                        .setCancelable(false)
                         .setItems(options) { _, which ->
                             when (which) {
                                 0 -> {
@@ -340,7 +335,6 @@ object Utils {
 
                     AlertDialog.Builder(activity)
                         .setTitle("$itemOptions ${item.name}")
-                        .setCancelable(false)
                         .setItems(options) { _, which ->
                             when (which) {
                                 0 -> {
@@ -416,7 +410,7 @@ object Utils {
                                         val previsionDate = task.previsionDate
                                         val previsionHour = task.previsionHour
 
-                                        item.finishDate = date(0).fullDate
+                                        item.finishDate = DateUtils.date(0).fullDate
                                         item.previsionDate = previsionDate
                                         item.previsionHour = previsionHour
                                     }

@@ -1,49 +1,30 @@
 package com.devminds.casasync.fragments
 
-import android.Manifest
-import android.app.AlarmManager
 import android.app.AlertDialog
 import android.content.Context
-import android.content.Intent
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
-import android.view.inputmethod.InputMethodManager
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.annotation.RequiresPermission
 import androidx.fragment.app.activityViewModels
 import com.devminds.casasync.R
 import com.devminds.casasync.TransitionType
 import com.devminds.casasync.parts.Task
-import com.devminds.casasync.parts.date
-import com.devminds.casasync.parts.datePicker
-import com.devminds.casasync.parts.hourPicker
 import com.devminds.casasync.views.DependentViewModel
 import com.devminds.casasync.views.TaskViewModel
 import com.devminds.casasync.views.UserViewModel
 import com.google.android.material.appbar.MaterialToolbar
-import com.google.android.material.datepicker.MaterialDatePicker
-import com.google.android.material.timepicker.MaterialTimePicker
-import com.google.android.material.timepicker.TimeFormat
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 import com.devminds.casasync.utils.DialogUtils
 import com.devminds.casasync.utils.TaskAlarmReceiver
-import android.provider.Settings
-import android.util.Log
-import androidx.core.net.toUri
-import java.time.LocalDateTime
-import java.util.Calendar
-import java.util.Date
-import java.time.LocalDate
-import java.time.LocalTime
+import com.devminds.casasync.utils.DatePickers
+import com.devminds.casasync.utils.DateUtils
 
 class TaskFragment : BaseFragment(R.layout.fragment_task) {
 
@@ -65,41 +46,6 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
     private lateinit var checker: CheckBox
     private lateinit var btnSaveTask: TextView
 
-    fun formatter(date: String?, hour: String?): LocalDateTime {
-        val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
-
-        val safeDate = if (date.isNullOrBlank()) "01/01/1970" else date
-        val safeHour = if (hour.isNullOrBlank()) "00:00" else hour
-
-        return LocalDateTime.parse("$safeDate $safeHour", formatter)
-    }
-
-    fun prevDateMillis(date: LocalDateTime): Long {
-        val prevDateHourMillis = date
-            .atZone(ZoneId.systemDefault())
-            .toInstant()
-            .toEpochMilli()
-        return prevDateHourMillis
-    }
-
-    fun minusHour(previsionDate: String?, previsionHour: String?, hours: Long): Long {
-        val previsionDateTime = formatter(previsionDate, previsionHour)
-
-        val notifyTime = previsionDateTime.minusHours(hours)
-        Log.d("Menos 1 hora", notifyTime.toString())
-        val notifyMillis = notifyTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
-        return notifyMillis
-    }
-
-    fun minusDay(previsionDate: String?, previsionHour: String?, days: Long): Long {
-        val previsionDateTime = formatter(previsionDate, previsionHour)
-
-        val notifyTime = previsionDateTime.minusDays(days)
-        Log.d("Menos 1 dia", notifyTime.toString())
-        val notifyMillis = notifyTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
-        return notifyMillis
-    }
-
     fun saveTask(context: Context, item: String, itemValue: String?) {
         taskViewModel.task.value?.let { task ->
             when (item) {
@@ -115,17 +61,16 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
             // agenda notificações
 
             if (task.finishDate == null && task.previsionHour != null) {
-                // converte dataHora em millis
-                // se task.previsionDate não for nula
-                val prevMillis = prevDateMillis(formatter(task.previsionDate, task.previsionHour))
+                val formatter = DateUtils.formatter(task.previsionDate, task.previsionHour)
+                val prevMillis = DateUtils.prevDateMillis(formatter)
 
-                // notifica 1 hora antes da conclusão prevista
                 if (prevMillis > System.currentTimeMillis()) {
+                    // notifica 1 hora antes da conclusão prevista
                     TaskAlarmReceiver().scheduleNotification(
                         context,
                         task.name,
                         "Menos de uma hora para ser concluída",
-                        minusHour(
+                        DateUtils.minusHour(
                             task.previsionDate,
                             task.previsionHour,
                             1
@@ -137,7 +82,7 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
                         context,
                         task.name,
                         "Menos de um dia para ser concluída",
-                        minusDay(
+                        DateUtils.minusDay(
                             task.previsionDate,
                             task.previsionHour,
                             1
@@ -165,9 +110,6 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
             // se a descrição estiver vazia, mostra "Sem descrição" na dica
             if (task?.description.toString() == "") {
                 taskDescription.hint = "Sem descrição"
-            }
-            if (task?.previsionDate != null) {
-                previsionHour.isEnabled = true
             }
 
             // alterar descrição
@@ -218,7 +160,7 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
             // checkbox de conclusão (se comunica com a data de conclusão)
             checker.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
-                    val date = date(0).fullDate // data atual
+                    val date = DateUtils.date(0).fullDate // data atual
 
                     finishDate.text = date
                     checker.text = "Concluído" // muda o texto do checkbox
@@ -252,7 +194,7 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
         // data de conclusão prevista
         previsionDate = view.findViewById(R.id.previsionDate)
         previsionDate.setOnClickListener {
-            val datePicker = datePicker("Previsão da data de conclusão")
+            val datePicker = DatePickers.datePicker("Previsão da data de conclusão")
 
             // transformar data em string
             datePicker.addOnPositiveButtonClickListener { selection ->
@@ -272,7 +214,7 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
         // hora de conclusão prevista
         previsionHour = view.findViewById(R.id.previsionHour)
         previsionHour.setOnClickListener {
-            val hourPicker = hourPicker("Previsão da hora de conclusão")
+            val hourPicker = DatePickers.hourPicker("Previsão da hora de conclusão")
 
             hourPicker.addOnPositiveButtonClickListener {
                 val hour = hourPicker.hour

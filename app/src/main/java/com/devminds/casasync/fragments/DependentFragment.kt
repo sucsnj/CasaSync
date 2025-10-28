@@ -1,6 +1,5 @@
 package com.devminds.casasync.fragments
 
-import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
@@ -24,20 +23,12 @@ import com.google.android.material.appbar.MaterialToolbar
 import java.time.format.DateTimeFormatter
 import java.util.UUID
 import android.text.InputType
-import android.view.inputmethod.InputMethodManager
-import com.devminds.casasync.parts.date
-import com.devminds.casasync.parts.datePicker
-import com.devminds.casasync.parts.hourPicker
 import java.time.Instant
 import java.time.ZoneId
 import java.util.Locale
-import com.devminds.casasync.parts.DateInfo
-import com.devminds.casasync.parts.formatter
-import com.devminds.casasync.parts.prevDateMillis
-import com.devminds.casasync.parts.minusHour
-import com.devminds.casasync.parts.minusDay
 import com.devminds.casasync.utils.TaskAlarmReceiver
-import android.widget.Toast
+import com.devminds.casasync.utils.DatePickers
+import com.devminds.casasync.utils.DateUtils
 
 class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
 
@@ -162,7 +153,7 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
                 // quando inputPrevisionDate for clicado, exibe o diálogo de seleção de data
                 setOnClickListener {
                     // MaterialDatePicker é um diálogo de seleção de data
-                    val datePicker = datePicker("Selecione a data prevista de conclusão")
+                    val datePicker = DatePickers.datePicker("Selecione a data prevista de conclusão")
 
                     // quando o usuário clicar em OK, o valor é salvo no campo inputPrevisionDate
                     datePicker.addOnPositiveButtonClickListener { selection ->
@@ -186,7 +177,7 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
 
                 setOnClickListener {
                     // MaterialTimePicker é um diálogo de seleção de hora
-                    val hourPicker = hourPicker("Selecione a hora prevista de conclusão")
+                    val hourPicker = DatePickers.hourPicker("Selecione a hora prevista de conclusão")
 
                     hourPicker.addOnPositiveButtonClickListener {
                         val hour = hourPicker.hour
@@ -226,7 +217,7 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
                             id = UUID.randomUUID().toString(),
                             name = name,
                             description = description,
-                            startDate = date(0).fullDate, // data atual
+                            startDate = DateUtils.date(0).fullDate, // data atual
                             previsionDate = previsionDate,
                             previsionHour = previsionHour,
                             finishDate = null // inicia 'em progresso'
@@ -235,8 +226,8 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
                         currentDependent?.tasks?.add(newTask)
                         adapter.notifyItemInserted(taskList.size - 1)
 
-                        val formatter = formatter(previsionDate, previsionHour)
-                        val prevMillis = prevDateMillis(formatter)
+                        val formatter = DateUtils.formatter(previsionDate, previsionHour)
+                        val prevMillis = DateUtils.prevDateMillis(formatter)
 
                         if (prevMillis > System.currentTimeMillis()) {
                             // notifica 1 hora antes da conclusão prevista
@@ -244,14 +235,14 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
                                 context,
                                 name,
                                 "Menos de uma hora para ser concluída",
-                                minusHour(previsionDate, previsionHour, 1)
+                                DateUtils.minusHour(previsionDate, previsionHour, 1)
                             )                        
                             // notifica 1 dia antes da conclusão prevista
                             TaskAlarmReceiver().scheduleNotification(
                                 context,
                                 name,
                                 "Menos de um dia para ser concluída",
-                                minusDay(previsionDate, previsionHour, 1)
+                                DateUtils.minusDay(previsionDate, previsionHour, 1)
                             )
                         }
 
