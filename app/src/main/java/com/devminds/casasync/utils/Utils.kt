@@ -33,8 +33,8 @@ object Utils {
         return (dp * scale).toInt()
     }
 
-    // chamar teclado com delay
-    fun TextView.keyboardDelay(context: Context, delay: Long) {
+    // chamar teclado com delay para TextView
+    private fun TextView.keyboardDelay(context: Context, delay: Long) {
         if (context is Activity) {
             this.requestFocus()
             this.postDelayed({

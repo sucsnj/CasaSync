@@ -122,14 +122,7 @@ class HouseFragment : BaseFragment(R.layout.fragment_house) {
             }
 
             // teclado com delay
-            inputName.postDelayed({
-                inputName.requestFocus() // traz o foco
-
-                // levanta o teclado
-                val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.showSoftInput(inputName, InputMethodManager.SHOW_IMPLICIT)
-                inputName.setSelection(0) // texto selecionado
-            },200)
+            delayEditText(inputName, context)
 
             layout.addView(inputName)
             // diálogo para adicionar dependente

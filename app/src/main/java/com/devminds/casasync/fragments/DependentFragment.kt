@@ -138,14 +138,7 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
             }
 
             // teclado com delay
-            inputName.postDelayed({
-                inputName.requestFocus() // traz o foco
-
-                // levanta o teclado
-                val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.showSoftInput(inputName, InputMethodManager.SHOW_IMPLICIT)
-                inputName.setSelection(0) // texto selecionado
-            },200)
+            delayEditText(inputName, context)
 
             val inputDescription = EditText(context).apply {
                 hint = context.getString(R.string.task_description)

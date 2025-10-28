@@ -117,14 +117,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
             val input = dialogView.findViewById<EditText>(R.id.inputHouse)
 
             // teclado com delay
-            input.postDelayed({
-                input.requestFocus() // traz o foco
-
-                // levanta o teclado
-                val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.showSoftInput(input, InputMethodManager.SHOW_IMPLICIT)
-                input.setSelection(0) // texto selecionado
-            },200)
+            delayEditText(input, context)
 
             // diálogo para criar uma nova casa
             val dialog = AlertDialog.Builder(ContextThemeWrapper(context, R.style.CustomDialog))
