@@ -185,14 +185,7 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
                 }
 
                 // teclado com delay
-                editText.postDelayed({
-                    editText.requestFocus() // traz o foco
-
-                    // levanta o teclado
-                    val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                    imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
-                    editText.setSelection(0, editText.length()) // texto selecionado
-                },500)
+                delayEditText(editText, context)
 
                 layout.addView(editText)
 
