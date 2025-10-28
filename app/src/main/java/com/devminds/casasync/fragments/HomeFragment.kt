@@ -124,6 +124,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
                 .setView(dialogView)
                 .setPositiveButton(getString(R.string.button_add), null)
                 .setNegativeButton(getString(R.string.button_cancel), null)
+                .setCancelable(false)
                 .create()
             dialog.show()
 

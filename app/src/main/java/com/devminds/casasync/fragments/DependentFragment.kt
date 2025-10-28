@@ -208,6 +208,7 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
             AlertDialog.Builder(context)
                 .setTitle(getString(R.string.add_task_dialog))
                 .setView(layout) // layout criado acima
+                .setCancelable(false)
                 .setPositiveButton(getString(R.string.button_add)) { _, _ ->
                     val name = inputName.text.toString().trim()
                     val description = inputDescription.text.toString().trim()

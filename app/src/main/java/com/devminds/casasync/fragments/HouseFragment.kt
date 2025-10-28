@@ -129,6 +129,7 @@ class HouseFragment : BaseFragment(R.layout.fragment_house) {
             AlertDialog.Builder(context)
                 .setTitle(getString(R.string.btn_add_dependent))
                 .setView(layout)
+                .setCancelable(false)
                 .setPositiveButton(getString(R.string.button_add)) { _, _ ->
                     val dependentName = inputName.text.toString().trim()
                     if (dependentName.isNotEmpty()) {

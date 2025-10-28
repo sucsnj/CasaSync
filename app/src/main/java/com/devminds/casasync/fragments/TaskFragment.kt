@@ -195,6 +195,7 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
                 AlertDialog.Builder(context)
                     .setTitle("Editar Descrição")
                     .setView(layout)
+                    .setCancelable(false)
                     .setNegativeButton("Cancelar") { dialog, _ ->
                         dialog.dismiss()
                     }

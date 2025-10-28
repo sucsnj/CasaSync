@@ -89,6 +89,7 @@ object Utils {
 
                     AlertDialog.Builder(activity)
                         .setTitle("$itemOptions ${item.name}")
+                        .setCancelable(false)
                         .setItems(options) { _, which ->
                             when (which) {
                                 0 -> {
@@ -99,6 +100,7 @@ object Utils {
                                     val dialogNameEdit = AlertDialog.Builder(activity)
                                         .setTitle(activity.getString(R.string.rename_dialog))
                                         .setView(dialogView)
+                                        .setCancelable(false)
                                         .setPositiveButton(activity.getString(R.string.accept_dialog)) { _, _ ->
                                             val newName = editTextDialog.text.toString().trim()
                                             if (newName.isNotEmpty()) {
@@ -131,6 +133,7 @@ object Utils {
                                     val itemNameDelete = item.name
                                     AlertDialog.Builder(context)
                                         .setTitle(context.getString(R.string.delete_dialog))
+                                        .setCancelable(false)
                                         .setMessage(
                                             context.getString(R.string.confirm_delete_dialog) +
                                                     itemNameDelete +
@@ -209,6 +212,7 @@ object Utils {
 
                     AlertDialog.Builder(activity)
                         .setTitle("$itemOptions ${item.name}")
+                        .setCancelable(false)
                         .setItems(options) { _, which ->
                             when (which) {
                                 0 -> {
@@ -219,6 +223,7 @@ object Utils {
                                     val dialogNameEdit = AlertDialog.Builder(activity)
                                         .setTitle(activity.getString(R.string.rename_dialog))
                                         .setView(dialogView)
+                                        .setCancelable(false)
                                         .setPositiveButton(activity.getString(R.string.accept_dialog)) { _, _ ->
                                             val newName = editTextDialog.text.toString().trim()
                                             if (newName.isNotEmpty()) {
@@ -250,6 +255,7 @@ object Utils {
                                     val itemNameDelete = item.name
                                     AlertDialog.Builder(context)
                                         .setTitle(context.getString(R.string.delete_dialog))
+                                        .setCancelable(false)
                                         .setMessage(
                                             context.getString(R.string.confirm_delete_dialog) +
                                                     itemNameDelete +
@@ -334,6 +340,7 @@ object Utils {
 
                     AlertDialog.Builder(activity)
                         .setTitle("$itemOptions ${item.name}")
+                        .setCancelable(false)
                         .setItems(options) { _, which ->
                             when (which) {
                                 0 -> {
@@ -344,6 +351,7 @@ object Utils {
                                     val dialogNameEdit = AlertDialog.Builder(activity)
                                         .setTitle(activity.getString(R.string.rename_dialog))
                                         .setView(dialogView)
+                                        .setCancelable(false)
                                         .setPositiveButton(activity.getString(R.string.accept_dialog)) { _, _ ->
                                             val newName = editTextDialog.text.toString().trim()
                                             if (newName.isNotEmpty()) {
@@ -375,6 +383,7 @@ object Utils {
                                     val itemNameDelete = item.name
                                     AlertDialog.Builder(context)
                                         .setTitle(context.getString(R.string.delete_dialog))
+                                        .setCancelable(false)
                                         .setMessage(
                                             context.getString(R.string.confirm_delete_dialog) +
                                                     itemNameDelete +
