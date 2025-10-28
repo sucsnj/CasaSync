@@ -21,6 +21,9 @@ import com.devminds.casasync.parts.Task
 import com.devminds.casasync.parts.date
 import com.devminds.casasync.setCustomTransition
 import com.devminds.casasync.views.UserViewModel
+import com.devminds.casasync.views.TaskViewModel
+import java.time.LocalDate
+import java.time.LocalTime
 
 // classe utilitária
 object Utils {
@@ -300,6 +303,7 @@ object Utils {
         itemOptions: String,
         successRenameToast: String,
         userViewModel: UserViewModel,
+        taskViewModel: TaskViewModel, // precisa para acessar o TaskViewModel com as datas e horas
         context: Context
     ): GenericAdapter<Task> {
         return GenericAdapter(
@@ -399,9 +403,14 @@ object Utils {
                                 }
 
                                 2 -> {
-                                    item.finishDate = date(0).fullDate
-                                    item.previsionDate = ""
-                                    item.previsionHour = ""
+                                    taskViewModel.task.value?.let { task -> 
+                                        val previsionDate = task.previsionDate
+                                        val previsionHour = task.previsionHour
+
+                                        item.finishDate = date(0).fullDate
+                                        item.previsionDate = previsionDate
+                                        item.previsionHour = previsionHour
+                                    }
 
                                     recycler.adapter?.notifyItemChanged(position)
 

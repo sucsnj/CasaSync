@@ -18,6 +18,7 @@ import com.devminds.casasync.parts.Dependent
 import com.devminds.casasync.parts.Task
 import com.devminds.casasync.utils.Utils
 import com.devminds.casasync.views.DependentViewModel
+import com.devminds.casasync.views.TaskViewModel
 import com.devminds.casasync.views.UserViewModel
 import com.google.android.material.appbar.MaterialToolbar
 import java.time.format.DateTimeFormatter
@@ -36,6 +37,7 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
     private var dependentId: String? = null
     private val userViewModel: UserViewModel by activityViewModels()
     private val dependentViewModel: DependentViewModel by activityViewModels()
+    private val taskViewModel: TaskViewModel by activityViewModels()
     private var currentDependent: Dependent? = null
     private val taskList: MutableList<Task>
         get() = currentDependent?.tasks ?: mutableListOf()
@@ -113,6 +115,7 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
                 itemOptions = getString(R.string.task_options),
                 successRenameToast = getString(R.string.rename_success_task_toast),
                 userViewModel = userViewModel,
+                taskViewModel = taskViewModel, // *insere data e hora quando a tarefa é concluída via menu de contexto
                 context = context
             )
             
