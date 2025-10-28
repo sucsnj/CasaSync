@@ -212,9 +212,5 @@
                 android:textSize="16sp" />
 
         </LinearLayout>
-
-        
-
     </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
