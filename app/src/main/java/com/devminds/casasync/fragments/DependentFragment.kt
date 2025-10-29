@@ -228,11 +228,13 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
 
                         val formatter = DateUtils.formatter(previsionDate, previsionHour)
                         val prevMillis = DateUtils.prevDateMillis(formatter)
+                        val idString = id.toString()
 
                         if (prevMillis > System.currentTimeMillis()) {
                             // notifica 1 hora antes da conclusão prevista
                             TaskAlarmReceiver().scheduleNotification(
                                 context,
+                                idString,
                                 name,
                                 "Menos de uma hora para ser concluída",
                                 DateUtils.minusHour(previsionDate, previsionHour, 1)
@@ -240,6 +242,7 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
                             // notifica 1 dia antes da conclusão prevista
                             TaskAlarmReceiver().scheduleNotification(
                                 context,
+                                idString,
                                 name,
                                 "Menos de um dia para ser concluída",
                                 DateUtils.minusDay(previsionDate, previsionHour, 1)

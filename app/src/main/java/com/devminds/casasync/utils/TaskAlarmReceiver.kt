@@ -36,13 +36,13 @@ class TaskAlarmReceiver : BroadcastReceiver() {
     }
 
     // agenda a notificação
-    fun scheduleNotification(context: Context, title: String, message: String, dueTimeMillis: Long) {
+    fun scheduleNotification(context: Context, taskId: String, title: String, message: String, dueTimeMillis: Long) {
         val intent = Intent(context, TaskAlarmReceiver::class.java).apply {
             putExtra("title", title) // dados da intent
             putExtra("message", message)
         }
 
-        val requestCode = (title + message + dueTimeMillis).hashCode()
+        val requestCode = taskId.hashCode()
 
         // intent para notificação
         val pendingIntent = PendingIntent.getBroadcast(
@@ -82,12 +82,13 @@ class TaskAlarmReceiver : BroadcastReceiver() {
     }
 
     // cancela a notificação em caso de modificação ou remoção do agendamento anteior
-    fun cancelScheduleNotification(context: Context, title: String) {
+    fun cancelScheduleNotification(context: Context, taskId: String,title: String) {
+        val requestCode = taskId.hashCode()
         val intent = Intent(context, TaskAlarmReceiver::class.java)
 
         val pendingIntent = PendingIntent.getBroadcast(
             context,
-            title.hashCode(), // deve ser o mesmo hashcode da intent
+            requestCode, // deve ser o mesmo hashcode da intent
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
