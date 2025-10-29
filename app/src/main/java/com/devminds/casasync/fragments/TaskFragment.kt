@@ -68,7 +68,7 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
                     // notifica 1 hora antes da conclusão prevista
                     TaskAlarmReceiver().scheduleNotification(
                         context,
-                        task.id,
+                        task.id + "hour",
                         task.name,
                         "Menos de uma hora para ser concluída",
                         DateUtils.minusHour(
@@ -81,7 +81,7 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
                     // notifica 1 dia antes da conclusão prevista
                     TaskAlarmReceiver().scheduleNotification(
                         context,
-                        task.id,
+                        task.id + "day",
                         task.name,
                         "Menos de um dia para ser concluída",
                         DateUtils.minusDay(

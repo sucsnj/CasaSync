@@ -82,7 +82,7 @@ class TaskAlarmReceiver : BroadcastReceiver() {
     }
 
     // cancela a notificação em caso de modificação ou remoção do agendamento anteior
-    fun cancelScheduleNotification(context: Context, taskId: String,title: String) {
+    fun cancelScheduleNotification(context: Context, taskId: String) {
         val requestCode = taskId.hashCode()
         val intent = Intent(context, TaskAlarmReceiver::class.java)
 
