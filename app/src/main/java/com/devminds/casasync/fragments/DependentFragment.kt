@@ -23,10 +23,10 @@ import com.google.android.material.appbar.MaterialToolbar
 import java.time.format.DateTimeFormatter
 import java.util.UUID
 import android.text.InputType
+import android.util.Log
 import java.time.Instant
 import java.time.ZoneId
 import java.util.Locale
-import com.devminds.casasync.utils.TaskAlarmReceiver
 import com.devminds.casasync.utils.DatePickers
 import com.devminds.casasync.utils.DateUtils
 
@@ -226,28 +226,10 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
                         currentDependent?.tasks?.add(newTask)
                         adapter.notifyItemInserted(taskList.size - 1)
 
-                        val formatter = DateUtils.formatter(previsionDate, previsionHour)
-                        val prevMillis = DateUtils.prevDateMillis(formatter)
-                        val idString = id.toString()
-
-                        if (prevMillis > System.currentTimeMillis()) {
-                            // notifica 1 hora antes da conclusão prevista
-                            TaskAlarmReceiver().scheduleNotification(
-                                context,
-                                idString,
-                                name,
-                                "Menos de uma hora para ser concluída",
-                                DateUtils.minusHour(previsionDate, previsionHour, 1)
-                            )                        
-                            // notifica 1 dia antes da conclusão prevista
-                            TaskAlarmReceiver().scheduleNotification(
-                                context,
-                                idString,
-                                name,
-                                "Menos de um dia para ser concluída",
-                                DateUtils.minusDay(previsionDate, previsionHour, 1)
-                            )
-                        }
+                        // agenda notificação
+                        taskViewModel.setTask(newTask)
+                        TaskFragment().scheduleTaskNotification(context, taskViewModel)
+                        Log.d("TaskFragment", "scheduleTaskNotification called")
 
                         // persiste o usuário
                         userViewModel.persistUser(context, userViewModel.user.value)

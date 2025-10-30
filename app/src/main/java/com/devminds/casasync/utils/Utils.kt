@@ -2,6 +2,7 @@ package com.devminds.casasync.utils
 
 import android.app.Activity
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.devminds.casasync.GenericAdapter
 import com.devminds.casasync.R
 import com.devminds.casasync.TransitionType
+import com.devminds.casasync.fragments.TaskFragment
 import com.devminds.casasync.parts.Dependent
 import com.devminds.casasync.parts.House
 import com.devminds.casasync.parts.Task
@@ -359,6 +361,30 @@ object Utils {
                                                     activity,
                                                     successRenameToast
                                                 )
+                                                TaskAlarmReceiver().scheduleNotification(
+                                                    context,
+                                                    item.id,
+                                                    item.name,
+                                                    "Menos de uma hora para ser concluída",
+                                                    DateUtils.minusHour(
+                                                        item.previsionDate,
+                                                        item.previsionHour,
+                                                        1
+                                                    ),
+                                                    "hour"
+                                                )
+                                                TaskAlarmReceiver().scheduleNotification(
+                                                    context,
+                                                    item.id,
+                                                    item.name,
+                                                    "Menos de um dia para ser concluída",
+                                                    DateUtils.minusDay(
+                                                        item.previsionDate,
+                                                        item.previsionHour,
+                                                        1
+                                                    ),
+                                                    "day"
+                                                )
                                             }
                                         }
                                         .setNegativeButton(
@@ -384,6 +410,23 @@ object Utils {
                                                     context.getString(R.string.question_mark)
                                         )
                                         .setPositiveButton(context.getString(R.string.delete_dialog)) { _, _ ->
+
+                                            TaskAlarmReceiver().cancelScheduleNotification(
+                                                context,
+                                                item.id,
+                                                "day",
+                                                item.name,
+                                                "Menos de um dia para ser concluída"
+                                            )
+                                            TaskAlarmReceiver().cancelScheduleNotification(
+                                                context,
+                                                item.id,
+                                                "hour",
+                                                item.name,
+                                                "Menos de uma hora para ser concluída"
+                                            )
+
+
                                             val index = list.indexOfFirst { it.id == item.id }
                                             if (index != -1) {
                                                 list.removeAt(index)
@@ -409,6 +452,22 @@ object Utils {
                                     taskViewModel.task.value?.let { task -> 
                                         val previsionDate = task.previsionDate
                                         val previsionHour = task.previsionHour
+
+                                        TaskAlarmReceiver().cancelScheduleNotification(
+                                            context,
+                                            item.id,
+                                            "day",
+                                            item.name,
+                                            "Menos de um dia para ser concluída"
+                                        )
+                                        TaskAlarmReceiver().cancelScheduleNotification(
+                                            context,
+                                            item.id,
+                                            "hour",
+                                            item.name,
+                                            "Menos de uma hora para ser concluída"
+                                        )
+
 
                                         item.finishDate = DateUtils.date(0).fullDate
                                         item.previsionDate = previsionDate

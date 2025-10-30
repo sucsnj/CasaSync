@@ -35,14 +35,37 @@ class TaskAlarmReceiver : BroadcastReceiver() {
         manager.notify(System.currentTimeMillis().toInt(), notification)
     }
 
+    fun createAlarmPendingIntent(context: Context, taskId: String, tag: String, title: String = "", message: String = ""): PendingIntent {
+        val intent = Intent(context, TaskAlarmReceiver::class.java).apply {
+            putExtra("title", title)
+            putExtra("message", message)
+        }
+        val requestCode = taskId.hashCode() + tag.hashCode()
+        return PendingIntent.getBroadcast(
+            context,
+            requestCode,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+    }
+
+
     // agenda a notificação
-    fun scheduleNotification(context: Context, taskId: String, title: String, message: String, dueTimeMillis: Long) {
+    fun scheduleNotification(
+        context: Context,
+        taskId: String,
+        title: String,
+        message: String,
+        dueTimeMillis: Long,
+        tag: String
+    ) {
         val intent = Intent(context, TaskAlarmReceiver::class.java).apply {
             putExtra("title", title) // dados da intent
             putExtra("message", message)
         }
 
-        val requestCode = taskId.hashCode()
+        // montar requestcode com tag e id da tarefa
+        val requestCode = taskId.hashCode() + tag.hashCode()
 
         // intent para notificação
         val pendingIntent = PendingIntent.getBroadcast(
@@ -82,9 +105,12 @@ class TaskAlarmReceiver : BroadcastReceiver() {
     }
 
     // cancela a notificação em caso de modificação ou remoção do agendamento anteior
-    fun cancelScheduleNotification(context: Context, taskId: String) {
-        val requestCode = taskId.hashCode()
-        val intent = Intent(context, TaskAlarmReceiver::class.java)
+    fun cancelScheduleNotification(context: Context, taskId: String, tag: String, title: String = "", message: String = "") {
+        val requestCode = taskId.hashCode() + tag.hashCode()
+        val intent = Intent(context, TaskAlarmReceiver::class.java).apply {
+            putExtra("title", title) // dados da intent
+            putExtra("message", message)
+        }
 
         val pendingIntent = PendingIntent.getBroadcast(
             context,
@@ -94,6 +120,6 @@ class TaskAlarmReceiver : BroadcastReceiver() {
         )
         // manuseia o alarme e cancela a notificação
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        alarmManager.cancel(pendingIntent)
+        alarmManager.cancel(pendingIntent) // aqui faz o cancelamento do intent do agendamento
     }
 }

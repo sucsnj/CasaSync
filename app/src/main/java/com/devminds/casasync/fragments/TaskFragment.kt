@@ -46,6 +46,46 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
     private lateinit var checker: CheckBox
     private lateinit var btnSaveTask: TextView
 
+    fun scheduleTaskNotification(context: Context, viewModel: TaskViewModel) {
+        viewModel.task.value?.let { task ->
+
+            if (task.finishDate == null && task.previsionHour != null) {
+                val formatter = DateUtils.formatter(task.previsionDate, task.previsionHour)
+                val prevMillis = DateUtils.prevDateMillis(formatter)
+
+                if (prevMillis > System.currentTimeMillis()) {
+                    // notifica 1 hora antes da conclusão prevista
+                    TaskAlarmReceiver().scheduleNotification(
+                        context,
+                        task.id,
+                        task.name,
+                        "Menos de uma hora para ser concluída",
+                        DateUtils.minusHour(
+                            task.previsionDate,
+                            task.previsionHour,
+                            1
+                        ),
+                        "hour"
+                    )
+
+                    // notifica 1 dia antes da conclusão prevista
+                    TaskAlarmReceiver().scheduleNotification(
+                        context,
+                        task.id,
+                        task.name,
+                        "Menos de um dia para ser concluída",
+                        DateUtils.minusDay(
+                            task.previsionDate,
+                            task.previsionHour,
+                            1
+                        ),
+                        "day"
+                    )
+                }
+            }
+        }
+    }
+
     fun saveTask(context: Context, item: String, itemValue: String?) {
         taskViewModel.task.value?.let { task ->
             when (item) {
@@ -59,39 +99,7 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
             userViewModel.persistUser(context, userViewModel.user.value)
 
             // agenda notificações
-
-            if (task.finishDate == null && task.previsionHour != null) {
-                val formatter = DateUtils.formatter(task.previsionDate, task.previsionHour)
-                val prevMillis = DateUtils.prevDateMillis(formatter)
-
-                if (prevMillis > System.currentTimeMillis()) {
-                    // notifica 1 hora antes da conclusão prevista
-                    TaskAlarmReceiver().scheduleNotification(
-                        context,
-                        task.id + "hour",
-                        task.name,
-                        "Menos de uma hora para ser concluída",
-                        DateUtils.minusHour(
-                            task.previsionDate,
-                            task.previsionHour,
-                            1
-                        )
-                    )
-
-                    // notifica 1 dia antes da conclusão prevista
-                    TaskAlarmReceiver().scheduleNotification(
-                        context,
-                        task.id + "day",
-                        task.name,
-                        "Menos de um dia para ser concluída",
-                        DateUtils.minusDay(
-                            task.previsionDate,
-                            task.previsionHour,
-                            1
-                        )
-                    )
-                }
-            }
+            scheduleTaskNotification(context, taskViewModel)
         }
     }
 
@@ -132,7 +140,6 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
 
                 // teclado com delay
                 delayEditText(editText, context)
-
                 layout.addView(editText)
 
                 // diálogo
@@ -262,6 +269,7 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
             currentTask?.let { taskViewModel.setTask(it) } // atualiza a tarefa no ViewModel
         }
 
+        // botão de salvar
         btnSaveTask = view.findViewById(R.id.btnSaveTask)
         btnSaveTask.setOnClickListener {
             val task = taskViewModel.task.value
