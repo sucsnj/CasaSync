@@ -410,22 +410,7 @@ object Utils {
                                                     context.getString(R.string.question_mark)
                                         )
                                         .setPositiveButton(context.getString(R.string.delete_dialog)) { _, _ ->
-
-                                            TaskAlarmReceiver().cancelScheduleNotification(
-                                                context,
-                                                item.id,
-                                                "day",
-                                                item.name,
-                                                "Menos de um dia para ser concluída"
-                                            )
-                                            TaskAlarmReceiver().cancelScheduleNotification(
-                                                context,
-                                                item.id,
-                                                "hour",
-                                                item.name,
-                                                "Menos de uma hora para ser concluída"
-                                            )
-
+                                            TaskFragment().cancelAllTaskNotifications(context, item)
 
                                             val index = list.indexOfFirst { it.id == item.id }
                                             if (index != -1) {
@@ -453,21 +438,7 @@ object Utils {
                                         val previsionDate = task.previsionDate
                                         val previsionHour = task.previsionHour
 
-                                        TaskAlarmReceiver().cancelScheduleNotification(
-                                            context,
-                                            item.id,
-                                            "day",
-                                            item.name,
-                                            "Menos de um dia para ser concluída"
-                                        )
-                                        TaskAlarmReceiver().cancelScheduleNotification(
-                                            context,
-                                            item.id,
-                                            "hour",
-                                            item.name,
-                                            "Menos de uma hora para ser concluída"
-                                        )
-
+                                        TaskFragment().cancelAllTaskNotifications(context, item)
 
                                         item.finishDate = DateUtils.date(0).fullDate
                                         item.previsionDate = previsionDate

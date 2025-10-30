@@ -46,6 +46,14 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
     private lateinit var checker: CheckBox
     private lateinit var btnSaveTask: TextView
 
+    // cancela notificações anteriores
+    fun cancelAllTaskNotifications(context: Context, task: Task) {
+        TaskAlarmReceiver().cancelScheduleNotification(
+            context, task.id, "hour", task.name, "Menos de uma hora para ser concluída")
+        TaskAlarmReceiver().cancelScheduleNotification(
+            context, task.id, "day", task.name, "Menos de um dia para ser concluída")
+    }
+
     fun scheduleTaskNotification(context: Context, viewModel: TaskViewModel) {
         viewModel.task.value?.let { task ->
 
@@ -86,7 +94,7 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
         }
     }
 
-    fun saveTask(context: Context, item: String, itemValue: String?) {
+    private fun saveTask(context: Context, item: String, itemValue: String?) {
         taskViewModel.task.value?.let { task ->
             when (item) {
                 "description" -> itemValue?.let { task.description = it }
