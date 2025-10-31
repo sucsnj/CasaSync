@@ -14,6 +14,7 @@ import com.devminds.casasync.TransitionType
 import com.devminds.casasync.utils.JsonStorageManager
 import com.devminds.casasync.views.UserViewModel
 import android.widget.LinearLayout
+import android.widget.Toast
 import com.devminds.casasync.utils.Biometric
 import com.devminds.casasync.utils.BiometricAuthManager
 import com.devminds.casasync.utils.DialogUtils
@@ -26,6 +27,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
     private lateinit var btnLogin: TextView
     private lateinit var btnCreateAccount: TextView
     private lateinit var btnForgotPassword: TextView
+    private lateinit var btnBiometricLogin: LinearLayout
 
     private fun loginWithUserId(userId: String) {
         val userFound = JsonStorageManager.getUserById(requireContext(), userId)
@@ -43,13 +45,13 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         }
     }
 
-    private fun biometricCaller(context: Context) {
+    private fun biometricCaller(context: Context, delay: Long) {
         // delay para chamar a biometria
-        Handler(Looper.getMainLooper()).post {
+        Handler(Looper.getMainLooper()).postDelayed({
             // chama a biometria
             if (BiometricAuthManager.canUseBiometric(context)) { // se puder usar biometria, então...
                 BiometricAuthManager.tryBiometricLogin(
-                    requireContext(),
+                    requireActivity(),
                     requireActivity(),
                     onSuccess = { userId ->
                         loginWithUserId(userId)
@@ -59,7 +61,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                     }
                 )
             }
-        }
+        }, delay)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -68,9 +70,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         val context = requireContext()
         // limpa o histórico de navegação
         clearNavHistory()
-        biometricCaller(context)
-
-        // botão para biometria TODO
+        biometricCaller(requireActivity(), 500)
 
         txtLoginPrompt = view.findViewById(R.id.txtLoginPrompt)
         txtPasswordPrompt = view.findViewById(R.id.txtPasswordPrompt)
@@ -123,6 +123,12 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         btnForgotPassword = view.findViewById(R.id.txtForgotPassword)
         btnForgotPassword.setOnClickListener {
             replaceFragment( RecoveryFragment(), TransitionType.SLIDE)
+        }
+
+        // botão para biometria
+        btnBiometricLogin = view.findViewById(R.id.btnBiometricLogin)
+        btnBiometricLogin.setOnClickListener {
+            biometricCaller(context, 100)
         }
     }
 }

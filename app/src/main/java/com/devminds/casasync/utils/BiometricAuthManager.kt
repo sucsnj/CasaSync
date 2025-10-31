@@ -1,6 +1,7 @@
 package com.devminds.casasync.utils
 
 import android.content.Context
+import android.util.Log
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
@@ -12,10 +13,12 @@ object BiometricAuthManager {
     // retorna um booleano indicando se o aparelho suporta autenticação por biometria
     fun canUseBiometric(context: Context): Boolean {
         val biometricManager = BiometricManager.from(context)
+        val authenticators = BiometricManager.Authenticators.BIOMETRIC_WEAK or BiometricManager.Authenticators.DEVICE_CREDENTIAL
 
-        // BIOMETRIC_STRONG -> biometria forte -> digital ou facial sem PIN
-        return biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG) ==
-                BiometricManager.BIOMETRIC_SUCCESS
+        val result = biometricManager.canAuthenticate(authenticators)
+        Log.d("BiometricCheck", "canAuthenticate result: $result")
+
+        return biometricManager.canAuthenticate(authenticators) == BiometricManager.BIOMETRIC_SUCCESS
     }
 
     // faz o processo de biometria para o último usuário logado
@@ -62,7 +65,9 @@ object BiometricAuthManager {
             val promptInfo = BiometricPrompt.PromptInfo.Builder()
                 .setTitle("Autenticação biométrica")
                 .setSubtitle("Use sua digital para entrar")
-                .setNegativeButtonText("Cancelar")
+                .setAllowedAuthenticators(
+                    BiometricManager.Authenticators.BIOMETRIC_WEAK or BiometricManager.Authenticators.DEVICE_CREDENTIAL
+                )
                 .build()
 
             biometricPrompt.authenticate(promptInfo) // retorna o prompt pronto
