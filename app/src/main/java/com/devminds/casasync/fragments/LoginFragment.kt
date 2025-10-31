@@ -14,7 +14,6 @@ import com.devminds.casasync.TransitionType
 import com.devminds.casasync.utils.JsonStorageManager
 import com.devminds.casasync.views.UserViewModel
 import android.widget.LinearLayout
-import android.widget.Toast
 import com.devminds.casasync.utils.Biometric
 import com.devminds.casasync.utils.BiometricAuthManager
 import com.devminds.casasync.utils.DialogUtils
@@ -45,6 +44,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         }
     }
 
+    // chama o menu de biometria
     private fun biometricCaller(context: Context, delay: Long) {
         // delay para chamar a biometria
         Handler(Looper.getMainLooper()).postDelayed({
@@ -74,11 +74,13 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
 
         txtLoginPrompt = view.findViewById(R.id.txtLoginPrompt)
         txtPasswordPrompt = view.findViewById(R.id.txtPasswordPrompt)
+
         // botão de login com google
         btnGoogleLogin = view.findViewById(R.id.btnGoogleLogin)
         btnGoogleLogin.setOnClickListener {
             DialogUtils.showMessage(context, "implementando google login")
         }
+
         // botão de login
         btnLogin = view.findViewById(R.id.btnLogin)
         btnLogin.setOnClickListener {
@@ -114,11 +116,13 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                 DialogUtils.showMessage(context, getString(R.string.login_empty_message))
             }
         }
+
         // botão de criar conta
         btnCreateAccount = view.findViewById(R.id.btnCreatAccount)
         btnCreateAccount.setOnClickListener {
             replaceFragment( CadastroFragment(), TransitionType.SLIDE)
         }
+
         // botão de recuperar senha
         btnForgotPassword = view.findViewById(R.id.txtForgotPassword)
         btnForgotPassword.setOnClickListener {

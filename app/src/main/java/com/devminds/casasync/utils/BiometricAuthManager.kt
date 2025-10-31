@@ -1,6 +1,7 @@
 package com.devminds.casasync.utils
 
 import android.content.Context
+import android.os.Build
 import android.util.Log
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
@@ -13,12 +14,18 @@ object BiometricAuthManager {
     // retorna um booleano indicando se o aparelho suporta autenticação por biometria
     fun canUseBiometric(context: Context): Boolean {
         val biometricManager = BiometricManager.from(context)
-        val authenticators = BiometricManager.Authenticators.BIOMETRIC_WEAK or BiometricManager.Authenticators.DEVICE_CREDENTIAL
+
+        // verifica a versão do android
+        val authenticators = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            BiometricManager.Authenticators.BIOMETRIC_WEAK or BiometricManager.Authenticators.DEVICE_CREDENTIAL
+        } else {
+            BiometricManager.Authenticators.BIOMETRIC_WEAK
+        }
 
         val result = biometricManager.canAuthenticate(authenticators)
         Log.d("BiometricCheck", "canAuthenticate result: $result")
 
-        return biometricManager.canAuthenticate(authenticators) == BiometricManager.BIOMETRIC_SUCCESS
+        return result == BiometricManager.BIOMETRIC_SUCCESS
     }
 
     // faz o processo de biometria para o último usuário logado
@@ -62,14 +69,23 @@ object BiometricAuthManager {
                 })
 
             // a visualização do prompt de biometria
-            val promptInfo = BiometricPrompt.PromptInfo.Builder()
+            val promptBuilder = BiometricPrompt.PromptInfo.Builder()
                 .setTitle("Autenticação biométrica")
                 .setSubtitle("Use sua digital para entrar")
-                .setAllowedAuthenticators(
+
+            // para android 11+ (DEVICE_CREDENTIAL)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                promptBuilder.setAllowedAuthenticators(
                     BiometricManager.Authenticators.BIOMETRIC_WEAK or BiometricManager.Authenticators.DEVICE_CREDENTIAL
                 )
-                .build()
+            } else {
+                // o android 10- precisa do botão de negação
+                promptBuilder
+                    .setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_WEAK)
+                    .setNegativeButtonText("Cancelar")
+            }
 
+            val promptInfo = promptBuilder.build()
             biometricPrompt.authenticate(promptInfo) // retorna o prompt pronto
         }
     }
