@@ -71,7 +71,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         val context = requireContext()
         // limpa o histórico de navegação
         clearNavHistory()
-        biometricCaller(requireActivity(), 500)
+        biometricCaller(requireActivity(), 800)
 
         txtLoginPrompt = view.findViewById(R.id.txtLoginPrompt)
         txtPasswordPrompt = view.findViewById(R.id.txtPasswordPrompt)
