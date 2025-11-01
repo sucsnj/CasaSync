@@ -17,6 +17,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.graphics.drawable.toDrawable
 import com.devminds.casasync.R
 
@@ -67,10 +68,10 @@ object DialogUtils {
         window?.attributes?.windowAnimations = R.style.DialogToastAnimation
 
         val screenWidth = context.resources.displayMetrics.widthPixels
-        val targetWidth = (screenWidth * 0.6).toInt()
-        val sideMargin = (screenWidth * 0.2).toInt()
+        val targetWidth = (screenWidth * 0.60).toInt()
+        val sideMargin = (screenWidth * 0.20).toInt()
 
-        val layout = dialog.findViewById<LinearLayout>(R.id.notification_layout)
+        val layout = dialog.findViewById<ConstraintLayout>(R.id.notification_layout)
 
         val params = FrameLayout.LayoutParams(targetWidth, ViewGroup.LayoutParams.WRAP_CONTENT)
         params.leftMargin = sideMargin

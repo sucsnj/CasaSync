@@ -451,6 +451,7 @@ object Utils {
                                     user?.let {
                                         JsonStorageManager.saveUser(activity, it)
                                     }
+                                    DialogUtils.showMessage(context, "Tarefa concluída")
                                 }
                             }
                         }

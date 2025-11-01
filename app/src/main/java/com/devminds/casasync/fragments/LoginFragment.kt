@@ -1,5 +1,6 @@
 package com.devminds.casasync.fragments
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -14,6 +15,7 @@ import com.devminds.casasync.TransitionType
 import com.devminds.casasync.utils.JsonStorageManager
 import com.devminds.casasync.views.UserViewModel
 import android.widget.LinearLayout
+import androidx.fragment.app.FragmentActivity
 import com.devminds.casasync.utils.Biometric
 import com.devminds.casasync.utils.BiometricAuthManager
 import com.devminds.casasync.utils.DialogUtils
@@ -50,8 +52,8 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
             // chama a biometria
             if (BiometricAuthManager.canUseBiometric(context)) { // se puder usar biometria, então...
                 BiometricAuthManager.tryBiometricLogin(
-                    requireActivity(),
-                    requireActivity(),
+                    context,
+                    (context as? Activity ?: return@postDelayed) as FragmentActivity,
                     onSuccess = { userId ->
                         loginWithUserId(userId)
                     },

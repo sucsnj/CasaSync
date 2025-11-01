@@ -20,6 +20,7 @@ import com.devminds.casasync.R
 import com.devminds.casasync.TransitionType
 import com.devminds.casasync.parts.House
 import com.devminds.casasync.parts.User
+import com.devminds.casasync.utils.DialogUtils
 import com.devminds.casasync.utils.JsonStorageManager
 import com.devminds.casasync.utils.Utils
 import com.devminds.casasync.views.UserViewModel
@@ -149,6 +150,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
                         userViewModel.persistUser(context, userViewModel.user.value)
 
                         dialog.dismiss()
+                        DialogUtils.showMessage(context, "Casa criada")
                     } else {
                         input.error = context.getString(R.string.invalid_house_name)
                     }

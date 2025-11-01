@@ -29,6 +29,7 @@ import java.time.ZoneId
 import java.util.Locale
 import com.devminds.casasync.utils.DatePickers
 import com.devminds.casasync.utils.DateUtils
+import com.devminds.casasync.utils.DialogUtils
 
 class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
 
@@ -234,6 +235,7 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
                         // persiste o usuário
                         userViewModel.persistUser(context, userViewModel.user.value)
                     }
+                    DialogUtils.showMessage(context, "Tarefa criada")
                 }
                 .setNegativeButton(getString(R.string.button_cancel), null)
                 .show()

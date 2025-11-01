@@ -25,6 +25,7 @@ import com.devminds.casasync.views.UserViewModel
 import com.google.android.material.appbar.MaterialToolbar
 import java.util.UUID
 import com.devminds.casasync.TransitionType
+import com.devminds.casasync.utils.DialogUtils
 
 class HouseFragment : BaseFragment(R.layout.fragment_house) {
 
@@ -146,6 +147,7 @@ class HouseFragment : BaseFragment(R.layout.fragment_house) {
                             JsonStorageManager.saveUser(context, it)
                         }
                     }
+                    DialogUtils.showMessage(context, "Dependente adicionado")
                 }
                 .setNegativeButton(getString(R.string.button_cancel), null)
                 .show()
