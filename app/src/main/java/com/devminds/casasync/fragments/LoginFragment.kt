@@ -97,6 +97,8 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
 
                 // se o usuário for encontrado
                 if (userFound != null) {
+                    DialogUtils.dismissActiveBanner() // elimina qualquer banner ativo
+
                     userViewModel.setUser(userFound)
 
                     val intent = Intent(context, HomeActivity::class.java)

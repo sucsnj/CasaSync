@@ -22,12 +22,20 @@ import com.devminds.casasync.R
 
 object DialogUtils {
 
-    fun getBannerDurations(): Triple<Long, Long, Long> {
+    private var currentDialog: Dialog? = null
+
+    private fun getBannerDurations(): Triple<Long, Long, Long> {
         return Triple(2200L, 3000L, 3700L)
+    }
+
+    fun dismissActiveBanner() {
+        currentDialog?.dismiss()
+        currentDialog = null
     }
 
     fun show(context: Context, message: String, iconResId: Int? = null, duration: Long) {
 
+        currentDialog?.dismiss()
         val dialog = Dialog(context)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(R.layout.notification_banner)
@@ -81,14 +89,17 @@ object DialogUtils {
         }
 
         dialog.show()
-
-        Handler(Looper.getMainLooper()).postDelayed({ dialog.dismiss() }, duration)
     }
 
     fun showMessage(context: Context, message: String) {
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) { // se for android 14 ou inferior
-            val (short, medium, long) = getBannerDurations()
-            show(context as Activity, message, R.drawable.casasync, medium) // chama a função "show"
+            // chama a função "show"
+            if (context is Activity) {
+                val (_, medium, _) = getBannerDurations()
+                show(context, message, R.drawable.casasync, medium)
+            } else {
+                Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+            }
         } else {
             Toast.makeText(context, message, Toast.LENGTH_LONG).show() // mostra o toast padrão
         }
