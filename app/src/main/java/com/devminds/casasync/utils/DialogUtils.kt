@@ -22,7 +22,11 @@ import com.devminds.casasync.R
 
 object DialogUtils {
 
-    fun show(context: Context, message: String, iconResId: Int? = null, duration: Long = 1800L) {
+    fun getBannerDurations(): Triple<Long, Long, Long> {
+        return Triple(2200L, 3000L, 3700L)
+    }
+
+    fun show(context: Context, message: String, iconResId: Int? = null, duration: Long) {
 
         val dialog = Dialog(context)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -32,15 +36,27 @@ object DialogUtils {
         val window = dialog.window
         window?.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
         window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-        window?.setGravity(Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL)
-        window?.addFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        window?.setGravity(Gravity.CENTER_VERTICAL or Gravity.CENTER_HORIZONTAL)
+        window?.addFlags(
+            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
+                    WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON or
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE or
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+        )
+        window?.setFlags(
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE or WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE or WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+        )
 
         // remove a sombra do dialog
         window?.setDimAmount(0f)
 
+        // animação/suavidade
+        window?.attributes?.windowAnimations = R.style.DialogToastAnimation
+
         val screenWidth = context.resources.displayMetrics.widthPixels
-        val targetWidth = (screenWidth * 0.7).toInt()
-        val sideMargin = (screenWidth * 0.15).toInt()
+        val targetWidth = (screenWidth * 0.6).toInt()
+        val sideMargin = (screenWidth * 0.2).toInt()
 
         val layout = dialog.findViewById<LinearLayout>(R.id.notification_layout)
 
@@ -71,9 +87,10 @@ object DialogUtils {
 
     fun showMessage(context: Context, message: String) {
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) { // se for android 14 ou inferior
-            show(context as Activity, message, R.drawable.casasync) // chama a função "show"
+            val (short, medium, long) = getBannerDurations()
+            show(context as Activity, message, R.drawable.casasync, medium) // chama a função "show"
         } else {
-            Toast.makeText(context, message, Toast.LENGTH_SHORT).show() // mostra o toast padrão
+            Toast.makeText(context, message, Toast.LENGTH_LONG).show() // mostra o toast padrão
         }
     }
 }

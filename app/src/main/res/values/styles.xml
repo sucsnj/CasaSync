@@ -32,4 +32,12 @@
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">@android:color/black</item>
     </style>
+    <style name="DialogToastAnimation">
+        <item name="android:windowEnterAnimation">@anim/fade_in_scale</item>
+        <item name="android:windowExitAnimation">@anim/fade_out_scale</item>
+    </style>
+    <style name="RoundedIconShape" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">23%</item>
+    </style>
 </resources>
