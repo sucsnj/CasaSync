@@ -164,7 +164,8 @@
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:contentDescription="Imagem da Biometria"
-                android:src="@drawable/img_biometric" />
+                android:src="@drawable/img_biometric"
+                app:tint="@color/cinza_claro" />
 
             <TextView
                 android:layout_width="wrap_content"

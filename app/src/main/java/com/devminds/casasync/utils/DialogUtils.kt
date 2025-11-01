@@ -29,11 +29,15 @@ object DialogUtils {
     }
 
     fun dismissActiveBanner() {
-        currentDialog?.dismiss()
+        currentDialog?.let {
+            if (it.isShowing && (it.context as? Activity)?.isFinishing == false && (it.context as? Activity)?.isDestroyed == false) {
+                it.dismiss()
+            }
+        }
         currentDialog = null
     }
 
-    fun show(context: Context, message: String, iconResId: Int? = null, duration: Long) {
+    fun show(context: Context, message: String, iconResId: Int? = null) {
 
         currentDialog?.dismiss()
         val dialog = Dialog(context)
@@ -88,15 +92,22 @@ object DialogUtils {
             iconView.visibility = View.GONE
         }
 
+        val (_, medium, _) = getBannerDurations()
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            if (dialog.isShowing && (context as? Activity)?.isFinishing == false && !context.isDestroyed) {
+                dialog.dismiss()
+            }
+        }, medium)
+
         dialog.show()
     }
 
     fun showMessage(context: Context, message: String) {
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) { // se for android 14 ou inferior
-            // chama a função "show"
+            // chama o dialog
             if (context is Activity) {
-                val (_, medium, _) = getBannerDurations()
-                show(context, message, R.drawable.casasync, medium)
+                show(context, message, R.drawable.casasync)
             } else {
                 Toast.makeText(context, message, Toast.LENGTH_LONG).show()
             }

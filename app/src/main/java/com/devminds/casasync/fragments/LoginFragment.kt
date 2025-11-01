@@ -38,7 +38,6 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
             intent.putExtra("userId", userFound.id)
             startActivity(intent)
             requireActivity().finish()
-
         } else {
             DialogUtils.showMessage(requireContext(), getString(R.string.login_error_message))
         }
