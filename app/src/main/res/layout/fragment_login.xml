@@ -85,11 +85,10 @@
             android:layout_marginBottom="16dp"
             android:text="@string/text_or"
             android:textSize="14sp" />
-
+            <!--logar com o google-->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
             <LinearLayout
                 android:id="@+id/btnGoogleLogin"
                 android:layout_width="0dp"
