@@ -12,7 +12,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
 import com.devminds.casasync.HomeActivity
 import com.devminds.casasync.R
-import com.devminds.casasync.models.User
+import com.devminds.casasync.TransitionType
+import com.devminds.casasync.parts.User
 import com.devminds.casasync.views.UserViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -131,7 +132,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                 val newUser = User(
                     id = firebaseUser.uid,
                     name = firebaseUser.displayName ?: "Usuário",
-                    email = firebaseUser.email ?: "",
+                    login = firebaseUser.email ?: "",
                     password = "" // Senha não é necessária
                 )
                 userRef.set(newUser)
