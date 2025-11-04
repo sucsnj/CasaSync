@@ -23,21 +23,6 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
-        // menu lateral
-//        drawerLayout = findViewById(R.id.drawer_layout)
-//        navView = findViewById(R.id.nav_view)
-//
-//        navView.setNavigationItemSelectedListener { menuItem ->
-//            when (menuItem.itemId) {
-//                // R.id.nav_home -> replaceFragment(HomeFragment())
-//                // R.id.nav_settings_app -> replaceFragment(SettingsAppFragment())
-//                // R.id.nav_settings_user -> replaceFragment(SettingsUserFragment())
-//                R.id.nav_about -> replaceFragment(AboutFragment())
-//            }
-//            drawerLayout.closeDrawer(GravityCompat.START)
-//            true
-//        }
     }
 
     private fun replaceFragment(fragment: Fragment, transitionType: TransitionType) {
