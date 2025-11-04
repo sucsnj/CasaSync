@@ -31,7 +31,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
                 android:text="Tarefa"
-                android:textSize="30sp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:textSize="28sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -39,6 +41,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
+                android:maxLines="2"
+                android:ellipsize="end"
                 android:text="Dependente"
                 android:textSize="14sp" />
         </LinearLayout>
@@ -75,10 +79,11 @@
             android:textColor="@android:color/black"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
+            android:ellipsize="end"
             android:padding="4dp"
             android:background="@drawable/background_description"
             android:textSize="18sp"
-            android:maxLines="10"
+            android:maxLines="15"
             android:minLines="1"
             android:clickable="true" />
 
@@ -178,17 +183,34 @@
             android:textSize="16sp"
             android:drawablePadding="10dp"
             android:focusable="false" />
-
-        <CheckBox
-            android:id="@+id/checker"
-            android:layout_width="wrap_content"
+        
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Concluído"
             android:layout_marginTop="10dp"
-            android:checked="false"
-            android:textSize="16sp"
-            android:padding="8dp" />
+            android:orientation="horizontal" >
 
+            <CheckBox
+                android:id="@+id/checker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Concluído"
+                android:checked="false"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/btnSaveTask"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="3dp"
+                android:layout_marginStart="20dp"
+                android:gravity="center_vertical"
+                android:drawableStart="@drawable/ico_save"
+                android:text="Salvar Alterações"
+                android:textColor="@android:color/black"
+                android:foreground="?attr/selectableItemBackground"
+                android:textSize="16sp" />
+
+        </LinearLayout>
     </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

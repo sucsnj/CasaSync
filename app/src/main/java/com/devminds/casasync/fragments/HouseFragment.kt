@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import androidx.recyclerview.widget.GridLayoutManager
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.LinearLayout
@@ -12,6 +13,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.devminds.casasync.GenericAdapter
 import com.devminds.casasync.R
 import com.devminds.casasync.parts.Dependent
@@ -23,6 +25,7 @@ import com.devminds.casasync.views.UserViewModel
 import com.google.android.material.appbar.MaterialToolbar
 import java.util.UUID
 import com.devminds.casasync.TransitionType
+import com.devminds.casasync.utils.DialogUtils
 
 class HouseFragment : BaseFragment(R.layout.fragment_house) {
 
@@ -71,7 +74,10 @@ class HouseFragment : BaseFragment(R.layout.fragment_house) {
         }
         // lista de dependentes
         recyclerDependents = view.findViewById(R.id.recyclerDependents)
-        recyclerDependents.layoutManager = LinearLayoutManager(context)
+        // recyclerDependents.layoutManager = GridLayoutManager(context, 2) // estilo grade
+        // recyclerDependents.layoutManager = LinearLayoutManager(context) // estilo lista
+        recyclerDependents.layoutManager = // estilo grade com espaçamento
+            StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
 
         houseId = arguments?.getString("houseId")
         // observa o usuário e a casa selecionada
@@ -117,20 +123,14 @@ class HouseFragment : BaseFragment(R.layout.fragment_house) {
             }
 
             // teclado com delay
-            inputName.postDelayed({
-                inputName.requestFocus() // traz o foco
-
-                // levanta o teclado
-                val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.showSoftInput(inputName, InputMethodManager.SHOW_IMPLICIT)
-                inputName.setSelection(0) // texto selecionado
-            },200)
+            delayEditText(inputName, context)
 
             layout.addView(inputName)
             // diálogo para adicionar dependente
             AlertDialog.Builder(context)
                 .setTitle(getString(R.string.btn_add_dependent))
                 .setView(layout)
+                .setCancelable(false)
                 .setPositiveButton(getString(R.string.button_add)) { _, _ ->
                     val dependentName = inputName.text.toString().trim()
                     if (dependentName.isNotEmpty()) {
@@ -147,6 +147,7 @@ class HouseFragment : BaseFragment(R.layout.fragment_house) {
                             JsonStorageManager.saveUser(context, it)
                         }
                     }
+                    DialogUtils.showMessage(context, "Dependente adicionado")
                 }
                 .setNegativeButton(getString(R.string.button_cancel), null)
                 .show()

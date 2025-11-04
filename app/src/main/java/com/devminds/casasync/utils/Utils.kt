@@ -2,10 +2,12 @@ package com.devminds.casasync.utils
 
 import android.app.Activity
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
@@ -14,12 +16,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.devminds.casasync.GenericAdapter
 import com.devminds.casasync.R
 import com.devminds.casasync.TransitionType
+import com.devminds.casasync.fragments.TaskFragment
 import com.devminds.casasync.parts.Dependent
 import com.devminds.casasync.parts.House
 import com.devminds.casasync.parts.Task
-import com.devminds.casasync.parts.date
 import com.devminds.casasync.setCustomTransition
 import com.devminds.casasync.views.UserViewModel
+import com.devminds.casasync.views.TaskViewModel
 
 // classe utilitária
 object Utils {
@@ -32,8 +35,8 @@ object Utils {
         return (dp * scale).toInt()
     }
 
-    // chamar teclado com delay
-    fun TextView.keyboardDelay(context: Context, delay: Long) {
+    // chamar teclado com delay para TextView
+    private fun TextView.keyboardDelay(context: Context, delay: Long) {
         if (context is Activity) {
             this.requestFocus()
             this.postDelayed({
@@ -95,6 +98,7 @@ object Utils {
                                     val dialogNameEdit = AlertDialog.Builder(activity)
                                         .setTitle(activity.getString(R.string.rename_dialog))
                                         .setView(dialogView)
+                                        .setCancelable(false)
                                         .setPositiveButton(activity.getString(R.string.accept_dialog)) { _, _ ->
                                             val newName = editTextDialog.text.toString().trim()
                                             if (newName.isNotEmpty()) {
@@ -127,6 +131,7 @@ object Utils {
                                     val itemNameDelete = item.name
                                     AlertDialog.Builder(context)
                                         .setTitle(context.getString(R.string.delete_dialog))
+                                        .setCancelable(false)
                                         .setMessage(
                                             context.getString(R.string.confirm_delete_dialog) +
                                                     itemNameDelete +
@@ -187,6 +192,10 @@ object Utils {
             layoutResId = R.layout.item_generic,
             bind = { itemView, item, position, viewHolder ->
 
+                // esconde a imagem
+                val imageView = itemView.findViewById<ImageView>(R.id.itemImage)
+                imageView.visibility = View.GONE
+                
                 val textView = itemView.findViewById<TextView>(R.id.itemName)
                 textView.text = item.name
 
@@ -211,6 +220,7 @@ object Utils {
                                     val dialogNameEdit = AlertDialog.Builder(activity)
                                         .setTitle(activity.getString(R.string.rename_dialog))
                                         .setView(dialogView)
+                                        .setCancelable(false)
                                         .setPositiveButton(activity.getString(R.string.accept_dialog)) { _, _ ->
                                             val newName = editTextDialog.text.toString().trim()
                                             if (newName.isNotEmpty()) {
@@ -242,6 +252,7 @@ object Utils {
                                     val itemNameDelete = item.name
                                     AlertDialog.Builder(context)
                                         .setTitle(context.getString(R.string.delete_dialog))
+                                        .setCancelable(false)
                                         .setMessage(
                                             context.getString(R.string.confirm_delete_dialog) +
                                                     itemNameDelete +
@@ -295,6 +306,7 @@ object Utils {
         itemOptions: String,
         successRenameToast: String,
         userViewModel: UserViewModel,
+        taskViewModel: TaskViewModel, // precisa para acessar o TaskViewModel com as datas e horas
         context: Context
     ): GenericAdapter<Task> {
         return GenericAdapter(
@@ -335,6 +347,7 @@ object Utils {
                                     val dialogNameEdit = AlertDialog.Builder(activity)
                                         .setTitle(activity.getString(R.string.rename_dialog))
                                         .setView(dialogView)
+                                        .setCancelable(false)
                                         .setPositiveButton(activity.getString(R.string.accept_dialog)) { _, _ ->
                                             val newName = editTextDialog.text.toString().trim()
                                             if (newName.isNotEmpty()) {
@@ -347,6 +360,30 @@ object Utils {
                                                 DialogUtils.showMessage(
                                                     activity,
                                                     successRenameToast
+                                                )
+                                                TaskAlarmReceiver().scheduleNotification(
+                                                    context,
+                                                    item.id,
+                                                    item.name,
+                                                    "Menos de uma hora para ser concluída",
+                                                    DateUtils.minusHour(
+                                                        item.previsionDate,
+                                                        item.previsionHour,
+                                                        1
+                                                    ),
+                                                    "hour"
+                                                )
+                                                TaskAlarmReceiver().scheduleNotification(
+                                                    context,
+                                                    item.id,
+                                                    item.name,
+                                                    "Menos de um dia para ser concluída",
+                                                    DateUtils.minusDay(
+                                                        item.previsionDate,
+                                                        item.previsionHour,
+                                                        1
+                                                    ),
+                                                    "day"
                                                 )
                                             }
                                         }
@@ -366,12 +403,15 @@ object Utils {
                                     val itemNameDelete = item.name
                                     AlertDialog.Builder(context)
                                         .setTitle(context.getString(R.string.delete_dialog))
+                                        .setCancelable(false)
                                         .setMessage(
                                             context.getString(R.string.confirm_delete_dialog) +
                                                     itemNameDelete +
                                                     context.getString(R.string.question_mark)
                                         )
                                         .setPositiveButton(context.getString(R.string.delete_dialog)) { _, _ ->
+                                            TaskFragment().cancelAllTaskNotifications(context, item)
+
                                             val index = list.indexOfFirst { it.id == item.id }
                                             if (index != -1) {
                                                 list.removeAt(index)
@@ -394,9 +434,16 @@ object Utils {
                                 }
 
                                 2 -> {
-                                    item.finishDate = date().fullDate
-                                    item.previsionDate = ""
-                                    item.previsionHour = ""
+                                    taskViewModel.task.value?.let { task -> 
+                                        val previsionDate = task.previsionDate
+                                        val previsionHour = task.previsionHour
+
+                                        TaskFragment().cancelAllTaskNotifications(context, item)
+
+                                        item.finishDate = DateUtils.date(0).fullDate
+                                        item.previsionDate = previsionDate
+                                        item.previsionHour = previsionHour
+                                    }
 
                                     recycler.adapter?.notifyItemChanged(position)
 
@@ -404,6 +451,7 @@ object Utils {
                                     user?.let {
                                         JsonStorageManager.saveUser(activity, it)
                                     }
+                                    DialogUtils.showMessage(context, "Tarefa concluída")
                                 }
                             }
                         }

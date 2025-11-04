@@ -20,6 +20,7 @@ import com.devminds.casasync.R
 import com.devminds.casasync.TransitionType
 import com.devminds.casasync.parts.House
 import com.devminds.casasync.parts.User
+import com.devminds.casasync.utils.DialogUtils
 import com.devminds.casasync.utils.JsonStorageManager
 import com.devminds.casasync.utils.Utils
 import com.devminds.casasync.views.UserViewModel
@@ -117,20 +118,14 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
             val input = dialogView.findViewById<EditText>(R.id.inputHouse)
 
             // teclado com delay
-            input.postDelayed({
-                input.requestFocus() // traz o foco
-
-                // levanta o teclado
-                val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.showSoftInput(input, InputMethodManager.SHOW_IMPLICIT)
-                input.setSelection(0) // texto selecionado
-            },200)
+            delayEditText(input, context)
 
             // diálogo para criar uma nova casa
             val dialog = AlertDialog.Builder(ContextThemeWrapper(context, R.style.CustomDialog))
                 .setView(dialogView)
                 .setPositiveButton(getString(R.string.button_add), null)
                 .setNegativeButton(getString(R.string.button_cancel), null)
+                .setCancelable(false)
                 .create()
             dialog.show()
 
@@ -155,6 +150,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
                         userViewModel.persistUser(context, userViewModel.user.value)
 
                         dialog.dismiss()
+                        DialogUtils.showMessage(context, "Casa criada")
                     } else {
                         input.error = context.getString(R.string.invalid_house_name)
                     }

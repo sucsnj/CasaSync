@@ -3,15 +3,16 @@ package com.devminds.casasync.utils
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
+import androidx.biometric.BiometricPrompt
 
-class Biometric {
+class Biometric : BiometricPrompt.AuthenticationCallback(){
 
-    // cria um pega o arquivo da lista
+    // cria ou acessa o arquivo xml da lista da biometria
     fun sharedPreferences(context: Context): SharedPreferences {
         return context.getSharedPreferences("biometric_prefs", Context.MODE_PRIVATE)
     }
 
-    // cria uma lista de usuários que usaram a autenticação biométrica
+    // adiciona o usuário a lista da biometria
     fun saveBiometricAuthUser(context: Context, userId: String) {
         // o arquivo.xml com a lista
         val sharedPref = sharedPreferences(context)
@@ -27,14 +28,14 @@ class Biometric {
         sharedPref.edit { putStringSet("biometricUsers", copySet) }
     }
 
-    // pega a lista no arquivo.xml
+    // retorna a lista no arquivo.xml com os usuários da biometria
     fun getBiometricAuthUsers(context: Context): Set<String> {
         val sharedPref = sharedPreferences(context)
         return sharedPref.getStringSet("biometricUsers", emptySet()) ?: emptySet()
     }
 
     // grava o ultimo usuário logado na lista
-    fun lastLastLoggedUser(context: Context, userId: String) {
+    fun lastLoggedUser(context: Context, userId: String) {
         val sharedPref = sharedPreferences(context)
         sharedPref.edit { putString("lastLoggedUser", userId) }
     }

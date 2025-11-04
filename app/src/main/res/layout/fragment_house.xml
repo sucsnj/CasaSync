@@ -32,7 +32,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
                 android:text="Tarefa"
-                android:textSize="30sp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:textSize="28sp"
                 android:textStyle="bold" />
 
             <TextView

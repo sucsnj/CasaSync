@@ -1,11 +1,12 @@
 package com.devminds.casasync.fragments
 
+import android.app.Activity
+import android.content.Context
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -15,6 +16,12 @@ import com.devminds.casasync.R
 import com.devminds.casasync.TransitionType
 import com.devminds.casasync.parts.User
 import com.devminds.casasync.views.UserViewModel
+import android.widget.LinearLayout
+import androidx.fragment.app.FragmentActivity
+import com.devminds.casasync.utils.Biometric
+import com.devminds.casasync.utils.BiometricAuthManager
+import com.devminds.casasync.utils.DialogUtils
+import com.devminds.casasync.utils.JsonStorageManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -41,6 +48,42 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
     private lateinit var btnLogin: TextView
     private lateinit var btnCreateAccount: TextView
     private lateinit var btnForgotPassword: TextView
+    private lateinit var btnBiometricLogin: LinearLayout
+
+    private fun loginWithUserId(userId: String) {
+        val userFound = JsonStorageManager.getUserById(requireContext(), userId)
+
+        if (userFound != null) {
+            userViewModel.setUser(userFound)
+
+            val intent = Intent(requireContext(), HomeActivity::class.java)
+            intent.putExtra("userId", userFound.id)
+            startActivity(intent)
+            requireActivity().finish()
+        } else {
+            DialogUtils.showMessage(requireContext(), getString(R.string.login_error_message))
+        }
+    }
+
+    // chama o menu de biometria
+    private fun biometricCaller(context: Context, delay: Long) {
+        // delay para chamar a biometria
+        Handler(Looper.getMainLooper()).postDelayed({
+            // chama a biometria
+            if (BiometricAuthManager.canUseBiometric(context)) { // se puder usar biometria, então...
+                BiometricAuthManager.tryBiometricLogin(
+                    context,
+                    (context as? Activity ?: return@postDelayed) as FragmentActivity,
+                    onSuccess = { userId ->
+                        loginWithUserId(userId)
+                    },
+                    onError = { errorMessage ->
+                        DialogUtils.showMessage(context, errorMessage)
+                    }
+                )
+            }
+        }, delay)
+    }
 
     // Lançador para o resultado da tela de login do Google
     private val googleSignInLauncher = registerForActivityResult(
@@ -64,6 +107,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         clearNavHistory()
+        biometricCaller(requireActivity(), 800)
         setupFirebaseAndGoogle()
         initializeUI(view)
         setupClickListeners()
@@ -81,6 +125,8 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
     private fun initializeUI(view: View) {
         txtLoginPrompt = view.findViewById(R.id.txtLoginPrompt)
         txtPasswordPrompt = view.findViewById(R.id.txtPasswordPrompt)
+
+        // botão de login com google
         btnGoogleLogin = view.findViewById(R.id.btnGoogleLogin)
         btnLogin = view.findViewById(R.id.btnLogin)
         btnCreateAccount = view.findViewById(R.id.btnCreatAccount)
@@ -94,16 +140,61 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
             googleSignInLauncher.launch(signInIntent)
         }
 
+
+        // botão de login
+        btnLogin = view.findViewById(R.id.btnLogin)
         btnLogin.setOnClickListener {
-            Toast.makeText(requireContext(), "Login tradicional a ser implementado.", Toast.LENGTH_LONG).show()
+
+            // transforma os dados em string
+            val login = txtLoginPrompt.text.toString()
+            val password = txtPasswordPrompt.text.toString()
+
+            // se estiver tudo preenchido
+            if (login.isNotEmpty() && password.isNotEmpty()) {
+
+                // carrega o usuário do json
+                val userFound = JsonStorageManager.authenticateUser(context, login, password)
+
+                // se o usuário for encontrado
+                if (userFound != null) {
+                    DialogUtils.dismissActiveBanner() // elimina qualquer banner ativo
+
+                    userViewModel.setUser(userFound)
+
+                    val intent = Intent(context, HomeActivity::class.java)
+                    intent.putExtra("userId", userFound.id)
+                    startActivity(intent)
+                    requireActivity().finish()
+
+                    // adiciona o usuário a lista da biometria
+                    val biometric = Biometric()
+                    biometric.saveBiometricAuthUser(requireContext(), userFound.id)
+                    biometric.lastLoggedUser(requireContext(), userFound.id)
+
+                } else {
+                    DialogUtils.showMessage(context, getString(R.string.login_error_message))
+                }
+            } else {
+                DialogUtils.showMessage(context, getString(R.string.login_empty_message))
+            }
         }
 
+        // botão de criar conta
+        btnCreateAccount = view.findViewById(R.id.btnCreatAccount)
         btnCreateAccount.setOnClickListener {
-            replaceFragment(CadastroFragment(), TransitionType.SLIDE)
+            replaceFragment( CadastroFragment(), TransitionType.SLIDE)
         }
 
+        // botão de recuperar senha
+        btnForgotPassword = view.findViewById(R.id.txtForgotPassword)
         btnForgotPassword.setOnClickListener {
-            replaceFragment(RecoveryFragment(), TransitionType.SLIDE)
+            replaceFragment( RecoveryFragment(), TransitionType.SLIDE)
+        }
+
+        // botão para biometria
+        btnBiometricLogin = view.findViewById(R.id.btnBiometricLogin)
+        btnBiometricLogin.setOnClickListener {
+            biometricCaller(context, 100)
         }
     }
 
@@ -161,8 +252,3 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         requireActivity().finish()
     }
 }
-
-
-
-
-

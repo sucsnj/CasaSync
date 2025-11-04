@@ -13,7 +13,7 @@
         android:gravity="center"
         android:orientation="vertical"
         android:padding="28dp"
-        android:layout_marginTop="70dp">
+        android:layout_marginTop="20dp">
 
         <ImageView
             android:layout_width="160dp"
@@ -81,8 +81,8 @@
             android:id="@+id/txtOr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
             android:text="@string/text_or"
             android:textSize="14sp" />
             <!--logar com o google-->
@@ -109,8 +109,7 @@
                     android:layout_height="16dp"
                     android:layout_marginEnd="8dp"
                     android:src="@drawable/ico_google16"
-                    android:contentDescription="@string/image_logo_google_description"
-                    />
+                    android:contentDescription="@string/image_logo_google_description" />
 
                 <TextView
                     android:id="@+id/btnGoogleLoginText"
@@ -124,17 +123,15 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-        >
+            android:orientation="horizontal" >
             <TextView
                 android:id="@+id/txtCreatAccount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="20dp"
                 android:gravity="center"
                 android:text="@string/new_account_text"
                 android:textSize="14sp" />
@@ -143,13 +140,38 @@
                 android:id="@+id/btnCreatAccount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="20dp"
                 android:paddingStart="2dp"
                 android:textStyle="bold"
                 android:gravity="center"
                 android:textColor="@color/azul_escuro"
                 android:text="@string/new_account_button"
                 android:textSize="15sp" />
+        </LinearLayout>
+
+        <!-- botão da biometria -->
+        <LinearLayout
+            android:id="@+id/btnBiometricLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="35dp"
+            android:gravity="bottom|center_horizontal"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <ImageView
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:contentDescription="Imagem da Biometria"
+                android:src="@drawable/img_biometric"
+                app:tint="@color/cinza_claro" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Entrar com biometria"
+                android:textStyle="bold"
+                android:textSize="14sp" />
         </LinearLayout>
 
         <!-- Este LinearLayout contém um problema com a imagem muito grande
@@ -178,6 +200,5 @@
                 android:textSize="11sp" />
 
         </LinearLayout>
-
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

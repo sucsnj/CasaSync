@@ -33,7 +33,7 @@ class UserViewModel : ViewModel() {
             JsonStorageManager.saveUser(context, it)
 
             // atualiza o firestore
-            FirestoreHelper.syncUserToFirestore(it)
+            //FirestoreHelper.syncUserToFirestore(it)
         }
     }
 

@@ -66,4 +66,13 @@ object JsonStorageManager {
             loadUser(context, it.id)
         }
     }
+
+    // retorna o Id do usuário que acabou de logar
+    fun getUserById(context: Context, userId: String): User? {
+        val index = getUserIndex(context)
+        val match = index.find { it.id == userId }
+        return match?.let {
+            loadUser(context, it.id)
+        }
+    }
 }

@@ -5,7 +5,6 @@ import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
-import android.view.inputmethod.InputMethodManager
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.LinearLayout
@@ -14,20 +13,18 @@ import androidx.fragment.app.activityViewModels
 import com.devminds.casasync.R
 import com.devminds.casasync.TransitionType
 import com.devminds.casasync.parts.Task
-import com.devminds.casasync.parts.date
-import com.devminds.casasync.parts.datePicker
-import com.devminds.casasync.parts.hourPicker
 import com.devminds.casasync.views.DependentViewModel
 import com.devminds.casasync.views.TaskViewModel
 import com.devminds.casasync.views.UserViewModel
 import com.google.android.material.appbar.MaterialToolbar
-import com.google.android.material.datepicker.MaterialDatePicker
-import com.google.android.material.timepicker.MaterialTimePicker
-import com.google.android.material.timepicker.TimeFormat
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Locale
+import com.devminds.casasync.utils.DialogUtils
+import com.devminds.casasync.utils.TaskAlarmReceiver
+import com.devminds.casasync.utils.DatePickers
+import com.devminds.casasync.utils.DateUtils
 
 class TaskFragment : BaseFragment(R.layout.fragment_task) {
 
@@ -47,17 +44,70 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
     private lateinit var startDate: TextView
     private lateinit var finishDate: TextView
     private lateinit var checker: CheckBox
+    private lateinit var btnSaveTask: TextView
+
+    // cancela notificações anteriores
+    fun cancelAllTaskNotifications(context: Context, task: Task) {
+        TaskAlarmReceiver().cancelScheduleNotification(
+            context, task.id, "hour", task.name, "Menos de uma hora para ser concluída")
+        TaskAlarmReceiver().cancelScheduleNotification(
+            context, task.id, "day", task.name, "Menos de um dia para ser concluída")
+    }
+
+    fun scheduleTaskNotification(context: Context, viewModel: TaskViewModel) {
+        viewModel.task.value?.let { task ->
+
+            if (task.finishDate == null && task.previsionHour != null) {
+                val formatter = DateUtils.formatter(task.previsionDate, task.previsionHour)
+                val prevMillis = DateUtils.prevDateMillis(formatter)
+
+                if (prevMillis > System.currentTimeMillis()) {
+                    // notifica 1 hora antes da conclusão prevista
+                    TaskAlarmReceiver().scheduleNotification(
+                        context,
+                        task.id,
+                        task.name,
+                        "Menos de uma hora para ser concluída",
+                        DateUtils.minusHour(
+                            task.previsionDate,
+                            task.previsionHour,
+                            1
+                        ),
+                        "hour"
+                    )
+
+                    // notifica 1 dia antes da conclusão prevista
+                    TaskAlarmReceiver().scheduleNotification(
+                        context,
+                        task.id,
+                        task.name,
+                        "Menos de um dia para ser concluída",
+                        DateUtils.minusDay(
+                            task.previsionDate,
+                            task.previsionHour,
+                            1
+                        ),
+                        "day"
+                    )
+                }
+            }
+        }
+    }
 
     private fun saveTask(context: Context, item: String, itemValue: String?) {
-        taskViewModel.task.value?.let {
+        taskViewModel.task.value?.let { task ->
             when (item) {
-                "description" -> itemValue?.let { value -> it.description = value }
-                "previsionDate" -> itemValue?.let { value -> it.previsionDate = value }
-                "previsionHour" -> itemValue?.let { value -> it.previsionHour = value }
-                "finishDate" -> it.finishDate = itemValue
+                "description" -> itemValue?.let { task.description = it }
+                "previsionDate" -> itemValue?.let { task.previsionDate = it }
+                "previsionHour" -> itemValue?.let { task.previsionHour = it }
+                "finishDate" -> task.finishDate = itemValue
             }
-            dependentViewModel.updateTask(it)
+
+            dependentViewModel.updateTask(task)
             userViewModel.persistUser(context, userViewModel.user.value)
+
+            // agenda notificações
+            scheduleTaskNotification(context, taskViewModel)
         }
     }
 
@@ -97,21 +147,14 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
                 }
 
                 // teclado com delay
-                editText.postDelayed({
-                    editText.requestFocus() // traz o foco
-
-                    // levanta o teclado
-                    val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                    imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
-                    editText.setSelection(0, editText.length()) // texto selecionado
-                },500)
-
+                delayEditText(editText, context)
                 layout.addView(editText)
 
                 // diálogo
                 AlertDialog.Builder(context)
                     .setTitle("Editar Descrição")
                     .setView(layout)
+                    .setCancelable(false)
                     .setNegativeButton("Cancelar") { dialog, _ ->
                         dialog.dismiss()
                     }
@@ -134,7 +177,7 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
             // checkbox de conclusão (se comunica com a data de conclusão)
             checker.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
-                    val date = date().fullDate // data atual
+                    val date = DateUtils.date(0).fullDate // data atual
 
                     finishDate.text = date
                     checker.text = "Concluído" // muda o texto do checkbox
@@ -155,20 +198,20 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
             }
 
             startDate = view.findViewById(R.id.startDate)
-            startDate.text = task?.startDate ?: "Sem data"
-            previsionDate.setText(task?.previsionDate ?: "Sem data")
+            startDate.text = task?.startDate ?: "Não concluído"
+            previsionDate.setText(task?.previsionDate ?: "Não concluído")
             if (previsionDate.text.toString() == "") { // impede que hora seja escrito sem uma data
                 previsionHour.isEnabled = false
             }
             previsionHour.setText(task?.previsionHour ?: "Sem hora")
-            finishDate.text = task?.finishDate ?: "Sem data"
+            finishDate.text = task?.finishDate ?: "Não concluído"
             checker.isChecked = task?.finishDate != null
         }
 
         // data de conclusão prevista
         previsionDate = view.findViewById(R.id.previsionDate)
         previsionDate.setOnClickListener {
-            val datePicker = datePicker("Previsão da data de conclusão")
+            val datePicker = DatePickers.datePicker("Previsão da data de conclusão")
 
             // transformar data em string
             datePicker.addOnPositiveButtonClickListener { selection ->
@@ -188,7 +231,7 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
         // hora de conclusão prevista
         previsionHour = view.findViewById(R.id.previsionHour)
         previsionHour.setOnClickListener {
-            val hourPicker = hourPicker("Previsão da hora de conclusão")
+            val hourPicker = DatePickers.hourPicker("Previsão da hora de conclusão")
 
             hourPicker.addOnPositiveButtonClickListener {
                 val hour = hourPicker.hour
@@ -232,6 +275,16 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
 
             currentTask = dependent?.tasks?.find { it.id == taskId } // tarefa selecionada (para que? TODO)
             currentTask?.let { taskViewModel.setTask(it) } // atualiza a tarefa no ViewModel
+        }
+
+        // botão de salvar
+        btnSaveTask = view.findViewById(R.id.btnSaveTask)
+        btnSaveTask.setOnClickListener {
+            val task = taskViewModel.task.value
+            if (task != null) {
+                userViewModel.persistUser(context, userViewModel.user.value)
+                DialogUtils.showMessage(context, "Tarefa salva com sucesso!")
+            }
         }
     }
 }

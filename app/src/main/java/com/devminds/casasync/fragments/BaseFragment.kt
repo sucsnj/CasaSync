@@ -10,6 +10,9 @@ import androidx.fragment.app.FragmentManager
 import com.devminds.casasync.R
 import com.devminds.casasync.TransitionType
 import com.devminds.casasync.setCustomTransition
+import android.widget.EditText
+import android.content.Context
+import android.view.inputmethod.InputMethodManager
 
 // passa um fragmento como parâmetro para a classe
 abstract class BaseFragment(@param:LayoutRes private val layoutRes: Int) : Fragment() {
@@ -33,5 +36,17 @@ abstract class BaseFragment(@param:LayoutRes private val layoutRes: Int) : Fragm
     // limpa o histórico de navegação
     fun clearNavHistory() {
         requireActivity().supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+    }
+
+    // teclado com delay num edittext
+    fun delayEditText(editText: EditText, context: Context, delay: Long = 500) {
+        editText.postDelayed({
+            editText.requestFocus() // traz o foco
+
+            // levanta o teclado
+            val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
+            editText.setSelection(0, editText.length()) // texto selecionado
+        }, delay)
     }
 }

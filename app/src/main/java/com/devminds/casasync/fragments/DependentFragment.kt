@@ -1,6 +1,5 @@
 package com.devminds.casasync.fragments
 
-import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
@@ -18,24 +17,26 @@ import com.devminds.casasync.parts.Dependent
 import com.devminds.casasync.parts.Task
 import com.devminds.casasync.utils.Utils
 import com.devminds.casasync.views.DependentViewModel
+import com.devminds.casasync.views.TaskViewModel
 import com.devminds.casasync.views.UserViewModel
 import com.google.android.material.appbar.MaterialToolbar
 import java.time.format.DateTimeFormatter
 import java.util.UUID
 import android.text.InputType
-import android.view.inputmethod.InputMethodManager
-import com.devminds.casasync.parts.date
-import com.devminds.casasync.parts.datePicker
-import com.devminds.casasync.parts.hourPicker
+import android.util.Log
 import java.time.Instant
 import java.time.ZoneId
 import java.util.Locale
+import com.devminds.casasync.utils.DatePickers
+import com.devminds.casasync.utils.DateUtils
+import com.devminds.casasync.utils.DialogUtils
 
 class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
 
     private var dependentId: String? = null
     private val userViewModel: UserViewModel by activityViewModels()
     private val dependentViewModel: DependentViewModel by activityViewModels()
+    private val taskViewModel: TaskViewModel by activityViewModels()
     private var currentDependent: Dependent? = null
     private val taskList: MutableList<Task>
         get() = currentDependent?.tasks ?: mutableListOf()
@@ -113,6 +114,7 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
                 itemOptions = getString(R.string.task_options),
                 successRenameToast = getString(R.string.rename_success_task_toast),
                 userViewModel = userViewModel,
+                taskViewModel = taskViewModel, // *insere data e hora quando a tarefa é concluída via menu de contexto
                 context = context
             )
             
@@ -138,14 +140,7 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
             }
 
             // teclado com delay
-            inputName.postDelayed({
-                inputName.requestFocus() // traz o foco
-
-                // levanta o teclado
-                val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.showSoftInput(inputName, InputMethodManager.SHOW_IMPLICIT)
-                inputName.setSelection(0) // texto selecionado
-            },200)
+            delayEditText(inputName, context)
 
             val inputDescription = EditText(context).apply {
                 hint = context.getString(R.string.task_description)
@@ -159,7 +154,7 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
                 // quando inputPrevisionDate for clicado, exibe o diálogo de seleção de data
                 setOnClickListener {
                     // MaterialDatePicker é um diálogo de seleção de data
-                    val datePicker = datePicker("Selecione a data prevista de conclusão")
+                    val datePicker = DatePickers.datePicker("Selecione a data prevista de conclusão")
 
                     // quando o usuário clicar em OK, o valor é salvo no campo inputPrevisionDate
                     datePicker.addOnPositiveButtonClickListener { selection ->
@@ -183,7 +178,7 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
 
                 setOnClickListener {
                     // MaterialTimePicker é um diálogo de seleção de hora
-                    val hourPicker = hourPicker("Selecione a hora prevista de conclusão")
+                    val hourPicker = DatePickers.hourPicker("Selecione a hora prevista de conclusão")
 
                     hourPicker.addOnPositiveButtonClickListener {
                         val hour = hourPicker.hour
@@ -205,6 +200,7 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
             AlertDialog.Builder(context)
                 .setTitle(getString(R.string.add_task_dialog))
                 .setView(layout) // layout criado acima
+                .setCancelable(false)
                 .setPositiveButton(getString(R.string.button_add)) { _, _ ->
                     val name = inputName.text.toString().trim()
                     val description = inputDescription.text.toString().trim()
@@ -222,7 +218,7 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
                             id = UUID.randomUUID().toString(),
                             name = name,
                             description = description,
-                            startDate = date().fullDate, // data atual
+                            startDate = DateUtils.date(0).fullDate, // data atual
                             previsionDate = previsionDate,
                             previsionHour = previsionHour,
                             finishDate = null // inicia 'em progresso'
@@ -231,9 +227,15 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
                         currentDependent?.tasks?.add(newTask)
                         adapter.notifyItemInserted(taskList.size - 1)
 
+                        // agenda notificação
+                        taskViewModel.setTask(newTask)
+                        TaskFragment().scheduleTaskNotification(context, taskViewModel)
+                        Log.d("TaskFragment", "scheduleTaskNotification called")
+
                         // persiste o usuário
                         userViewModel.persistUser(context, userViewModel.user.value)
                     }
+                    DialogUtils.showMessage(context, "Tarefa criada")
                 }
                 .setNegativeButton(getString(R.string.button_cancel), null)
                 .show()

@@ -3,17 +3,12 @@ package com.devminds.casasync
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
-import com.google.android.material.navigation.NavigationView
 
 class HomeActivity : AppCompatActivity() {
-
-    // menu lateral
-    private lateinit var drawerLayout: DrawerLayout
-    private lateinit var navView: NavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,20 +20,8 @@ class HomeActivity : AppCompatActivity() {
             insets
         }
 
-        // menu lateral
-//        drawerLayout = findViewById(R.id.drawer_layout)
-//        navView = findViewById(R.id.nav_view)
-//
-//        navView.setNavigationItemSelectedListener { menuItem ->
-//            when (menuItem.itemId) {
-//                // R.id.nav_home -> replaceFragment(HomeFragment())
-//                // R.id.nav_settings_app -> replaceFragment(SettingsAppFragment())
-//                // R.id.nav_settings_user -> replaceFragment(SettingsUserFragment())
-//                R.id.nav_about -> replaceFragment(AboutFragment())
-//            }
-//            drawerLayout.closeDrawer(GravityCompat.START)
-//            true
-//        }
+        // mudar cor da status bar (migrar para compose TODO)
+        window.statusBarColor = ContextCompat.getColor(this, R.color.entalhe)
     }
 
     private fun replaceFragment(fragment: Fragment, transitionType: TransitionType) {
