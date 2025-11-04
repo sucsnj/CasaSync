@@ -31,6 +31,8 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import android.os.Handler
+import android.os.Looper
 
 class LoginFragment : BaseFragment(R.layout.fragment_login) {
 
@@ -104,15 +106,6 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        clearNavHistory()
-        biometricCaller(requireActivity(), 800)
-        setupFirebaseAndGoogle()
-        initializeUI(view)
-        setupClickListeners()
-    }
-
     private fun setupFirebaseAndGoogle() {
         firebaseAuth = Firebase.auth
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -131,86 +124,6 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         btnLogin = view.findViewById(R.id.btnLogin)
         btnCreateAccount = view.findViewById(R.id.btnCreatAccount)
         btnForgotPassword = view.findViewById(R.id.txtForgotPassword)
-    }
-
-    private fun setupClickListeners() {
-        btnGoogleLogin.setOnClickListener {
-            Log.d(TAG, "Iniciando fluxo de login com Google...")
-            val signInIntent = googleSignInClient.signInIntent
-            googleSignInLauncher.launch(signInIntent)
-        }
-
-
-        // botão de login
-        btnLogin = view.findViewById(R.id.btnLogin)
-        btnLogin.setOnClickListener {
-
-            // transforma os dados em string
-            val login = txtLoginPrompt.text.toString()
-            val password = txtPasswordPrompt.text.toString()
-
-            // se estiver tudo preenchido
-            if (login.isNotEmpty() && password.isNotEmpty()) {
-
-                // carrega o usuário do json
-                val userFound = JsonStorageManager.authenticateUser(context, login, password)
-
-                // se o usuário for encontrado
-                if (userFound != null) {
-                    DialogUtils.dismissActiveBanner() // elimina qualquer banner ativo
-
-                    userViewModel.setUser(userFound)
-
-                    val intent = Intent(context, HomeActivity::class.java)
-                    intent.putExtra("userId", userFound.id)
-                    startActivity(intent)
-                    requireActivity().finish()
-
-                    // adiciona o usuário a lista da biometria
-                    val biometric = Biometric()
-                    biometric.saveBiometricAuthUser(requireContext(), userFound.id)
-                    biometric.lastLoggedUser(requireContext(), userFound.id)
-
-                } else {
-                    DialogUtils.showMessage(context, getString(R.string.login_error_message))
-                }
-            } else {
-                DialogUtils.showMessage(context, getString(R.string.login_empty_message))
-            }
-        }
-
-        // botão de criar conta
-        btnCreateAccount = view.findViewById(R.id.btnCreatAccount)
-        btnCreateAccount.setOnClickListener {
-            replaceFragment( CadastroFragment(), TransitionType.SLIDE)
-        }
-
-        // botão de recuperar senha
-        btnForgotPassword = view.findViewById(R.id.txtForgotPassword)
-        btnForgotPassword.setOnClickListener {
-            replaceFragment( RecoveryFragment(), TransitionType.SLIDE)
-        }
-
-        // botão para biometria
-        btnBiometricLogin = view.findViewById(R.id.btnBiometricLogin)
-        btnBiometricLogin.setOnClickListener {
-            biometricCaller(context, 100)
-        }
-    }
-
-    private fun firebaseAuthWithGoogle(idToken: String) {
-        val credential = GoogleAuthProvider.getCredential(idToken, null)
-        firebaseAuth.signInWithCredential(credential)
-            .addOnCompleteListener(requireActivity()) { task ->
-                if (task.isSuccessful) {
-                    val firebaseUser = firebaseAuth.currentUser
-                    Log.d(TAG, "Sucesso ao autenticar no Firebase: ${firebaseUser?.displayName}")
-                    checkAndSaveUserInFirestore(firebaseUser!!)
-                } else {
-                    Log.w(TAG, "Falha na autenticação com Firebase", task.exception)
-                    Toast.makeText(requireContext(), "Falha na autenticação.", Toast.LENGTH_SHORT).show()
-                }
-            }
     }
 
     private fun checkAndSaveUserInFirestore(firebaseUser: com.google.firebase.auth.FirebaseUser) {
@@ -244,11 +157,100 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         }
     }
 
+    private fun firebaseAuthWithGoogle(idToken: String) {
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
+        firebaseAuth.signInWithCredential(credential)
+            .addOnCompleteListener(requireActivity()) { task ->
+                if (task.isSuccessful) {
+                    val firebaseUser = firebaseAuth.currentUser
+                    Log.d(TAG, "Sucesso ao autenticar no Firebase: ${firebaseUser?.displayName}")
+                    checkAndSaveUserInFirestore(firebaseUser!!)
+                } else {
+                    Log.w(TAG, "Falha na autenticação com Firebase", task.exception)
+                    Toast.makeText(requireContext(), "Falha na autenticação.", Toast.LENGTH_SHORT).show()
+                }
+            }
+    }
+
     private fun navigateToHome(user: User) {
         userViewModel.setUser(user)
         val intent = Intent(requireContext(), HomeActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
         requireActivity().finish()
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val context = requireContext()
+
+        clearNavHistory()
+        biometricCaller(requireActivity(), 800)
+        setupFirebaseAndGoogle()
+        initializeUI(view)
+
+        btnGoogleLogin.setOnClickListener {
+            Log.d(TAG, "Iniciando fluxo de login com Google...")
+            val signInIntent = googleSignInClient.signInIntent
+            googleSignInLauncher.launch(signInIntent)
+        }
+
+
+        // botão de login
+        btnLogin = view.findViewById(R.id.btnLogin)
+        btnLogin.setOnClickListener {
+
+            // transforma os dados em string
+            val login = txtLoginPrompt.text.toString()
+            val password = txtPasswordPrompt.text.toString()
+
+            // se estiver tudo preenchido
+            if (login.isNotEmpty() && password.isNotEmpty()) {
+
+                // carrega o usuário do json
+                val userFound = JsonStorageManager.authenticateUser(requireContext(), login, password)
+
+                // se o usuário for encontrado
+                if (userFound != null) {
+                    DialogUtils.dismissActiveBanner() // elimina qualquer banner ativo
+
+                    userViewModel.setUser(userFound)
+
+                    val intent = Intent(context, HomeActivity::class.java)
+                    intent.putExtra("userId", userFound.id)
+                    startActivity(intent)
+                    requireActivity().finish()
+
+                    // adiciona o usuário a lista da biometria
+                    val biometric = Biometric()
+                    biometric.saveBiometricAuthUser(requireContext(), userFound.id)
+                    biometric.lastLoggedUser(requireContext(), userFound.id)
+
+                } else {
+                    DialogUtils.showMessage(requireContext(), getString(R.string.login_error_message))
+                }
+            } else {
+                DialogUtils.showMessage(context, getString(R.string.login_empty_message))
+            }
+        }
+
+        // botão de criar conta
+        btnCreateAccount = view.findViewById(R.id.btnCreatAccount)
+        btnCreateAccount.setOnClickListener {
+            replaceFragment( CadastroFragment(), TransitionType.SLIDE)
+        }
+
+        // botão de recuperar senha
+        btnForgotPassword = view.findViewById(R.id.txtForgotPassword)
+        btnForgotPassword.setOnClickListener {
+            replaceFragment( RecoveryFragment(), TransitionType.SLIDE)
+        }
+
+        // botão para biometria
+        btnBiometricLogin = view.findViewById(R.id.btnBiometricLogin)
+        btnBiometricLogin.setOnClickListener {
+            biometricCaller(context, 100)
+        }
     }
 }
