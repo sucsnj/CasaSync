@@ -1,6 +1,11 @@
 package com.devminds.casasync.fragments
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import android.util.Log
 import android.content.Context
+import android.widget.Toast
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -76,11 +81,36 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
         clearNavHistory()
         openUserPerfil()
 
+        // TODO
         // carrega o usuário com base no id
         user = JsonStorageManager.loadUser(context, userId())
         user?.let {
             userViewModel.setUser(it) // atualiza o usuário no ViewModel
         }
+
+        // val prefs = context.getSharedPreferences("user_data", Context.MODE_PRIVATE)
+        // val savedUserId = prefs.getString("last_user_id", null)
+        // val localUser = savedUserId?.let { JsonStorageManager.loadUser(context, it) }
+
+        // // carrega o usuário do google
+        // val account = GoogleSignIn.getLastSignedInAccount(context)
+
+        // val mergedUser = localUser?.copy(
+        //     id = account?.id ?: localUser.id,
+        //     name = account?.displayName ?: localUser.name,
+        //     login = account?.email ?: localUser.login
+        // ) ?: User(
+        //     id = account?.id ?: "",
+        //     name = account?.displayName ?: "Usuário",
+        //     login = account?.email ?: ""
+        // )
+
+        // userViewModel.setUser(mergedUser)
+        // userViewModel.persistUser(context, mergedUser)
+        // JsonStorageManager.saveUser(context, mergedUser)
+        // prefs.edit().putString("last_user_id", mergedUser.id).apply()
+        
+        // Toast.makeText(context, "Usuário Firebase: " + userViewModel.user.value?.name, Toast.LENGTH_SHORT).show()
 
         toolbar = view.findViewById(R.id.topBar)
         title = view.findViewById(R.id.title)
@@ -146,8 +176,15 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
                         userViewModel.user.value?.houses?.add(newHouse)
                         adapter.notifyItemInserted(houseList.size - 1)
 
+                        // TODO
                         // persiste o usuário
                         userViewModel.persistUser(context, userViewModel.user.value)
+
+                        // val db = FirebaseFirestore.getInstance()
+                        // val user = userViewModel.user.value
+                        // user?.let {
+                        //     db.collection("users").document(it.id).set(it)
+                        // }
 
                         dialog.dismiss()
                         DialogUtils.showMessage(context, "Casa criada")

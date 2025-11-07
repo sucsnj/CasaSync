@@ -1,5 +1,6 @@
 package com.devminds.casasync.fragments
 
+import com.google.firebase.firestore.FirebaseFirestore
 import android.content.Context
 import android.os.Bundle
 import android.view.Menu
@@ -146,6 +147,13 @@ class HouseFragment : BaseFragment(R.layout.fragment_house) {
                         user?.let {
                             JsonStorageManager.saveUser(context, it)
                         }
+
+                        // TODO
+                        // val user = userViewModel.user.value
+                        //     user?.let {
+                        //         userViewModel.persistUser(context, it) // salva no JSON
+                        //         FirebaseFirestore.getInstance().collection("users").document(it.id).set(it) // salva no Firestore
+                        // }
                     }
                     DialogUtils.showMessage(context, "Dependente adicionado")
                 }

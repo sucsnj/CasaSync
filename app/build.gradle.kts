@@ -44,11 +44,12 @@ android {
 
 dependencies {
 
+    implementation(libs.firebase.firestore.ktx)
     implementation(libs.firebase.common.ktx)
     implementation(libs.firebase.auth)
-    implementation (libs.firebase.auth.ktx)
-    implementation (libs.play.services.auth)
-    implementation (libs.firebase.core)
+    implementation(libs.firebase.auth.ktx)
+    implementation(libs.play.services.auth)
+    implementation(libs.firebase.core)
     implementation(libs.androidx.biometric)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
     implementation(libs.material.v1110)
