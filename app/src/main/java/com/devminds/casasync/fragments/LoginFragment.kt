@@ -112,17 +112,6 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
     }
 
-    private fun initializeUI(view: View) {
-        txtLoginPrompt = view.findViewById(R.id.txtLoginPrompt)
-        txtPasswordPrompt = view.findViewById(R.id.txtPasswordPrompt)
-
-        // botão de login com google
-        btnGoogleLogin = view.findViewById(R.id.btnGoogleLogin)
-        btnLogin = view.findViewById(R.id.btnLogin)
-        btnCreateAccount = view.findViewById(R.id.btnCreatAccount)
-        btnForgotPassword = view.findViewById(R.id.txtForgotPassword)
-    }
-
     private fun checkAndSaveUserInFirestore(firebaseUser: com.google.firebase.auth.FirebaseUser) {
         val db = FirebaseFirestore.getInstance()
         val userRef = db.collection("users").document(firebaseUser.uid)
@@ -182,11 +171,14 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
 
         val context = requireContext()
 
+        txtLoginPrompt = view.findViewById(R.id.txtLoginPrompt)
+        txtPasswordPrompt = view.findViewById(R.id.txtPasswordPrompt)
+
         clearNavHistory()
         biometricCaller(requireActivity(), 800)
         setupFirebaseAndGoogle()
-        initializeUI(view)
 
+        btnGoogleLogin = view.findViewById(R.id.btnGoogleLogin)
         btnGoogleLogin.setOnClickListener {
             Log.d(TAG, "Iniciando fluxo de login com Google...")
             val signInIntent = googleSignInClient.signInIntent
