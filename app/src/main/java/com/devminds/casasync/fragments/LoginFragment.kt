@@ -93,12 +93,14 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                     id = firebaseUser.uid,
                     name = firebaseUser.displayName ?: "Usuário",
                     login = firebaseUser.email ?: "",
-                    password = "" // Senha não é necessária
+                    password = "", // Senha não é necessária
+                    houses = mutableListOf()
                 )
                 userRef.set(newUser)
                     .addOnSuccessListener {
                         Log.d(TAG, "Novo usuário salvo no Firestore.")
                         navigateToHome(newUser)
+                        JsonStorageManager.saveUser(requireContext(), newUser)
                     }
                     .addOnFailureListener { e ->
                         Log.e(TAG, "Erro ao salvar novo usuário no Firestore", e)
@@ -107,6 +109,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                 Log.d(TAG, "Usuário já existe no Firestore.")
                 val existingUser = document.toObject(User::class.java)!!
                 navigateToHome(existingUser)
+                JsonStorageManager.saveUser(requireContext(), existingUser)
             }
         }.addOnFailureListener { e ->
             Log.e(TAG, "Erro ao buscar usuário no Firestore", e)
@@ -132,6 +135,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
     private fun navigateToHome(user: User) {
         userViewModel.setUser(user)
         val intent = Intent(requireContext(), HomeActivity::class.java)
+        intent.putExtra("userId", user.id)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
         requireActivity().finish()

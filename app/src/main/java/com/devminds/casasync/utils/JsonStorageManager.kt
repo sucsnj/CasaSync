@@ -1,6 +1,7 @@
 package com.devminds.casasync.utils
 
 import android.content.Context
+import android.util.Log
 import com.devminds.casasync.parts.User
 import com.devminds.casasync.parts.UserIndexEntry
 import com.google.gson.Gson
@@ -9,14 +10,23 @@ object JsonStorageManager {
 
     private const val INDEX_FILE = "users_index.json"
     fun saveUser(context: Context, user: User) {
-        val gson = Gson()
-        val jsonString = gson.toJson(user)
-        val fileName = "user_${user.id}.json"
-        context.openFileOutput(fileName, Context.MODE_PRIVATE).use {
-            it.write(jsonString.toByteArray())
+        try {
+            val gson = Gson()
+            val jsonString = gson.toJson(user)
+            val fileName = "user_${user.id}.json"
+
+            context.openFileOutput(fileName, Context.MODE_PRIVATE).use { outputStream ->
+                outputStream.write(jsonString.toByteArray(Charsets.UTF_8))
+            }
+
+            updateUserIndex(context, user)
+
+            Log.d("JsonStorageManager", "Usuário ${user.id} salvo com sucesso.")
+        } catch (e: Exception) {
+            Log.e("JsonStorageManager", "Erro ao salvar usuário ${user.id}", e)
         }
-        updateUserIndex(context, user)
     }
+
 
     fun loadUser(context: Context, userId: String): User? {
         return try {
