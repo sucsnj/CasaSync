@@ -32,6 +32,7 @@ import com.devminds.casasync.views.UserViewModel
 import com.google.android.material.appbar.MaterialToolbar
 import java.util.UUID
 import com.devminds.casasync.utils.PopupMenu
+import com.google.gson.Gson
 
 class HomeFragment : BaseFragment(R.layout.fragment_home) {
 
@@ -73,6 +74,12 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
         return userId
     }
 
+    private fun resolveUserId(): String {
+        return activity?.intent?.getStringExtra("userId")
+            ?: userViewModel.user.value?.id
+            ?: getString(R.string.devminds_text)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -81,11 +88,20 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
         clearNavHistory()
         openUserPerfil()
 
-        // carrega o usuário com base no id
-        user = JsonStorageManager.loadUser(context, userId())
+        val resolvedUserId = resolveUserId()
+        Log.d("HomeFragment", "Carregando usuário com ID: $resolvedUserId")
+
+        user = JsonStorageManager.loadUser(context, resolvedUserId)
         user?.let {
-            userViewModel.setUser(it) // atualiza o usuário no ViewModel
+            userViewModel.setUser(it)
         }
+
+
+        // carrega o usuário com base no id
+//        user = JsonStorageManager.loadUser(context, userId())
+//        user?.let {
+//            userViewModel.setUser(it) // atualiza o usuário no ViewModel
+//        }
 
         toolbar = view.findViewById(R.id.topBar)
         title = view.findViewById(R.id.title)

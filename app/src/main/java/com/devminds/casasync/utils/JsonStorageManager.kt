@@ -21,6 +21,7 @@ object JsonStorageManager {
 
             updateUserIndex(context, user)
 
+            Log.d("JsonStorageManager", "Usuário salvo: $jsonString")
             Log.d("JsonStorageManager", "Usuário ${user.id} salvo com sucesso.")
         } catch (e: Exception) {
             Log.e("JsonStorageManager", "Erro ao salvar usuário ${user.id}", e)

@@ -33,6 +33,7 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import com.google.gson.Gson
 
 class LoginFragment : BaseFragment(R.layout.fragment_login) {
     private val userViewModel: UserViewModel by activityViewModels()
@@ -101,15 +102,35 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                         Log.d(TAG, "Novo usuário salvo no Firestore.")
                         navigateToHome(newUser)
                         JsonStorageManager.saveUser(requireContext(), newUser)
+                        userViewModel.setUser(newUser)
+                        val json = Gson().toJson(newUser)
+                        Log.d("JsonStorageManager", "Usuário salvo: $json")
+
                     }
                     .addOnFailureListener { e ->
                         Log.e(TAG, "Erro ao salvar novo usuário no Firestore", e)
                     }
             } else {
                 Log.d(TAG, "Usuário já existe no Firestore.")
-                val existingUser = document.toObject(User::class.java)!!
-                navigateToHome(existingUser)
-                JsonStorageManager.saveUser(requireContext(), existingUser)
+
+                val localUser = JsonStorageManager.loadUser(requireContext(), firebaseUser.uid)
+                val firestoreUser = document.toObject(User::class.java)!!
+
+                val finalUser = if (localUser != null && localUser.houses.isNotEmpty()) {
+                    Log.d(TAG, "Usando usuário local com casas.")
+                    localUser
+                } else {
+                    Log.d(TAG, "Usando usuário do Firestore.")
+                    firestoreUser
+                }
+
+                navigateToHome(finalUser)
+                JsonStorageManager.saveUser(requireContext(), finalUser)
+                userViewModel.setUser(finalUser)
+
+                val json = Gson().toJson(finalUser)
+                Log.d("JsonStorageManager", "Usuário final usado: $json")
+
             }
         }.addOnFailureListener { e ->
             Log.e(TAG, "Erro ao buscar usuário no Firestore", e)
@@ -171,7 +192,6 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                     val result = credentialManager.getCredential(requireActivity(), request)
                     val credential = result.credential
 
-                    // CORREÇÃO PRINCIPAL: Use GoogleIdTokenCredential
                     // e o metodo de fábrica createFrom()
                     if (credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
                         val googleIdTokenCredential =

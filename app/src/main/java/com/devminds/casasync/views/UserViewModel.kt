@@ -1,6 +1,7 @@
 package com.devminds.casasync.views
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,6 +9,7 @@ import com.devminds.casasync.parts.House
 import com.devminds.casasync.parts.User
 import com.devminds.casasync.utils.JsonStorageManager
 import com.devminds.casasync.FirestoreHelper
+import com.google.gson.Gson
 
 class UserViewModel : ViewModel() {
     private val _user = MutableLiveData<User?>()
@@ -32,8 +34,11 @@ class UserViewModel : ViewModel() {
         user?.let {
             JsonStorageManager.saveUser(context, it)
 
+            val json = Gson().toJson(it)
+            Log.d("UserViewModel", "persistUser chamado com: $json")
+
             // atualiza o firestore
-            //FirestoreHelper.syncUserToFirestore(it)
+            FirestoreHelper.syncUserToFirestore(it)
         }
     }
 

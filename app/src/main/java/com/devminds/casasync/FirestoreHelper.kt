@@ -21,14 +21,14 @@ object FirestoreHelper {
         val db = FirebaseFirestore.getInstance()
         val user = hashMapOf("nome" to "Carlos", "cidade" to "Jaboatão")
 
-        db.collection("usuarios").add(user)
+        db.collection("users").add(user)
             .addOnSuccessListener { Log.d("Firestore", "Adicionado: ${it.id}") }
             .addOnFailureListener { Log.e("Firestore", "Erro: ", it) }
     }
 
     fun readUsers() {
         val db = FirebaseFirestore.getInstance()
-        db.collection("usuarios").get()
+        db.collection("users").get()
             .addOnSuccessListener { result ->
                 for (doc in result) {
                     Log.d("Firestore", "${doc.id} => ${doc.data}")
@@ -39,7 +39,7 @@ object FirestoreHelper {
 
     fun syncUserToFirestore(user: User) {
         val db = FirebaseFirestore.getInstance()
-        val userDoc = db.collection("usuarios").document(user.id)
+        val userDoc = db.collection("users").document(user.id)
 
         // Salva dados básicos do usuário
         val userMap = mapOf(
