@@ -2,14 +2,12 @@ package com.devminds.casasync.fragments
 
 import android.app.Activity
 import android.content.Context
-import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
 import com.devminds.casasync.HomeActivity
 import com.devminds.casasync.R
@@ -24,21 +22,21 @@ import com.devminds.casasync.utils.DialogUtils
 import com.devminds.casasync.utils.JsonStorageManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
 import com.google.firebase.firestore.FirebaseFirestore
 import android.os.Handler
 import android.os.Looper
+import androidx.credentials.CredentialManager
+import androidx.credentials.GetCredentialRequest
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 
 class LoginFragment : BaseFragment(R.layout.fragment_login) {
-
     private val userViewModel: UserViewModel by activityViewModels()
 
-    private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var firebaseAuth: FirebaseAuth
     private val TAG = "GoogleSignIn"
     private lateinit var txtLoginPrompt: TextView
@@ -84,34 +82,6 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         }, delay)
     }
 
-    // Lançador para o resultado da tela de login do Google
-    private val googleSignInLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        if (result.resultCode == RESULT_OK) {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
-            try {
-                val account = task.getResult(ApiException::class.java)!!
-                Log.d(TAG, "Sucesso no login com Google. Autenticando com Firebase...")
-                firebaseAuthWithGoogle(account.idToken!!)
-            } catch (e: ApiException) {
-                Log.w(TAG, "Falha no login com Google: ${e.statusCode}", e)
-                Toast.makeText(requireContext(), "Falha ao autenticar com Google.", Toast.LENGTH_SHORT).show()
-            }
-        } else {
-            Log.w(TAG, "Login com Google cancelado ou falhou. Código: ${result.resultCode}")
-        }
-    }
-
-    private fun setupFirebaseAndGoogle() {
-        firebaseAuth = Firebase.auth
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))
-            .requestEmail()
-            .build()
-        googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
-    }
-
     private fun checkAndSaveUserInFirestore(firebaseUser: com.google.firebase.auth.FirebaseUser) {
         val db = FirebaseFirestore.getInstance()
         val userRef = db.collection("users").document(firebaseUser.uid)
@@ -153,7 +123,8 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                     checkAndSaveUserInFirestore(firebaseUser!!)
                 } else {
                     Log.w(TAG, "Falha na autenticação com Firebase", task.exception)
-                    Toast.makeText(requireContext(), "Falha na autenticação.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Falha na autenticação.", Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
     }
@@ -170,21 +141,62 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         super.onViewCreated(view, savedInstanceState)
 
         val context = requireContext()
+        firebaseAuth = Firebase.auth
 
         txtLoginPrompt = view.findViewById(R.id.txtLoginPrompt)
         txtPasswordPrompt = view.findViewById(R.id.txtPasswordPrompt)
 
         clearNavHistory()
         biometricCaller(requireActivity(), 800)
-        setupFirebaseAndGoogle()
 
         btnGoogleLogin = view.findViewById(R.id.btnGoogleLogin)
         btnGoogleLogin.setOnClickListener {
-            Log.d(TAG, "Iniciando fluxo de login com Google...")
-            val signInIntent = googleSignInClient.signInIntent
-            googleSignInLauncher.launch(signInIntent)
-        }
+            val credentialManager = CredentialManager.create(requireContext())
 
+            val googleIdOption = GetGoogleIdOption.Builder()
+                .setFilterByAuthorizedAccounts(false)
+                .setServerClientId(getString(R.string.default_web_client_id))
+                .build()
+
+            val request = GetCredentialRequest.Builder()
+                .addCredentialOption(googleIdOption)
+                .build()
+
+            lifecycleScope.launch {
+                try {
+                    val result = credentialManager.getCredential(requireActivity(), request)
+                    val credential = result.credential
+
+                    // CORREÇÃO PRINCIPAL: Use GoogleIdTokenCredential
+                    // e o metodo de fábrica createFrom()
+                    if (credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
+                        val googleIdTokenCredential =
+                            GoogleIdTokenCredential.createFrom(credential.data)
+                        val idToken = googleIdTokenCredential.idToken
+
+                        Log.d(TAG, "Token do Google obtido com sucesso")
+                        firebaseAuthWithGoogle(idToken)
+
+                    } else {
+                        // Lida com outros tipos de credenciais ou erros, se necessário
+                        Log.w(TAG, "Tipo de credencial inesperado: ${credential.type}")
+                        Toast.makeText(
+                            requireContext(),
+                            "Erro: Tipo de credencial inesperado.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
+                } catch (e: Exception) {
+                    Log.e(TAG, "Erro na autenticação com CredentialManager", e)
+                    Toast.makeText(
+                        requireContext(),
+                        "Erro na autenticação com Google.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
 
         // botão de login
         btnLogin = view.findViewById(R.id.btnLogin)
@@ -198,7 +210,8 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
             if (login.isNotEmpty() && password.isNotEmpty()) {
 
                 // carrega o usuário do json
-                val userFound = JsonStorageManager.authenticateUser(requireContext(), login, password)
+                val userFound =
+                    JsonStorageManager.authenticateUser(requireContext(), login, password)
 
                 // se o usuário for encontrado
                 if (userFound != null) {
@@ -217,7 +230,10 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                     biometric.lastLoggedUser(requireContext(), userFound.id)
 
                 } else {
-                    DialogUtils.showMessage(requireContext(), getString(R.string.login_error_message))
+                    DialogUtils.showMessage(
+                        requireContext(),
+                        getString(R.string.login_error_message)
+                    )
                 }
             } else {
                 DialogUtils.showMessage(context, getString(R.string.login_empty_message))
@@ -227,13 +243,13 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         // botão de criar conta
         btnCreateAccount = view.findViewById(R.id.btnCreatAccount)
         btnCreateAccount.setOnClickListener {
-            replaceFragment( CadastroFragment(), TransitionType.SLIDE)
+            replaceFragment(CadastroFragment(), TransitionType.SLIDE)
         }
 
         // botão de recuperar senha
         btnForgotPassword = view.findViewById(R.id.txtForgotPassword)
         btnForgotPassword.setOnClickListener {
-            replaceFragment( RecoveryFragment(), TransitionType.SLIDE)
+            replaceFragment(RecoveryFragment(), TransitionType.SLIDE)
         }
 
         // botão para biometria
