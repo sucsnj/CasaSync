@@ -20,11 +20,15 @@ import androidx.core.net.toUri
 import com.devminds.casasync.utils.DialogUtils
 import com.devminds.casasync.utils.PermissionHelper
 import com.devminds.casasync.utils.PermissionHelper.checkAndRequestExactAlarmPermission
+import com.devminds.casasync.utils.Utils
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        Utils.isLogged(this)
+
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->

@@ -1,5 +1,6 @@
 package com.devminds.casasync.utils
 
+import android.app.AlertDialog
 import android.content.Context
 import android.view.Menu
 import android.view.View
@@ -29,6 +30,16 @@ object PopupMenu {
                 }
                 R.id.about -> {
                     baseFragment.replaceFragment(AboutFragment(), TransitionType.INFLATE_RIGHT_TOP)
+                    true
+                }
+                R.id.logout -> {
+                    val dialog = AlertDialog.Builder(context)
+                    dialog.setMessage("Quer mesmo deslogar?")
+                    dialog.setPositiveButton("Sim") { _, _ ->
+                        Utils.logout(context)
+                    }
+                    dialog.setNegativeButton("Não") { _, _ -> }
+                    dialog.show()
                     true
                 }
                 else -> false

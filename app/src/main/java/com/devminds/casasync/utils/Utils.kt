@@ -2,6 +2,7 @@ package com.devminds.casasync.utils
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.util.Log
@@ -12,11 +13,13 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.devminds.casasync.FirestoreHelper
 import com.devminds.casasync.GenericAdapter
+import com.devminds.casasync.HomeActivity
 import com.devminds.casasync.R
 import com.devminds.casasync.TransitionType
 import com.devminds.casasync.fragments.TaskFragment
@@ -26,6 +29,8 @@ import com.devminds.casasync.parts.Task
 import com.devminds.casasync.setCustomTransition
 import com.devminds.casasync.views.UserViewModel
 import com.devminds.casasync.views.TaskViewModel
+import androidx.core.content.edit
+import com.devminds.casasync.MainActivity
 
 // classe utilitária
 object Utils {
@@ -493,5 +498,40 @@ object Utils {
         val network = connectivityManager.activeNetwork ?: return false
         val capabilities = connectivityManager.getNetworkCapabilities(network) ?: return false
         return capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+    }
+
+    // checa se há um usuário logado
+    fun isLogged(activity: Activity) {
+        val prefs = activity.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        val userId = prefs.getString("logged_user_id", null)
+
+        if (userId != null) {
+            val user = JsonStorageManager.loadUser(activity, userId)
+            if (user != null) {
+                val intent = Intent(activity, HomeActivity::class.java)
+                intent.putExtra("userId", user.id)
+                activity.startActivity(intent)
+                activity.finish()
+            }
+        }
+    }
+
+    // remove usuário do SharedPreferences
+    fun logout(context: Context) {
+        val prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        prefs.edit { clear() }
+
+        val intent = Intent(context, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        context.startActivity(intent)
+
+        if (context is Activity) {
+            context.finish()
+        }
+    }
+
+    fun removeUser(context: Context) {
+        val prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        prefs.edit { remove("logged_user_id") }
     }
 }

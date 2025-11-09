@@ -34,6 +34,7 @@ import com.devminds.casasync.utils.Utils
 import kotlinx.coroutines.launch
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import androidx.core.content.edit
 
 class LoginFragment : BaseFragment(R.layout.fragment_login) {
     private val userViewModel: UserViewModel by activityViewModels()
@@ -75,6 +76,13 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                     onSuccess = { userId ->
                         loginWithUserId(userId)
                         userViewModel.persistAndSyncUser(requireContext())
+
+                        val prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+                        prefs.edit {
+                            putString(
+                                "logged_user_id",
+                                userId)
+                        }
                     },
                     onError = { errorMessage ->
                         DialogUtils.showMessage(context, errorMessage)
@@ -158,21 +166,29 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         requireActivity().finish()
     }
 
-    fun login(context: Context, userViewModel: UserViewModel, userFound: User) {
+    fun login(context: Context, userViewModel: UserViewModel, user: User) {
         DialogUtils.dismissActiveBanner() // elimina qualquer banner ativo
 
-        userViewModel.setUser(userFound)
+        userViewModel.setUser(user)
         userViewModel.persistAndSyncUser(context)
 
         val intent = Intent(context, HomeActivity::class.java)
-        intent.putExtra("userId", userFound.id)
+        intent.putExtra("userId", user.id)
         startActivity(intent)
         requireActivity().finish()
 
         // adiciona o usuário a lista da biometria
         val biometric = Biometric()
-        biometric.saveBiometricAuthUser(requireContext(), userFound.id)
-        biometric.lastLoggedUser(requireContext(), userFound.id)
+        biometric.saveBiometricAuthUser(requireContext(), user.id)
+        biometric.lastLoggedUser(requireContext(), user.id)
+
+        // salva o id do usuário nas shared preferences
+        val prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        prefs.edit {
+            putString(
+                "logged_user_id",
+                user.id)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

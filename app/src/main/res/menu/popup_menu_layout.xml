@@ -3,4 +3,5 @@
     <item android:id="@+id/app_settings" android:title="Configurações do App" />
     <item android:id="@+id/user_settings" android:title="Configurações do Usuário" />
     <item android:id="@+id/about" android:title="Sobre" />
+    <item android:id="@+id/logout" android:title="Sair" />
 </menu>
