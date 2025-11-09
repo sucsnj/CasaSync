@@ -72,6 +72,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                     (context as? Activity ?: return@postDelayed) as FragmentActivity,
                     onSuccess = { userId ->
                         loginWithUserId(userId)
+                        userViewModel.persistAndSyncUser(requireContext())
                     },
                     onError = { errorMessage ->
                         DialogUtils.showMessage(context, errorMessage)
@@ -122,6 +123,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                 navigateToHome(finalUser)
                 JsonStorageManager.saveUser(requireContext(), finalUser)
                 userViewModel.setUser(finalUser)
+                userViewModel.persistAndSyncUser(requireContext())
             }
         }.addOnFailureListener { e ->
             Log.e(tag, "Erro ao buscar usuário no Firestore", e)
@@ -230,6 +232,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                     DialogUtils.dismissActiveBanner() // elimina qualquer banner ativo
 
                     userViewModel.setUser(userFound)
+                    userViewModel.persistAndSyncUser(context)
 
                     val intent = Intent(context, HomeActivity::class.java)
                     intent.putExtra("userId", userFound.id)
