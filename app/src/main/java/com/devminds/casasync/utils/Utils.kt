@@ -13,6 +13,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
+import com.devminds.casasync.FirestoreHelper
 import com.devminds.casasync.GenericAdapter
 import com.devminds.casasync.R
 import com.devminds.casasync.TransitionType
@@ -109,6 +110,10 @@ object Utils {
                                                 )
                                                 recycler.adapter?.notifyItemChanged(position)
 
+                                                userViewModel.user.value?.let {
+                                                    userViewModel.persistUser(context, it)
+                                                }
+
                                                 DialogUtils.showMessage(
                                                     activity,
                                                     successRenameToast
@@ -144,7 +149,7 @@ object Utils {
                                                 recycler.adapter?.notifyItemRemoved(index)
 
                                                 userViewModel.user.value?.let {
-                                                    JsonStorageManager.saveUser(context, it)
+                                                    userViewModel.persistUser(context, it)
                                                 }
 
                                                 DialogUtils.showMessage(context,
@@ -230,6 +235,11 @@ object Utils {
                                                     userViewModel.user.value!!
                                                 )
                                                 recycler.adapter?.notifyItemChanged(position)
+
+                                                userViewModel.user.value?.let {
+                                                    userViewModel.persistUser(context, it)
+                                                }
+
                                                 DialogUtils.showMessage(
                                                     activity,
                                                     successRenameToast
@@ -265,7 +275,7 @@ object Utils {
                                                 recycler.adapter?.notifyItemRemoved(index)
 
                                                 userViewModel.user.value?.let {
-                                                    JsonStorageManager.saveUser(context, it)
+                                                    userViewModel.persistUser(context, it)
                                                 }
 
                                                 DialogUtils.showMessage(context,
@@ -357,6 +367,11 @@ object Utils {
                                                     userViewModel.user.value!!
                                                 )
                                                 recycler.adapter?.notifyItemChanged(position)
+
+                                                userViewModel.user.value?.let {
+                                                    userViewModel.persistUser(context, it)
+                                                }
+
                                                 DialogUtils.showMessage(
                                                     activity,
                                                     successRenameToast
@@ -418,7 +433,7 @@ object Utils {
                                                 recycler.adapter?.notifyItemRemoved(index)
 
                                                 userViewModel.user.value?.let {
-                                                    JsonStorageManager.saveUser(context, it)
+                                                    userViewModel.persistUser(context, it)
                                                 }
 
                                                 DialogUtils.showMessage(context,
@@ -447,10 +462,10 @@ object Utils {
 
                                     recycler.adapter?.notifyItemChanged(position)
 
-                                    val user = userViewModel.user.value
-                                    user?.let {
-                                        JsonStorageManager.saveUser(activity, it)
+                                    userViewModel.user.value?.let {
+                                        userViewModel.persistUser(context, it)
                                     }
+                                    
                                     DialogUtils.showMessage(context, "Tarefa concluída")
                                 }
                             }

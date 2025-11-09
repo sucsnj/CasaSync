@@ -231,17 +231,9 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
                         // agenda notificação
                         taskViewModel.setTask(newTask)
                         TaskFragment().scheduleTaskNotification(context, taskViewModel)
-                        Log.d("TaskFragment", "scheduleTaskNotification called")
 
-                        // TODO
                         // persiste o usuário
                         userViewModel.persistUser(context, userViewModel.user.value)
-                        // userViewModel.persistUser(context, userViewModel.user.value)
-                        // val user = userViewModel.user.value
-                        //     user?.let {
-                        //         userViewModel.persistUser(context, it) // salva no JSON
-                        //         FirebaseFirestore.getInstance().collection("users").document(it.id).set(it) // salva no Firestore
-                        // }
                     }
                     DialogUtils.showMessage(context, "Tarefa criada")
                 }

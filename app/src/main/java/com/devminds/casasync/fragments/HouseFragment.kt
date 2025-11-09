@@ -142,18 +142,7 @@ class HouseFragment : BaseFragment(R.layout.fragment_house) {
                         houseViewModel.house.value?.dependents?.add(newDependent)
                         adapter.notifyItemInserted(dependentList.size - 1)
 
-                        // persiste o usuário em json
-                        val user = userViewModel.user.value
-                        user?.let {
-                            JsonStorageManager.saveUser(context, it)
-                        }
-
-                        // TODO
-                        // val user = userViewModel.user.value
-                        //     user?.let {
-                        //         userViewModel.persistUser(context, it) // salva no JSON
-                        //         FirebaseFirestore.getInstance().collection("users").document(it.id).set(it) // salva no Firestore
-                        // }
+                        userViewModel.persistUser(context, userViewModel.user.value)
                     }
                     DialogUtils.showMessage(context, "Dependente adicionado")
                 }

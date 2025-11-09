@@ -34,9 +34,6 @@ class UserViewModel : ViewModel() {
         user?.let {
             JsonStorageManager.saveUser(context, it)
 
-            val json = Gson().toJson(it)
-            Log.d("UserViewModel", "persistUser chamado com: $json")
-
             // atualiza o firestore
             FirestoreHelper.syncUserToFirestore(it)
         }

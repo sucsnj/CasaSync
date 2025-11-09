@@ -37,7 +37,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
     private val userViewModel: UserViewModel by activityViewModels()
 
     private lateinit var firebaseAuth: FirebaseAuth
-    private val TAG = "GoogleSignIn"
+    private val tag = "GoogleSignIn"
     private lateinit var txtLoginPrompt: TextView
     private lateinit var txtPasswordPrompt: TextView
     private lateinit var btnGoogleLogin: LinearLayout
@@ -103,7 +103,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                         userViewModel.setUser(newUser) // coloca o usuário no viewmodel
                     }
                     .addOnFailureListener { e ->
-                        Log.e(TAG, "Erro ao salvar novo usuário no Firestore", e)
+                        Log.e(tag, "Erro ao salvar novo usuário no Firestore", e)
                     }
             } else {
                 // se o usuário já existir, pega ele do firestore
@@ -124,7 +124,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                 userViewModel.setUser(finalUser)
             }
         }.addOnFailureListener { e ->
-            Log.e(TAG, "Erro ao buscar usuário no Firestore", e)
+            Log.e(tag, "Erro ao buscar usuário no Firestore", e)
         }
     }
 
@@ -201,7 +201,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                             "Erro: Tipo de credencial inesperado."
                         )
                     }
-                } catch (e: Exception) {
+                } catch (_: Exception) {
                     DialogUtils.showMessage(
                         requireContext(),
                         "Erro na autenticação com Google."
