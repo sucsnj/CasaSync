@@ -4,9 +4,12 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.View
 import android.widget.TextView
+import com.devminds.casasync.FirestoreHelper
 import com.devminds.casasync.R
 import com.devminds.casasync.TransitionType
 import com.devminds.casasync.parts.User
+import com.devminds.casasync.utils.Auth
+import com.devminds.casasync.utils.Biometric
 import com.devminds.casasync.utils.DialogUtils
 import com.devminds.casasync.utils.JsonStorageManager
 import com.google.android.material.appbar.MaterialToolbar
@@ -45,7 +48,10 @@ class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
             // guarda os dados de cadastro
             val name = newUserPrompt.text.toString()
             val login = newLoginPrompt.text.toString()
-            val password = newPasswordPrompt.text.toString()
+            val pass = newPasswordPrompt.text.toString()
+
+            // cria um hash 256 para a senha
+            val password = JsonStorageManager.hashPassword(pass)
 
             // verifica se o login já existe
             userFound = JsonStorageManager.recoveryUser(context, login)
@@ -68,6 +74,8 @@ class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
 
                 // persiste o usuário em json
                 JsonStorageManager.saveUser(context, newUser)
+                FirestoreHelper.syncUserToFirestore(newUser) // cria um documento no Firestore
+
                 // redireciona para a página de login
                 replaceFragment( LoginFragment(), TransitionType.SLIDE)
             } else {

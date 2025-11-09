@@ -62,9 +62,17 @@ object JsonStorageManager {
         }
     }
 
+    fun hashPassword(password: String): String {
+        val bytes = password.toByteArray()
+        val md = java.security.MessageDigest.getInstance("SHA-256")
+        val digest = md.digest(bytes)
+        return digest.joinToString("") { "%02x".format(it) }
+    }
+
     fun authenticateUser(context: Context, login: String, password: String): User? {
+        val hashedInput = hashPassword(password)
         val index = getUserIndex(context)
-        val match = index.find { it.login == login && it.password == password }
+        val match = index.find { it.login == login && it.password == hashedInput }
         return match?.let {
             loadUser(context, it.id)
         }
