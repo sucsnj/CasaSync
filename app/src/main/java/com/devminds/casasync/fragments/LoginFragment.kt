@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import com.devminds.casasync.HomeActivity
 import com.devminds.casasync.R
@@ -33,7 +32,6 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
-import com.google.gson.Gson
 
 class LoginFragment : BaseFragment(R.layout.fragment_login) {
     private val userViewModel: UserViewModel by activityViewModels()
@@ -83,80 +81,74 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         }, delay)
     }
 
+    // checa se o usuário já existe no firestore
     private fun checkAndSaveUserInFirestore(firebaseUser: com.google.firebase.auth.FirebaseUser) {
         val db = FirebaseFirestore.getInstance()
         val userRef = db.collection("users").document(firebaseUser.uid)
 
         userRef.get().addOnSuccessListener { document ->
             if (!document.exists()) {
-                Log.d(TAG, "Usuário não encontrado. Criando novo registro no Firestore.")
+                // se o usuário não for encontrado no firestore, cria um novo
                 val newUser = User(
                     id = firebaseUser.uid,
                     name = firebaseUser.displayName ?: "Usuário",
                     login = firebaseUser.email ?: "",
                     password = "", // Senha não é necessária
-                    houses = mutableListOf()
+                    houses = mutableListOf() // lista de casas
                 )
                 userRef.set(newUser)
                     .addOnSuccessListener {
-                        Log.d(TAG, "Novo usuário salvo no Firestore.")
-                        navigateToHome(newUser)
-                        JsonStorageManager.saveUser(requireContext(), newUser)
-                        userViewModel.setUser(newUser)
-                        val json = Gson().toJson(newUser)
-                        Log.d("JsonStorageManager", "Usuário salvo: $json")
-
+                        navigateToHome(newUser) // vai para a home com o usuário
+                        JsonStorageManager.saveUser(requireContext(), newUser) // grava o usuário no json
+                        userViewModel.setUser(newUser) // coloca o usuário no viewmodel
                     }
                     .addOnFailureListener { e ->
                         Log.e(TAG, "Erro ao salvar novo usuário no Firestore", e)
                     }
             } else {
-                Log.d(TAG, "Usuário já existe no Firestore.")
-
+                // se o usuário já existir, pega ele do firestore
+                // faz a verificação com base no id do google
                 val localUser = JsonStorageManager.loadUser(requireContext(), firebaseUser.uid)
                 val firestoreUser = document.toObject(User::class.java)!!
 
+                // define o usuário que vai para a home
                 val finalUser = if (localUser != null && localUser.houses.isNotEmpty()) {
-                    Log.d(TAG, "Usando usuário local com casas.")
-                    localUser
+                    localUser // usuário com casas
                 } else {
-                    Log.d(TAG, "Usando usuário do Firestore.")
-                    firestoreUser
+                    firestoreUser // usuário do firestore
                 }
 
+                // vai para a home com o usuário
                 navigateToHome(finalUser)
                 JsonStorageManager.saveUser(requireContext(), finalUser)
                 userViewModel.setUser(finalUser)
-
-                val json = Gson().toJson(finalUser)
-                Log.d("JsonStorageManager", "Usuário final usado: $json")
-
             }
         }.addOnFailureListener { e ->
             Log.e(TAG, "Erro ao buscar usuário no Firestore", e)
         }
     }
 
+    // autentica o usuário com o firebase
     private fun firebaseAuthWithGoogle(idToken: String) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         firebaseAuth.signInWithCredential(credential)
             .addOnCompleteListener(requireActivity()) { task ->
                 if (task.isSuccessful) {
                     val firebaseUser = firebaseAuth.currentUser
-                    Log.d(TAG, "Sucesso ao autenticar no Firebase: ${firebaseUser?.displayName}")
                     checkAndSaveUserInFirestore(firebaseUser!!)
+                    DialogUtils.showMessage(requireContext(), "Autenticação bem-sucedida!")
+                    DialogUtils.dismissActiveBanner()
                 } else {
-                    Log.w(TAG, "Falha na autenticação com Firebase", task.exception)
-                    Toast.makeText(requireContext(), "Falha na autenticação.", Toast.LENGTH_SHORT)
-                        .show()
+                    DialogUtils.showMessage(requireContext(), "Autenticação falhou.")
                 }
             }
     }
 
+    // vai para a home
     private fun navigateToHome(user: User) {
-        userViewModel.setUser(user)
-        val intent = Intent(requireContext(), HomeActivity::class.java)
-        intent.putExtra("userId", user.id)
+        userViewModel.setUser(user) // insere o usuário no viewmodel
+        val intent = Intent(requireContext(), HomeActivity::class.java) // leva um intent para a home
+        intent.putExtra("userId", user.id) // coloca o id do usuário na intent
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
         requireActivity().finish()
@@ -166,63 +158,59 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         super.onViewCreated(view, savedInstanceState)
 
         val context = requireContext()
-        firebaseAuth = Firebase.auth
+        firebaseAuth = Firebase.auth // inicializa o firebase auth
 
         txtLoginPrompt = view.findViewById(R.id.txtLoginPrompt)
         txtPasswordPrompt = view.findViewById(R.id.txtPasswordPrompt)
 
-        clearNavHistory()
-        biometricCaller(requireActivity(), 800)
+        clearNavHistory() // limpa o histórico de navegação
+        biometricCaller(requireActivity(), 800) // biometria
 
+        // faz login com google
         btnGoogleLogin = view.findViewById(R.id.btnGoogleLogin)
         btnGoogleLogin.setOnClickListener {
-            val credentialManager = CredentialManager.create(requireContext())
+            val credentialManager = CredentialManager.create(requireContext()) // gerenciador de credenciais
 
             val googleIdOption = GetGoogleIdOption.Builder()
-                .setFilterByAuthorizedAccounts(false)
+                .setFilterByAuthorizedAccounts(false) // permite perguntar qual conta logar sempre (false)
                 .setServerClientId(getString(R.string.default_web_client_id))
                 .build()
 
+            // requisição de credenciais
             val request = GetCredentialRequest.Builder()
                 .addCredentialOption(googleIdOption)
                 .build()
 
+            // inicia a atividade de login com google
             lifecycleScope.launch {
                 try {
                     val result = credentialManager.getCredential(requireActivity(), request)
                     val credential = result.credential
 
-                    // e o metodo de fábrica createFrom()
+                    // verifica o tipo de credencial
                     if (credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
                         val googleIdTokenCredential =
                             GoogleIdTokenCredential.createFrom(credential.data)
-                        val idToken = googleIdTokenCredential.idToken
-
-                        Log.d(TAG, "Token do Google obtido com sucesso")
-                        firebaseAuthWithGoogle(idToken)
+                        val idToken = googleIdTokenCredential.idToken // pega o token do google
+                        firebaseAuthWithGoogle(idToken) // autentica o usuário com o firebase
 
                     } else {
                         // Lida com outros tipos de credenciais ou erros, se necessário
-                        Log.w(TAG, "Tipo de credencial inesperado: ${credential.type}")
-                        Toast.makeText(
+                        DialogUtils.showMessage(
                             requireContext(),
-                            "Erro: Tipo de credencial inesperado.",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                            "Erro: Tipo de credencial inesperado."
+                        )
                     }
-
                 } catch (e: Exception) {
-                    Log.e(TAG, "Erro na autenticação com CredentialManager", e)
-                    Toast.makeText(
+                    DialogUtils.showMessage(
                         requireContext(),
-                        "Erro na autenticação com Google.",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                        "Erro na autenticação com Google."
+                    )
                 }
             }
         }
 
-        // botão de login
+        // botão de login por senha
         btnLogin = view.findViewById(R.id.btnLogin)
         btnLogin.setOnClickListener {
 
