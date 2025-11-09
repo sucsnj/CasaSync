@@ -29,6 +29,8 @@ import android.os.Looper
 import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
 import androidx.lifecycle.lifecycleScope
+import com.devminds.casasync.utils.Auth
+import com.devminds.casasync.utils.Utils
 import kotlinx.coroutines.launch
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
@@ -156,6 +158,23 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         requireActivity().finish()
     }
 
+    fun login(context: Context, userViewModel: UserViewModel, userFound: User) {
+        DialogUtils.dismissActiveBanner() // elimina qualquer banner ativo
+
+        userViewModel.setUser(userFound)
+        userViewModel.persistAndSyncUser(context)
+
+        val intent = Intent(context, HomeActivity::class.java)
+        intent.putExtra("userId", userFound.id)
+        startActivity(intent)
+        requireActivity().finish()
+
+        // adiciona o usuário a lista da biometria
+        val biometric = Biometric()
+        biometric.saveBiometricAuthUser(requireContext(), userFound.id)
+        biometric.lastLoggedUser(requireContext(), userFound.id)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -223,27 +242,26 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
             // se estiver tudo preenchido
             if (login.isNotEmpty() && password.isNotEmpty()) {
 
-                // carrega o usuário do json
-                val userFound =
-                    JsonStorageManager.authenticateUser(requireContext(), login, password)
+                // usuário local
+                val userFound = JsonStorageManager.authenticateUser(requireContext(), login, password)
+                val isConnected = Utils.isConnected(requireContext()) // verifica conexão
 
-                // se o usuário for encontrado
+                // se o usuário local for encontrado
                 if (userFound != null) {
-                    DialogUtils.dismissActiveBanner() // elimina qualquer banner ativo
-
-                    userViewModel.setUser(userFound)
-                    userViewModel.persistAndSyncUser(context)
-
-                    val intent = Intent(context, HomeActivity::class.java)
-                    intent.putExtra("userId", userFound.id)
-                    startActivity(intent)
-                    requireActivity().finish()
-
-                    // adiciona o usuário a lista da biometria
-                    val biometric = Biometric()
-                    biometric.saveBiometricAuthUser(requireContext(), userFound.id)
-                    biometric.lastLoggedUser(requireContext(), userFound.id)
-
+                    login(context, userViewModel, userFound)
+                    DialogUtils.showMessage(context, "Login realizado Localmente")
+                } else if (isConnected) { // caso não encontre o local, procura no firestore
+                    Auth().authenticateWithFirestore(requireContext(), login, password) { fsUser ->
+                        if (fsUser != null) {
+                            login(context, userViewModel, fsUser)
+                            DialogUtils.showMessage(context, "Login realizado em Nuvem")
+                        } else {
+                            DialogUtils.showMessage(
+                                requireContext(),
+                                getString(R.string.login_error_message)
+                            )
+                        }
+                    }
                 } else {
                     DialogUtils.showMessage(
                         requireContext(),

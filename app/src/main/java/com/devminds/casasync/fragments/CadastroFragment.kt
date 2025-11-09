@@ -8,7 +8,6 @@ import com.devminds.casasync.FirestoreHelper
 import com.devminds.casasync.R
 import com.devminds.casasync.TransitionType
 import com.devminds.casasync.parts.User
-import com.devminds.casasync.utils.Auth
 import com.devminds.casasync.utils.Biometric
 import com.devminds.casasync.utils.DialogUtils
 import com.devminds.casasync.utils.JsonStorageManager

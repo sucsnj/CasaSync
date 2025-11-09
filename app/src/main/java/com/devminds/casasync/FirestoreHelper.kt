@@ -40,6 +40,11 @@ object FirestoreHelper {
     // TODO modularizar
     fun syncUserToFirestore(user: User) {
         val db = FirebaseFirestore.getInstance()
+        if (user.id.isBlank()) {
+            Log.e("Firestore", "ID do usuário está nulo ou vazio. Abortando sincronização.")
+            return
+        }
+
         val userDoc = db.collection("users").document(user.id)
 
         // Salva dados básicos do usuário
