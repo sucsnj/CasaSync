@@ -35,6 +35,7 @@ import kotlinx.coroutines.launch
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import androidx.core.content.edit
+import com.devminds.casasync.FirestoreHelper
 
 class LoginFragment : BaseFragment(R.layout.fragment_login) {
     private val userViewModel: UserViewModel by activityViewModels()

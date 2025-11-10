@@ -17,26 +17,6 @@ import android.content.Context
 
 object FirestoreHelper {
 
-    fun writeUser() {
-        val db = FirebaseFirestore.getInstance()
-        val user = hashMapOf("nome" to "Carlos", "cidade" to "Jaboatão")
-
-        db.collection("users").add(user)
-            .addOnSuccessListener { Log.d("Firestore", "Adicionado: ${it.id}") }
-            .addOnFailureListener { Log.e("Firestore", "Erro: ", it) }
-    }
-
-    fun readUsers() {
-        val db = FirebaseFirestore.getInstance()
-        db.collection("users").get()
-            .addOnSuccessListener { result ->
-                for (doc in result) {
-                    Log.d("Firestore", "${doc.id} => ${doc.data}")
-                }
-            }
-            .addOnFailureListener { Log.e("Firestore", "Erro: ", it) }
-    }
-
     // TODO modularizar
     fun syncUserToFirestore(user: User) {
         val db = FirebaseFirestore.getInstance()
@@ -49,6 +29,7 @@ object FirestoreHelper {
 
         // Salva dados básicos do usuário
         val userMap = mapOf(
+            "id" to user.id,
             "name" to user.name,
             "login" to user.login,
             "password" to user.password
