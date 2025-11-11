@@ -69,16 +69,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-
-        <TextView
-            android:id="@+id/debug"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:layout_gravity="start"
-            android:text="debug"
-            android:textSize="14sp" />
-
         <!-- Lista de casas -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerHouses"

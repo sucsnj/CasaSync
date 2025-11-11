@@ -96,10 +96,6 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
             userViewModel.setUser(it)
         }
 
-        // debug
-        val debug = view.findViewById<TextView>(R.id.debug)
-        debug.text = JsonStorageManager.getAllFullUsersJson(context)
-
         // carrega o usuário com base no id
 //        user = JsonStorageManager.loadUser(context, userId())
 //        user?.let {
