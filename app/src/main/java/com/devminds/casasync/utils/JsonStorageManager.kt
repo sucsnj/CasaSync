@@ -8,12 +8,16 @@ import com.google.gson.Gson
 
 object JsonStorageManager {
 
+    private const val INDEX_FILE = "users_index.json" // arquivo de indexação de usuários
+
+    // pega todos os usuários em users_index.json
     fun getAllUsers(context: Context): String {
         val index = getUserIndex(context)
         val gson = Gson()
         return gson.toJson(index)
     }
 
+    // pega todos os usuários em user_[id].json
     fun getAllFullUsersJson(context: Context): String {
         val users = JsonStorageManager.getUserIndex(context).mapNotNull {
             JsonStorageManager.loadUser(context, it.id)
@@ -21,31 +25,31 @@ object JsonStorageManager {
         return Gson().toJson(users)
     }
 
-    private const val INDEX_FILE = "users_index.json"
+    // salva o usuário em user_[id].json
     fun saveUser(context: Context, user: User) {
         try {
             val gson = Gson()
-            val jsonString = gson.toJson(user)
-            val fileName = "user_${user.id}.json"
+            val jsonString = gson.toJson(user) // converte o objeto User para JSON
+            val fileName = "user_${user.id}.json" // nome do arquivo de usuário
 
+            // abre o arquivo de saída para escrita
             context.openFileOutput(fileName, Context.MODE_PRIVATE).use { outputStream ->
                 outputStream.write(jsonString.toByteArray(Charsets.UTF_8))
             }
 
             updateUserIndex(context, user)
 
-            Log.d("JsonStorageManager", "Usuário salvo: $jsonString")
             Log.d("JsonStorageManager", "Usuário ${user.id} salvo com sucesso.")
         } catch (e: Exception) {
             Log.e("JsonStorageManager", "Erro ao salvar usuário ${user.id}", e)
         }
     }
 
-
+    // carrega um usuário pelo seu id
     fun loadUser(context: Context, userId: String): User? {
         return try {
             val gson = Gson()
-            val fileName = "user_${userId}.json"
+            val fileName = "user_${userId}.json" // nome do arquivo de usuário com o id do argumento
             val json = context.openFileInput(fileName).bufferedReader().use { it.readText() }
             gson.fromJson(json, User::class.java)
         } catch (_: Exception) {
@@ -53,6 +57,7 @@ object JsonStorageManager {
         }
     }
 
+    // carrega o index de usuários e retorna uma lista de UserIndexEntry
     fun getUserIndex(context: Context): List<UserIndexEntry> {
         return try {
             val json = context.openFileInput(INDEX_FILE).bufferedReader().use { it.readText() }
@@ -75,6 +80,7 @@ object JsonStorageManager {
         }
     }
 
+    // gera um hash da senha
     fun hashPassword(password: String): String {
         val bytes = password.toByteArray()
         val md = java.security.MessageDigest.getInstance("SHA-256")
@@ -99,7 +105,7 @@ object JsonStorageManager {
         }
     }
 
-    // retorna o Id do usuário que acabou de logar
+    // retorna o id do usuário que acabou de logar
     fun getUserById(context: Context, userId: String): User? {
         val index = getUserIndex(context)
         val match = index.find { it.id == userId }
