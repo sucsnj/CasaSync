@@ -504,18 +504,18 @@ object Utils {
     }
 
     // checa se há um usuário logado
-    fun isLogged(activity: Activity) {
-        val prefs = activity.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+    fun isLogged(context: Context): Boolean {
+        val prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
         val userId = prefs.getString("logged_user_id", null)
 
-        if (userId != null) {
-            val user = JsonStorageManager.loadUser(activity, userId)
-            if (user != null) {
-                val intent = Intent(activity, HomeActivity::class.java)
-                intent.putExtra("userId", user.id)
-                activity.startActivity(intent)
-                activity.finish()
-            }
+        return if (!userId.isNullOrEmpty()) {
+            val intent = Intent(context, HomeActivity::class.java)
+            intent.putExtra("userId", userId)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            context.startActivity(intent)
+            true
+        } else {
+            false
         }
     }
 
