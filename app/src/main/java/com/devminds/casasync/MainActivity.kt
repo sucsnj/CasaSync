@@ -17,6 +17,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.core.net.toUri
+import com.devminds.casasync.fragments.LoginFragment
 import com.devminds.casasync.utils.DialogUtils
 import com.devminds.casasync.utils.PermissionHelper
 import com.devminds.casasync.utils.PermissionHelper.checkAndRequestExactAlarmPermission
@@ -27,7 +28,22 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Utils.isLogged(this)
+        val prefs = getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        val userId = prefs.getString("logged_user_id", null)
+
+        if (!userId.isNullOrEmpty()) {
+            // Usuário já está logado, vai direto para HomeActivity
+            val intent = Intent(this, HomeActivity::class.java)
+            intent.putExtra("userId", userId)
+            startActivity(intent)
+            finish() // encerra MainActivity para não voltar com o botão de voltar
+        } else {
+            // Usuário não logado, segue com LoginFragment
+            setContentView(R.layout.activity_main)
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, LoginFragment())
+                .commit()
+        }
 
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)

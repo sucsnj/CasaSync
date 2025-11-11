@@ -41,7 +41,6 @@ class UserViewModel : ViewModel() {
 
     fun persistAndSyncUser(context: Context) {
         val user = user.value ?: return
-        JsonStorageManager.saveUser(context, user)
         FirestoreHelper.syncUserToFirestore(user)
     }
 

@@ -54,7 +54,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
     private lateinit var btnForgotPassword: TextView
     private lateinit var btnBiometricLogin: LinearLayout
 
-    private fun loginWithUserId(userId: String) {
+    fun loginWithUserId(userId: String) {
         FirestoreHelper.getUserById(userId) { user ->
             if (user != null) {
                 userViewModel.setUser(user)
@@ -177,22 +177,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         biometric.saveBiometricAuthUser(requireContext(), user.id)
         biometric.lastLoggedUser(requireContext(), user.id)
 
-        // salva o id do usuário nas shared preferences
-        val prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
-        prefs.edit {
-            putString(
-                "logged_user_id",
-                user.id)
-        }
-    }
-
-    fun saveUserToPrefs(user: User) {
-        val prefs = requireContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
-        prefs.edit {
-            putString(
-                "logged_user_id",
-                user.id)
-        }
+        Utils.saveUserToPrefs(context, user)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -205,6 +190,9 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         txtPasswordPrompt = view.findViewById(R.id.txtPasswordPrompt)
 
         clearNavHistory() // limpa o histórico de navegação
+
+        Utils.checkIfUserIsLoggedIn(context)
+
         biometricCaller(requireActivity(), 800) // biometria
 
         // faz login com google
@@ -270,7 +258,6 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                         if (user != null) {
                             login(context, userViewModel, user)
                             DialogUtils.showMessage(context, getString(R.string.login_success_message))
-//                            saveUserToPrefs(user) // salva o usuário nas shared preferences
                         } else {
                             DialogUtils.showMessage(
                                 requireContext(),

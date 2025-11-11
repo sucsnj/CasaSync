@@ -31,6 +31,8 @@ import com.devminds.casasync.views.UserViewModel
 import com.devminds.casasync.views.TaskViewModel
 import androidx.core.content.edit
 import com.devminds.casasync.MainActivity
+import com.devminds.casasync.fragments.LoginFragment
+import com.devminds.casasync.parts.User
 import com.google.firebase.firestore.FirebaseFirestore
 
 // classe utilitária
@@ -514,6 +516,29 @@ object Utils {
                 activity.startActivity(intent)
                 activity.finish()
             }
+        }
+    }
+
+    // salva o id do usuário nas shared preferences
+    fun saveUserToPrefs(context: Context, user: User) {
+        val prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        prefs.edit {
+            putString(
+                "logged_user_id",
+                user.id)
+        }
+    }
+
+    fun checkIfUserIsLoggedIn(context: Context) {
+        val prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        val userId = prefs.getString("logged_user_id", null)
+
+        if (!userId.isNullOrEmpty()) {
+            // Usuário já está logado, tenta carregar os dados dele
+            LoginFragment().loginWithUserId(userId)
+        } else {
+            // Nenhum usuário logado, segue com o fluxo normal de login
+            Log.d("LoginFragment", "Nenhum usuário salvo nas prefs.")
         }
     }
 
