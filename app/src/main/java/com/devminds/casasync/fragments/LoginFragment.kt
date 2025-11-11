@@ -36,6 +36,10 @@ import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import androidx.core.content.edit
 import com.devminds.casasync.FirestoreHelper
+import com.google.firebase.auth.FirebaseUser
+import com.devminds.casasync.parts.House
+import com.devminds.casasync.parts.Dependent
+import com.devminds.casasync.parts.Task
 
 class LoginFragment : BaseFragment(R.layout.fragment_login) {
     private val userViewModel: UserViewModel by activityViewModels()
@@ -94,50 +98,42 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
     }
 
     // checa se o usuário já existe no firestore
-    private fun checkAndSaveUserInFirestore(firebaseUser: com.google.firebase.auth.FirebaseUser) {
+    private fun checkAndSaveUserInFirestore(firebaseUser: FirebaseUser) {
         val db = FirebaseFirestore.getInstance()
         val userRef = db.collection("users").document(firebaseUser.uid)
 
         userRef.get().addOnSuccessListener { document ->
             if (!document.exists()) {
-                // se o usuário não for encontrado no firestore, cria um novo
                 val newUser = User(
                     id = firebaseUser.uid,
                     name = firebaseUser.displayName ?: "Usuário",
                     login = firebaseUser.email ?: "",
-                    password = "", // Senha não é necessária
-                    houses = mutableListOf() // lista de casas
+                    password = "",
+                    houses = mutableListOf()
                 )
-                userRef.set(newUser)
-                    .addOnSuccessListener {
-                        navigateToHome(newUser) // vai para a home com o usuário
-                        JsonStorageManager.saveUser(requireContext(), newUser) // grava o usuário no json
-                        userViewModel.setUser(newUser) // coloca o usuário no viewmodel
-                    }
-                    .addOnFailureListener { e ->
-                        Log.e(tag, "Erro ao salvar novo usuário no Firestore", e)
-                    }
-            } else {
-                // se o usuário já existir, pega ele do firestore
-                // faz a verificação com base no id do google
-                val localUser = JsonStorageManager.loadUser(requireContext(), firebaseUser.uid)
-                val firestoreUser = document.toObject(User::class.java)!!
-
-                // define o usuário que vai para a home
-                val finalUser = if (localUser != null && localUser.houses.isNotEmpty()) {
-                    localUser // usuário com casas
-                } else {
-                    firestoreUser // usuário do firestore
+                userRef.set(newUser).addOnSuccessListener {
+                    JsonStorageManager.saveUser(requireContext(), newUser)
+                    userViewModel.setUser(newUser)
+                    navigateToHome(newUser)
                 }
+            } else {
+                val user = document.toObject(User::class.java) ?: return@addOnSuccessListener
 
-                // vai para a home com o usuário
-                navigateToHome(finalUser)
-                JsonStorageManager.saveUser(requireContext(), finalUser)
-                userViewModel.setUser(finalUser)
-                userViewModel.persistAndSyncUser(requireContext())
+                // salva depois de carregar as casas
+                userRef.collection("houses").get().addOnSuccessListener { querySnapshot ->
+                    val houses = querySnapshot.documents.mapNotNull { doc ->
+                        doc.toObject(House::class.java)
+                    }
+                    user.houses.clear()
+                    user.houses.addAll(houses)
+
+                    // salva com casas
+                    JsonStorageManager.saveUser(requireContext(), user)
+                    userViewModel.setUser(user)
+                    userViewModel.persistAndSyncUser(requireContext())
+                    navigateToHome(user)
+                }
             }
-        }.addOnFailureListener { e ->
-            Log.e(tag, "Erro ao buscar usuário no Firestore", e)
         }
     }
 

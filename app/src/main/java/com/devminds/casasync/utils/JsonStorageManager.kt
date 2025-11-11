@@ -8,6 +8,19 @@ import com.google.gson.Gson
 
 object JsonStorageManager {
 
+    fun getAllUsers(context: Context): String {
+        val index = getUserIndex(context)
+        val gson = Gson()
+        return gson.toJson(index)
+    }
+
+    fun getAllFullUsersJson(context: Context): String {
+        val users = JsonStorageManager.getUserIndex(context).mapNotNull {
+            JsonStorageManager.loadUser(context, it.id)
+        }
+        return Gson().toJson(users)
+    }
+
     private const val INDEX_FILE = "users_index.json"
     fun saveUser(context: Context, user: User) {
         try {
