@@ -8,6 +8,7 @@ import com.devminds.casasync.FirestoreHelper
 import com.devminds.casasync.R
 import com.devminds.casasync.TransitionType
 import com.devminds.casasync.parts.User
+import com.devminds.casasync.utils.Auth
 import com.devminds.casasync.utils.Biometric
 import com.devminds.casasync.utils.DialogUtils
 import com.devminds.casasync.utils.JsonStorageManager
@@ -38,51 +39,101 @@ class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
         newUserPrompt = view.findViewById(R.id.newUserPrompt)
         newLoginPrompt = view.findViewById(R.id.newLoginPrompt)
         newPasswordPrompt = view.findViewById(R.id.newPasswordPrompt)
-        btnCadastro = view.findViewById(R.id.btnCadastro)
         btnLoginAccount = view.findViewById(R.id.btnLoginAccount)
         toolbar = view.findViewById(R.id.topBar) // cabeçalho
 
         // cadastro de usuário
+//        btnCadastro.setOnClickListener {
+//            // guarda os dados de cadastro
+//            val name = newUserPrompt.text.toString()
+//            val login = newLoginPrompt.text.toString()
+//            val pass = newPasswordPrompt.text.toString()
+//
+//            // cria um hash 256 para a senha
+//            val password = JsonStorageManager.hashPassword(pass)
+//
+//            // verifica se o login já existe
+//            userFound = JsonStorageManager.recoveryUser(context, login)
+//            // se já existe
+//            if (userFound != null) {
+//                DialogUtils.showMessage(context, getString(R.string.login_exists_message))
+//                return@setOnClickListener // sai da função, impedindo o cadastro
+//            }
+//
+//            // verifica se todos os campos obrigatórios estão preenchidos
+//            if (name.isNotEmpty() && login.isNotEmpty() && password.isNotEmpty()) {
+//                // cria o novo usuário
+//                val newUser = User(
+//                    id = UUID.randomUUID().toString(), // ID gerado aleatóriamente
+//                    name = name,
+//                    login = login,
+//                    password = password
+//                )
+//                DialogUtils.showMessage(context, getString(R.string.new_account_success_message))
+//
+//                // persiste o usuário em json
+//                JsonStorageManager.saveUser(context, newUser)
+//                FirestoreHelper.syncUserToFirestore(newUser) // cria um documento no Firestore
+//
+//                // redireciona para a página de login
+//                replaceFragment( LoginFragment(), TransitionType.SLIDE)
+//            } else {
+//                DialogUtils.showMessage(context, getString(R.string.new_account_error_message))
+//            }
+//        }
+
+        btnCadastro = view.findViewById(R.id.btnCadastro)
         btnCadastro.setOnClickListener {
-            // guarda os dados de cadastro
+            // dados de cadastro com google
+
             val name = newUserPrompt.text.toString()
-            val login = newLoginPrompt.text.toString()
-            val pass = newPasswordPrompt.text.toString()
+            val email = newLoginPrompt.text.toString()
+            val password = newPasswordPrompt.text.toString()
 
             // cria um hash 256 para a senha
-            val password = JsonStorageManager.hashPassword(pass)
+            val hashedPassword = Auth().hashPassword(password)
+
+            var emailExists = false
+
+            // vai no firestore procurar um email igual
+            FirestoreHelper.getUserByEmail(email) { exists ->
+                if (exists) {
+                    emailExists = true
+                }
+            }
 
             // verifica se o login já existe
-            userFound = JsonStorageManager.recoveryUser(context, login)
-            // se já existe
-            if (userFound != null) {
-                DialogUtils.showMessage(context, getString(R.string.login_exists_message))
+            if (emailExists) {
+                DialogUtils.showMessage(context, "Email já cadastrado")
                 return@setOnClickListener // sai da função, impedindo o cadastro
             }
 
             // verifica se todos os campos obrigatórios estão preenchidos
-            if (name.isNotEmpty() && login.isNotEmpty() && password.isNotEmpty()) {
+            if (name.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()) {
                 // cria o novo usuário
-                val newUser = User(
-                    id = UUID.randomUUID().toString(), // ID gerado aleatóriamente
-                    name = name,
-                    login = login,
-                    password = password
-                )
-                DialogUtils.showMessage(context, getString(R.string.new_account_success_message))
-
-                // persiste o usuário em json
-                JsonStorageManager.saveUser(context, newUser)
-                FirestoreHelper.syncUserToFirestore(newUser) // cria um documento no Firestore
-
-                // redireciona para a página de login
-                replaceFragment( LoginFragment(), TransitionType.SLIDE)
+                FirestoreHelper.createUser(name, email, hashedPassword) { newUser ->
+                    if (newUser != null) {
+                        DialogUtils.showMessage(
+                            context,
+                            getString(R.string.new_account_success_message)
+                        )
+                        // persiste o usuário no firestore
+                        FirestoreHelper.syncUserToFirestore(newUser)
+                        // redireciona para a página de login
+                        replaceFragment( LoginFragment(), TransitionType.SLIDE)
+                    } else {
+                        DialogUtils.showMessage(
+                            context,
+                            getString(R.string.new_account_error_message)
+                        )
+                    }
+                }
             } else {
-                DialogUtils.showMessage(context, getString(R.string.new_account_error_message))
+                DialogUtils.showMessage(context, "Preencha todos os campos")
             }
         }
 
-        // login de usuário
+        // volta pra tela de login
         btnLoginAccount.setOnClickListener {
             replaceFragment( LoginFragment(), TransitionType.SLIDE)
         }

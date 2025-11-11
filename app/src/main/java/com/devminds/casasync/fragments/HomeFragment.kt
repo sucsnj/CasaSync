@@ -1,8 +1,5 @@
 package com.devminds.casasync.fragments
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import android.util.Log
 import android.content.Context
 import android.widget.Toast
@@ -66,12 +63,6 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
         subtitle.setOnClickListener {
             replaceFragment(UserConfigFragment(), TransitionType.FADE)
         }
-    }
-    private fun userId(): String { // retorna o id do usuário
-        userId = activity?.intent?.getStringExtra("userId") ?: userViewModel.user.value?.id ?: getString(
-            R.string.devminds_text
-        )
-        return userId
     }
 
     private fun resolveUserId(): String {

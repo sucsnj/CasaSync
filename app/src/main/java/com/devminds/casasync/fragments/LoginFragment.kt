@@ -55,17 +55,17 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
     private lateinit var btnBiometricLogin: LinearLayout
 
     private fun loginWithUserId(userId: String) {
-        val userFound = JsonStorageManager.getUserById(requireContext(), userId)
+        FirestoreHelper.getUserById(userId) { user ->
+            if (user != null) {
+                userViewModel.setUser(user)
 
-        if (userFound != null) {
-            userViewModel.setUser(userFound)
-
-            val intent = Intent(requireContext(), HomeActivity::class.java)
-            intent.putExtra("userId", userFound.id)
-            startActivity(intent)
-            requireActivity().finish()
-        } else {
-            DialogUtils.showMessage(requireContext(), getString(R.string.login_error_message))
+                val intent = Intent(requireContext(), HomeActivity::class.java)
+                intent.putExtra("userId", user.id)
+                startActivity(intent)
+                requireActivity().finish()
+            } else {
+                DialogUtils.showMessage(requireContext(), getString(R.string.login_error_message))
+            }
         }
     }
 
@@ -107,12 +107,11 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                 val newUser = User(
                     id = firebaseUser.uid,
                     name = firebaseUser.displayName ?: "Usuário",
-                    login = firebaseUser.email ?: "",
+                    email = firebaseUser.email ?: "",
                     password = "",
                     houses = mutableListOf()
                 )
                 userRef.set(newUser).addOnSuccessListener {
-                    JsonStorageManager.saveUser(requireContext(), newUser)
                     userViewModel.setUser(newUser)
                     navigateToHome(newUser)
                 }
@@ -128,7 +127,6 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                     user.houses.addAll(houses)
 
                     // salva com casas
-                    JsonStorageManager.saveUser(requireContext(), user)
                     userViewModel.setUser(user)
                     userViewModel.persistAndSyncUser(requireContext())
                     navigateToHome(user)
@@ -181,6 +179,15 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
 
         // salva o id do usuário nas shared preferences
         val prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        prefs.edit {
+            putString(
+                "logged_user_id",
+                user.id)
+        }
+    }
+
+    fun saveUserToPrefs(user: User) {
+        val prefs = requireContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
         prefs.edit {
             putString(
                 "logged_user_id",
@@ -248,26 +255,22 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         btnLogin = view.findViewById(R.id.btnLogin)
         btnLogin.setOnClickListener {
 
-            // transforma os dados em string
-            val login = txtLoginPrompt.text.toString()
+            // dados de login
+            val email = txtLoginPrompt.text.toString()
             val password = txtPasswordPrompt.text.toString()
 
             // se estiver tudo preenchido
-            if (login.isNotEmpty() && password.isNotEmpty()) {
-
+            if (email.isNotEmpty() && password.isNotEmpty()) {
                 // usuário local
-                val userFound = JsonStorageManager.authenticateUser(requireContext(), login, password)
                 val isConnected = Utils.isConnected(requireContext()) // verifica conexão
 
-                // se o usuário local for encontrado
-                if (userFound != null) {
-                    login(context, userViewModel, userFound)
-                    DialogUtils.showMessage(context, "Login realizado Localmente")
-                } else if (isConnected) { // caso não encontre o local, procura no firestore
-                    Auth().authenticateWithFirestore(requireContext(), login, password) { fsUser ->
-                        if (fsUser != null) {
-                            login(context, userViewModel, fsUser)
-                            DialogUtils.showMessage(context, "Login realizado em Nuvem")
+                // se houver conexão
+                if (isConnected) {
+                    Auth().authenticateWithFirestore(requireContext(), email, password) { user ->
+                        if (user != null) {
+                            login(context, userViewModel, user)
+                            DialogUtils.showMessage(context, getString(R.string.login_success_message))
+//                            saveUserToPrefs(user) // salva o usuário nas shared preferences
                         } else {
                             DialogUtils.showMessage(
                                 requireContext(),
@@ -276,17 +279,14 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                         }
                     }
                 } else {
-                    DialogUtils.showMessage(
-                        requireContext(),
-                        getString(R.string.login_error_message)
-                    )
+                    DialogUtils.showMessage(requireContext(), "Sem conexão com a internet.")
                 }
             } else {
                 DialogUtils.showMessage(context, getString(R.string.login_empty_message))
             }
         }
 
-        // botão de criar conta
+        // vai pra tela de criar conta
         btnCreateAccount = view.findViewById(R.id.btnCreatAccount)
         btnCreateAccount.setOnClickListener {
             replaceFragment(CadastroFragment(), TransitionType.SLIDE)

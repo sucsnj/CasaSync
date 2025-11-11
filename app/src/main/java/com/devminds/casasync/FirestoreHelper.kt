@@ -18,8 +18,72 @@ import com.google.firebase.firestore.SetOptions
 
 object FirestoreHelper {
 
-    // TODO modularizar
-fun syncUserToFirestore(user: User) {
+    val db = FirebaseFirestore.getInstance()
+
+    fun getUserById(userId: String, onResult: (User?) -> Unit) {
+        val userDoc = db.collection("users").document(userId)
+        userDoc.get()
+            .addOnSuccessListener { document ->
+                if (document != null && document.exists()) {
+                    val user = User(
+                        id = document.id,
+                        name = document.getString("name") ?: "",
+                        email = document.getString("email") ?: "",
+                        password = document.getString("password") ?: "",
+                        houses = mutableListOf()
+                    )
+                    onResult(user)
+                } else {
+                    Log.w("FirestoreHelper", "Usuário não encontrado com ID: $userId")
+                    onResult(null)
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.e("FirestoreHelper", "Erro ao buscar usuário por ID", exception)
+                onResult(null)
+            }
+    }
+
+    fun getUserByEmail(email: String, onResult: (Boolean) -> Unit) {
+        db.collection("users")
+            .whereEqualTo("email", email)
+            .get()
+            .addOnSuccessListener { documents ->
+                Log.d("FirestoreHelper", "Email encontrado")
+                val exists = !documents.isEmpty
+                onResult(exists)
+            }
+            .addOnFailureListener { exception ->
+                Log.e("FirestoreHelper", "Email não encontrado", exception)
+                onResult(false)
+            }
+    }
+
+    fun createUser(name: String, email: String, password: String, onResult: (User?) -> Unit) {
+        val newUser = hashMapOf(
+            "name" to name,
+            "email" to email,
+            "password" to password
+        )
+        db.collection("users")
+            .add(newUser)
+            .addOnSuccessListener { documentReference ->
+                val user = User(
+                    id = documentReference.id,
+                    name = name,
+                    email = email,
+                    password = password,
+                    houses = mutableListOf()
+                )
+                onResult(user)
+            }
+            .addOnFailureListener { e ->
+                Log.e("FirestoreHelper", "Erro ao criar usuário", e)
+                onResult(null)
+            }
+    }
+
+    fun syncUserToFirestore(user: User) {
     val db = FirebaseFirestore.getInstance()
 
     if (user.id.isBlank()) {
@@ -113,5 +177,4 @@ fun syncUserToFirestore(user: User) {
         }
     }
 }
-
 }

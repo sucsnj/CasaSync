@@ -7,6 +7,7 @@ import androidx.annotation.Keep
 data class User(
     var id: String = "",
     var name: String = "",
+    var email: String = "",
     var login: String = "",
     var password: String = "",
     val houses: MutableList<House> = mutableListOf()

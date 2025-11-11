@@ -31,6 +31,7 @@ import com.devminds.casasync.views.UserViewModel
 import com.devminds.casasync.views.TaskViewModel
 import androidx.core.content.edit
 import com.devminds.casasync.MainActivity
+import com.google.firebase.firestore.FirebaseFirestore
 
 // classe utilitária
 object Utils {
@@ -519,7 +520,7 @@ object Utils {
     // remove usuário do SharedPreferences
     fun logout(context: Context) {
         val prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
-        prefs.edit { clear() }
+        prefs.edit().clear().apply()
 
         val intent = Intent(context, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -528,10 +529,5 @@ object Utils {
         if (context is Activity) {
             context.finish()
         }
-    }
-
-    fun removeUser(context: Context) {
-        val prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
-        prefs.edit { remove("logged_user_id") }
     }
 }
