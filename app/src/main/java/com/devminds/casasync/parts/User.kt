@@ -8,6 +8,6 @@ data class User(
     var id: String = "",
     var name: String = "",
     var login: String = "",
-    var password: String = "", // Mesmo que não use, precisa estar aqui para o mapeamento
+    var password: String = "",
     val houses: MutableList<House> = mutableListOf()
 )

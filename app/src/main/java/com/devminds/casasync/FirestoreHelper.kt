@@ -14,79 +14,104 @@ import com.devminds.casasync.views.HouseViewModel
 import com.devminds.casasync.views.DependentViewModel
 import com.devminds.casasync.views.TaskViewModel
 import android.content.Context
+import com.google.firebase.firestore.SetOptions
 
 object FirestoreHelper {
 
-    fun writeUser() {
-        val db = FirebaseFirestore.getInstance()
-        val user = hashMapOf("nome" to "Carlos", "cidade" to "Jaboatão")
+    // TODO modularizar
+fun syncUserToFirestore(user: User) {
+    val db = FirebaseFirestore.getInstance()
 
-        db.collection("usuarios").add(user)
-            .addOnSuccessListener { Log.d("Firestore", "Adicionado: ${it.id}") }
-            .addOnFailureListener { Log.e("Firestore", "Erro: ", it) }
+    if (user.id.isBlank()) {
+        Log.e("Firestore", "ID do usuário está nulo ou vazio. Abortando sincronização.")
+        return
     }
 
-    fun readUsers() {
-        val db = FirebaseFirestore.getInstance()
-        db.collection("usuarios").get()
-            .addOnSuccessListener { result ->
-                for (doc in result) {
-                    Log.d("Firestore", "${doc.id} => ${doc.data}")
-                }
+    val userDoc = db.collection("users").document(user.id)
+
+    // Salva dados básicos do usuário com merge para não apagar campos existentes
+    val userMap = mapOf(
+        "id" to user.id,
+        "name" to user.name,
+        "login" to user.login,
+        "password" to user.password
+    )
+
+    userDoc.set(userMap, SetOptions.merge())
+        .addOnSuccessListener { Log.d("Firestore", "Usuário sincronizado: ${user.id}") }
+        .addOnFailureListener { Log.e("Firestore", "Erro ao salvar usuário", it) }
+
+    // Sincroniza casas apenas se houver casas locais
+    if (user.houses.isNotEmpty()) {
+        val casasRef = userDoc.collection("casas")
+
+        casasRef.get().addOnSuccessListener { snapshot ->
+            val firestoreHouseIds = snapshot.documents.map { it.id }
+            val localHouseIds = user.houses.map { it.id }
+
+            // Remove casas que não existem mais localmente
+            firestoreHouseIds.filterNot { it in localHouseIds }.forEach { idToDelete ->
+                casasRef.document(idToDelete).delete()
             }
-            .addOnFailureListener { Log.e("Firestore", "Erro: ", it) }
-    }
 
-    fun syncUserToFirestore(user: User) {
-        val db = FirebaseFirestore.getInstance()
-        val userDoc = db.collection("usuarios").document(user.id)
+            // Atualiza ou cria casas
+            user.houses.forEach { house ->
+                val houseDoc = casasRef.document(house.id)
+                val houseMap = mapOf(
+                    "name" to house.name,
+                    "ownerId" to house.ownerId
+                )
+                houseDoc.set(houseMap)
 
-        // Salva dados básicos do usuário
-        val userMap = mapOf(
-            "name" to user.name,
-            "login" to user.login,
-            "password" to user.password
-        )
+                // Sincroniza dependentes apenas se houver
+                if (house.dependents.isNotEmpty()) {
+                    val dependentsRef = houseDoc.collection("dependentes")
 
-        userDoc.set(userMap)
-            .addOnSuccessListener { Log.d("Firestore", "Usuário sincronizado: ${user.id}") }
-            .addOnFailureListener { Log.e("Firestore", "Erro ao salvar usuário", it) }
+                    dependentsRef.get().addOnSuccessListener { depSnapshot ->
+                        val firestoreDepIds = depSnapshot.documents.map { it.id }
+                        val localDepIds = house.dependents.map { it.id }
 
-        // Casas
-        user.houses.forEach { house ->
-            val houseDoc = userDoc.collection("casas").document(house.id)
-            val houseMap = mapOf(
-                "name" to house.name,
-                "ownerId" to house.ownerId
-            )
+                        firestoreDepIds.filterNot { it in localDepIds }.forEach { idToDelete ->
+                            dependentsRef.document(idToDelete).delete()
+                        }
 
-            houseDoc.set(houseMap)
-                .addOnSuccessListener { Log.d("Firestore", "Casa sincronizada: ${house.id}") }
+                        house.dependents.forEach { dep ->
+                            val depDoc = dependentsRef.document(dep.id)
+                            val depMap = mapOf("name" to dep.name)
+                            depDoc.set(depMap)
 
-            // Dependentes
-            house.dependents.forEach { dep ->
-                val depDoc = houseDoc.collection("dependentes").document(dep.id)
-                val depMap = mapOf("name" to dep.name)
+                            // Sincroniza tarefas apenas se houver
+                            if (dep.tasks.isNotEmpty()) {
+                                val tasksRef = depDoc.collection("tarefas")
 
-                depDoc.set(depMap)
-                    .addOnSuccessListener { Log.d("Firestore", "Dependente sincronizado: ${dep.id}") }
+                                tasksRef.get().addOnSuccessListener { taskSnapshot ->
+                                    val firestoreTaskIds = taskSnapshot.documents.map { it.id }
+                                    val localTaskIds = dep.tasks.map { it.id }
 
-                // Tarefas
-                dep.tasks.forEach { task ->
-                    val taskDoc = depDoc.collection("tarefas").document(task.id)
-                    val taskMap = mapOf(
-                        "name" to task.name,
-                        "description" to task.description,
-                        "previsionDate" to task.previsionDate,
-                        "previsionHour" to task.previsionHour,
-                        "startDate" to task.startDate,
-                        "finishDate" to task.finishDate
-                    )
+                                    firestoreTaskIds.filterNot { it in localTaskIds }.forEach { idToDelete ->
+                                        tasksRef.document(idToDelete).delete()
+                                    }
 
-                    taskDoc.set(taskMap)
-                        .addOnSuccessListener { Log.d("Firestore", "Tarefa sincronizada: ${task.id}") }
+                                    dep.tasks.forEach { task ->
+                                        val taskDoc = tasksRef.document(task.id)
+                                        val taskMap = mapOf(
+                                            "name" to task.name,
+                                            "description" to task.description,
+                                            "previsionDate" to task.previsionDate,
+                                            "previsionHour" to task.previsionHour,
+                                            "startDate" to task.startDate,
+                                            "finishDate" to task.finishDate
+                                        )
+                                        taskDoc.set(taskMap)
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
     }
+}
+
 }

@@ -1,5 +1,6 @@
 package com.devminds.casasync.fragments
 
+import com.google.firebase.firestore.FirebaseFirestore
 import android.content.Context
 import android.os.Bundle
 import android.view.Menu
@@ -141,11 +142,7 @@ class HouseFragment : BaseFragment(R.layout.fragment_house) {
                         houseViewModel.house.value?.dependents?.add(newDependent)
                         adapter.notifyItemInserted(dependentList.size - 1)
 
-                        // persiste o usuário em json
-                        val user = userViewModel.user.value
-                        user?.let {
-                            JsonStorageManager.saveUser(context, it)
-                        }
+                        userViewModel.persistUser(context, userViewModel.user.value)
                     }
                     DialogUtils.showMessage(context, "Dependente adicionado")
                 }

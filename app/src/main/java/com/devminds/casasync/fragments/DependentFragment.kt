@@ -1,5 +1,6 @@
 package com.devminds.casasync.fragments
 
+import com.google.firebase.firestore.FirebaseFirestore
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
@@ -230,7 +231,6 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
                         // agenda notificação
                         taskViewModel.setTask(newTask)
                         TaskFragment().scheduleTaskNotification(context, taskViewModel)
-                        Log.d("TaskFragment", "scheduleTaskNotification called")
 
                         // persiste o usuário
                         userViewModel.persistUser(context, userViewModel.user.value)
