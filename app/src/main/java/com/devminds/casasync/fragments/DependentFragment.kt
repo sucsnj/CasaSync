@@ -38,9 +38,10 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
     private val userViewModel: UserViewModel by activityViewModels()
     private val dependentViewModel: DependentViewModel by activityViewModels()
     private val taskViewModel: TaskViewModel by activityViewModels()
+    private val taskList: MutableList<Task> = mutableListOf()
     private var currentDependent: Dependent? = null
-    private val taskList: MutableList<Task>
-        get() = currentDependent?.tasks ?: mutableListOf()
+//    private val taskList: MutableList<Task>
+//        get() = currentDependent?.tasks ?: mutableListOf()
 
     private lateinit var adapter: GenericAdapter<Task> // adaptador para a lista de tarefas
     private lateinit var toolbar: MaterialToolbar
@@ -53,6 +54,12 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
         super.onViewCreated(view, savedInstanceState)
 
         val context = requireContext()
+
+        dependentId = arguments?.getString("dependentId")
+        if (dependentId.isNullOrBlank()) {
+            DialogUtils.showMessage(context, "Erro: ID da dependente não encontrado.")
+            return
+        }
 
         toolbar = view.findViewById(R.id.topBar) // cabeçalho
         menu = toolbar.menu
@@ -89,6 +96,7 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
         dependentId = arguments?.getString("dependentId")
         // observa o usuário e o dependente selecionado
         userViewModel.user.observe(viewLifecycleOwner) { user ->
+
             // Busca o dependente atual com base no ID recebido, percorrendo todas as casas do usuário
             currentDependent = user?.houses // casas do usuário
                 ?.flatMap { it.dependents } // todos os dependentes
@@ -97,8 +105,30 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
             // Atualiza o ViewModel de dependente com o dependente selecionado
             currentDependent?.let { dependentViewModel.setDependent(it) }
 
-            // coloca o recyclerTasks no recycler
-            val recycler = recyclerTasks
+            val userId = user?.id ?: return@observe
+            val houseId = user.houses.find { it.dependents.contains(currentDependent) }?.id ?: return@observe
+            val dependentId = currentDependent?.id ?: return@observe
+
+            val tasksRef = FirebaseFirestore.getInstance()
+                .collection("users")
+                .document(userId)
+                .collection("houses")
+                .document(houseId)
+                .collection("dependentes")
+                .document(dependentId)
+                .collection("tarefas")
+
+            tasksRef.get().addOnSuccessListener { snapshot ->
+                val tasks = snapshot.documents.mapNotNull { it.toObject(Task::class.java) }
+
+                currentDependent?.tasks?.clear()
+                currentDependent?.tasks?.addAll(tasks)
+
+                taskList.clear()
+                taskList.addAll(tasks)
+
+                adapter.notifyDataSetChanged()
+            }
 
             // cria o adaptador
             adapter = Utils.createTaskAdapter(
@@ -120,7 +150,7 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
             )
             
             // Aplica o adaptador à RecyclerView para exibir as tarefas
-            recycler.adapter = adapter
+            recyclerTasks.adapter = adapter
             val position = taskList.indexOfFirst { it.id == dependentId }
             if (position != -1) {
                 adapter.notifyItemChanged(position)
@@ -224,6 +254,9 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
                             previsionHour = previsionHour,
                             finishDate = null // inicia 'em progresso'
                         )
+
+                        taskList.add(newTask)
+
                         // adiciona a tarefa à lista e notifica o adapter
                         currentDependent?.tasks?.add(newTask)
                         adapter.notifyItemInserted(taskList.size - 1)
@@ -233,9 +266,10 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
                         TaskFragment().scheduleTaskNotification(context, taskViewModel)
 
                         // persiste o usuário
-                        userViewModel.persistUser(context, userViewModel.user.value)
+                        userViewModel.persistAndSyncUser(context)
+
+                        DialogUtils.showMessage(context, "Tarefa criada")
                     }
-                    DialogUtils.showMessage(context, "Tarefa criada")
                 }
                 .setNegativeButton(getString(R.string.button_cancel), null)
                 .show()

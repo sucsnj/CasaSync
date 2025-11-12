@@ -126,6 +126,7 @@ object FirestoreHelper {
                     }
                     val houseDoc = casasRef.document(house.id)
                     val houseMap = mapOf(
+                        "id" to house.id,
                         "name" to house.name,
                         "ownerId" to house.ownerId
                     )
@@ -145,7 +146,10 @@ object FirestoreHelper {
 
                             house.dependents.forEach { dep ->
                                 val depDoc = dependentsRef.document(dep.id)
-                                val depMap = mapOf("name" to dep.name)
+                                val depMap = mapOf(
+                                    "id" to dep.id,
+                                    "name" to dep.name
+                                )
                                 depDoc.set(depMap)
 
                                 // Sincroniza tarefas apenas se houver
@@ -163,6 +167,7 @@ object FirestoreHelper {
                                         dep.tasks.forEach { task ->
                                             val taskDoc = tasksRef.document(task.id)
                                             val taskMap = mapOf(
+                                                "id" to task.id,
                                                 "name" to task.name,
                                                 "description" to task.description,
                                                 "previsionDate" to task.previsionDate,

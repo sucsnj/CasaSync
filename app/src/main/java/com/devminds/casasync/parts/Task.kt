@@ -1,11 +1,14 @@
 package com.devminds.casasync.parts
 
+import androidx.annotation.Keep
+
+@Keep
 data class Task(
-    val id: String,
-    var name: String,
-    var description: String,
-    var previsionDate: String?,
-    var previsionHour: String?,
-    var startDate: String?,
-    var finishDate: String?
+    var id: String = "",
+    var name: String = "",
+    var description: String = "",
+    var previsionDate: String? = null,
+    var previsionHour: String? = null,
+    var startDate: String? = null,
+    var finishDate: String? = null
 )

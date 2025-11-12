@@ -166,6 +166,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
                             name = houseName,
                             ownerId = userViewModel.user.value?.id ?: getString(R.string.devminds_text) // id do usuário atual
                         )
+                        Log.d("NovaCasa", "ID gerado: ${newHouse.id}")
 
                         // adiciona a casa à lista
                         houseList.add(newHouse)
