@@ -17,6 +17,7 @@ import androidx.appcompat.view.ContextThemeWrapper
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.devminds.casasync.FirestoreHelper
 import com.devminds.casasync.GenericAdapter
 import com.devminds.casasync.R
 import com.devminds.casasync.TransitionType
@@ -34,8 +35,10 @@ import com.google.gson.Gson
 class HomeFragment : BaseFragment(R.layout.fragment_home) {
 
     private val userViewModel: UserViewModel by activityViewModels()
-    private val houseList: MutableList<House>
-        get() = userViewModel.user.value?.houses ?: mutableListOf()
+//    private val houseList: MutableList<House>
+//        get() = userViewModel.user.value?.houses ?: mutableListOf()
+    private val houseList = mutableListOf<House>()
+
     private var user: User? = null
 
     private lateinit var userId: String
@@ -79,19 +82,29 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
         clearNavHistory()
         openUserPerfil()
 
-        val resolvedUserId = resolveUserId()
-        Log.d("HomeFragment", "Carregando usuário com ID: $resolvedUserId")
+        FirestoreHelper.getUserById(resolveUserId()) { user ->
+            user?.let {
+                val casasRef = FirestoreHelper.db
+                    .collection("users")
+                    .document(it.id)
+                    .collection("houses")
 
-        user = JsonStorageManager.loadUser(context, resolvedUserId)
-        user?.let {
-            userViewModel.setUser(it)
+                casasRef.get().addOnSuccessListener { snapshot ->
+                    val houses = snapshot.documents.mapNotNull { doc ->
+                        doc.toObject(House::class.java)
+                    }
+
+                    it.houses.clear()
+                    it.houses.addAll(houses)
+
+                    userViewModel.setUser(it)
+
+                    houseList.clear()
+                    houseList.addAll(houses)
+                    adapter.notifyDataSetChanged()
+                }
+            }
         }
-
-        // carrega o usuário com base no id
-//        user = JsonStorageManager.loadUser(context, userId())
-//        user?.let {
-//            userViewModel.setUser(it) // atualiza o usuário no ViewModel
-//        }
 
         toolbar = view.findViewById(R.id.topBar)
         title = view.findViewById(R.id.title)
@@ -153,12 +166,16 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
                             name = houseName,
                             ownerId = userViewModel.user.value?.id ?: getString(R.string.devminds_text) // id do usuário atual
                         )
+
+                        // adiciona a casa à lista
+                        houseList.add(newHouse)
+
                         // adiciona a casa à lista e notifica o adapter
                         userViewModel.user.value?.houses?.add(newHouse)
                         adapter.notifyItemInserted(houseList.size - 1)
 
                         // persiste o usuário
-                        userViewModel.persistUser(context, userViewModel.user.value)
+                        userViewModel.persistAndSyncUser(context)
 
                         dialog.dismiss()
                         DialogUtils.showMessage(context, "Casa criada")
