@@ -1,5 +1,6 @@
 package com.devminds.casasync.fragments
 
+import com.devminds.casasync.FirestoreHelper
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
@@ -38,34 +39,35 @@ class RecoveryFragment : BaseFragment(R.layout.fragment_recovery) {
 
         // variável para armazenar o usuário encontrado
         var userFound: User? = null
+
         btnRecovery = view.findViewById(R.id.btnRecovery)
         btnRecovery.setOnClickListener {
-            val login = txtLoginPromptRecovery.text.toString()
-            userFound = JsonStorageManager.recoveryUser(context, login) // recupera o usuário
-            // se o usuário for encontrado
-            if (login.isNotEmpty()) {
-                if (userFound != null) {
-                    DialogUtils.showMessage(context, getString(R.string.recovery_login_found_message))
+            val email = txtLoginPromptRecovery.text.toString()
 
-                    promptChangePassword.visibility =
-                        View.VISIBLE // mostra o prompt para troca de senha
-                    btnChangePassword.visibility =
-                        View.VISIBLE // mostra o botão para troca de senha
-                } else {
-                    DialogUtils.showMessage(context, getString(R.string.recovery_login_not_found_message))
+            // verifica o email
+            if (email.isNotEmpty()) {
+                FirestoreHelper.getUserByEmail(email) { exists ->
+                    if (exists) {
+                        DialogUtils.showMessage(context, getString(R.string.recovery_login_found_message))
 
-                    promptChangePassword.visibility =
-                        View.INVISIBLE // esconde o prompt para troca de senha
-                    btnChangePassword.visibility =
-                        View.INVISIBLE // esconde o botão para troca de senha
+                        promptChangePassword.visibility =
+                            View.VISIBLE // mostra o prompt para troca de senha
+                        btnChangePassword.visibility =
+                            View.VISIBLE // mostra o botão para troca de senha
+                    } else {
+                        DialogUtils.showMessage(context, getString(R.string.recovery_login_not_found_message))
+
+                        promptChangePassword.visibility =
+                            View.INVISIBLE // esconde o prompt para troca de senha
+                        btnChangePassword.visibility =
+                            View.INVISIBLE // esconde o botão para troca de senha
+                    }
                 }
             } else {
                 DialogUtils.showMessage(context, getString(R.string.recovery_login_empty_message))
-
-                promptChangePassword.visibility = View.INVISIBLE
-                btnChangePassword.visibility = View.INVISIBLE
             }
         }
+
         // botão para troca de senha
         btnChangePassword = view.findViewById(R.id.btnChangePassword)
         btnChangePassword.visibility = View.INVISIBLE
