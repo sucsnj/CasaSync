@@ -1,5 +1,6 @@
 package com.devminds.casasync.fragments
 
+import com.devminds.casasync.utils.Auth
 import com.devminds.casasync.FirestoreHelper
 import android.os.Bundle
 import android.view.Menu
@@ -44,7 +45,6 @@ class RecoveryFragment : BaseFragment(R.layout.fragment_recovery) {
         btnRecovery.setOnClickListener {
 
             val email = txtLoginPromptRecovery.text.toString()
-
             // verifica o email
             if (email.isNotEmpty()) {
                 FirestoreHelper.getUserByEmail(email) { exists ->
@@ -74,11 +74,19 @@ class RecoveryFragment : BaseFragment(R.layout.fragment_recovery) {
         btnChangePassword.visibility = View.INVISIBLE
         btnChangePassword.setOnClickListener {
 
+            val email = txtLoginPromptRecovery.text.toString()
             val password = promptChangePassword.text.toString()
+            val hashedPassword = Auth().hashPassword(password)
 
             if (password.isNotEmpty()) {
 
-         
+                FirestoreHelper.getUserByEmail(email) { user ->
+                    val userId = user?.id
+                    val userPassword = user?.password
+
+                    DialogUtils.showMessage(context, userId.toString())
+                    DialogUtils.showMessage(context, userPassword.toString())
+                }
 
 
                 // persiste o usuário com a nova senha
