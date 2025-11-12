@@ -54,7 +54,7 @@ class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
 
             // vai no firestore procurar um email igual
             FirestoreHelper.getUserByEmail(email) { exists ->
-                if (exists) {
+                if (exists != null) {
                     DialogUtils.showMessage(context, "Email já cadastrado")
                 } else {
                     // verifica se todos os campos obrigatórios estão preenchidos

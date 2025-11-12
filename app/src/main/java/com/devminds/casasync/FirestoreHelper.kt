@@ -21,6 +21,25 @@ object FirestoreHelper {
 
     val db = FirebaseFirestore.getInstance()
 
+    fun getUserByEmail(email: String, onResult: (User?) -> Unit) {
+        db.collection("users")
+            .whereEqualTo("email", email)
+            .get()
+            .addOnSuccessListener { documents ->
+                if (!documents.isEmpty) {
+                    val doc = documents.documents[0]
+                    val user = doc.toObject(User::class.java)
+                    onResult(user)
+                } else {
+                    onResult(null)
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.e("FirestoreHelper", "Erro ao buscar usuário", exception)
+                onResult(null)
+            }
+    }
+
     fun getUserById(userId: String, onResult: (User?) -> Unit) {
         val userDoc = db.collection("users").document(userId)
         userDoc.get()
@@ -45,20 +64,20 @@ object FirestoreHelper {
             }
     }
 
-    fun getUserByEmail(email: String, onResult: (Boolean) -> Unit) {
-        db.collection("users")
-            .whereEqualTo("email", email)
-            .get()
-            .addOnSuccessListener { documents ->
-                Log.d("FirestoreHelper", "Email encontrado")
-                val exists = !documents.isEmpty
-                onResult(exists)
-            }
-            .addOnFailureListener { exception ->
-                Log.e("FirestoreHelper", "Email não encontrado", exception)
-                onResult(false)
-            }
-    }
+    // fun getUserByEmail(email: String, onResult: (Boolean) -> Unit) {
+    //     db.collection("users")
+    //         .whereEqualTo("email", email)
+    //         .get()
+    //         .addOnSuccessListener { documents ->
+    //             Log.d("FirestoreHelper", "Email encontrado")
+    //             val exists = !documents.isEmpty
+    //             onResult(exists)
+    //         }
+    //         .addOnFailureListener { exception ->
+    //             Log.e("FirestoreHelper", "Email não encontrado", exception)
+    //             onResult(false)
+    //         }
+    // }
 
     fun createUser(name: String, email: String, password: String, onResult: (User?) -> Unit) {
         val newUser = hashMapOf(

@@ -42,12 +42,13 @@ class RecoveryFragment : BaseFragment(R.layout.fragment_recovery) {
 
         btnRecovery = view.findViewById(R.id.btnRecovery)
         btnRecovery.setOnClickListener {
+
             val email = txtLoginPromptRecovery.text.toString()
 
             // verifica o email
             if (email.isNotEmpty()) {
                 FirestoreHelper.getUserByEmail(email) { exists ->
-                    if (exists) {
+                    if (exists != null) {
                         DialogUtils.showMessage(context, getString(R.string.recovery_login_found_message))
 
                         promptChangePassword.visibility =
@@ -72,8 +73,14 @@ class RecoveryFragment : BaseFragment(R.layout.fragment_recovery) {
         btnChangePassword = view.findViewById(R.id.btnChangePassword)
         btnChangePassword.visibility = View.INVISIBLE
         btnChangePassword.setOnClickListener {
+
             val password = promptChangePassword.text.toString()
+
             if (password.isNotEmpty()) {
+
+         
+
+
                 // persiste o usuário com a nova senha
                 userViewModel.persistUserPassword(context, userFound, password)
 
