@@ -33,6 +33,7 @@ class RecoveryFragment : BaseFragment(R.layout.fragment_recovery) {
         super.onViewCreated(view, savedInstanceState)
 
         val context = requireContext()
+        var emailCheck = ""
 
         promptChangePassword = view.findViewById(R.id.promptChangePassword)
         promptChangePassword.visibility = View.INVISIBLE // esconde o prompt para troca de senha
@@ -47,6 +48,7 @@ class RecoveryFragment : BaseFragment(R.layout.fragment_recovery) {
             val email = txtLoginPromptRecovery.text.toString()
             // verifica o email
             if (email.isNotEmpty()) {
+                emailCheck = email
                 FirestoreHelper.getUserByEmail(email) { exists ->
                     if (exists != null) {
                         DialogUtils.showMessage(context, getString(R.string.recovery_login_found_message))
@@ -80,20 +82,14 @@ class RecoveryFragment : BaseFragment(R.layout.fragment_recovery) {
 
             if (password.isNotEmpty()) {
 
-                FirestoreHelper.getUserByEmail(email) { user ->
+                FirestoreHelper.getUserByEmail(emailCheck) { user ->
                     val userId = user?.id
-                    val userPassword = user?.password
-
-                    DialogUtils.showMessage(context, userId.toString())
-                    DialogUtils.showMessage(context, userPassword.toString())
+                    
+                    // atualizar senha no Firestore
+                    FirestoreHelper.updateUserPassword(user, hashedPassword)
+                    DialogUtils.showMessage(context, getString(R.string.recovery_password_changed_message))
+                    replaceFragment(LoginFragment(), TransitionType.SLIDE)
                 }
-
-
-                // persiste o usuário com a nova senha
-                userViewModel.persistUserPassword(context, userFound, password)
-
-                DialogUtils.showMessage(context, getString(R.string.recovery_password_changed_message))
-                replaceFragment( LoginFragment(), TransitionType.SLIDE)
             } else {
                 DialogUtils.showMessage(context, getString(R.string.recovery_password_empty_message))
             }
