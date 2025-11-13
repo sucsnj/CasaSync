@@ -16,6 +16,7 @@ import com.devminds.casasync.views.TaskViewModel
 import android.content.Context
 import com.google.firebase.firestore.SetOptions
 import java.util.UUID
+import com.devminds.casasync.utils.DialogUtils
 
 object FirestoreHelper {
 
@@ -198,5 +199,32 @@ object FirestoreHelper {
                 }
             }
         }
+    }
+
+    fun syncUserToFirestoreRemoveHouse(context: Context, user: User, houseId: String) {
+        if (user.id.isBlank()) {
+            Log.e("Firestore", "ID do usuário está nulo ou vazio. Abortando sincronização.")
+            return
+        } else {
+            Log.d("FirestoreHelper", "Syncing user ${user.id}")
+        }
+
+        DialogUtils.showMessage(context, "Removendo casa ${houseId}...")
+
+        val houseRef = db.collection("users")
+            .document(user.id)
+            .collection("houses")
+            .document(houseId)
+
+        // remover a casa do usuário com base no HouseId
+        houseRef.delete()
+            .addOnSuccessListener { 
+                DialogUtils.showMessage(context, "Casa ${houseId} removida com sucesso.")
+                Log.d("Firestore", "Casa ${houseId} removida com sucesso.")
+                }
+            .addOnFailureListener {
+                DialogUtils.showMessage(context, "Erro ao remover casa ${houseId}.")
+                Log.e("Firestore", "Erro ao remover casa ${houseId}", it)
+                }
     }
 }

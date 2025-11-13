@@ -10,6 +10,7 @@ import com.devminds.casasync.parts.User
 import com.devminds.casasync.utils.JsonStorageManager
 import com.devminds.casasync.FirestoreHelper
 import com.google.gson.Gson
+import com.devminds.casasync.utils.DialogUtils
 
 class UserViewModel : ViewModel() {
     private val _user = MutableLiveData<User?>()
@@ -42,6 +43,11 @@ class UserViewModel : ViewModel() {
     fun persistAndSyncUser(context: Context) {
         val user = user.value ?: return
         FirestoreHelper.syncUserToFirestore(user)
+    }
+
+    fun deleteHouse(context: Context, houseId: String) {
+        val user = user.value ?: return
+        FirestoreHelper.syncUserToFirestoreRemoveHouse(context, user, houseId) 
     }
 
     fun persistUserPassword(context: Context, user: User?, password: String) {

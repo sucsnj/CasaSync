@@ -114,14 +114,14 @@ object Utils {
                                             val newName = editTextDialog.text.toString().trim()
                                             if (newName.isNotEmpty()) {
                                                 item.name = newName
-                                                JsonStorageManager.saveUser(
-                                                    activity,
-                                                    userViewModel.user.value!!
-                                                )
+                                                // JsonStorageManager.saveUser(
+                                                //     activity,
+                                                //     userViewModel.user.value!!
+                                                // )
                                                 recycler.adapter?.notifyItemChanged(position)
 
                                                 userViewModel.user.value?.let {
-                                                    userViewModel.persistUser(context, it)
+                                                    userViewModel.persistAndSyncUser(context)
                                                 }
 
                                                 DialogUtils.showMessage(
@@ -159,7 +159,8 @@ object Utils {
                                                 recycler.adapter?.notifyItemRemoved(index)
 
                                                 userViewModel.user.value?.let {
-                                                    userViewModel.persistUser(context, it)
+                                                    userViewModel.persistAndSyncUser(context)
+                                                    userViewModel.deleteHouse(context, item.id)
                                                 }
 
                                                 DialogUtils.showMessage(context,
@@ -240,14 +241,14 @@ object Utils {
                                             val newName = editTextDialog.text.toString().trim()
                                             if (newName.isNotEmpty()) {
                                                 item.name = newName
-                                                JsonStorageManager.saveUser(
-                                                    activity,
-                                                    userViewModel.user.value!!
-                                                )
+                                                // JsonStorageManager.saveUser(
+                                                //     activity,
+                                                //     userViewModel.user.value!!
+                                                // )
                                                 recycler.adapter?.notifyItemChanged(position)
 
                                                 userViewModel.user.value?.let {
-                                                    userViewModel.persistUser(context, it)
+                                                    userViewModel.persistAndSyncUser(context)
                                                 }
 
                                                 DialogUtils.showMessage(
@@ -285,7 +286,7 @@ object Utils {
                                                 recycler.adapter?.notifyItemRemoved(index)
 
                                                 userViewModel.user.value?.let {
-                                                    userViewModel.persistUser(context, it)
+                                                    userViewModel.persistAndSyncUser(context)
                                                 }
 
                                                 DialogUtils.showMessage(context,
@@ -372,14 +373,14 @@ object Utils {
                                             val newName = editTextDialog.text.toString().trim()
                                             if (newName.isNotEmpty()) {
                                                 item.name = newName
-                                                JsonStorageManager.saveUser(
-                                                    activity,
-                                                    userViewModel.user.value!!
-                                                )
+                                                // JsonStorageManager.saveUser(
+                                                //     activity,
+                                                //     userViewModel.user.value!!
+                                                // )
                                                 recycler.adapter?.notifyItemChanged(position)
 
                                                 userViewModel.user.value?.let {
-                                                    userViewModel.persistUser(context, it)
+                                                    userViewModel.persistAndSyncUser(context)
                                                 }
 
                                                 DialogUtils.showMessage(
@@ -443,7 +444,7 @@ object Utils {
                                                 recycler.adapter?.notifyItemRemoved(index)
 
                                                 userViewModel.user.value?.let {
-                                                    userViewModel.persistUser(context, it)
+                                                    userViewModel.persistAndSyncUser(context)
                                                 }
 
                                                 DialogUtils.showMessage(context,
@@ -473,7 +474,7 @@ object Utils {
                                     recycler.adapter?.notifyItemChanged(position)
 
                                     userViewModel.user.value?.let {
-                                        userViewModel.persistUser(context, it)
+                                        userViewModel.persistAndSyncUser(context)
                                     }
 
                                     DialogUtils.showMessage(context, "Tarefa concluída")
