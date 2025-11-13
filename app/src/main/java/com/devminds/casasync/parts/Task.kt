@@ -5,6 +5,7 @@ import androidx.annotation.Keep
 @Keep
 data class Task(
     var id: String = "",
+    var dependentId: String = "",
     var name: String = "",
     var description: String = "",
     var previsionDate: String? = null,

@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
+import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import androidx.recyclerview.widget.GridLayoutManager
 import android.widget.EditText
@@ -138,6 +139,9 @@ class HouseFragment : BaseFragment(R.layout.fragment_house) {
         // botão de adicionar dependente
         btnAddDependent = view.findViewById(R.id.btnAddDependent)
         btnAddDependent.setOnClickListener {
+            // recupera o id da house
+            val houseId = currentHouse?.id.toString()
+
             val layout = LinearLayout(context).apply {
                 orientation = LinearLayout.VERTICAL
                 setPadding(50, 40, 50, 10)
@@ -161,6 +165,8 @@ class HouseFragment : BaseFragment(R.layout.fragment_house) {
                     if (dependentName.isNotEmpty()) {
                         val newDependent = Dependent(
                             id = UUID.randomUUID().toString(),
+                            email = "",
+                            houseId = houseId,
                             name = dependentName
                         )
                         dependentList.add(newDependent)

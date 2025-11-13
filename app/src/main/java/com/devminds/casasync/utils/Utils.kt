@@ -159,7 +159,6 @@ object Utils {
                                                 recycler.adapter?.notifyItemRemoved(index)
 
                                                 userViewModel.user.value?.let {
-                                                    userViewModel.persistAndSyncUser(context)
                                                     userViewModel.deleteHouse(context, item.id)
                                                 }
 

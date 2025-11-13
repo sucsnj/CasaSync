@@ -159,6 +159,9 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
 
         // adicionar tarefa
         btnAddTask.setOnClickListener {
+            // recupera id do dependente
+            val dependentId = currentDependent?.id.toString()
+
             // layout do diálogo
             val layout = LinearLayout(context).apply {
                 orientation = LinearLayout.VERTICAL
@@ -247,6 +250,7 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
                     if (name.isNotEmpty()) {
                         val newTask = Task(
                             id = UUID.randomUUID().toString(),
+                            dependentId = dependentId,
                             name = name,
                             description = description,
                             startDate = DateUtils.date(0).fullDate, // data atual

@@ -162,7 +162,9 @@ object FirestoreHelper {
                                 val depDoc = dependentsRef.document(dep.id)
                                 val depMap = mapOf(
                                     "id" to dep.id,
-                                    "name" to dep.name
+                                    "name" to dep.name,
+                                    "houseId" to dep.houseId,
+                                    "email" to dep.email
                                 )
                                 depDoc.set(depMap)
 
@@ -182,6 +184,7 @@ object FirestoreHelper {
                                             val taskDoc = tasksRef.document(task.id)
                                             val taskMap = mapOf(
                                                 "id" to task.id,
+                                                "dependentId" to task.dependentId,
                                                 "name" to task.name,
                                                 "description" to task.description,
                                                 "previsionDate" to task.previsionDate,
@@ -226,5 +229,59 @@ object FirestoreHelper {
                 DialogUtils.showMessage(context, "Erro ao remover casa ${houseId}.")
                 Log.e("Firestore", "Erro ao remover casa ${houseId}", it)
                 }
+    }
+
+    fun syncUserToFirestoreRemoveDependent(context: Context, user: User, houseId: String,dependentId: String) {
+        if (user.id.isBlank()) {
+            Log.e("Firestore", "ID do usuário está nulo ou vazio. Abortando sincronização.")
+            return
+        } else {
+            Log.d("FirestoreHelper", "Syncing user ${user.id}")
+        }
+
+        DialogUtils.showMessage(context, "Removendo casa ${dependentId}...")
+
+        val houseRef = db.collection("users")
+            .document(user.id)
+            .collection("houses")
+            .document(houseId)
+
+        // remover a casa do usuário com base no HouseId
+        houseRef.delete()
+            .addOnSuccessListener {
+                DialogUtils.showMessage(context, "Casa ${houseId} removida com sucesso.")
+                Log.d("Firestore", "Casa ${houseId} removida com sucesso.")
+            }
+            .addOnFailureListener {
+                DialogUtils.showMessage(context, "Erro ao remover casa ${houseId}.")
+                Log.e("Firestore", "Erro ao remover casa ${houseId}", it)
+            }
+    }
+
+    fun syncUserToFirestoreRemoveTask(context: Context, user: User, houseId: String, dependentId: String, taskId: String) {
+        if (user.id.isBlank()) {
+            Log.e("Firestore", "ID do usuário está nulo ou vazio. Abortando sincronização.")
+            return
+        } else {
+            Log.d("FirestoreHelper", "Syncing user ${user.id}")
+        }
+
+        DialogUtils.showMessage(context, "Removendo casa ${houseId}...")
+
+        val houseRef = db.collection("users")
+            .document(user.id)
+            .collection("houses")
+            .document(houseId)
+
+        // remover a casa do usuário com base no HouseId
+        houseRef.delete()
+            .addOnSuccessListener {
+                DialogUtils.showMessage(context, "Casa ${houseId} removida com sucesso.")
+                Log.d("Firestore", "Casa ${houseId} removida com sucesso.")
+            }
+            .addOnFailureListener {
+                DialogUtils.showMessage(context, "Erro ao remover casa ${houseId}.")
+                Log.e("Firestore", "Erro ao remover casa ${houseId}", it)
+            }
     }
 }

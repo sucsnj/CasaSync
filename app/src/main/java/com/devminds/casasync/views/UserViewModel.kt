@@ -50,6 +50,16 @@ class UserViewModel : ViewModel() {
         FirestoreHelper.syncUserToFirestoreRemoveHouse(context, user, houseId) 
     }
 
+    fun deleteDependent(context: Context, houseId: String, dependentId: String) {
+        val user = user.value ?: return
+        FirestoreHelper.syncUserToFirestoreRemoveDependent(context, user, houseId, dependentId)
+    }
+
+    fun deleteTask(context: Context, houseId: String, dependentId: String, taskId: String) {
+        val user = user.value ?: return
+        FirestoreHelper.syncUserToFirestoreRemoveTask(context, user, houseId, dependentId, taskId)
+    }
+
     fun persistUserPassword(context: Context, user: User?, password: String) {
         user?.let {
             it.password = password
