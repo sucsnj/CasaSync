@@ -100,7 +100,7 @@ class HouseFragment : BaseFragment(R.layout.fragment_house) {
                     .document(userId)
                     .collection("houses")
                     .document(id)
-                    .collection("dependentes")
+                    .collection("dependents")
 
                 dependentsRef.get().addOnSuccessListener { snapshot ->
                     val dependents =

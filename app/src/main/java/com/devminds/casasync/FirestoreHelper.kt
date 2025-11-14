@@ -152,7 +152,7 @@ object FirestoreHelper {
 
                     // Sincroniza dependentes apenas se houver
                     if (house.dependents.isNotEmpty()) {
-                        val dependentsRef = houseDoc.collection("dependentes")
+                        val dependentsRef = houseDoc.collection("dependents")
 
                         dependentsRef.get().addOnSuccessListener { depSnapshot ->
                             val firestoreDepIds = depSnapshot.documents.map { it.id }
@@ -174,7 +174,7 @@ object FirestoreHelper {
 
                                 // Sincroniza tarefas apenas se houver
                                 if (dep.tasks.isNotEmpty()) {
-                                    val tasksRef = depDoc.collection("tarefas")
+                                    val tasksRef = depDoc.collection("tasks")
 
                                     tasksRef.get().addOnSuccessListener { taskSnapshot ->
                                         val firestoreTaskIds = taskSnapshot.documents.map { it.id }
@@ -188,7 +188,8 @@ object FirestoreHelper {
                                             val taskDoc = tasksRef.document(task.id)
                                             val taskMap = mapOf(
                                                 "id" to task.id,
-                                                "dependentId" to task.dependentId,
+                                                "houseId" to task.houseId,
+                                                "dependentId" to task.dependentId,             
                                                 "name" to task.name,
                                                 "description" to task.description,
                                                 "previsionDate" to task.previsionDate,
@@ -219,13 +220,13 @@ object FirestoreHelper {
             .collection("houses")
             .document(houseId)
 
-        val dependentsRef = houseRef.collection("dependentes")
+        val dependentsRef = houseRef.collection("dependents")
 
         dependentsRef.get().addOnSuccessListener { depSnapshot ->
             val dependentDocs = depSnapshot.documents
 
             val deleteTasksAndDependents = dependentDocs.map { depDoc ->
-                val tasksRef = depDoc.reference.collection("tarefas")
+                val tasksRef = depDoc.reference.collection("tasks")
                 tasksRef.get().continueWithTask { taskSnapshot ->
                     val deleteTasks = taskSnapshot.result?.documents?.map { it.reference.delete() } ?: emptyList()
                     Tasks.whenAllComplete(deleteTasks).continueWithTask {
@@ -259,13 +260,13 @@ object FirestoreHelper {
             .collection("houses")
             .document(houseId)
 
-        val dependentsRef = houseRef.collection("dependentes")
+        val dependentsRef = houseRef.collection("dependents")
 
         dependentsRef.get().addOnSuccessListener { depSnapshot ->
             val dependentDocs = depSnapshot.documents
 
             val deleteTasksAndDependents = dependentDocs.map { depDoc ->
-                val tasksRef = depDoc.reference.collection("tarefas")
+                val tasksRef = depDoc.reference.collection("tasks")
                 tasksRef.get().continueWithTask { taskSnapshot ->
                     val deleteTasks = taskSnapshot.result?.documents?.map { it.reference.delete() } ?: emptyList()
                     Tasks.whenAllComplete(deleteTasks).continueWithTask {
@@ -278,20 +279,27 @@ object FirestoreHelper {
         }
     }
 
-    fun syncUserToFirestoreRemoveTask(context: Context, user: User, taskId: String) {
+    fun syncUserToFirestoreRemoveTask(context: Context, user: User, houseId: String, depId: String, taskId: String) {
         if (user.id.isBlank()) {
             Log.e("Firestore", "ID do usuário está nulo ou vazio. Abortando sincronização.")
             return
         }
 
-        val taskRef = db.collection("tasks").document(taskId)
+        val taskRef = db.collection("users")
+            .document(user.id)
+            .collection("houses")
+            .document(houseId)
+            .collection("dependents")
+            .document(depId)
+            .collection("tasks")
+            .document(taskId)
 
         taskRef.delete()
                 .addOnSuccessListener {
-                    Log.d("Firestore", "Casa ${taskId} removida com sucesso.")
+                    Log.d("Firestore", "Tarefa ${taskId} removida com sucesso.")
                 }
                 .addOnFailureListener {
-                    Log.e("Firestore", "Erro ao remover casa ${taskId}", it)
+                    Log.e("Firestore", "Erro ao remover tarefa ${taskId}", it)
                 }
     }
 }

@@ -114,9 +114,9 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
                 .document(userId)
                 .collection("houses")
                 .document(houseId)
-                .collection("dependentes")
+                .collection("dependents")
                 .document(dependentId)
-                .collection("tarefas")
+                .collection("tasks")
 
             tasksRef.get().addOnSuccessListener { snapshot ->
                 val tasks = snapshot.documents.mapNotNull { it.toObject(Task::class.java) }
@@ -159,7 +159,8 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
 
         // adicionar tarefa
         btnAddTask.setOnClickListener {
-            // recupera id do dependente
+            // recupera id do dependente e casa
+            val houseId = currentDependent?.houseId.toString()
             val dependentId = currentDependent?.id.toString()
 
             // layout do diálogo
@@ -250,6 +251,7 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
                     if (name.isNotEmpty()) {
                         val newTask = Task(
                             id = UUID.randomUUID().toString(),
+                            houseId = houseId,
                             dependentId = dependentId,
                             name = name,
                             description = description,
