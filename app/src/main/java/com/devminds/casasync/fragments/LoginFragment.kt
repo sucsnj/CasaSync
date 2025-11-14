@@ -159,6 +159,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
         requireActivity().finish()
+        Utils.saveUserToPrefs(requireContext(), user)
     }
 
     fun login(context: Context, userViewModel: UserViewModel, user: User) {

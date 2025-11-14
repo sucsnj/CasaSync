@@ -285,8 +285,6 @@ object FirestoreHelper {
             return
         }
 
-        DialogUtils.showMessage(context, "Removendo tarefa...")
-
         val taskRef = db.collection("users")
             .document(user.id)
             .collection("houses")
@@ -298,11 +296,9 @@ object FirestoreHelper {
 
         taskRef.delete()
                 .addOnSuccessListener {
-                    DialogUtils.showMessage(context, "Tarefa removida com sucesso.")
                     Log.d("Firestore", "Tarefa ${taskId} removida com sucesso.")
                 }
                 .addOnFailureListener {
-                    DialogUtils.showMessage(context, "Erro ao remover tarefa ${taskId}")
                     Log.e("Firestore", "Erro ao remover tarefa ${taskId}", it)
                 }
     }
