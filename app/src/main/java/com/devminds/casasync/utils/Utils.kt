@@ -431,7 +431,8 @@ object Utils {
                                                 recycler.adapter?.notifyItemRemoved(index)
 
                                                 userViewModel.user.value?.let {
-                                                    userViewModel.persistAndSyncUser(context)
+                                                    // userViewModel.persistAndSyncUser(context)
+                                                    userViewModel.deleteTask(context, item.houseId, item.dependentId, item.id)
                                                 }
 
                                                 DialogUtils.showMessage(context,
@@ -461,7 +462,7 @@ object Utils {
                                     recycler.adapter?.notifyItemChanged(position)
 
                                     userViewModel.user.value?.let {
-                                        userViewModel.deleteTask(context, item.houseId, item.dependentId, item.id)
+                                        userViewModel.persistAndSyncUser(context)
                                     }
 
                                     DialogUtils.showMessage(context, "Tarefa concluída")
