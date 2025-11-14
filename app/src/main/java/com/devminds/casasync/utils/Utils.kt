@@ -114,10 +114,6 @@ object Utils {
                                             val newName = editTextDialog.text.toString().trim()
                                             if (newName.isNotEmpty()) {
                                                 item.name = newName
-                                                // JsonStorageManager.saveUser(
-                                                //     activity,
-                                                //     userViewModel.user.value!!
-                                                // )
                                                 recycler.adapter?.notifyItemChanged(position)
 
                                                 userViewModel.user.value?.let {
@@ -240,10 +236,6 @@ object Utils {
                                             val newName = editTextDialog.text.toString().trim()
                                             if (newName.isNotEmpty()) {
                                                 item.name = newName
-                                                // JsonStorageManager.saveUser(
-                                                //     activity,
-                                                //     userViewModel.user.value!!
-                                                // )
                                                 recycler.adapter?.notifyItemChanged(position)
 
                                                 userViewModel.user.value?.let {
@@ -285,7 +277,8 @@ object Utils {
                                                 recycler.adapter?.notifyItemRemoved(index)
 
                                                 userViewModel.user.value?.let {
-                                                    userViewModel.persistAndSyncUser(context)
+                                                    // userViewModel.persistAndSyncUser(context)
+                                                    userViewModel.deleteDependent(context, item.houseId)
                                                 }
 
                                                 DialogUtils.showMessage(context,

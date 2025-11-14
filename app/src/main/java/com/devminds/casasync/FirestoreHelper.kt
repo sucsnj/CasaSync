@@ -2,10 +2,14 @@ package com.devminds.casasync
 
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.QuerySnapshot
+import com.google.android.gms.tasks.Task
+import com.google.android.gms.tasks.Tasks
 import com.devminds.casasync.parts.User
 import com.devminds.casasync.parts.House
 import com.devminds.casasync.parts.Dependent
-import com.devminds.casasync.parts.Task
+// import com.devminds.casasync.parts.Task as TaskPart
 import com.devminds.casasync.parts.UserIndexEntry
 import com.devminds.casasync.utils.JsonStorageManager
 import com.devminds.casasync.utils.Utils
@@ -208,80 +212,86 @@ object FirestoreHelper {
         if (user.id.isBlank()) {
             Log.e("Firestore", "ID do usuário está nulo ou vazio. Abortando sincronização.")
             return
-        } else {
-            Log.d("FirestoreHelper", "Syncing user ${user.id}")
         }
-
-        DialogUtils.showMessage(context, "Removendo casa ${houseId}...")
 
         val houseRef = db.collection("users")
             .document(user.id)
             .collection("houses")
             .document(houseId)
 
-        // remover a casa do usuário com base no HouseId
-        houseRef.delete()
-            .addOnSuccessListener { 
-                DialogUtils.showMessage(context, "Casa ${houseId} removida com sucesso.")
-                Log.d("Firestore", "Casa ${houseId} removida com sucesso.")
+        val dependentsRef = houseRef.collection("dependentes")
+
+        dependentsRef.get().addOnSuccessListener { depSnapshot ->
+            val dependentDocs = depSnapshot.documents
+
+            val deleteTasksAndDependents = dependentDocs.map { depDoc ->
+                val tasksRef = depDoc.reference.collection("tarefas")
+                tasksRef.get().continueWithTask { taskSnapshot ->
+                    val deleteTasks = taskSnapshot.result?.documents?.map { it.reference.delete() } ?: emptyList()
+                    Tasks.whenAllComplete(deleteTasks).continueWithTask {
+                        depDoc.reference.delete()
+                    }
                 }
-            .addOnFailureListener {
-                DialogUtils.showMessage(context, "Erro ao remover casa ${houseId}.")
-                Log.e("Firestore", "Erro ao remover casa ${houseId}", it)
+            }
+
+        Tasks.whenAllComplete(deleteTasksAndDependents).addOnSuccessListener {
+            houseRef.delete()
+                .addOnSuccessListener {
+                    Log.d("Firestore", "Casa ${houseId} removida com sucesso.")
                 }
+                .addOnFailureListener {
+                    Log.e("Firestore", "Erro ao remover casa ${houseId}", it)
+                }
+            }
+        }.addOnFailureListener {
+            Log.e("Firestore", "Erro ao acessar dependentes", it)
+        }
     }
 
-    fun syncUserToFirestoreRemoveDependent(context: Context, user: User, houseId: String,dependentId: String) {
+    fun syncUserToFirestoreRemoveDependent(context: Context, user: User, houseId: String) {
         if (user.id.isBlank()) {
             Log.e("Firestore", "ID do usuário está nulo ou vazio. Abortando sincronização.")
             return
-        } else {
-            Log.d("FirestoreHelper", "Syncing user ${user.id}")
         }
-
-        DialogUtils.showMessage(context, "Removendo casa ${dependentId}...")
 
         val houseRef = db.collection("users")
             .document(user.id)
             .collection("houses")
             .document(houseId)
 
-        // remover a casa do usuário com base no HouseId
-        houseRef.delete()
-            .addOnSuccessListener {
-                DialogUtils.showMessage(context, "Casa ${houseId} removida com sucesso.")
-                Log.d("Firestore", "Casa ${houseId} removida com sucesso.")
+        val dependentsRef = houseRef.collection("dependentes")
+
+        dependentsRef.get().addOnSuccessListener { depSnapshot ->
+            val dependentDocs = depSnapshot.documents
+
+            val deleteTasksAndDependents = dependentDocs.map { depDoc ->
+                val tasksRef = depDoc.reference.collection("tarefas")
+                tasksRef.get().continueWithTask { taskSnapshot ->
+                    val deleteTasks = taskSnapshot.result?.documents?.map { it.reference.delete() } ?: emptyList()
+                    Tasks.whenAllComplete(deleteTasks).continueWithTask {
+                        depDoc.reference.delete()
+                    }
+                }
             }
-            .addOnFailureListener {
-                DialogUtils.showMessage(context, "Erro ao remover casa ${houseId}.")
-                Log.e("Firestore", "Erro ao remover casa ${houseId}", it)
-            }
+        }.addOnFailureListener {
+            Log.e("Firestore", "Erro ao acessar dependentes", it)
+        }
     }
 
-    fun syncUserToFirestoreRemoveTask(context: Context, user: User, houseId: String, dependentId: String, taskId: String) {
+    fun syncUserToFirestoreRemoveTask(context: Context, user: User, taskId: String) {
         if (user.id.isBlank()) {
             Log.e("Firestore", "ID do usuário está nulo ou vazio. Abortando sincronização.")
             return
-        } else {
-            Log.d("FirestoreHelper", "Syncing user ${user.id}")
         }
 
-        DialogUtils.showMessage(context, "Removendo casa ${houseId}...")
+        val taskRef = db.collection("tasks").document(taskId)
 
-        val houseRef = db.collection("users")
-            .document(user.id)
-            .collection("houses")
-            .document(houseId)
-
-        // remover a casa do usuário com base no HouseId
-        houseRef.delete()
-            .addOnSuccessListener {
-                DialogUtils.showMessage(context, "Casa ${houseId} removida com sucesso.")
-                Log.d("Firestore", "Casa ${houseId} removida com sucesso.")
-            }
-            .addOnFailureListener {
-                DialogUtils.showMessage(context, "Erro ao remover casa ${houseId}.")
-                Log.e("Firestore", "Erro ao remover casa ${houseId}", it)
-            }
+        taskRef.delete()
+                .addOnSuccessListener {
+                    Log.d("Firestore", "Casa ${taskId} removida com sucesso.")
+                }
+                .addOnFailureListener {
+                    Log.e("Firestore", "Erro ao remover casa ${taskId}", it)
+                }
     }
 }
