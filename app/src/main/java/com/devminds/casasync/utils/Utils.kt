@@ -154,7 +154,9 @@ object Utils {
                                                 list.removeAt(index)
                                                 recycler.adapter?.notifyItemRemoved(index)
 
-                                                userViewModel.user.value?.let {
+                                                userViewModel.user.value?.let { user ->
+                                                    user.houses.removeAll { it.id == item.id }
+
                                                     userViewModel.deleteHouse(context, item.id)
                                                 }
 
@@ -276,7 +278,12 @@ object Utils {
                                                 list.removeAt(index)
                                                 recycler.adapter?.notifyItemRemoved(index)
 
-                                                userViewModel.user.value?.let {
+                                                userViewModel.user.value?.let { user ->
+                                                    // remover o dependente do user
+                                                    user.houses.find { it.id == item.houseId }?.let { house ->
+                                                        house.dependents.removeAll { it.id == item.id }
+                                                    }
+                                                    
                                                     userViewModel.deleteDependent(context, item.houseId)
                                                 }
 
@@ -430,8 +437,13 @@ object Utils {
                                                 list.removeAt(index)
                                                 recycler.adapter?.notifyItemRemoved(index)
 
-                                                userViewModel.user.value?.let {
-                                                    // userViewModel.persistAndSyncUser(context)
+                                                userViewModel.user.value?.let { user ->
+                                                    // remover o task do user
+                                                    user.houses.find { it.id == item.houseId }?.let { house ->
+                                                        house.dependents.find { it.id == item.dependentId }?.let { dep ->
+                                                            dep.tasks.removeAll { it.id == item.id }
+                                                        }
+                                                    }
                                                     userViewModel.deleteTask(context, item.houseId, item.dependentId, item.id)
                                                 }
 
