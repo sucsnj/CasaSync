@@ -55,6 +55,7 @@
                 android:id="@+id/txtLoginPromptRecovery"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:minHeight="48dp"
                 android:layout_marginTop="16dp"
                 android:autofillHints="username"
                 android:drawableStart="@drawable/ico_email"
@@ -72,6 +73,7 @@
                     style="@style/BotaoAzul"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    app:layout_constraintWidth_max="320dp"
                     android:text="@string/recovery_validate_button"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -83,6 +85,7 @@
                 android:id="@+id/promptChangePassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:minHeight="48dp"
                 android:layout_marginTop="16dp"
                 android:autofillHints="password"
                 android:drawableStart="@drawable/ico_password"
@@ -100,6 +103,7 @@
                     style="@style/BotaoAzul"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    app:layout_constraintWidth_max="320dp"
                     android:text="@string/recovery_change_password_button"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -128,21 +132,22 @@
                     android:layout_marginTop="24dp"
                     android:gravity="center"
                     android:paddingStart="2dp"
+                    android:paddingEnd="1dp"
                     android:text="@string/new_account_button"
                     android:textColor="@color/azul_escuro"
                     android:textSize="15sp"
                     android:textStyle="bold" />
             </LinearLayout>
 
-            <!-- Este LinearLayout contém um problema com a imagem muito grande
-                   e por isso não pode ser resumido num único TextView-->
+            <!--  footer  -->
             <LinearLayout
                 android:id="@+id/footer"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="bottom|center_horizontal"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="16dp"
+                tools:ignore="UseCompoundDrawables">
 
                 <ImageView
                     android:id="@+id/imgFooter"

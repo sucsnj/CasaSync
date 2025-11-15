@@ -30,7 +30,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
-                android:text="Tarefa"
+                android:text="@string/task"
                 android:maxLines="1"
                 android:ellipsize="end"
                 android:textSize="28sp"
@@ -43,7 +43,7 @@
                 android:layout_gravity="start"
                 android:maxLines="2"
                 android:ellipsize="end"
-                android:text="Dependente"
+                android:text="@string/dependent"
                 android:textSize="14sp" />
         </LinearLayout>
 
@@ -66,7 +66,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Descrição da tarefa"
+            android:text="@string/task_description"
             android:textColor="@android:color/black"
             android:textSize="20sp"
             android:textStyle="bold"/>
@@ -75,7 +75,7 @@
             android:id="@+id/taskDescription"
             android:layout_width="match_parent"
             android:layout_height="250dp"
-            android:text="Descrição aqui"
+            android:text="@string/description_here"
             android:textColor="@android:color/black"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
@@ -92,11 +92,12 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:minHeight="48dp"
             android:layout_marginTop="6dp"
             android:autofillHints="date"
             android:clickable="true"
             android:layout_marginBottom="6dp"
-            android:text="Data de criação"
+            android:text="@string/creation_date"
             android:drawablePadding="10dp"
             android:focusable="false"
             android:textSize="20sp"
@@ -106,11 +107,12 @@
             android:id="@+id/startDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:minHeight="48dp"
             android:layout_marginTop="6dp"
             android:layout_marginBottom="6dp"
             android:autofillHints="date"
             android:textSize="16sp"
-            android:text="data"
+            android:text="@string/start_date"
             android:clickable="true"
             android:drawablePadding="10dp"
             android:focusable="false" />
@@ -118,11 +120,12 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:minHeight="48dp"
             android:layout_marginTop="6dp"
             android:layout_marginBottom="6dp"
             android:autofillHints="date"
             android:clickable="true"
-            android:text="Data prevista de conclusão"
+            android:text="@string/prevision_conclusion_date"
             android:drawablePadding="10dp"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -138,36 +141,42 @@
                 android:id="@+id/previsionDate"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:maxWidth="488dp"
+                android:minHeight="48dp"
                 android:layout_weight="1"
                 android:autofillHints="date"
                 android:clickable="true"
                 android:drawableStart="@drawable/ico_calendar"
                 android:drawablePadding="10dp"
                 android:focusable="false"
-                android:hint="Data" />
+                android:hint="@string/date"
+                android:inputType="date" />
 
             <EditText
                 android:id="@+id/previsionHour"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:minHeight="48dp"
                 android:layout_weight="1"
                 android:autofillHints="date"
                 android:clickable="true"
                 android:drawableStart="@drawable/ico_calendar"
                 android:drawablePadding="10dp"
                 android:focusable="false"
-                android:hint="Hora" />
+                android:hint="@string/hour"
+                android:inputType="datetime" />
 
         </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:minHeight="48dp"
             android:layout_marginTop="6dp"
             android:layout_marginBottom="6dp"
             android:autofillHints="date"
             android:clickable="true"
-            android:text="Data de conclusão"
+            android:text="@string/conclusion_date"
             android:textSize="20sp"
             android:textStyle="bold"
             android:drawablePadding="10dp"
@@ -178,7 +187,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:text="Concluído"
+            android:text="@string/finished"
             android:autofillHints="date"
             android:textSize="16sp"
             android:drawablePadding="10dp"
@@ -194,7 +203,8 @@
                 android:id="@+id/checker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Concluído"
+                android:minHeight="48dp"
+                android:text="@string/finished"
                 android:checked="false"
                 android:textSize="16sp" />
 
@@ -205,11 +215,11 @@
                 android:drawablePadding="3dp"
                 android:layout_marginStart="20dp"
                 android:gravity="center_vertical"
-                android:drawableStart="@drawable/ico_save"
-                android:text="Salvar Alterações"
+                android:text="@string/save_changes"
                 android:textColor="@android:color/black"
                 android:foreground="?attr/selectableItemBackground"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                app:drawableStartCompat="@drawable/ico_save" />
 
         </LinearLayout>
     </LinearLayout>

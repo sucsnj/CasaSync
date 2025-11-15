@@ -141,5 +141,32 @@
     <string name="finish_dialog">Concluir tarefa</string>
     <string name="default_web_client_id">941068486881-41jjnlij8guqt6ofuliia3sh9pue8mvq.apps.googleusercontent.com</string>
     <string name="finished">Concluído</string>
+    <string name="snackbar_icon">Ícone do Snackbar</string>
+    <string name="item_name">Nome do item</string>
+    <string name="user_info">Informações do usuário</string>
+    <string name="app_info">Informações do app</string>
+    <string name="task">Tarefa</string>
+    <string name="depentent">Dependentes</string>
+    <string name="add_dependent">Adicionar Dependente</string>
+    <string name="user_picture">Foto do usuário</string>
+    <string name="hi_user">Olá, Gandalf</string>
+    <string name="user_profile">Meu Perfil</string>
+    <string name="add_house">Adicionar Casa</string>
+    <string name="dependent_picture">Foto do dependente</string>
+    <string name="tasks">Tarefas</string>
+    <string name="add_task">Adicionar Tarefa</string>
+    <string name="dependent">Dependente</string>
+    <string name="description_here">Descrição aqui</string>
+    <string name="creation_date">Data de criação</string>
+    <string name="date">data</string>
+    <string name="prevision_conclusion_date">Data prevista de conclusão</string>
+    <string name="hour">Hora</string>
+    <string name="conclusion_date">Data de conclusão</string>
+    <string name="save_changes">Salvar Alterações</string>
+    <string name="start_date">Data de início</string>
+    <string name="icon_biometric">Imagem da biometria</string>
+    <string name="login_with_biometric">Entrar com biometria</string>
+    <string name="details">Clique para ver detalhes</string>
+    <string name="item_image">Imagem do Item</string>
 
 </resources>

@@ -21,11 +21,13 @@
         android:id="@+id/inputHouse"
         android:layout_width="match_parent"
         android:layout_height="48dp"
+        android:maxWidth="488dp"
         android:autofillHints="name"
         android:background="@drawable/edittext_background"
         android:hint="@string/house_name"
         android:inputType="text"
         android:padding="12dp"
+        android:textColorHint="#616161"
         android:textColor="#0D47A1"
         android:textCursorDrawable="@null"
         android:textSize="16sp" />

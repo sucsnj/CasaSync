@@ -14,7 +14,7 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="15dp"
         android:elevation="8dp"
-        android:contentDescription="Foto do usuário"
+        android:contentDescription="@string/user_picture"
         android:scaleType="centerInside"
         android:src="@drawable/devminds"
         app:layout_constraintStart_toStartOf="parent"
@@ -43,7 +43,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
-                android:text="Olá, Gandalf"
+                android:text="@string/hi_user"
                 android:textSize="22sp"
                 android:textStyle="bold" />
 
@@ -52,7 +52,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
-                android:text="Meu Perfil"
+                android:text="@string/user_profile"
                 android:textSize="14sp" />
         </LinearLayout>
     </com.google.android.material.appbar.MaterialToolbar>
@@ -98,7 +98,8 @@
         style="@style/BotaoAzulClaro"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:text="Adicionar Casa"
+        app:layout_constraintWidth_max="320dp"
+        android:text="@string/add_house"
         android:textSize="24sp"
         app:icon="@drawable/add_circle"
         app:iconGravity="textStart"
