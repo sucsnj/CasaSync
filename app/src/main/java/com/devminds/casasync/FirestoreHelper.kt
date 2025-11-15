@@ -24,10 +24,10 @@ import com.devminds.casasync.utils.DialogUtils
 
 object FirestoreHelper {
 
-    val db = FirebaseFirestore.getInstance()
+    fun getDb(): FirebaseFirestore = FirebaseFirestore.getInstance()
 
     fun getUserById(userId: String, onResult: (User?) -> Unit) {
-        val userDoc = db.collection("users").document(userId)
+        val userDoc = getDb().collection("users").document(userId)
         userDoc.get()
             .addOnSuccessListener { document ->
                 if (document != null && document.exists()) {
@@ -51,7 +51,7 @@ object FirestoreHelper {
     }
 
     fun getUserByEmail(email: String, onResult: (User?) -> Unit) {
-        db.collection("users")
+        getDb().collection("users")
             .whereEqualTo("email", email)
             .get()
             .addOnSuccessListener { documents ->
@@ -75,7 +75,7 @@ object FirestoreHelper {
             "email" to email,
             "password" to password
         )
-        db.collection("users")
+        getDb().collection("users")
             .add(newUser)
             .addOnSuccessListener { documentReference ->
                 val user = User(
@@ -95,7 +95,7 @@ object FirestoreHelper {
 
     fun updateUserPassword(user: User?, password: String) {
         val userId = user?.id.toString()
-        val userDoc = db.collection("users").document(userId)
+        val userDoc = getDb().collection("users").document(userId)
         val userMap = mapOf(
             "password" to password
         )
@@ -215,7 +215,7 @@ object FirestoreHelper {
             return
         }
 
-        val houseRef = db.collection("users")
+        val houseRef = getDb().collection("users")
             .document(user.id)
             .collection("houses")
             .document(houseId)
@@ -255,7 +255,7 @@ object FirestoreHelper {
             return
         }
 
-        val houseRef = db.collection("users")
+        val houseRef = getDb().collection("users")
             .document(user.id)
             .collection("houses")
             .document(houseId)
@@ -285,7 +285,7 @@ object FirestoreHelper {
             return
         }
 
-        val taskRef = db.collection("users")
+        val taskRef = getDb().collection("users")
             .document(user.id)
             .collection("houses")
             .document(houseId)

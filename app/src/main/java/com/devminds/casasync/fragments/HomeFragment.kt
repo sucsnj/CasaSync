@@ -84,7 +84,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
 
         FirestoreHelper.getUserById(resolveUserId()) { user ->
             user?.let {
-                val casasRef = FirestoreHelper.db
+                val casasRef = FirestoreHelper.getDb()
                     .collection("users")
                     .document(it.id)
                     .collection("houses")
@@ -101,7 +101,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
 
                     houseList.clear()
                     houseList.addAll(houses)
-                    adapter.notifyDataSetChanged()
+                    adapter.notifyItemRangeChanged(0, houseList.size)
                 }
             }
         }
