@@ -39,8 +39,6 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
     private val taskViewModel: TaskViewModel by activityViewModels()
     private val taskList: MutableList<Task> = mutableListOf()
     private var currentDependent: Dependent? = null
-//    private val taskList: MutableList<Task>
-//        get() = currentDependent?.tasks ?: mutableListOf()
 
     private lateinit var adapter: GenericAdapter<Task> // adaptador para a lista de tarefas
     private lateinit var toolbar: MaterialToolbar

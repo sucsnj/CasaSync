@@ -31,7 +31,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
-                android:text="Tarefa"
+                android:text="@string/task"
                 android:maxLines="1"
                 android:ellipsize="end"
                 android:textSize="28sp"
@@ -42,7 +42,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
-                android:text="Dependentes"
+                android:text="@string/depentent"
                 android:textSize="14sp" />
         </LinearLayout>
 
@@ -89,7 +89,8 @@
         style="@style/BotaoAzulClaro"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:text="Adicionar Dependente"
+        app:layout_constraintWidth_max="320dp"
+        android:text="@string/add_dependent"
         android:textSize="24sp"
         app:icon="@drawable/add_circle"
         app:iconGravity="textStart"

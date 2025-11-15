@@ -30,8 +30,6 @@ class HouseFragment : BaseFragment(R.layout.fragment_house) {
     private val houseViewModel: HouseViewModel by activityViewModels()
     private var currentHouse: House? = null
     private val dependentList = mutableListOf<Dependent>()
-//    private val dependentList: MutableList<Dependent>
-//        get() = currentHouse?.dependents ?: mutableListOf()
     private lateinit var toolbar: MaterialToolbar
     private lateinit var menu: Menu
     private lateinit var recyclerDependents: RecyclerView
@@ -52,6 +50,8 @@ class HouseFragment : BaseFragment(R.layout.fragment_house) {
         }
 
         title = view.findViewById(R.id.title)
+        subtitle = view.findViewById(R.id.subtitle)
+
         toolbar = view.findViewById(R.id.topBar)
         // muda o título do cabeçalho
         houseViewModel.house.observe(viewLifecycleOwner) { house ->
@@ -106,7 +106,7 @@ class HouseFragment : BaseFragment(R.layout.fragment_house) {
                     dependentList.clear()
                     dependentList.addAll(dependents)
 
-                    adapter.notifyDataSetChanged()
+                    adapter.notifyItemRangeChanged(0, dependentList.size)
                 }
             }
 

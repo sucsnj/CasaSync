@@ -15,6 +15,7 @@
         android:layout_height="24dp"
         android:layout_marginEnd="7dp"
         android:layout_marginStart="10dp"
+        android:contentDescription="@string/snackbar_icon"
         android:visibility="gone"
         android:src="@drawable/casasync" />
 

@@ -20,10 +20,11 @@ class HomeActivity : AppCompatActivity() {
             insets
         }
 
-        // mudar cor da status bar (migrar para compose TODO)
+        @Suppress("DEPRECATION") // TUDO migrar para Compose
         window.statusBarColor = ContextCompat.getColor(this, R.color.entalhe)
     }
 
+    @Suppress("unused") // TODO
     private fun replaceFragment(fragment: Fragment, transitionType: TransitionType) {
         supportFragmentManager.beginTransaction()
             .setCustomTransition(transitionType)

@@ -34,6 +34,7 @@
             android:id="@+id/txtLoginPrompt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:minHeight="48dp"
             android:layout_marginTop="16dp"
             android:autofillHints="username"
             android:hint="@string/login_email_prompt"
@@ -45,6 +46,7 @@
             android:id="@+id/txtPasswordPrompt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:minHeight="48dp"
             android:layout_marginTop="16dp"
             android:autofillHints="password"
             android:hint="@string/login_password_prompt"
@@ -93,6 +95,7 @@
                 android:id="@+id/btnGoogleLogin"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:minHeight="48dp"
                 android:background="@drawable/rounded_button"
                 android:clickable="true"
                 android:focusable="true"
@@ -142,6 +145,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:paddingStart="2dp"
+                android:paddingEnd="1dp"
                 android:textStyle="bold"
                 android:gravity="center"
                 android:textColor="@color/azul_escuro"
@@ -157,32 +161,32 @@
             android:layout_marginTop="35dp"
             android:gravity="bottom|center_horizontal"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="16dp"
+            tools:ignore="UseCompoundDrawables">
 
             <ImageView
                 android:layout_width="64dp"
                 android:layout_height="64dp"
-                android:contentDescription="Imagem da Biometria"
+                android:contentDescription="@string/icon_biometric"
                 android:src="@drawable/img_biometric"
                 app:tint="@color/cinza_claro" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Entrar com biometria"
+                android:text="@string/login_with_biometric"
                 android:textStyle="bold"
                 android:textSize="14sp" />
         </LinearLayout>
 
-        <!-- Este LinearLayout contém um problema com a imagem muito grande
-               e por isso não pode ser resumido num único TextView-->
         <LinearLayout
             android:id="@+id/footer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="bottom|center_horizontal"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="16dp"
+            tools:ignore="UseCompoundDrawables">
 
             <ImageView
                 android:id="@+id/imgFooter"

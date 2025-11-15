@@ -2,7 +2,6 @@ package com.devminds.casasync.utils
 
 import android.app.NotificationManager
 import android.content.Context
-import android.os.Build
 
 object NotificationUtils {
 

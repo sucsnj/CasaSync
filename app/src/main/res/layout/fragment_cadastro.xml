@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cadastro"
     android:layout_width="match_parent"
@@ -75,6 +76,7 @@
                     android:id="@+id/newUserPrompt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:minHeight="48dp"
                     android:layout_marginTop="6dp"
                     android:autofillHints="username"
                     android:drawableStart="@drawable/icon_user"
@@ -86,6 +88,7 @@
                     android:id="@+id/newBirthdayPrompt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:minHeight="48dp"
                     android:layout_marginTop="6dp"
                     android:autofillHints="birthday"
                     android:clickable="true"
@@ -145,6 +148,7 @@
                     android:id="@+id/newLoginPrompt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:minHeight="48dp"
                     android:layout_marginTop="6dp"
                     android:autofillHints="none"
                     android:drawableStart="@drawable/ico_email"
@@ -156,6 +160,7 @@
                     android:id="@+id/newLoginPromptConfirm"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:minHeight="48dp"
                     android:layout_marginTop="6dp"
                     android:autofillHints="none"
                     android:drawableStart="@drawable/ico_email2"
@@ -401,7 +406,6 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
-            <!-- problema esperado (ignorar)-->
             <!--      footer      -->
             <LinearLayout
                 android:id="@+id/footer"
@@ -411,6 +415,7 @@
                 android:layout_marginBottom="10dp"
                 android:gravity="bottom|center_horizontal"
                 android:orientation="vertical"
+                tools:ignore="UseCompoundDrawables"
                 android:padding="16dp">
 
                 <ImageView

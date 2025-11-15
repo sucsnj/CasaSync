@@ -36,8 +36,4 @@ class GenericAdapter<T>(
 
     override fun getItemCount() = items.size
 
-    fun addItem(item: T) {
-        items.add(item)
-        notifyItemInserted(items.size - 1)
-    }
 }

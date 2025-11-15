@@ -28,7 +28,7 @@
                 android:id="@+id/itemName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Nome do Item"
+                android:text="@string/item_name"
                 android:maxLines="4"
                 android:ellipsize="end"
                 android:textColor="@android:color/black"
@@ -40,7 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="Clique para ver detalhes"
+                android:text="@string/details"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="14sp" />
         </LinearLayout>
@@ -52,7 +52,7 @@
             android:layout_height="42dp"
             android:layout_gravity="top"
             android:layout_marginStart="12dp"
-            android:contentDescription="Imagem do Item"
+            android:contentDescription="@string/item_image"
             android:scaleType="centerInside"
             android:src="@drawable/devminds" />
     </LinearLayout>
