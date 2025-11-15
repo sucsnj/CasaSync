@@ -1,5 +1,6 @@
 package com.devminds.casasync.utils
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -13,11 +14,9 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
-import com.devminds.casasync.FirestoreHelper
 import com.devminds.casasync.GenericAdapter
 import com.devminds.casasync.HomeActivity
 import com.devminds.casasync.R
@@ -33,7 +32,6 @@ import androidx.core.content.edit
 import com.devminds.casasync.MainActivity
 import com.devminds.casasync.fragments.LoginFragment
 import com.devminds.casasync.parts.User
-import com.google.firebase.firestore.FirebaseFirestore
 
 // classe utilitária
 object Utils {
@@ -59,11 +57,12 @@ object Utils {
     }
 
     // precisa de uma variável activity e uma String pro itemName
+    @SuppressLint("InflateParams")
     fun renameDialogItem(
         activity: Activity,
         itemName: String
     ): Pair<View, EditText> { // retorna um par, uma View e um EditText
-        val dialogView = LayoutInflater.from(activity).inflate(R.layout.dialog_rename_item, null)
+        val dialogView = LayoutInflater.from(activity).inflate(R.layout.dialog_rename_item, null, false)
         val editText = dialogView.findViewById<EditText>(R.id.newNameItem)
         editText.setText(itemName)
         editText.setSelection(0, itemName.length)
@@ -83,57 +82,56 @@ object Utils {
         return GenericAdapter(
             items = list,
             layoutResId = R.layout.item_generic,
-            bind = { itemView, item, position, viewHolder ->
+            bind = { itemView, item, position, _ ->
 
                 val textView = itemView.findViewById<TextView>(R.id.itemName)
                 textView.text = item.name
 
                 itemView.setOnLongClickListener {
                     if (context !is Activity) return@setOnLongClickListener false
-                    val activity = context
 
                     val options = arrayOf(
-                        activity.getString(R.string.rename_dialog),
-                        activity.getString(R.string.delete_dialog)
+                        context.getString(R.string.rename_dialog),
+                        context.getString(R.string.delete_dialog)
                     )
 
-                    AlertDialog.Builder(activity)
+                    AlertDialog.Builder(context)
                         .setTitle("$itemOptions ${item.name}")
                         .setItems(options) { _, which ->
                             when (which) {
                                 0 -> {
                                     val (dialogView, editTextDialog) = renameDialogItem(
-                                        activity,
+                                        context,
                                         item.name
                                     )
-                                    val dialogNameEdit = AlertDialog.Builder(activity)
-                                        .setTitle(activity.getString(R.string.rename_dialog))
+                                    val dialogNameEdit = AlertDialog.Builder(context)
+                                        .setTitle(context.getString(R.string.rename_dialog))
                                         .setView(dialogView)
                                         .setCancelable(false)
-                                        .setPositiveButton(activity.getString(R.string.accept_dialog)) { _, _ ->
+                                        .setPositiveButton(context.getString(R.string.accept_dialog)) { _, _ ->
                                             val newName = editTextDialog.text.toString().trim()
                                             if (newName.isNotEmpty()) {
                                                 item.name = newName
                                                 recycler.adapter?.notifyItemChanged(position)
 
                                                 userViewModel.user.value?.let {
-                                                    userViewModel.persistAndSyncUser(context)
+                                                    userViewModel.persistAndSyncUser()
                                                 }
 
                                                 DialogUtils.showMessage(
-                                                    activity,
+                                                    context,
                                                     successRenameToast
                                                 )
                                             }
                                         }
                                         .setNegativeButton(
-                                            activity.getString(R.string.cancel_dialog),
+                                            context.getString(R.string.cancel_dialog),
                                             null
                                         )
                                         .create()
                                     dialogNameEdit.setOnShowListener {
                                         editTextDialog.requestFocus()
-                                        editTextDialog.keyboardDelay(activity, 100)
+                                        editTextDialog.keyboardDelay(context, 100)
                                     }
                                     dialogNameEdit.show()
                                 }
@@ -157,7 +155,7 @@ object Utils {
                                                 userViewModel.user.value?.let { user ->
                                                     user.houses.removeAll { it.id == item.id }
 
-                                                    userViewModel.deleteHouse(context, item.id)
+                                                    userViewModel.deleteHouse(item.id)
                                                 }
 
                                                 DialogUtils.showMessage(context,
@@ -203,7 +201,7 @@ object Utils {
         return GenericAdapter(
             items = list,
             layoutResId = R.layout.item_generic,
-            bind = { itemView, item, position, viewHolder ->
+            bind = { itemView, item, position, _ ->
 
                 // esconde a imagem
                 val imageView = itemView.findViewById<ImageView>(R.id.itemImage)
@@ -214,50 +212,49 @@ object Utils {
 
                 itemView.setOnLongClickListener {
                     if (context !is Activity) return@setOnLongClickListener false
-                    val activity = context
 
                     val options = arrayOf(
-                        activity.getString(R.string.rename_dialog),
-                        activity.getString(R.string.delete_dialog)
+                        context.getString(R.string.rename_dialog),
+                        context.getString(R.string.delete_dialog)
                     )
 
-                    AlertDialog.Builder(activity)
+                    AlertDialog.Builder(context)
                         .setTitle("$itemOptions ${item.name}")
                         .setItems(options) { _, which ->
                             when (which) {
                                 0 -> {
                                     val (dialogView, editTextDialog) = renameDialogItem(
-                                        activity,
+                                        context,
                                         item.name
                                     )
-                                    val dialogNameEdit = AlertDialog.Builder(activity)
-                                        .setTitle(activity.getString(R.string.rename_dialog))
+                                    val dialogNameEdit = AlertDialog.Builder(context)
+                                        .setTitle(context.getString(R.string.rename_dialog))
                                         .setView(dialogView)
                                         .setCancelable(false)
-                                        .setPositiveButton(activity.getString(R.string.accept_dialog)) { _, _ ->
+                                        .setPositiveButton(context.getString(R.string.accept_dialog)) { _, _ ->
                                             val newName = editTextDialog.text.toString().trim()
                                             if (newName.isNotEmpty()) {
                                                 item.name = newName
                                                 recycler.adapter?.notifyItemChanged(position)
 
                                                 userViewModel.user.value?.let {
-                                                    userViewModel.persistAndSyncUser(context)
+                                                    userViewModel.persistAndSyncUser()
                                                 }
 
                                                 DialogUtils.showMessage(
-                                                    activity,
+                                                    context,
                                                     successRenameToast
                                                 )
                                             }
                                         }
                                         .setNegativeButton(
-                                            activity.getString(R.string.cancel_dialog),
+                                            context.getString(R.string.cancel_dialog),
                                             null
                                         )
                                         .create()
                                     dialogNameEdit.setOnShowListener {
                                         editTextDialog.requestFocus()
-                                        editTextDialog.keyboardDelay(activity, 100)
+                                        editTextDialog.keyboardDelay(context, 100)
                                     }
                                     dialogNameEdit.show()
                                 }
@@ -284,7 +281,7 @@ object Utils {
                                                         house.dependents.removeAll { it.id == item.id }
                                                     }
                                                     
-                                                    userViewModel.deleteDependent(context, item.houseId)
+                                                    userViewModel.deleteDependent(item.houseId, item.id)
                                                 }
 
                                                 DialogUtils.showMessage(context,
@@ -331,54 +328,53 @@ object Utils {
         return GenericAdapter(
             items = list,
             layoutResId = R.layout.item_generic,
-            bind = { itemView, item, position, viewHolder ->
+            bind = { itemView, item, position, _ ->
 
                 val textView = itemView.findViewById<TextView>(R.id.itemName)
                 textView.text = item.name
 
                 itemView.setOnLongClickListener {
                     if (context !is Activity) return@setOnLongClickListener false
-                    val activity = context
 
                     // lógica para fazer aparecer o "Concluir tarefa"
                     options = if (item.finishDate != null) {
                         arrayOf(
-                            activity.getString(R.string.rename_dialog),
-                            activity.getString(R.string.delete_dialog)
+                            context.getString(R.string.rename_dialog),
+                            context.getString(R.string.delete_dialog)
                         )
                     } else {
                         arrayOf(
-                            activity.getString(R.string.rename_dialog),
-                            activity.getString(R.string.delete_dialog),
-                            activity.getString(R.string.finish_dialog)
+                            context.getString(R.string.rename_dialog),
+                            context.getString(R.string.delete_dialog),
+                            context.getString(R.string.finish_dialog)
                         )
                     }
 
-                    AlertDialog.Builder(activity)
+                    AlertDialog.Builder(context)
                         .setTitle("$itemOptions ${item.name}")
                         .setItems(options) { _, which ->
                             when (which) {
                                 0 -> {
                                     val (dialogView, editTextDialog) = renameDialogItem(
-                                        activity,
+                                        context,
                                         item.name
                                     )
-                                    val dialogNameEdit = AlertDialog.Builder(activity)
-                                        .setTitle(activity.getString(R.string.rename_dialog))
+                                    val dialogNameEdit = AlertDialog.Builder(context)
+                                        .setTitle(context.getString(R.string.rename_dialog))
                                         .setView(dialogView)
                                         .setCancelable(false)
-                                        .setPositiveButton(activity.getString(R.string.accept_dialog)) { _, _ ->
+                                        .setPositiveButton(context.getString(R.string.accept_dialog)) { _, _ ->
                                             val newName = editTextDialog.text.toString().trim()
                                             if (newName.isNotEmpty()) {
                                                 item.name = newName
                                                 recycler.adapter?.notifyItemChanged(position)
 
                                                 userViewModel.user.value?.let {
-                                                    userViewModel.persistAndSyncUser(context)
+                                                    userViewModel.persistAndSyncUser()
                                                 }
 
                                                 DialogUtils.showMessage(
-                                                    activity,
+                                                    context,
                                                     successRenameToast
                                                 )
                                                 TaskAlarmReceiver().scheduleNotification(
@@ -408,13 +404,13 @@ object Utils {
                                             }
                                         }
                                         .setNegativeButton(
-                                            activity.getString(R.string.cancel_dialog),
+                                            context.getString(R.string.cancel_dialog),
                                             null
                                         )
                                         .create()
                                     dialogNameEdit.setOnShowListener {
                                         editTextDialog.requestFocus()
-                                        editTextDialog.keyboardDelay(activity, 100)
+                                        editTextDialog.keyboardDelay(context, 100)
                                     }
                                     dialogNameEdit.show()
                                 }
@@ -444,7 +440,7 @@ object Utils {
                                                             dep.tasks.removeAll { it.id == item.id }
                                                         }
                                                     }
-                                                    userViewModel.deleteTask(context, item.houseId, item.dependentId, item.id)
+                                                    userViewModel.deleteTask(item.houseId, item.dependentId, item.id)
                                                 }
 
                                                 DialogUtils.showMessage(context,
@@ -474,7 +470,7 @@ object Utils {
                                     recycler.adapter?.notifyItemChanged(position)
 
                                     userViewModel.user.value?.let {
-                                        userViewModel.persistAndSyncUser(context)
+                                        userViewModel.persistAndSyncUser()
                                     }
 
                                     DialogUtils.showMessage(context, "Tarefa concluída")
@@ -546,7 +542,7 @@ object Utils {
     // remove usuário do SharedPreferences
     fun logout(context: Context) {
         val prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
-        prefs.edit().clear().apply()
+        prefs.edit { clear() }
 
         val intent = Intent(context, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

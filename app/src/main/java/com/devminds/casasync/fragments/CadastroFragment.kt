@@ -7,13 +7,9 @@ import android.widget.TextView
 import com.devminds.casasync.FirestoreHelper
 import com.devminds.casasync.R
 import com.devminds.casasync.TransitionType
-import com.devminds.casasync.parts.User
 import com.devminds.casasync.utils.Auth
-import com.devminds.casasync.utils.Biometric
 import com.devminds.casasync.utils.DialogUtils
-import com.devminds.casasync.utils.JsonStorageManager
 import com.google.android.material.appbar.MaterialToolbar
-import java.util.UUID
 import com.devminds.casasync.utils.PopupMenu
 
 class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {

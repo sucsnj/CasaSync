@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.fragment.app.activityViewModels
@@ -18,7 +17,6 @@ import androidx.fragment.app.FragmentActivity
 import com.devminds.casasync.utils.Biometric
 import com.devminds.casasync.utils.BiometricAuthManager
 import com.devminds.casasync.utils.DialogUtils
-import com.devminds.casasync.utils.JsonStorageManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.Firebase
@@ -38,14 +36,11 @@ import androidx.core.content.edit
 import com.devminds.casasync.FirestoreHelper
 import com.google.firebase.auth.FirebaseUser
 import com.devminds.casasync.parts.House
-import com.devminds.casasync.parts.Dependent
-import com.devminds.casasync.parts.Task
 
 class LoginFragment : BaseFragment(R.layout.fragment_login) {
     private val userViewModel: UserViewModel by activityViewModels()
 
     private lateinit var firebaseAuth: FirebaseAuth
-    private val tag = "GoogleSignIn"
     private lateinit var txtLoginPrompt: TextView
     private lateinit var txtPasswordPrompt: TextView
     private lateinit var btnGoogleLogin: LinearLayout
@@ -80,7 +75,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                     (context as? Activity ?: return@postDelayed) as FragmentActivity,
                     onSuccess = { userId ->
                         loginWithUserId(userId)
-                        userViewModel.persistAndSyncUser(requireContext())
+                        userViewModel.persistAndSyncUser()
 
                         val prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
                         prefs.edit {
@@ -128,7 +123,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
 
                     // salva com casas
                     userViewModel.setUser(user)
-                    userViewModel.persistAndSyncUser(requireContext())
+                    userViewModel.persistAndSyncUser()
                     navigateToHome(user)
                 }
             }
@@ -166,7 +161,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         DialogUtils.dismissActiveBanner() // elimina qualquer banner ativo
 
         userViewModel.setUser(user)
-        userViewModel.persistAndSyncUser(context)
+        userViewModel.persistAndSyncUser()
 
         val intent = Intent(context, HomeActivity::class.java)
         intent.putExtra("userId", user.id)

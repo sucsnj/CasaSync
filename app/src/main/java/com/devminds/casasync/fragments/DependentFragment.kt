@@ -24,7 +24,6 @@ import com.google.android.material.appbar.MaterialToolbar
 import java.time.format.DateTimeFormatter
 import java.util.UUID
 import android.text.InputType
-import android.util.Log
 import java.time.Instant
 import java.time.ZoneId
 import java.util.Locale
@@ -127,7 +126,7 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
                 taskList.clear()
                 taskList.addAll(tasks)
 
-                adapter.notifyDataSetChanged()
+                adapter.notifyItemRangeChanged(0, taskList.size)
             }
 
             // cria o adaptador
@@ -272,7 +271,7 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
                         TaskFragment().scheduleTaskNotification(context, taskViewModel)
 
                         // persiste o usuário
-                        userViewModel.persistAndSyncUser(context)
+                        userViewModel.persistAndSyncUser()
 
                         DialogUtils.showMessage(context, "Tarefa criada")
                     }

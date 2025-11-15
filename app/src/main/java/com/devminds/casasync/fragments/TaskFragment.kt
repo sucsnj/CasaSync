@@ -104,7 +104,7 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
             }
 
             dependentViewModel.updateTask(task)
-            userViewModel.persistUser(context, userViewModel.user.value)
+            userViewModel.persistAndSyncUser()
 
             // agenda notificações
             scheduleTaskNotification(context, taskViewModel)
@@ -180,15 +180,15 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
                     val date = DateUtils.date(0).fullDate // data atual
 
                     finishDate.text = date
-                    checker.text = "Concluído" // muda o texto do checkbox
+                    checker.text = getString(R.string.finished) // muda o texto do checkbox
                     previsionDate.isEnabled = false // desabilita a data de previsão
                     previsionHour.isEnabled = false // desabilita a hora de previsão
 
                     // atualiza a tarefa e o usuário no json
                     saveTask(context, item = "finishDate", date)
                 } else {
-                    finishDate.text = "Concluído"
-                    checker.text = "Concluído"
+                    finishDate.text = getString(R.string.finished)
+                    checker.text = getString(R.string.finished)
                     previsionDate.isEnabled = true
                     previsionHour.isEnabled = true
 
@@ -273,7 +273,7 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
         dependentViewModel.dependent.observe(viewLifecycleOwner) { dependent ->
             subtitle.text = dependent?.name ?: "Dependente" // nome do dependente no subtítulo
 
-            currentTask = dependent?.tasks?.find { it.id == taskId } // tarefa selecionada (para que? TODO)
+            currentTask = dependent?.tasks?.find { it.id == taskId } // seta a tarefa atual
             currentTask?.let { taskViewModel.setTask(it) } // atualiza a tarefa no ViewModel
         }
 
@@ -282,7 +282,7 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
         btnSaveTask.setOnClickListener {
             val task = taskViewModel.task.value
             if (task != null) {
-                userViewModel.persistUser(context, userViewModel.user.value)
+                userViewModel.persistAndSyncUser()
                 DialogUtils.showMessage(context, "Tarefa salva com sucesso!")
             }
         }

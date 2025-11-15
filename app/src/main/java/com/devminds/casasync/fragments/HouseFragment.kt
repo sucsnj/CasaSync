@@ -1,26 +1,20 @@
 package com.devminds.casasync.fragments
 
 import com.google.firebase.firestore.FirebaseFirestore
-import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
-import android.util.Log
-import android.view.inputmethod.InputMethodManager
-import androidx.recyclerview.widget.GridLayoutManager
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.activityViewModels
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.devminds.casasync.GenericAdapter
 import com.devminds.casasync.R
 import com.devminds.casasync.parts.Dependent
 import com.devminds.casasync.parts.House
-import com.devminds.casasync.utils.JsonStorageManager
 import com.devminds.casasync.utils.Utils
 import com.devminds.casasync.views.HouseViewModel
 import com.devminds.casasync.views.UserViewModel
@@ -174,7 +168,7 @@ class HouseFragment : BaseFragment(R.layout.fragment_house) {
                         houseViewModel.house.value?.dependents?.add(newDependent)
                         adapter.notifyItemInserted(dependentList.size - 1)
 
-                        userViewModel.persistAndSyncUser(context)
+                        userViewModel.persistAndSyncUser()
 
                         DialogUtils.showMessage(context, "Dependente adicionado")
                     }

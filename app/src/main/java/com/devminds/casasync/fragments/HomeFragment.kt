@@ -1,14 +1,11 @@
 package com.devminds.casasync.fragments
 
 import android.util.Log
-import android.content.Context
-import android.widget.Toast
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
-import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
@@ -22,26 +19,17 @@ import com.devminds.casasync.GenericAdapter
 import com.devminds.casasync.R
 import com.devminds.casasync.TransitionType
 import com.devminds.casasync.parts.House
-import com.devminds.casasync.parts.User
 import com.devminds.casasync.utils.DialogUtils
-import com.devminds.casasync.utils.JsonStorageManager
 import com.devminds.casasync.utils.Utils
 import com.devminds.casasync.views.UserViewModel
 import com.google.android.material.appbar.MaterialToolbar
 import java.util.UUID
 import com.devminds.casasync.utils.PopupMenu
-import com.google.gson.Gson
 
 class HomeFragment : BaseFragment(R.layout.fragment_home) {
 
     private val userViewModel: UserViewModel by activityViewModels()
-//    private val houseList: MutableList<House>
-//        get() = userViewModel.user.value?.houses ?: mutableListOf()
     private val houseList = mutableListOf<House>()
-
-    private var user: User? = null
-
-    private lateinit var userId: String
     private lateinit var adapter: GenericAdapter<House>
     private lateinit var toolbar: MaterialToolbar
     private lateinit var menu: Menu
@@ -121,7 +109,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
         menu.findItem(R.id.action_homepage).isVisible = false
 
         // menu suspenso (3 pontos)
-        menuItemView = toolbar.findViewById<View>(R.id.more_options)
+        menuItemView = toolbar.findViewById(R.id.more_options)
 
         // botão de menu suspenso
         toolbar.setOnMenuItemClickListener { item ->
@@ -136,7 +124,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
         }
 
         // cria uma casa
-        btnNewHouse = view.findViewById<TextView>(R.id.btnAddHouse)
+        btnNewHouse = view.findViewById(R.id.btnAddHouse)
         btnNewHouse.setOnClickListener {
             val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_add_house, null)
             val input = dialogView.findViewById<EditText>(R.id.inputHouse)
@@ -176,7 +164,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
                         adapter.notifyItemInserted(houseList.size - 1)
 
                         // persiste o usuário
-                        userViewModel.persistAndSyncUser(context)
+                        userViewModel.persistAndSyncUser()
 
                         dialog.dismiss()
                         DialogUtils.showMessage(context, "Casa criada")
@@ -198,7 +186,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
         }
 
         // lista das casas
-        recyclerHouses = view.findViewById<RecyclerView>(R.id.recyclerHouses)
+        recyclerHouses = view.findViewById(R.id.recyclerHouses)
         recyclerHouses.layoutManager = LinearLayoutManager(context)
         recycler = recyclerHouses
 

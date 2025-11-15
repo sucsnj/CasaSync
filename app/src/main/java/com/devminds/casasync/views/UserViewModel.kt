@@ -1,16 +1,10 @@
 package com.devminds.casasync.views
 
-import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.devminds.casasync.parts.House
 import com.devminds.casasync.parts.User
-import com.devminds.casasync.utils.JsonStorageManager
 import com.devminds.casasync.FirestoreHelper
-import com.google.gson.Gson
-import com.devminds.casasync.utils.DialogUtils
 
 class UserViewModel : ViewModel() {
     private val _user = MutableLiveData<User?>()
@@ -20,50 +14,23 @@ class UserViewModel : ViewModel() {
         _user.value = user
     }
 
-    fun clearUser() {
-        _user.value = null
-    }
-
-    fun deleteHouse(house: House, context: Context) {
-        user.value?.let { user ->
-            user.houses.remove(house)
-            JsonStorageManager.saveUser(context, user)
-        }
-    }
-
-    fun persistUser(context: Context, user: User?) {
-        user?.let {
-            JsonStorageManager.saveUser(context, it)
-
-            // atualiza o firestore
-            FirestoreHelper.syncUserToFirestore(it)
-        }
-    }
-
-    fun persistAndSyncUser(context: Context) {
+    fun persistAndSyncUser() {
         val user = user.value ?: return
         FirestoreHelper.syncUserToFirestore(user)
     }
 
-    fun deleteHouse(context: Context, houseId: String) {
+    fun deleteHouse(houseId: String) {
         val user = user.value ?: return
-        FirestoreHelper.syncUserToFirestoreRemoveHouse(context, user, houseId) 
+        FirestoreHelper.syncUserToFirestoreRemoveHouse(user, houseId)
     }
 
-    fun deleteDependent(context: Context, houseId: String) {
+    fun deleteDependent(houseId: String, dependentId: String) {
         val user = user.value ?: return
-        FirestoreHelper.syncUserToFirestoreRemoveDependent(context, user, houseId)
+        FirestoreHelper.syncUserToFirestoreRemoveDependent(user, houseId, dependentId)
     }
 
-    fun deleteTask(context: Context, houseId: String, depId: String, taskId: String) {
+    fun deleteTask(houseId: String, depId: String, taskId: String) {
         val user = user.value ?: return
-        FirestoreHelper.syncUserToFirestoreRemoveTask(context, user, houseId, depId, taskId)
-    }
-
-    fun persistUserPassword(context: Context, user: User?, password: String) {
-        user?.let {
-            it.password = password
-            JsonStorageManager.saveUser(context, it)
-        }
+        FirestoreHelper.syncUserToFirestoreRemoveTask(user, houseId, depId, taskId)
     }
 }

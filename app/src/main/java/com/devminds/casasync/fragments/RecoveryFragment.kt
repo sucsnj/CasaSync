@@ -8,13 +8,9 @@ import android.view.View
 import android.widget.TextView
 import com.devminds.casasync.R
 import com.devminds.casasync.TransitionType
-import com.devminds.casasync.parts.User
 import com.devminds.casasync.utils.DialogUtils
-import com.devminds.casasync.utils.JsonStorageManager
 import com.devminds.casasync.utils.PopupMenu
 import com.google.android.material.appbar.MaterialToolbar
-import androidx.fragment.app.activityViewModels
-import com.devminds.casasync.views.UserViewModel
 
 class RecoveryFragment : BaseFragment(R.layout.fragment_recovery) {
 
@@ -27,8 +23,6 @@ class RecoveryFragment : BaseFragment(R.layout.fragment_recovery) {
     private lateinit var menu: Menu
     private lateinit var menuItemView: View
 
-    private val userViewModel: UserViewModel by activityViewModels()
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -38,9 +32,6 @@ class RecoveryFragment : BaseFragment(R.layout.fragment_recovery) {
         promptChangePassword = view.findViewById(R.id.promptChangePassword)
         promptChangePassword.visibility = View.INVISIBLE // esconde o prompt para troca de senha
         txtLoginPromptRecovery = view.findViewById(R.id.txtLoginPromptRecovery)
-
-        // variável para armazenar o usuário encontrado
-        var userFound: User? = null
 
         btnRecovery = view.findViewById(R.id.btnRecovery)
         btnRecovery.setOnClickListener {
@@ -76,14 +67,12 @@ class RecoveryFragment : BaseFragment(R.layout.fragment_recovery) {
         btnChangePassword.visibility = View.INVISIBLE
         btnChangePassword.setOnClickListener {
 
-            val email = txtLoginPromptRecovery.text.toString()
             val password = promptChangePassword.text.toString()
             val hashedPassword = Auth().hashPassword(password)
 
             if (password.isNotEmpty()) {
 
                 FirestoreHelper.getUserByEmail(emailCheck) { user ->
-                    val userId = user?.id
                     
                     // atualizar senha no Firestore
                     FirestoreHelper.updateUserPassword(user, hashedPassword)
