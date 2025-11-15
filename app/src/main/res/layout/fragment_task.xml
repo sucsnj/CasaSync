@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/task"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_layout" >
+
+    <!-- barra fixa no top-->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="8dp"
+        app:navigationIcon="@drawable/ico_arrow_back"
+        app:navigationContentDescription="@string/button_back"
+        app:navigationIconTint="@android:color/black"
+        app:titleTextAppearance="@style/ToolbarTitleStyle"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:text="Tarefa"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:textSize="28sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:text="Dependente"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+    </com.google.android.material.appbar.MaterialToolbar>
+
+    <LinearLayout
+        android:id="@+id/layoutTask"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="top"
+        android:layout_marginTop="65dp"
+        android:orientation="vertical"
+        android:padding="28dp" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Descrição da tarefa"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/taskDescription"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:text="Descrição aqui"
+            android:textColor="@android:color/black"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:ellipsize="end"
+            android:padding="4dp"
+            android:background="@drawable/background_description"
+            android:textSize="18sp"
+            android:maxLines="15"
+            android:minLines="1"
+            android:clickable="true" />
+
+    </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:autofillHints="date"
+            android:clickable="true"
+            android:layout_marginBottom="6dp"
+            android:text="Data de criação"
+            android:drawablePadding="10dp"
+            android:focusable="false"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/startDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="6dp"
+            android:autofillHints="date"
+            android:textSize="16sp"
+            android:text="data"
+            android:clickable="true"
+            android:drawablePadding="10dp"
+            android:focusable="false" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="6dp"
+            android:autofillHints="date"
+            android:clickable="true"
+            android:text="Data prevista de conclusão"
+            android:drawablePadding="10dp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:focusable="false" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="6dp">
+
+            <EditText
+                android:id="@+id/previsionDate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:autofillHints="date"
+                android:clickable="true"
+                android:drawableStart="@drawable/ico_calendar"
+                android:drawablePadding="10dp"
+                android:focusable="false"
+                android:hint="Data" />
+
+            <EditText
+                android:id="@+id/previsionHour"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:autofillHints="date"
+                android:clickable="true"
+                android:drawableStart="@drawable/ico_calendar"
+                android:drawablePadding="10dp"
+                android:focusable="false"
+                android:hint="Hora" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="6dp"
+            android:autofillHints="date"
+            android:clickable="true"
+            android:text="Data de conclusão"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:drawablePadding="10dp"
+            android:focusable="false" />
+
+        <TextView
+            android:id="@+id/finishDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="Concluído"
+            android:autofillHints="date"
+            android:textSize="16sp"
+            android:drawablePadding="10dp"
+            android:focusable="false" />
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal" >
+
+            <CheckBox
+                android:id="@+id/checker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Concluído"
+                android:checked="false"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/btnSaveTask"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="3dp"
+                android:layout_marginStart="20dp"
+                android:gravity="center_vertical"
+                android:drawableStart="@drawable/ico_save"
+                android:text="Salvar Alterações"
+                android:textColor="@android:color/black"
+                android:foreground="?attr/selectableItemBackground"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,21 @@
+package com.devminds.casasync.fragments
+
+import android.os.Bundle
+import android.view.View
+import com.devminds.casasync.R
+import com.google.android.material.appbar.MaterialToolbar
+
+class UserConfigFragment : BaseFragment(R.layout.fragment_config_user) {
+
+    private lateinit var toolbar: MaterialToolbar
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // cabeçalho
+        toolbar = view.findViewById(R.id.topBar)
+        toolbar.setNavigationOnClickListener {
+            parentFragmentManager.popBackStack() // botão de voltar
+        }
+    }
+}
