@@ -12,7 +12,6 @@ import androidx.annotation.RequiresPermission
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import android.provider.Settings
-import android.util.Log
 import androidx.core.net.toUri
 
 class TaskAlarmReceiver : BroadcastReceiver() {
@@ -23,7 +22,7 @@ class TaskAlarmReceiver : BroadcastReceiver() {
 
         // notificação
         val notification = NotificationCompat.Builder(context, "task_channel")
-            .setSmallIcon(R.drawable.casasync) // ícone da notificação TODO: mudar
+            .setSmallIcon(R.drawable.casasync) // ícone da notificação
             .setContentTitle(title)
             .setContentText(message)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -35,6 +34,7 @@ class TaskAlarmReceiver : BroadcastReceiver() {
         manager.notify(System.currentTimeMillis().toInt(), notification)
     }
 
+    @Suppress("unused") // TODO
     fun createAlarmPendingIntent(context: Context, taskId: String, tag: String, title: String = "", message: String = ""): PendingIntent {
         val intent = Intent(context, TaskAlarmReceiver::class.java).apply {
             putExtra("title", title)
@@ -48,7 +48,6 @@ class TaskAlarmReceiver : BroadcastReceiver() {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
     }
-
 
     // agenda a notificação
     fun scheduleNotification(

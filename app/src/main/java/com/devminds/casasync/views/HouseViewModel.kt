@@ -12,8 +12,4 @@ class HouseViewModel : ViewModel() {
     fun setHouse(house: House) {
         _house.value = house
     }
-
-    fun clearHouse() {
-        _house.value = null
-    }
 }

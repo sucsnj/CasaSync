@@ -46,7 +46,6 @@ object PermissionHelper {
     fun handlePermissionResult(
         context: Context,
         requestCode: Int,
-        permissions: Array<out String>,
         grantResults: IntArray
     ) {
         if (requestCode == 1001) {

@@ -250,7 +250,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
 
                 // se houver conexão
                 if (isConnected) {
-                    Auth().authenticateWithFirestore(requireContext(), email, password) { user ->
+                    Auth().authenticateWithFirestore(email, password) { user ->
                         if (user != null) {
                             login(context, userViewModel, user)
                             DialogUtils.showMessage(context, getString(R.string.login_success_message))

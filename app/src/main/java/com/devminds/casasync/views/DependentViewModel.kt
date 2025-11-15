@@ -14,10 +14,6 @@ class DependentViewModel : ViewModel() {
         _dependent.value = dependent
     }
 
-    fun clearDependent() {
-        _dependent.value = null
-    }
-
     fun updateTask(updatedTask: Task) {
         val current = _dependent.value ?: return
         val index = current.tasks.indexOfFirst { it.id == updatedTask.id }
