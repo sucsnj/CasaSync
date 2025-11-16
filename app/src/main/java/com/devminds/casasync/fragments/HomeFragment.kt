@@ -1,7 +1,5 @@
 package com.devminds.casasync.fragments
 
-import android.animation.AnimatorSet
-
 import android.util.Log
 import android.graphics.Color
 import android.os.Bundle
@@ -18,6 +16,7 @@ import androidx.appcompat.view.ContextThemeWrapper
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.devminds.casasync.FirestoreHelper
 import com.devminds.casasync.GenericAdapter
 import com.devminds.casasync.R
@@ -119,16 +118,26 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
         toolbar = view.findViewById(R.id.topBar)
         title = view.findViewById(R.id.title)
 
-        // muda o título do cabeçalho para o nome do usuário atual
+        // cabeçalho
         userViewModel.user.observe(viewLifecycleOwner) { user ->
+            // nome do usuário
             val welcome = getString(R.string.welcome_text) + (user?.name ?: "Usuário")
             title.text = welcome
 
+            // foto do usuário
+            user?.photoUrl?.let { url ->
+                Glide.with(this)
+                    .load(url)
+                    .placeholder(R.drawable.devminds) // imagem padrão
+                    .error(R.drawable.devminds) // em caso de erro
+                    .circleCrop() // arredonda a imagem
+                    .into(userPhoto)
+            }
+
             if (user != null) {
-                // fica 3 segundos na tela
                 Handler(Looper.getMainLooper()).postDelayed({
                     showLoading(false)
-                }, 2000)
+                }, 0)
             }
         }
 

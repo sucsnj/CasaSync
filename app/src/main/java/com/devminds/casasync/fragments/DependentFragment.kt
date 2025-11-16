@@ -24,6 +24,7 @@ import com.google.android.material.appbar.MaterialToolbar
 import java.time.format.DateTimeFormatter
 import java.util.UUID
 import android.text.InputType
+import android.widget.ImageView
 import java.time.Instant
 import java.time.ZoneId
 import java.util.Locale
@@ -39,13 +40,13 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
     private val taskViewModel: TaskViewModel by activityViewModels()
     private val taskList: MutableList<Task> = mutableListOf()
     private var currentDependent: Dependent? = null
-
     private lateinit var adapter: GenericAdapter<Task> // adaptador para a lista de tarefas
     private lateinit var toolbar: MaterialToolbar
     private lateinit var menu: Menu
     private lateinit var recyclerTasks: RecyclerView
     private lateinit var btnAddTask: TextView
     private lateinit var title: TextView
+    private lateinit var dependentPhoto: ImageView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -67,6 +68,9 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
         // muda o título do cabeçalho
         dependentViewModel.dependent.observe(viewLifecycleOwner) { dependent ->
             title.text = dependent?.name ?: "Dependente"
+            dependentPhoto = view.findViewById(R.id.dependentPhoto)
+            // foto do dependente TODO
+            dependentPhoto.setImageResource(R.drawable.ico_dep)
         }
         // botão de voltar
         toolbar.setNavigationOnClickListener {

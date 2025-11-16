@@ -160,7 +160,7 @@
                 android:layout_weight="1"
                 android:autofillHints="date"
                 android:clickable="true"
-                android:drawableStart="@drawable/ico_calendar"
+                android:drawableStart="@drawable/ico_hour"
                 android:drawablePadding="10dp"
                 android:focusable="false"
                 android:hint="@string/hour"

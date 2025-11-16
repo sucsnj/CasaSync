@@ -84,6 +84,10 @@ object Utils {
             layoutResId = R.layout.item_generic,
             bind = { itemView, item, position, _ ->
 
+                // manipula a imagem do recycler (item_generic)
+                val imageView = itemView.findViewById<ImageView>(R.id.itemImage)
+                imageView.setImageResource(R.drawable.ico_house)
+
                 val textView = itemView.findViewById<TextView>(R.id.itemName)
                 textView.text = item.name
 
@@ -329,6 +333,10 @@ object Utils {
             items = list,
             layoutResId = R.layout.item_generic,
             bind = { itemView, item, position, _ ->
+
+                // manipula a imagem do recycler (item_generic)
+                val imageView = itemView.findViewById<ImageView>(R.id.itemImage)
+                imageView.setImageResource(R.drawable.ico_task)
 
                 val textView = itemView.findViewById<TextView>(R.id.itemName)
                 textView.text = item.name

@@ -105,6 +105,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                     name = firebaseUser.displayName ?: "Usuário",
                     email = firebaseUser.email ?: "",
                     password = "",
+                    photoUrl = firebaseUser.photoUrl?.toString() ?: "",
                     houses = mutableListOf()
                 )
                 userRef.set(newUser).addOnSuccessListener {

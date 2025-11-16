@@ -10,5 +10,6 @@ data class User(
     var email: String = "",
     var login: String = "",
     var password: String = "",
+    var photoUrl: String = "",
     val houses: MutableList<House> = mutableListOf()
 )

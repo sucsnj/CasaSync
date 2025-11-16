@@ -21,6 +21,7 @@ object FirestoreHelper {
                         name = document.getString("name") ?: "",
                         email = document.getString("email") ?: "",
                         password = document.getString("password") ?: "",
+                        photoUrl = document.getString("photoUrl") ?: "",
                         houses = mutableListOf()
                     )
                     onResult(user)
@@ -102,7 +103,8 @@ object FirestoreHelper {
             "id" to user.id,
             "name" to user.name,
             "login" to user.login,
-            "password" to user.password
+            "password" to user.password,
+            "photoUrl" to user.photoUrl
         )
 
         userDoc.set(userMap, SetOptions.merge())
