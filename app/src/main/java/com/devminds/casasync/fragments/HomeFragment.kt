@@ -1,6 +1,7 @@
 package com.devminds.casasync.fragments
 
-import android.animation.ObjectAnimator
+import android.animation.AnimatorSet
+
 import android.util.Log
 import android.graphics.Color
 import android.os.Bundle
@@ -22,6 +23,7 @@ import com.devminds.casasync.GenericAdapter
 import com.devminds.casasync.R
 import com.devminds.casasync.TransitionType
 import com.devminds.casasync.parts.House
+import com.devminds.casasync.utils.Animations
 import com.devminds.casasync.utils.DialogUtils
 import com.devminds.casasync.utils.Utils
 import com.devminds.casasync.views.UserViewModel
@@ -45,7 +47,6 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
     private lateinit var subtitle: TextView
     private lateinit var loadingOverlay: View
     private lateinit var loadingImage: ImageView
-    private var rotate: ObjectAnimator? = null
 
     private fun openUserPerfil() { // permite abrir a tela de perfil do usuário
         userPhoto = view?.findViewById(R.id.userPhoto)!! // foto
@@ -71,9 +72,9 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
     private fun showLoading(show: Boolean) {
         if (show) {
             loadingOverlay.visibility = View.VISIBLE
-            rotate?.start()
+            Animations.startPulseAnimation(loadingImage)
         } else {
-            rotate?.cancel()
+            Animations.stopPulseAnimation()
             loadingOverlay.visibility = View.GONE
         }
     }
@@ -86,12 +87,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
         loadingOverlay = view.findViewById(R.id.loadingOverlay)
         loadingImage = view.findViewById(R.id.loadingImage)
 
-        rotate = ObjectAnimator.ofFloat(loadingImage, "rotation", 0f, 360f).apply {
-            duration = 1000
-            repeatCount = ObjectAnimator.INFINITE
-        }
-
-        showLoading(true)
+        showLoading(true) // mostra loading
 
         clearNavHistory()
         openUserPerfil()
