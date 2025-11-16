@@ -24,6 +24,7 @@ import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import android.os.Handler
 import android.os.Looper
+import android.widget.ImageView
 import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
 import androidx.lifecycle.lifecycleScope
@@ -36,6 +37,7 @@ import androidx.core.content.edit
 import com.devminds.casasync.FirestoreHelper
 import com.google.firebase.auth.FirebaseUser
 import com.devminds.casasync.parts.House
+import com.devminds.casasync.utils.Animations
 
 class LoginFragment : BaseFragment(R.layout.fragment_login) {
 
@@ -48,6 +50,8 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
     private lateinit var btnCreateAccount: TextView
     private lateinit var btnForgotPassword: TextView
     private lateinit var btnBiometricLogin: LinearLayout
+    private lateinit var startAppOverlay: View
+    private lateinit var loadingImage: ImageView
 
     // faz login com o id do usuário
     fun loginWithUserId(userId: String) {
@@ -222,8 +226,25 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         }
     }
 
+    fun startingAppLogo(show: Boolean) {
+        if (show) {
+            startAppOverlay.visibility = View.VISIBLE
+            Animations.startInflateAndShrink(loadingImage)
+        } else {
+            Animations.stopInflateAnimation()
+            startAppOverlay.visibility = View.GONE
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        startAppOverlay = view.findViewById(R.id.startAppOverlay)
+        loadingImage = view.findViewById(R.id.loadingImage)
+        startingAppLogo(true)
+        Handler(Looper.getMainLooper()).postDelayed({
+            startingAppLogo(false)
+        }, 2700)
 
         val context = requireContext()
         firebaseAuth = Firebase.auth // inicializa o firebase auth

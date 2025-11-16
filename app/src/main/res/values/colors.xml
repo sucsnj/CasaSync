@@ -11,4 +11,5 @@
     <color name="entalhe">#EEEEEE</color>
     <color name="text_primary">#212121</color>
     <color name="text_hint">#616161</color>
+    <color name="google_btn_bg">#DADCE0</color>
 </resources>

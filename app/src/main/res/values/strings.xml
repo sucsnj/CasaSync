@@ -169,5 +169,6 @@
     <string name="details">Clique para ver detalhes</string>
     <string name="item_image">Imagem do Item</string>
     <string name="loading">Carregando...</string>
+    <string name="starting_app">Iniciando App</string>
 
 </resources>
