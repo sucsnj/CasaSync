@@ -100,40 +100,63 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
     // checa se o usuário já existe no firestore
     private fun checkAndSaveUserInFirestore(firebaseUser: FirebaseUser) {
         val db = FirebaseFirestore.getInstance()
-        val userRef = db.collection("users").document(firebaseUser.uid)
+        val usersRef = db.collection("users")
 
-        userRef.get().addOnSuccessListener { document ->
-            if (!document.exists()) {
-                val newUser = User(
-                    id = firebaseUser.uid,
-                    name = firebaseUser.displayName ?: "Usuário",
-                    email = firebaseUser.email ?: "",
-                    password = "",
-                    photoUrl = firebaseUser.photoUrl?.toString() ?: "",
-                    houses = mutableListOf()
-                )
-                userRef.set(newUser).addOnSuccessListener {
+        usersRef.whereEqualTo("email", firebaseUser.email).get()
+            .addOnSuccessListener { querySnapshot ->
+                if (!querySnapshot.isEmpty) {
+
+                    val existingUserDoc = querySnapshot.documents.first()
+                    val existingUser = existingUserDoc.toObject(User::class.java)
+
+                    existingUser?.apply {
+                        name = firebaseUser.displayName ?: name
+                        photoUrl = firebaseUser.photoUrl?.toString() ?: photoUrl
+                    }
+
+                    usersRef.document(existingUserDoc.id).set(existingUser!!)
+                    userViewModel.setUser(existingUser)
+                    navigateToHome(existingUser)
+
+                    val biometric = Biometric()
+                    biometric.saveBiometricAuthUser(requireContext(), existingUser.id)
+                    biometric.lastLoggedUser(requireContext(), existingUser.id)
+
+                } else {
+
+                    val newUser = User(
+                        id = firebaseUser.uid,
+                        name = firebaseUser.displayName ?: "Usuário",
+                        email = firebaseUser.email ?: "",
+                        password = "",
+                        photoUrl = firebaseUser.photoUrl?.toString() ?: "",
+                        houses = mutableListOf()
+                    )
+                    usersRef.document(firebaseUser.uid).set(newUser)
                     userViewModel.setUser(newUser)
                     navigateToHome(newUser)
-                }
-            } else {
-                val user = document.toObject(User::class.java) ?: return@addOnSuccessListener
 
-                // salva depois de carregar as casas
-                userRef.collection("houses").get().addOnSuccessListener { querySnapshot ->
-                    val houses = querySnapshot.documents.mapNotNull { doc ->
-                        doc.toObject(House::class.java)
+                    val userRef = db.collection("users").document(firebaseUser.uid)
+
+                    // salva depois de carregar as casas
+                    userRef.collection("houses").get().addOnSuccessListener { querySnapshot ->
+                        val houses = querySnapshot.documents.mapNotNull { doc ->
+                            doc.toObject(House::class.java)
+                        }
+                        newUser.houses.clear()
+                        newUser.houses.addAll(houses)
+
+                        // salva com casas
+                        userViewModel.setUser(newUser)
+                        userViewModel.persistAndSyncUser()
+                        navigateToHome(newUser)
                     }
-                    user.houses.clear()
-                    user.houses.addAll(houses)
 
-                    // salva com casas
-                    userViewModel.setUser(user)
-                    userViewModel.persistAndSyncUser()
-                    navigateToHome(user)
+                    val biometric = Biometric()
+                    biometric.saveBiometricAuthUser(requireContext(), newUser.id)
+                    biometric.lastLoggedUser(requireContext(), newUser.id)
                 }
             }
-        }
     }
 
     // autentica o usuário com o firebase
@@ -244,13 +267,13 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         startingAppLogo(true)
         Handler(Looper.getMainLooper()).postDelayed({
             startingAppLogo(false)
-        }, 2700)
+        }, 2500)
 
         val context = requireContext()
         firebaseAuth = Firebase.auth // inicializa o firebase auth
         clearNavHistory() // limpa o histórico de navegação
         Utils.checkIfUserIsLoggedIn(context)
-        biometricCaller(requireActivity(), 800) // biometria
+        biometricCaller(requireActivity(), 2700) // biometria
 
         txtLoginPrompt = view.findViewById(R.id.txtLoginPrompt)
         txtPasswordPrompt = view.findViewById(R.id.txtPasswordPrompt)
@@ -310,7 +333,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         // botão para biometria
         btnBiometricLogin = view.findViewById(R.id.btnBiometricLogin)
         btnBiometricLogin.setOnClickListener {
-            biometricCaller(context, 100)
+            biometricCaller(context, 2800)
         }
     }
 }
