@@ -10,6 +10,7 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.activityViewModels
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.devminds.casasync.R
 import com.devminds.casasync.TransitionType
 import com.devminds.casasync.parts.Task
@@ -45,6 +46,7 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
     private lateinit var finishDate: TextView
     private lateinit var checker: CheckBox
     private lateinit var btnSaveTask: TextView
+    private lateinit var swipeRefresh: SwipeRefreshLayout
 
     // cancela notificações anteriores
     fun cancelAllTaskNotifications(context: Context, task: Task) {
@@ -120,6 +122,10 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
         subtitle = view.findViewById(R.id.subtitle)
         taskDescription = view.findViewById(R.id.taskDescription)
         checker = view.findViewById(R.id.checker)
+
+        // TODO
+//        swipeRefresh = view.findViewById(R.id.swipeRefresh)
+//        refreshPage(swipeRefresh, userViewModel)
 
         // observa a tarefa selecionada
         taskViewModel.task.observe(viewLifecycleOwner) { task ->

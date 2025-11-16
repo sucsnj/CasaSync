@@ -11,6 +11,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.devminds.casasync.GenericAdapter
 import com.devminds.casasync.R
 import com.devminds.casasync.parts.Dependent
@@ -37,6 +38,7 @@ class HouseFragment : BaseFragment(R.layout.fragment_house) {
     private lateinit var btnAddDependent: TextView
     private lateinit var title: TextView
     private lateinit var subtitle: TextView
+    private lateinit var swipeRefresh: SwipeRefreshLayout
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -75,6 +77,10 @@ class HouseFragment : BaseFragment(R.layout.fragment_house) {
                 else -> false
             }
         }
+
+        swipeRefresh = view.findViewById(R.id.swipeRefresh)
+        refreshPage(swipeRefresh, userViewModel)
+
         // lista de dependentes
         recyclerDependents = view.findViewById(R.id.recyclerDependents)
         // recyclerDependents.layoutManager = GridLayoutManager(context, 2) // estilo grade

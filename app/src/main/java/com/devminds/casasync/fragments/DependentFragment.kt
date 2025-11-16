@@ -25,6 +25,7 @@ import java.time.format.DateTimeFormatter
 import java.util.UUID
 import android.text.InputType
 import android.widget.ImageView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import java.time.Instant
 import java.time.ZoneId
 import java.util.Locale
@@ -47,6 +48,7 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
     private lateinit var btnAddTask: TextView
     private lateinit var title: TextView
     private lateinit var dependentPhoto: ImageView
+    private lateinit var swipeRefresh: SwipeRefreshLayout
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -91,6 +93,9 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
                 else -> false
             }
         }
+
+        swipeRefresh = view.findViewById(R.id.swipeRefresh)
+        refreshPage(swipeRefresh, userViewModel)
 
         // manuseia a lista de tarefas
         recyclerTasks.layoutManager = LinearLayoutManager(context)

@@ -52,6 +52,7 @@
         android:id="@+id/layoutHouse"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="70dp"
         android:gravity="center"
         android:orientation="vertical"
         android:padding="28dp"
@@ -60,13 +61,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" >
 
-        <!--    Lista de dependentes    -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerDependents"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="60dp"
-            android:layout_weight="1" />
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <!--    Lista de dependentes    -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerDependents"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </LinearLayout>
 
     <!-- Botão para adicionar -->

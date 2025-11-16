@@ -16,6 +16,7 @@ import androidx.appcompat.view.ContextThemeWrapper
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.devminds.casasync.FirestoreHelper
 import com.devminds.casasync.GenericAdapter
@@ -46,6 +47,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
     private lateinit var subtitle: TextView
     private lateinit var loadingOverlay: View
     private lateinit var loadingImage: ImageView
+    private lateinit var swipeRefresh: SwipeRefreshLayout
 
     private fun openUserPerfil() { // permite abrir a tela de perfil do usuário
         userPhoto = view?.findViewById(R.id.userPhoto)!! // foto
@@ -222,6 +224,9 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
                 }
             }
         }
+
+        swipeRefresh = view.findViewById(R.id.swipeRefresh)
+        refreshPage(swipeRefresh, userViewModel)
 
         // lista das casas
         recyclerHouses = view.findViewById(R.id.recyclerHouses)

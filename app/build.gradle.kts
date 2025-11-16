@@ -45,6 +45,7 @@ android {
 dependencies {
 
     implementation("com.github.bumptech.glide:glide:4.16.0")
+    implementation(libs.androidx.swiperefreshlayout)
     annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
     implementation("com.google.android.gms:play-services-tasks:18.0.2")
     implementation("androidx.credentials:credentials:1.5.0")
