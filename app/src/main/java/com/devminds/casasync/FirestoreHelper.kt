@@ -196,6 +196,103 @@ object FirestoreHelper {
         }
     }
 
+    fun syncFirestoreToUser(userId: String, onResult: (User?) -> Unit) {
+        val db = FirebaseFirestore.getInstance()
+
+        val userDoc = db.collection("users").document(userId)
+
+        userDoc.get().addOnSuccessListener { userSnapshot ->
+            if (!userSnapshot.exists()) {
+                onResult(null)
+                return@addOnSuccessListener
+            }
+
+            // Monta o User básico
+            val user = User(
+                id = userSnapshot.getString("id") ?: userSnapshot.id,
+                name = userSnapshot.getString("name") ?: "",
+                login = userSnapshot.getString("login") ?: "",
+                password = userSnapshot.getString("password") ?: "",
+                photoUrl = userSnapshot.getString("photoUrl") ?: "",
+                houses = mutableListOf()
+            )
+
+            // Agora pega as houses
+            userDoc.collection("houses").get().addOnSuccessListener { houseSnapshot ->
+
+                val houseDocs = houseSnapshot.documents
+                if (houseDocs.isEmpty()) {
+                    onResult(user)
+                    return@addOnSuccessListener
+                }
+
+                var pendingHouses = houseDocs.size
+
+                houseDocs.forEach { houseDoc ->
+                    val house = com.devminds.casasync.parts.House(
+                        id = houseDoc.getString("id") ?: houseDoc.id,
+                        name = houseDoc.getString("name") ?: "",
+                        ownerId = houseDoc.getString("ownerId") ?: "",
+                        dependents = mutableListOf()
+                    )
+
+                    // Lê os dependents
+                    houseDoc.reference.collection("dependents").get()
+                        .addOnSuccessListener { depSnapshot ->
+                            val depDocs = depSnapshot.documents
+                            var pendingDeps = depDocs.size
+
+                            if (depDocs.isEmpty()) {
+                                user.houses.add(house)
+                                if (--pendingHouses == 0) onResult(user)
+                                return@addOnSuccessListener
+                            }
+
+                            depDocs.forEach { depDoc ->
+                                val dep = com.devminds.casasync.parts.Dependent(
+                                    id = depDoc.getString("id") ?: depDoc.id,
+                                    name = depDoc.getString("name") ?: "",
+                                    houseId = depDoc.getString("houseId") ?: "",
+                                    email = depDoc.getString("email") ?: "",
+                                    tasks = mutableListOf()
+                                )
+
+                                // Lê tasks
+                                depDoc.reference.collection("tasks").get()
+                                    .addOnSuccessListener { taskSnapshot ->
+                                        val taskDocs = taskSnapshot.documents
+
+                                        taskDocs.forEach { taskDoc ->
+                                            val task = com.devminds.casasync.parts.Task(
+                                                id = taskDoc.getString("id") ?: taskDoc.id,
+                                                houseId = taskDoc.getString("houseId") ?: "",
+                                                dependentId = taskDoc.getString("dependentId") ?: "",
+                                                name = taskDoc.getString("name") ?: "",
+                                                description = taskDoc.getString("description") ?: "",
+                                                previsionDate = taskDoc.getString("previsionDate"),
+                                                previsionHour = taskDoc.getString("previsionHour"),
+                                                startDate = taskDoc.getString("startDate"),
+                                                finishDate = taskDoc.getString("finishDate")
+                                            )
+                                            dep.tasks.add(task)
+                                        }
+
+                                        house.dependents.add(dep)
+
+                                        if (--pendingDeps == 0) {
+                                            user.houses.add(house)
+                                            if (--pendingHouses == 0) onResult(user)
+                                        }
+                                    }
+                            }
+                        }
+                }
+            }
+        }.addOnFailureListener {
+            onResult(null)
+        }
+    }
+
     fun syncUserToFirestoreRemoveHouse(user: User, houseId: String) {
         if (user.id.isBlank()) {
             Log.e("Firestore", "ID do usuário está nulo ou vazio. Abortando sincronização.")

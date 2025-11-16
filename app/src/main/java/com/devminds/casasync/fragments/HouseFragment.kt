@@ -1,6 +1,5 @@
 package com.devminds.casasync.fragments
 
-import com.google.firebase.firestore.FirebaseFirestore
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
@@ -12,6 +11,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.devminds.casasync.FirestoreHelper
 import com.devminds.casasync.GenericAdapter
 import com.devminds.casasync.R
 import com.devminds.casasync.parts.Dependent
@@ -39,6 +39,43 @@ class HouseFragment : BaseFragment(R.layout.fragment_house) {
     private lateinit var title: TextView
     private lateinit var subtitle: TextView
     private lateinit var swipeRefresh: SwipeRefreshLayout
+
+    fun syncFirestoreToApp() {
+        val userId = activity?.intent?.getStringExtra("userId").toString()
+        houseId?.let { id ->
+            val dependentsRef = FirestoreHelper.getDb()
+                .collection("users")
+                .document(userId)
+                .collection("houses")
+                .document(id)
+                .collection("dependents")
+
+            dependentsRef.get().addOnSuccessListener { snapshot ->
+                val dependents =
+                    snapshot.documents.mapNotNull { it.toObject(Dependent::class.java) }
+
+                currentHouse?.dependents?.clear()
+                currentHouse?.dependents?.addAll(dependents)
+
+                dependentList.clear()
+                dependentList.addAll(dependents)
+
+                adapter.notifyItemRangeChanged(0, dependentList.size)
+            }
+        }
+    }
+
+    fun refreshPage(swipeRefresh: SwipeRefreshLayout, userViewModel: UserViewModel) {
+        swipeRefresh.setOnRefreshListener {
+            // pega o usuário atual do ViewModel
+            val user = userViewModel.user.value
+            if (user != null) {
+                syncFirestoreToApp()
+            }
+            // encerra o efeito de refresh
+            swipeRefresh.isRefreshing = false
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -93,28 +130,7 @@ class HouseFragment : BaseFragment(R.layout.fragment_house) {
             currentHouse = user?.houses?.find { it.id == houseId }
             currentHouse?.let { houseViewModel.setHouse(it) }
 
-            val userId = user?.id ?: return@observe
-            houseId?.let { id ->
-                val dependentsRef = FirebaseFirestore.getInstance()
-                    .collection("users")
-                    .document(userId)
-                    .collection("houses")
-                    .document(id)
-                    .collection("dependents")
-
-                dependentsRef.get().addOnSuccessListener { snapshot ->
-                    val dependents =
-                        snapshot.documents.mapNotNull { it.toObject(Dependent::class.java) }
-
-                    currentHouse?.dependents?.clear()
-                    currentHouse?.dependents?.addAll(dependents)
-
-                    dependentList.clear()
-                    dependentList.addAll(dependents)
-
-                    adapter.notifyItemRangeChanged(0, dependentList.size)
-                }
-            }
+            syncFirestoreToApp()
 
             // cria o adaptador
             adapter = Utils.createDependentAdapter(

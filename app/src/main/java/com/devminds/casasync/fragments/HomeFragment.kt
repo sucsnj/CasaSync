@@ -80,19 +80,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val context = requireContext()
-
-        loadingOverlay = view.findViewById(R.id.loadingOverlay)
-        loadingImage = view.findViewById(R.id.loadingImage)
-
-        showLoading(true) // mostra loading
-
-        clearNavHistory()
-        openUserPerfil()
-
+    fun syncFirestoreToApp() {
         FirestoreHelper.getUserById(resolveUserId()) { user ->
             user?.let {
                 val casasRef = FirestoreHelper.getDb()
@@ -116,6 +104,30 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
                 }
             }
         }
+    }
+
+    fun refreshPage(swipeRefresh: SwipeRefreshLayout) {
+        swipeRefresh.setOnRefreshListener {
+            syncFirestoreToApp()
+            // encerra o efeito de refresh
+            swipeRefresh.isRefreshing = false
+        }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val context = requireContext()
+
+        loadingOverlay = view.findViewById(R.id.loadingOverlay)
+        loadingImage = view.findViewById(R.id.loadingImage)
+
+        showLoading(true) // mostra loading
+
+        clearNavHistory()
+        openUserPerfil()
+
+        syncFirestoreToApp()
 
         toolbar = view.findViewById(R.id.topBar)
         title = view.findViewById(R.id.title)
@@ -225,8 +237,9 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
             }
         }
 
+        // atualiza o adapter
         swipeRefresh = view.findViewById(R.id.swipeRefresh)
-        refreshPage(swipeRefresh, userViewModel)
+        refreshPage(swipeRefresh)
 
         // lista das casas
         recyclerHouses = view.findViewById(R.id.recyclerHouses)

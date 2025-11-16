@@ -50,6 +50,50 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
     private lateinit var dependentPhoto: ImageView
     private lateinit var swipeRefresh: SwipeRefreshLayout
 
+    fun syncFirestoreToApp() {
+        val dependent = dependentViewModel.dependent.value
+        val houseId = dependent?.houseId
+
+        val userId = activity?.intent?.getStringExtra("userId").toString()
+        if (houseId != null) {
+            // atualiza as tarefas
+            dependentId?.let { dependentId ->
+                val tasksRef = FirebaseFirestore.getInstance()
+                    .collection("users")
+                    .document(userId)
+                    .collection("houses")
+                    .document(houseId)
+                    .collection("dependents")
+                    .document(dependentId)
+                    .collection("tasks")
+
+                tasksRef.get().addOnSuccessListener { snapshot ->
+                    val tasks = snapshot.documents.mapNotNull { it.toObject(Task::class.java) }
+
+                    currentDependent?.tasks?.clear()
+                    currentDependent?.tasks?.addAll(tasks)
+
+                    taskList.clear()
+                    taskList.addAll(tasks)
+
+                    adapter.notifyItemRangeChanged(0, taskList.size)
+                }
+            }
+        }
+    }
+
+    fun refreshPage(swipeRefresh: SwipeRefreshLayout, userViewModel: UserViewModel) {
+        swipeRefresh.setOnRefreshListener {
+            // pega o usuário atual do ViewModel
+            val user = userViewModel.user.value
+            if (user != null) {
+                syncFirestoreToApp()
+            }
+            // encerra o efeito de refresh
+            swipeRefresh.isRefreshing = false
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -111,30 +155,11 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
             // Atualiza o ViewModel de dependente com o dependente selecionado
             currentDependent?.let { dependentViewModel.setDependent(it) }
 
-            val userId = user?.id ?: return@observe
-            val houseId = user.houses.find { it.dependents.contains(currentDependent) }?.id ?: return@observe
+//            val userId = user?.id ?: return@observe
+//            val houseId = user?.houses?.find { it.dependents.contains(currentDependent) }?.id ?: return@observe
             val dependentId = currentDependent?.id ?: return@observe
 
-            val tasksRef = FirebaseFirestore.getInstance()
-                .collection("users")
-                .document(userId)
-                .collection("houses")
-                .document(houseId)
-                .collection("dependents")
-                .document(dependentId)
-                .collection("tasks")
-
-            tasksRef.get().addOnSuccessListener { snapshot ->
-                val tasks = snapshot.documents.mapNotNull { it.toObject(Task::class.java) }
-
-                currentDependent?.tasks?.clear()
-                currentDependent?.tasks?.addAll(tasks)
-
-                taskList.clear()
-                taskList.addAll(tasks)
-
-                adapter.notifyItemRangeChanged(0, taskList.size)
-            }
+            syncFirestoreToApp()
 
             // cria o adaptador
             adapter = Utils.createTaskAdapter(

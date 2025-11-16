@@ -13,10 +13,6 @@ import com.devminds.casasync.setCustomTransition
 import android.widget.EditText
 import android.content.Context
 import android.view.inputmethod.InputMethodManager
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.devminds.casasync.FirestoreHelper
-import com.devminds.casasync.utils.DialogUtils
-import com.devminds.casasync.views.UserViewModel
 
 // passa um fragmento como parâmetro para a classe
 abstract class BaseFragment(@param:LayoutRes private val layoutRes: Int) : Fragment() {
@@ -52,20 +48,5 @@ abstract class BaseFragment(@param:LayoutRes private val layoutRes: Int) : Fragm
             imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
             editText.setSelection(0, editText.length()) // texto selecionado
         }, delay)
-    }
-
-    fun refreshPage(swipeRefresh: SwipeRefreshLayout, userViewModel: UserViewModel) {
-        swipeRefresh.setOnRefreshListener {
-            // pega o usuário atual do ViewModel
-            val user = userViewModel.user.value
-            if (user != null) {
-                FirestoreHelper.syncUserToFirestore(user)
-            }
-
-            DialogUtils.showMessage(requireContext(), "Atualizando dados...")
-
-            // encerra o efeito de refresh
-            swipeRefresh.isRefreshing = false
-        }
     }
 }

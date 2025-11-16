@@ -3,6 +3,7 @@ package com.devminds.casasync.fragments
 import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.View
 import android.widget.CheckBox
@@ -11,6 +12,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.activityViewModels
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.devminds.casasync.FirestoreHelper
 import com.devminds.casasync.R
 import com.devminds.casasync.TransitionType
 import com.devminds.casasync.parts.Task
@@ -110,6 +112,51 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
 
             // agenda notificações
             scheduleTaskNotification(context, taskViewModel)
+        }
+    }
+
+    fun syncFirestoreToApp() {
+        val userId = userViewModel.user.value?.id
+        userId?.let { id ->
+            FirestoreHelper.syncFirestoreToUser(id) { result ->
+                if (result != null) {
+
+                    // atualiza o model do usuário (tb na tela)
+                    userViewModel.setUser(result)
+
+                    // atualiza o dependente
+                    val currentDepId = dependentViewModel.dependent.value?.id
+                    val updatedDep = result.houses
+                        .flatMap { it.dependents }
+                        .find { it.id == currentDepId }
+
+                    if (updatedDep != null)
+                        dependentViewModel.setDependent(updatedDep)
+
+                    // atualiza a tarefa
+                    val currentTaskId = taskViewModel.task.value?.id
+                    val updatedTask = updatedDep?.tasks?.find { it.id == currentTaskId }
+
+                    if (updatedTask != null)
+                        taskViewModel.setTask(updatedTask)
+
+                    Log.d("TaskFragment", "Sincronizado com sucesso")
+                } else {
+                    Log.d("TaskFragment", "Erro ao sincronizar o usuário")
+                }
+            }
+        }
+    }
+
+    fun refreshPage(swipeRefresh: SwipeRefreshLayout, userViewModel: UserViewModel) {
+        swipeRefresh.setOnRefreshListener {
+            // pega o usuário atual do ViewModel
+            val user = userViewModel.user.value
+            if (user != null) {
+                syncFirestoreToApp()
+            }
+            // encerra o efeito de refresh
+            swipeRefresh.isRefreshing = false
         }
     }
 
