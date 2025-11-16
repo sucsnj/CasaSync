@@ -1,8 +1,11 @@
 package com.devminds.casasync.fragments
 
+import android.animation.ObjectAnimator
 import android.util.Log
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
@@ -40,6 +43,9 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
     private lateinit var userPhoto: ImageView
     private lateinit var title: TextView
     private lateinit var subtitle: TextView
+    private lateinit var loadingOverlay: View
+    private lateinit var loadingImage: ImageView
+    private var rotate: ObjectAnimator? = null
 
     private fun openUserPerfil() { // permite abrir a tela de perfil do usuário
         userPhoto = view?.findViewById(R.id.userPhoto)!! // foto
@@ -62,10 +68,30 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
             ?: getString(R.string.devminds_text)
     }
 
+    private fun showLoading(show: Boolean) {
+        if (show) {
+            loadingOverlay.visibility = View.VISIBLE
+            rotate?.start()
+        } else {
+            rotate?.cancel()
+            loadingOverlay.visibility = View.GONE
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val context = requireContext()
+
+        loadingOverlay = view.findViewById(R.id.loadingOverlay)
+        loadingImage = view.findViewById(R.id.loadingImage)
+
+        rotate = ObjectAnimator.ofFloat(loadingImage, "rotation", 0f, 360f).apply {
+            duration = 1000
+            repeatCount = ObjectAnimator.INFINITE
+        }
+
+        showLoading(true)
 
         clearNavHistory()
         openUserPerfil()
@@ -101,6 +127,13 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
         userViewModel.user.observe(viewLifecycleOwner) { user ->
             val welcome = getString(R.string.welcome_text) + (user?.name ?: "Usuário")
             title.text = welcome
+
+            if (user != null) {
+                // fica 3 segundos na tela
+                Handler(Looper.getMainLooper()).postDelayed({
+                    showLoading(false)
+                }, 2000)
+            }
         }
 
         toolbar.inflateMenu(R.menu.topbar_menu)

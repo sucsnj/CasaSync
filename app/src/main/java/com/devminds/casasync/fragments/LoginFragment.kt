@@ -38,8 +38,8 @@ import com.google.firebase.auth.FirebaseUser
 import com.devminds.casasync.parts.House
 
 class LoginFragment : BaseFragment(R.layout.fragment_login) {
-    private val userViewModel: UserViewModel by activityViewModels()
 
+    private val userViewModel: UserViewModel by activityViewModels()
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var txtLoginPrompt: TextView
     private lateinit var txtPasswordPrompt: TextView
@@ -49,13 +49,14 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
     private lateinit var btnForgotPassword: TextView
     private lateinit var btnBiometricLogin: LinearLayout
 
+    // faz login com o id do usuário
     fun loginWithUserId(userId: String) {
         FirestoreHelper.getUserById(userId) { user ->
             if (user != null) {
                 userViewModel.setUser(user)
 
                 val intent = Intent(requireContext(), HomeActivity::class.java)
-                intent.putExtra("userId", user.id)
+                intent.putExtra("userId", user.id) // manda o id do usuário
                 startActivity(intent)
                 requireActivity().finish()
             } else {
@@ -176,63 +177,66 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         Utils.saveUserToPrefs(context, user)
     }
 
+    // realiza o login com google
+    fun loginWithGoogle() {
+        val credentialManager = CredentialManager.create(requireContext()) // gerenciador de credenciais
+
+        val googleIdOption = GetGoogleIdOption.Builder()
+            .setFilterByAuthorizedAccounts(false) // permite perguntar qual conta logar sempre (false)
+            .setServerClientId(getString(R.string.default_web_client_id))
+            .build()
+
+        // requisição de credenciais
+        val request = GetCredentialRequest.Builder()
+            .addCredentialOption(googleIdOption)
+            .build()
+
+        // inicia a atividade de login com google
+        lifecycleScope.launch {
+            try {
+                val result = credentialManager.getCredential(requireActivity(), request)
+                val credential = result.credential
+
+                // verifica o tipo de credencial
+                if (credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
+                    val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
+                    val idToken = googleIdTokenCredential.idToken // pega o token do google
+
+                    // autentica o usuário com o firebase
+                    firebaseAuthWithGoogle(idToken)
+
+                } else {
+                    // Lida com outros tipos de credenciais ou erros, se necessário
+                    DialogUtils.showMessage(
+                        requireContext(),
+                        "Erro: Tipo de credencial inesperado."
+                    )
+                }
+            } catch (_: Exception) {
+                DialogUtils.showMessage(
+                    requireContext(),
+                    "Erro na autenticação com Google."
+                )
+            }
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val context = requireContext()
         firebaseAuth = Firebase.auth // inicializa o firebase auth
+        clearNavHistory() // limpa o histórico de navegação
+        Utils.checkIfUserIsLoggedIn(context)
+        biometricCaller(requireActivity(), 800) // biometria
 
         txtLoginPrompt = view.findViewById(R.id.txtLoginPrompt)
         txtPasswordPrompt = view.findViewById(R.id.txtPasswordPrompt)
 
-        clearNavHistory() // limpa o histórico de navegação
-
-        Utils.checkIfUserIsLoggedIn(context)
-
-        biometricCaller(requireActivity(), 800) // biometria
-
         // faz login com google
         btnGoogleLogin = view.findViewById(R.id.btnGoogleLogin)
         btnGoogleLogin.setOnClickListener {
-            val credentialManager = CredentialManager.create(requireContext()) // gerenciador de credenciais
-
-            val googleIdOption = GetGoogleIdOption.Builder()
-                .setFilterByAuthorizedAccounts(false) // permite perguntar qual conta logar sempre (false)
-                .setServerClientId(getString(R.string.default_web_client_id))
-                .build()
-
-            // requisição de credenciais
-            val request = GetCredentialRequest.Builder()
-                .addCredentialOption(googleIdOption)
-                .build()
-
-            // inicia a atividade de login com google
-            lifecycleScope.launch {
-                try {
-                    val result = credentialManager.getCredential(requireActivity(), request)
-                    val credential = result.credential
-
-                    // verifica o tipo de credencial
-                    if (credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
-                        val googleIdTokenCredential =
-                            GoogleIdTokenCredential.createFrom(credential.data)
-                        val idToken = googleIdTokenCredential.idToken // pega o token do google
-                        firebaseAuthWithGoogle(idToken) // autentica o usuário com o firebase
-
-                    } else {
-                        // Lida com outros tipos de credenciais ou erros, se necessário
-                        DialogUtils.showMessage(
-                            requireContext(),
-                            "Erro: Tipo de credencial inesperado."
-                        )
-                    }
-                } catch (_: Exception) {
-                    DialogUtils.showMessage(
-                        requireContext(),
-                        "Erro na autenticação com Google."
-                    )
-                }
-            }
+            loginWithGoogle()
         }
 
         // botão de login por senha

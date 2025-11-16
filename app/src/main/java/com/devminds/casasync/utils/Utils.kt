@@ -510,8 +510,10 @@ object Utils {
             intent.putExtra("userId", userId)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             context.startActivity(intent)
+            Log.d("LoginFragment", "Usuário já está logado.")
             true
         } else {
+            Log.d("LoginFragment", "Nenhum usuário salvo nas prefs.")
             false
         }
     }

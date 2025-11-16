@@ -168,5 +168,6 @@
     <string name="login_with_biometric">Entrar com biometria</string>
     <string name="details">Clique para ver detalhes</string>
     <string name="item_image">Imagem do Item</string>
+    <string name="loading">Carregando...</string>
 
 </resources>
