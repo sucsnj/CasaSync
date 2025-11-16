@@ -333,7 +333,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         // botão para biometria
         btnBiometricLogin = view.findViewById(R.id.btnBiometricLogin)
         btnBiometricLogin.setOnClickListener {
-            biometricCaller(context, 2800)
+            biometricCaller(context, 100)
         }
     }
 }
