@@ -84,7 +84,7 @@ class HouseFragment : BaseFragment(R.layout.fragment_house) {
 
         houseId = arguments?.getString("houseId")
         if (houseId.isNullOrBlank()) {
-            DialogUtils.showMessage(context, "Erro: ID da casa não encontrado.")
+            DialogUtils.showMessage(context, getString(R.string.house_id_not_found_error))
             return
         }
 
@@ -192,7 +192,7 @@ class HouseFragment : BaseFragment(R.layout.fragment_house) {
 
                         userViewModel.persistAndSyncUser()
 
-                        DialogUtils.showMessage(context, "Dependente adicionado")
+                        DialogUtils.showMessage(context, getString(R.string.dependent_added))
                     }
                 }
                 .setNegativeButton(getString(R.string.button_cancel), null)

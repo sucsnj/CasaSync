@@ -219,7 +219,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
                         userViewModel.persistAndSyncUser()
 
                         dialog.dismiss()
-                        DialogUtils.showMessage(context, "Casa criada")
+                        DialogUtils.showMessage(context, context.getString(R.string.created_house))
                     } else {
                         input.error = context.getString(R.string.invalid_house_name)
                     }

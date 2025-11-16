@@ -10,6 +10,7 @@ import com.devminds.casasync.R
 import com.devminds.casasync.TransitionType
 import com.devminds.casasync.utils.DialogUtils
 import com.devminds.casasync.utils.PopupMenu
+import com.devminds.casasync.utils.Utils
 import com.google.android.material.appbar.MaterialToolbar
 
 class RecoveryFragment : BaseFragment(R.layout.fragment_recovery) {
@@ -35,30 +36,42 @@ class RecoveryFragment : BaseFragment(R.layout.fragment_recovery) {
 
         btnRecovery = view.findViewById(R.id.btnRecovery)
         btnRecovery.setOnClickListener {
+            if (Utils.isConnected(requireContext())) {
+                val email = txtLoginPromptRecovery.text.toString()
+                // verifica o email
+                if (email.isNotEmpty()) {
+                    emailCheck = email
+                    FirestoreHelper.getUserByEmail(email) { exists ->
+                        if (exists != null) {
+                            DialogUtils.showMessage(
+                                context,
+                                getString(R.string.recovery_login_found_message)
+                            )
 
-            val email = txtLoginPromptRecovery.text.toString()
-            // verifica o email
-            if (email.isNotEmpty()) {
-                emailCheck = email
-                FirestoreHelper.getUserByEmail(email) { exists ->
-                    if (exists != null) {
-                        DialogUtils.showMessage(context, getString(R.string.recovery_login_found_message))
+                            promptChangePassword.visibility =
+                                View.VISIBLE // mostra o prompt para troca de senha
+                            btnChangePassword.visibility =
+                                View.VISIBLE // mostra o botão para troca de senha
+                        } else {
+                            DialogUtils.showMessage(
+                                context,
+                                getString(R.string.recovery_login_not_found_message)
+                            )
 
-                        promptChangePassword.visibility =
-                            View.VISIBLE // mostra o prompt para troca de senha
-                        btnChangePassword.visibility =
-                            View.VISIBLE // mostra o botão para troca de senha
-                    } else {
-                        DialogUtils.showMessage(context, getString(R.string.recovery_login_not_found_message))
-
-                        promptChangePassword.visibility =
-                            View.INVISIBLE // esconde o prompt para troca de senha
-                        btnChangePassword.visibility =
-                            View.INVISIBLE // esconde o botão para troca de senha
+                            promptChangePassword.visibility =
+                                View.INVISIBLE // esconde o prompt para troca de senha
+                            btnChangePassword.visibility =
+                                View.INVISIBLE // esconde o botão para troca de senha
+                        }
                     }
+                } else {
+                    DialogUtils.showMessage(
+                        context,
+                        getString(R.string.recovery_login_empty_message)
+                    )
                 }
             } else {
-                DialogUtils.showMessage(context, getString(R.string.recovery_login_empty_message))
+                DialogUtils.showMessage(context, getString(R.string.no_connection))
             }
         }
 
@@ -66,28 +79,42 @@ class RecoveryFragment : BaseFragment(R.layout.fragment_recovery) {
         btnChangePassword = view.findViewById(R.id.btnChangePassword)
         btnChangePassword.visibility = View.INVISIBLE
         btnChangePassword.setOnClickListener {
+            if (Utils.isConnected(requireContext())) {
 
-            val password = promptChangePassword.text.toString()
-            val hashedPassword = Auth().hashPassword(password)
+                val password = promptChangePassword.text.toString()
+                val hashedPassword = Auth().hashPassword(password)
 
-            if (password.isNotEmpty()) {
+                if (password.isNotEmpty()) {
 
-                FirestoreHelper.getUserByEmail(emailCheck) { user ->
-                    
-                    // atualizar senha no Firestore
-                    FirestoreHelper.updateUserPassword(user, hashedPassword)
-                    DialogUtils.showMessage(context, getString(R.string.recovery_password_changed_message))
-                    replaceFragment(LoginFragment(), TransitionType.SLIDE)
+                    FirestoreHelper.getUserByEmail(emailCheck) { user ->
+
+                        // atualizar senha no Firestore
+                        FirestoreHelper.updateUserPassword(user, hashedPassword)
+                        DialogUtils.showMessage(
+                            context,
+                            getString(R.string.recovery_password_changed_message)
+                        )
+                        replaceFragment(LoginFragment(), TransitionType.SLIDE)
+                    }
+                } else {
+                    DialogUtils.showMessage(
+                        context,
+                        getString(R.string.recovery_password_empty_message)
+                    )
                 }
             } else {
-                DialogUtils.showMessage(context, getString(R.string.recovery_password_empty_message))
+                DialogUtils.showMessage(context, getString(R.string.no_connection))
             }
         }
 
         // botão para criar conta
         btnCreateAccount = view.findViewById(R.id.btnCreatAccount)
         btnCreateAccount.setOnClickListener {
-            replaceFragment( CadastroFragment(), TransitionType.SLIDE)
+            if (Utils.isConnected(requireContext())) {
+                replaceFragment(CadastroFragment(), TransitionType.SLIDE)
+            } else {
+                DialogUtils.showMessage(context, getString(R.string.no_connection))
+            }
         }
 
         // cabeçalho

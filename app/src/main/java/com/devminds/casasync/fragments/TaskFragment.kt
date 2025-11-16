@@ -53,9 +53,9 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
     // cancela notificações anteriores
     fun cancelAllTaskNotifications(context: Context, task: Task) {
         TaskAlarmReceiver().cancelScheduleNotification(
-            context, task.id, "hour", task.name, "Menos de uma hora para ser concluída")
+            context, task.id, "hour", task.name, getString(R.string.less_than_one_hour))
         TaskAlarmReceiver().cancelScheduleNotification(
-            context, task.id, "day", task.name, "Menos de um dia para ser concluída")
+            context, task.id, "day", task.name, getString(R.string.less_than_one_day))
     }
 
     fun scheduleTaskNotification(context: Context, viewModel: TaskViewModel) {
@@ -71,7 +71,7 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
                         context,
                         task.id,
                         task.name,
-                        "Menos de uma hora para ser concluída",
+                        getString(R.string.less_than_one_hour),
                         DateUtils.minusHour(
                             task.previsionDate,
                             task.previsionHour,
@@ -85,7 +85,7 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
                         context,
                         task.id,
                         task.name,
-                        "Menos de um dia para ser concluída",
+                        getString(R.string.less_than_one_day),
                         DateUtils.minusDay(
                             task.previsionDate,
                             task.previsionHour,
@@ -216,11 +216,6 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
 
                         // atualizar descrição na task e no dependent e persiste no usuário
                         saveTask(context, item = "description", newDescription)
-                        // currentTask?.let {
-                        //     it.description = newDescription
-                        //     dependentViewModel.updateTask(it) // atualiza a task
-                        //     userViewModel.persistUser(context, userViewModel.user.value) // persiste o usuário
-                        // }
                         dialog.dismiss() // fecha o diálogo
                     }
                     .show() // mostra o diálogo
@@ -250,20 +245,20 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
             }
 
             startDate = view.findViewById(R.id.startDate)
-            startDate.text = task?.startDate ?: "Não concluído"
-            previsionDate.setText(task?.previsionDate ?: "Não concluído")
+            startDate.text = task?.startDate ?: getString(R.string.not_finished)
+            previsionDate.setText(task?.previsionDate ?: getString(R.string.not_finished))
             if (previsionDate.text.toString() == "") { // impede que hora seja escrito sem uma data
                 previsionHour.isEnabled = false
             }
-            previsionHour.setText(task?.previsionHour ?: "Sem hora")
-            finishDate.text = task?.finishDate ?: "Não concluído"
+            previsionHour.setText(task?.previsionHour ?: getString(R.string.no_hour))
+            finishDate.text = task?.finishDate ?: getString(R.string.not_finished)
             checker.isChecked = task?.finishDate != null
         }
 
         // data de conclusão prevista
         previsionDate = view.findViewById(R.id.previsionDate)
         previsionDate.setOnClickListener {
-            val datePicker = DatePickers.datePicker("Previsão da data de conclusão")
+            val datePicker = DatePickers.datePicker(getString(R.string.expected_date))
 
             // transformar data em string
             datePicker.addOnPositiveButtonClickListener { selection ->
@@ -283,7 +278,7 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
         // hora de conclusão prevista
         previsionHour = view.findViewById(R.id.previsionHour)
         previsionHour.setOnClickListener {
-            val hourPicker = DatePickers.hourPicker("Previsão da hora de conclusão")
+            val hourPicker = DatePickers.hourPicker(getString(R.string.expected_hour))
 
             hourPicker.addOnPositiveButtonClickListener {
                 val hour = hourPicker.hour
@@ -335,7 +330,7 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
             val task = taskViewModel.task.value
             if (task != null) {
                 userViewModel.persistAndSyncUser()
-                DialogUtils.showMessage(context, "Tarefa salva com sucesso!")
+                DialogUtils.showMessage(context, getString(R.string.task_saved))
             }
         }
     }

@@ -11,6 +11,7 @@ import com.devminds.casasync.utils.Auth
 import com.devminds.casasync.utils.DialogUtils
 import com.google.android.material.appbar.MaterialToolbar
 import com.devminds.casasync.utils.PopupMenu
+import com.devminds.casasync.utils.Utils
 
 class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
 
@@ -39,44 +40,48 @@ class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
         // cadastro de usuário
         btnCadastro = view.findViewById(R.id.btnCadastro)
         btnCadastro.setOnClickListener {
-            // dados de cadastro com google
+            if (Utils.isConnected(requireContext())) {
+                // dados de cadastro com google
 
-            val name = newUserPrompt.text.toString()
-            val email = newLoginPrompt.text.toString()
-            val password = newPasswordPrompt.text.toString()
+                val name = newUserPrompt.text.toString()
+                val email = newLoginPrompt.text.toString()
+                val password = newPasswordPrompt.text.toString()
 
-            // cria um hash 256 para a senha
-            val hashedPassword = Auth().hashPassword(password)
+                // cria um hash 256 para a senha
+                val hashedPassword = Auth().hashPassword(password)
 
-            // vai no firestore procurar um email igual
-            FirestoreHelper.getUserByEmail(email) { exists ->
-                if (exists != null) {
-                    DialogUtils.showMessage(context, "Email já cadastrado")
-                } else {
-                    // verifica se todos os campos obrigatórios estão preenchidos
-                    if (name.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()) {
-                        // cria o novo usuário
-                        FirestoreHelper.createUser(name, email, hashedPassword) { newUser ->
-                            if (newUser != null) {
-                                DialogUtils.showMessage(
-                                    context,
-                                    getString(R.string.new_account_success_message)
-                                )
-                                // persiste o usuário no firestore
-                                FirestoreHelper.syncUserToFirestore(newUser)
-                                // redireciona para a página de login
-                                replaceFragment( LoginFragment(), TransitionType.SLIDE)
-                            } else {
-                                DialogUtils.showMessage(
-                                    context,
-                                    getString(R.string.new_account_error_message)
-                                )
-                            }
-                        }
+                // vai no firestore procurar um email igual
+                FirestoreHelper.getUserByEmail(email) { exists ->
+                    if (exists != null) {
+                        DialogUtils.showMessage(context, getString(R.string.same_email))
                     } else {
-                        DialogUtils.showMessage(context, "Preencha todos os campos")
+                        // verifica se todos os campos obrigatórios estão preenchidos
+                        if (name.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()) {
+                            // cria o novo usuário
+                            FirestoreHelper.createUser(name, email, hashedPassword) { newUser ->
+                                if (newUser != null) {
+                                    DialogUtils.showMessage(
+                                        context,
+                                        getString(R.string.new_account_success_message)
+                                    )
+                                    // persiste o usuário no firestore
+                                    FirestoreHelper.syncUserToFirestore(newUser)
+                                    // redireciona para a página de login
+                                    replaceFragment(LoginFragment(), TransitionType.SLIDE)
+                                } else {
+                                    DialogUtils.showMessage(
+                                        context,
+                                        getString(R.string.new_account_error_message)
+                                    )
+                                }
+                            }
+                        } else {
+                            DialogUtils.showMessage(context, getString(R.string.all_fields_warning))
+                        }
                     }
                 }
+            } else {
+                DialogUtils.showMessage(context, getString(R.string.no_connection))
             }
         }
 

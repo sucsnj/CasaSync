@@ -170,5 +170,32 @@
     <string name="item_image">Imagem do Item</string>
     <string name="loading">Carregando...</string>
     <string name="starting_app">Iniciando App</string>
+    <string name="no_connection">Sem conexão com a internet.</string>
+    <string name="auth_success">Autenticação bem-sucedida!</string>
+    <string name="auth_fail">Autenticação falhou.</string>
+    <string name="unexpected_credential">Erro: Tipo de credencial inesperado.</string>
+    <string name="auth_google_error">Erro na autenticação com Google.</string>
+    <string name="less_than_one_hour">Menos de uma hora para ser concluída</string>
+    <string name="less_than_one_day">Menos de um dia para ser concluída</string>
+    <string name="task_finished">Tarefa concluída</string>
+    <string name="same_email">Email já cadastrado</string>
+    <string name="all_fields_warning">Preencha todos os campos</string>
+    <string name="house_id_not_found_error">Erro: ID da casa não encontrado.</string>
+    <string name="dependent_added">Dependente adicionado</string>
+    <string name="created_house">Casa criada</string>
+    <string name="dependent_id_not_found_error">Erro: ID da dependente não encontrado.</string>
+    <string name="select_expected_date">Selecione a data prevista de conclusão</string>
+    <string name="select_expected_hour">Selecione a hora prevista de conclusão</string>
+    <string name="created_task">Tarefa criada</string>
+    <string name="not_finished">Não concluído</string>
+    <string name="no_hour">Sem hora</string>
+    <string name="expected_date">Data prevista para conclusão</string>
+    <string name="expected_hour">Hora prevista para conclusão</string>
+    <string name="task_saved">Tarefa salva com sucesso!</string>
+    <string name="notification_permission_granted">Permissão de notificações concedida</string>
+    <string name="notification_permission_denied">Permissão de notificações negada</string>
+    <string name="logout_prompt_confirm">Quer mesmo deslogar?</string>
+    <string name="yes">Sim</string>
+    <string name="no">Não</string>
 
 </resources>

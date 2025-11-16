@@ -389,7 +389,7 @@ object Utils {
                                                     context,
                                                     item.id,
                                                     item.name,
-                                                    "Menos de uma hora para ser concluída",
+                                                    context.getString(R.string.less_than_one_hour),
                                                     DateUtils.minusHour(
                                                         item.previsionDate,
                                                         item.previsionHour,
@@ -401,7 +401,7 @@ object Utils {
                                                     context,
                                                     item.id,
                                                     item.name,
-                                                    "Menos de um dia para ser concluída",
+                                                    context.getString(R.string.less_than_one_day),
                                                     DateUtils.minusDay(
                                                         item.previsionDate,
                                                         item.previsionHour,
@@ -481,7 +481,8 @@ object Utils {
                                         userViewModel.persistAndSyncUser()
                                     }
 
-                                    DialogUtils.showMessage(context, "Tarefa concluída")
+                                    DialogUtils.showMessage(context,
+                                        context.getString(R.string.task_finished))
                                 }
                             }
                         }

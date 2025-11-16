@@ -12,6 +12,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
+import com.devminds.casasync.R
 
 object PermissionHelper {
 
@@ -55,9 +56,9 @@ object PermissionHelper {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                     checkAndRequestExactAlarmPermission(context)
                 }
-                "Permissão de notificações concedida"
+                context.getString(R.string.notification_permission_granted)
             } else {
-                "Permissão de notificações negada"
+                context.getString(R.string.notification_permission_denied)
             }
             DialogUtils.showMessage(context, message)
         }

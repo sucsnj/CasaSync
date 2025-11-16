@@ -34,11 +34,11 @@ object PopupMenu {
                 }
                 R.id.logout -> {
                     val dialog = AlertDialog.Builder(context)
-                    dialog.setMessage("Quer mesmo deslogar?")
-                    dialog.setPositiveButton("Sim") { _, _ ->
+                    dialog.setMessage(context.getString(R.string.logout_prompt_confirm))
+                    dialog.setPositiveButton(context.getString(R.string.yes)) { _, _ ->
                         Utils.logout(context)
                     }
-                    dialog.setNegativeButton("Não") { _, _ -> }
+                    dialog.setNegativeButton(context.getString(R.string.no)) { _, _ -> }
                     dialog.show()
                     true
                 }
@@ -49,5 +49,4 @@ object PopupMenu {
         popup.show()
         return popup.menu
     }
-
 }

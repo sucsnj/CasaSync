@@ -53,7 +53,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
     private lateinit var startAppOverlay: View
     private lateinit var loadingImage: ImageView
 
-    // faz login com o id do usuário
+    // faz login com o id do usurious
     fun loginWithUserId(userId: String) {
         FirestoreHelper.getUserById(userId) { user ->
             if (user != null) {
@@ -79,14 +79,18 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                     context,
                     (context as? Activity ?: return@postDelayed) as FragmentActivity,
                     onSuccess = { userId ->
-                        loginWithUserId(userId)
-                        userViewModel.persistAndSyncUser()
+                        if (Utils.isConnected(requireContext())) {
+                            loginWithUserId(userId)
+                            userViewModel.persistAndSyncUser()
 
-                        val prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
-                        prefs.edit {
-                            putString(
-                                "logged_user_id",
-                                userId)
+                            val prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+                            prefs.edit {
+                                putString(
+                                    "logged_user_id",
+                                    userId)
+                            }
+                        } else {
+                            DialogUtils.showMessage(context, getString(R.string.no_connection))
                         }
                     },
                     onError = { errorMessage ->
@@ -167,10 +171,10 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                 if (task.isSuccessful) {
                     val firebaseUser = firebaseAuth.currentUser
                     checkAndSaveUserInFirestore(firebaseUser!!)
-                    DialogUtils.showMessage(requireContext(), "Autenticação bem-sucedida!")
+                    DialogUtils.showMessage(requireContext(), getString(R.string.auth_success))
                     DialogUtils.dismissActiveBanner()
                 } else {
-                    DialogUtils.showMessage(requireContext(), "Autenticação falhou.")
+                    DialogUtils.showMessage(requireContext(), getString(R.string.auth_fail))
                 }
             }
     }
@@ -237,13 +241,13 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                     // Lida com outros tipos de credenciais ou erros, se necessário
                     DialogUtils.showMessage(
                         requireContext(),
-                        "Erro: Tipo de credencial inesperado."
+                        getString(R.string.unexpected_credential)
                     )
                 }
             } catch (_: Exception) {
                 DialogUtils.showMessage(
                     requireContext(),
-                    "Erro na autenticação com Google."
+                    getString(R.string.auth_google_error)
                 )
             }
         }
@@ -281,7 +285,11 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         // faz login com google
         btnGoogleLogin = view.findViewById(R.id.btnGoogleLogin)
         btnGoogleLogin.setOnClickListener {
-            loginWithGoogle()
+            if (Utils.isConnected(requireContext())) {
+                loginWithGoogle()
+            } else {
+                DialogUtils.showMessage(requireContext(), getString(R.string.no_connection))
+            }
         }
 
         // botão de login por senha
@@ -294,11 +302,9 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
 
             // se estiver tudo preenchido
             if (email.isNotEmpty() && password.isNotEmpty()) {
-                // usuário local
-                val isConnected = Utils.isConnected(requireContext()) // verifica conexão
 
                 // se houver conexão
-                if (isConnected) {
+                if (Utils.isConnected(requireContext())) {
                     Auth().authenticateWithFirestore(email, password) { user ->
                         if (user != null) {
                             login(context, userViewModel, user)
@@ -311,7 +317,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                         }
                     }
                 } else {
-                    DialogUtils.showMessage(requireContext(), "Sem conexão com a internet.")
+                    DialogUtils.showMessage(requireContext(), getString(R.string.no_connection))
                 }
             } else {
                 DialogUtils.showMessage(context, getString(R.string.login_empty_message))
@@ -321,13 +327,21 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         // vai pra tela de criar conta
         btnCreateAccount = view.findViewById(R.id.btnCreatAccount)
         btnCreateAccount.setOnClickListener {
-            replaceFragment(CadastroFragment(), TransitionType.SLIDE)
+            if (Utils.isConnected(requireContext())) {
+                replaceFragment(CadastroFragment(), TransitionType.SLIDE)
+            } else {
+                DialogUtils.showMessage(requireContext(), getString(R.string.no_connection))
+            }
         }
 
         // botão de recuperar senha
         btnForgotPassword = view.findViewById(R.id.txtForgotPassword)
         btnForgotPassword.setOnClickListener {
-            replaceFragment(RecoveryFragment(), TransitionType.SLIDE)
+            if (Utils.isConnected(requireContext())) {
+                replaceFragment(RecoveryFragment(), TransitionType.SLIDE)
+            } else {
+                DialogUtils.showMessage(requireContext(), getString(R.string.no_connection))
+            }
         }
 
         // botão para biometria

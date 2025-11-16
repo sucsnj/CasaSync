@@ -101,7 +101,7 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
 
         dependentId = arguments?.getString("dependentId")
         if (dependentId.isNullOrBlank()) {
-            DialogUtils.showMessage(context, "Erro: ID da dependente não encontrado.")
+            DialogUtils.showMessage(context, getString(R.string.dependent_id_not_found_error))
             return
         }
 
@@ -220,7 +220,7 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
                 // quando inputPrevisionDate for clicado, exibe o diálogo de seleção de data
                 setOnClickListener {
                     // MaterialDatePicker é um diálogo de seleção de data
-                    val datePicker = DatePickers.datePicker("Selecione a data prevista de conclusão")
+                    val datePicker = DatePickers.datePicker(context.getString(R.string.select_expected_date))
 
                     // quando o usuário clicar em OK, o valor é salvo no campo inputPrevisionDate
                     datePicker.addOnPositiveButtonClickListener { selection ->
@@ -244,7 +244,7 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
 
                 setOnClickListener {
                     // MaterialTimePicker é um diálogo de seleção de hora
-                    val hourPicker = DatePickers.hourPicker("Selecione a hora prevista de conclusão")
+                    val hourPicker = DatePickers.hourPicker(context.getString(R.string.select_expected_hour))
 
                     hourPicker.addOnPositiveButtonClickListener {
                         val hour = hourPicker.hour
@@ -305,7 +305,7 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
                         // persiste o usuário
                         userViewModel.persistAndSyncUser()
 
-                        DialogUtils.showMessage(context, "Tarefa criada")
+                        DialogUtils.showMessage(context, getString(R.string.created_task))
                     }
                 }
                 .setNegativeButton(getString(R.string.button_cancel), null)
