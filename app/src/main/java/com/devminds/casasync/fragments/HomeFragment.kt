@@ -142,8 +142,8 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
             user?.photoUrl?.let { url ->
                 Glide.with(this)
                     .load(url)
-                    .placeholder(R.drawable.devminds) // imagem padrão
-                    .error(R.drawable.devminds) // em caso de erro
+                    .placeholder(R.drawable.user_photo) // imagem padrão
+                    .error(R.drawable.user_photo_error) // em caso de erro
                     .circleCrop() // arredonda a imagem
                     .into(userPhoto)
             }
@@ -151,7 +151,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
             if (user != null) {
                 Handler(Looper.getMainLooper()).postDelayed({
                     showLoading(false)
-                }, 0)
+                }, 200)
             }
         }
 
