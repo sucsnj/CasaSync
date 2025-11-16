@@ -123,9 +123,8 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
         taskDescription = view.findViewById(R.id.taskDescription)
         checker = view.findViewById(R.id.checker)
 
-        // TODO
-//        swipeRefresh = view.findViewById(R.id.swipeRefresh)
-//        refreshPage(swipeRefresh, userViewModel)
+        swipeRefresh = view.findViewById(R.id.swipeRefresh)
+        refreshPage(swipeRefresh, userViewModel)
 
         // observa a tarefa selecionada
         taskViewModel.task.observe(viewLifecycleOwner) { task ->

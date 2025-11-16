@@ -4,7 +4,7 @@
     android:id="@+id/task"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_layout" >
+    android:background="@drawable/background_layout">
 
     <!-- barra fixa no top-->
     <com.google.android.material.appbar.MaterialToolbar
@@ -12,11 +12,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:elevation="8dp"
-        app:navigationIcon="@drawable/ico_arrow_back"
+        app:layout_constraintTop_toTopOf="parent"
         app:navigationContentDescription="@string/button_back"
+        app:navigationIcon="@drawable/ico_arrow_back"
         app:navigationIconTint="@android:color/black"
-        app:titleTextAppearance="@style/ToolbarTitleStyle"
-        app:layout_constraintTop_toTopOf="parent">
+        app:titleTextAppearance="@style/ToolbarTitleStyle">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -30,9 +30,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
-                android:text="@string/task"
-                android:maxLines="1"
                 android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@string/task"
                 android:textSize="28sp"
                 android:textStyle="bold" />
 
@@ -41,186 +41,193 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
-                android:maxLines="2"
                 android:ellipsize="end"
+                android:maxLines="2"
                 android:text="@string/dependent"
                 android:textSize="14sp" />
         </LinearLayout>
 
     </com.google.android.material.appbar.MaterialToolbar>
 
-    <LinearLayout
-        android:id="@+id/layoutTask"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="top"
-        android:layout_marginTop="65dp"
-        android:orientation="vertical"
-        android:padding="28dp" >
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/task_description"
-            android:textColor="@android:color/black"
-            android:textSize="20sp"
-            android:textStyle="bold"/>
-
-        <TextView
-            android:id="@+id/taskDescription"
-            android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:text="@string/description_here"
-            android:textColor="@android:color/black"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:ellipsize="end"
-            android:padding="4dp"
-            android:background="@drawable/background_description"
-            android:textSize="18sp"
-            android:maxLines="15"
-            android:minLines="1"
-            android:clickable="true" />
-
-    </LinearLayout>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="48dp"
-            android:layout_marginTop="6dp"
-            android:autofillHints="date"
-            android:clickable="true"
-            android:layout_marginBottom="6dp"
-            android:text="@string/creation_date"
-            android:drawablePadding="10dp"
-            android:focusable="false"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/startDate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="48dp"
-            android:layout_marginTop="6dp"
-            android:layout_marginBottom="6dp"
-            android:autofillHints="date"
-            android:textSize="16sp"
-            android:text="@string/start_date"
-            android:clickable="true"
-            android:drawablePadding="10dp"
-            android:focusable="false" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="48dp"
-            android:layout_marginTop="6dp"
-            android:layout_marginBottom="6dp"
-            android:autofillHints="date"
-            android:clickable="true"
-            android:text="@string/prevision_conclusion_date"
-            android:drawablePadding="10dp"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:focusable="false" />
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/topBar">
 
         <LinearLayout
+            android:id="@+id/layoutTask"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="6dp">
+            android:layout_height="match_parent"
+            android:gravity="top"
+            android:orientation="vertical"
+            android:padding="28dp">
 
-            <EditText
-                android:id="@+id/previsionDate"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxWidth="488dp"
-                android:minHeight="48dp"
-                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/task_description"
+                    android:textColor="@android:color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/taskDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/background_description"
+                    android:clickable="true"
+                    android:ellipsize="end"
+                    android:maxLines="15"
+                    android:minLines="1"
+                    android:padding="4dp"
+                    android:text="@string/description_here"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="6dp"
                 android:autofillHints="date"
                 android:clickable="true"
-                android:drawableStart="@drawable/ico_calendar"
                 android:drawablePadding="10dp"
                 android:focusable="false"
-                android:hint="@string/date"
-                android:inputType="date" />
-
-            <EditText
-                android:id="@+id/previsionHour"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
                 android:minHeight="48dp"
-                android:layout_weight="1"
+                android:text="@string/creation_date"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/startDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="6dp"
                 android:autofillHints="date"
                 android:clickable="true"
-                android:drawableStart="@drawable/ico_hour"
                 android:drawablePadding="10dp"
                 android:focusable="false"
-                android:hint="@string/hour"
-                android:inputType="datetime" />
-
-        </LinearLayout>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="48dp"
-            android:layout_marginTop="6dp"
-            android:layout_marginBottom="6dp"
-            android:autofillHints="date"
-            android:clickable="true"
-            android:text="@string/conclusion_date"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:drawablePadding="10dp"
-            android:focusable="false" />
-
-        <TextView
-            android:id="@+id/finishDate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:text="@string/finished"
-            android:autofillHints="date"
-            android:textSize="16sp"
-            android:drawablePadding="10dp"
-            android:focusable="false" />
-        
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal" >
-
-            <CheckBox
-                android:id="@+id/checker"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:minHeight="48dp"
-                android:text="@string/finished"
-                android:checked="false"
+                android:text="@string/start_date"
                 android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/btnSaveTask"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawablePadding="3dp"
-                android:layout_marginStart="20dp"
-                android:gravity="center_vertical"
-                android:text="@string/save_changes"
-                android:textColor="@android:color/black"
-                android:foreground="?attr/selectableItemBackground"
-                android:textSize="16sp"
-                app:drawableStartCompat="@drawable/ico_save" />
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="6dp"
+                android:autofillHints="date"
+                android:clickable="true"
+                android:drawablePadding="10dp"
+                android:focusable="false"
+                android:minHeight="48dp"
+                android:text="@string/prevision_conclusion_date"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/previsionDate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:autofillHints="date"
+                    android:clickable="true"
+                    android:drawableStart="@drawable/ico_calendar"
+                    android:drawablePadding="10dp"
+                    android:focusable="false"
+                    android:hint="@string/date"
+                    android:inputType="date"
+                    android:maxWidth="488dp"
+                    android:minHeight="48dp" />
+
+                <EditText
+                    android:id="@+id/previsionHour"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:autofillHints="date"
+                    android:clickable="true"
+                    android:drawableStart="@drawable/ico_hour"
+                    android:drawablePadding="10dp"
+                    android:focusable="false"
+                    android:hint="@string/hour"
+                    android:inputType="datetime"
+                    android:minHeight="48dp" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="6dp"
+                android:autofillHints="date"
+                android:clickable="true"
+                android:drawablePadding="10dp"
+                android:focusable="false"
+                android:minHeight="48dp"
+                android:text="@string/conclusion_date"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/finishDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:autofillHints="date"
+                android:drawablePadding="10dp"
+                android:focusable="false"
+                android:text="@string/finished"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/checker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:minHeight="48dp"
+                    android:text="@string/finished"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/btnSaveTask"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:drawablePadding="3dp"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:gravity="center_vertical"
+                    android:text="@string/save_changes"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp"
+                    app:drawableStartCompat="@drawable/ico_save" />
+
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

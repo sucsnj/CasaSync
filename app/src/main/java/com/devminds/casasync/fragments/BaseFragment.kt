@@ -15,6 +15,7 @@ import android.content.Context
 import android.view.inputmethod.InputMethodManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.devminds.casasync.FirestoreHelper
+import com.devminds.casasync.utils.DialogUtils
 import com.devminds.casasync.views.UserViewModel
 
 // passa um fragmento como parâmetro para a classe
@@ -60,6 +61,8 @@ abstract class BaseFragment(@param:LayoutRes private val layoutRes: Int) : Fragm
             if (user != null) {
                 FirestoreHelper.syncUserToFirestore(user)
             }
+
+            DialogUtils.showMessage(requireContext(), "Atualizando dados...")
 
             // encerra o efeito de refresh
             swipeRefresh.isRefreshing = false

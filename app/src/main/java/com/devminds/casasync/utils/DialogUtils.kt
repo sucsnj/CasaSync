@@ -92,13 +92,13 @@ object DialogUtils {
             iconView.visibility = View.GONE
         }
 
-        val (_, medium, _) = getBannerDurations()
+        val (short, _, _) = getBannerDurations()
 
         Handler(Looper.getMainLooper()).postDelayed({
             if (dialog.isShowing && (context as? Activity)?.isFinishing == false && !context.isDestroyed) {
                 dialog.dismiss()
             }
-        }, medium)
+        }, short)
 
         dialog.show()
     }
@@ -112,7 +112,7 @@ object DialogUtils {
                 Toast.makeText(context, message, Toast.LENGTH_LONG).show()
             }
         } else {
-            Toast.makeText(context, message, Toast.LENGTH_LONG).show() // mostra o toast padrão
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show() // mostra o toast padrão
         }
     }
 }
