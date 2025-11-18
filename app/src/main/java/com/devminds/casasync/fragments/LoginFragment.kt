@@ -226,14 +226,15 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         Utils.saveUserToPrefs(context, user)
     }
 
-    // login com google, forma deprecated
+    // login com google, forma antiga
     fun loginWithGoogleGSO() {
         // Configuração do Google Sign-In
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN) // escolhe a opção de login
             .requestIdToken(getString(R.string.default_web_client_id)) // mesmo client_id usado no Firebase
-            .requestEmail()
-            .build()
+            .requestEmail() // requisição de email
+            .build() // monta
 
+        // pega o login com google
         googleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
     }
 
@@ -244,13 +245,13 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
 
         val googleIdOption = GetGoogleIdOption.Builder()
             .setFilterByAuthorizedAccounts(false) // permite perguntar qual conta logar sempre (false)
-            .setAutoSelectEnabled(false)
-            .setServerClientId(getString(R.string.default_web_client_id))
-            .build()
+            .setAutoSelectEnabled(false) // força a escolher uma conta
+            .setServerClientId(getString(R.string.default_web_client_id)) // mesmo client_id usado no Firebase
+            .build() // monta
 
         // requisição de credenciais
-        val request = GetCredentialRequest.Builder()
-            .addCredentialOption(googleIdOption)
+        val request = GetCredentialRequest.Builder() // pega a credencial e monta
+            .addCredentialOption(googleIdOption) // adiciona as informações de login do google
             .build()
 
         // inicia a atividade de login com google
@@ -287,13 +288,14 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
+        // se o login foi bem sucedido
         if (requestCode == RC_SIGN_IN) {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data) // conta do google aqui
             try {
-                val account = task.getResult(ApiException::class.java)
-                val idToken = account.idToken
+                val account = task.getResult(ApiException::class.java) // recupera a conta do google
+                val idToken = account.idToken // recupera o token
                 if (idToken != null) {
-                    firebaseAuthWithGoogle(idToken)
+                    firebaseAuthWithGoogle(idToken) // faz a autenticação com o firestore
                 }
             } catch (_: ApiException) {
                 DialogUtils.showMessage(requireContext(), getString(R.string.auth_google_error))
@@ -329,7 +331,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                     val signInIntent = googleSignInClient.signInIntent
                     startActivityForResult(signInIntent, RC_SIGN_IN)
                 }
-//                loginWithGoogle()
+//                loginWithGoogle() // usando credential manager
             } else {
                 DialogUtils.showMessage(requireContext(), getString(R.string.no_connection))
             }
