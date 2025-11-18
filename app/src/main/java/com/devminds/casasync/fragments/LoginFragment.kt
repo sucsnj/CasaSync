@@ -38,11 +38,18 @@ import com.devminds.casasync.FirestoreHelper
 import com.google.firebase.auth.FirebaseUser
 import com.devminds.casasync.parts.House
 import com.devminds.casasync.utils.Animations
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
 
+@Suppress("DEPRECATION") // @(TODO até o google implentar o CM completo...)
 class LoginFragment : BaseFragment(R.layout.fragment_login) {
 
     private val userViewModel: UserViewModel by activityViewModels()
     private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var googleSignInClient: GoogleSignInClient
+    private val RC_SIGN_IN = 9001
     private lateinit var txtLoginPrompt: TextView
     private lateinit var txtPasswordPrompt: TextView
     private lateinit var btnGoogleLogin: LinearLayout
@@ -53,7 +60,17 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
     private lateinit var startAppOverlay: View
     private lateinit var loadingImage: ImageView
 
-    // faz login com o id do usurious
+    fun startingAppLogo(show: Boolean) {
+        if (show) {
+            startAppOverlay.visibility = View.VISIBLE
+            Animations.startInflateAndShrink(loadingImage)
+        } else {
+            Animations.stopInflateAnimation()
+            startAppOverlay.visibility = View.GONE
+        }
+    }
+
+    // faz login com o id do usuário
     fun loginWithUserId(userId: String) {
         FirestoreHelper.getUserById(userId) { user ->
             if (user != null) {
@@ -209,12 +226,25 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         Utils.saveUserToPrefs(context, user)
     }
 
+    // login com google, forma deprecated
+    fun loginWithGoogleGSO() {
+        // Configuração do Google Sign-In
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id)) // mesmo client_id usado no Firebase
+            .requestEmail()
+            .build()
+
+        googleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
+    }
+
     // realiza o login com google
+    @Suppress("unused")
     fun loginWithGoogle() {
         val credentialManager = CredentialManager.create(requireContext()) // gerenciador de credenciais
 
         val googleIdOption = GetGoogleIdOption.Builder()
             .setFilterByAuthorizedAccounts(false) // permite perguntar qual conta logar sempre (false)
+            .setAutoSelectEnabled(false)
             .setServerClientId(getString(R.string.default_web_client_id))
             .build()
 
@@ -253,13 +283,21 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         }
     }
 
-    fun startingAppLogo(show: Boolean) {
-        if (show) {
-            startAppOverlay.visibility = View.VISIBLE
-            Animations.startInflateAndShrink(loadingImage)
-        } else {
-            Animations.stopInflateAnimation()
-            startAppOverlay.visibility = View.GONE
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == RC_SIGN_IN) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            try {
+                val account = task.getResult(ApiException::class.java)
+                val idToken = account.idToken
+                if (idToken != null) {
+                    firebaseAuthWithGoogle(idToken)
+                }
+            } catch (_: ApiException) {
+                DialogUtils.showMessage(requireContext(), getString(R.string.auth_google_error))
+            }
         }
     }
 
@@ -283,10 +321,15 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         txtPasswordPrompt = view.findViewById(R.id.txtPasswordPrompt)
 
         // faz login com google
+        loginWithGoogleGSO()
         btnGoogleLogin = view.findViewById(R.id.btnGoogleLogin)
         btnGoogleLogin.setOnClickListener {
             if (Utils.isConnected(requireContext())) {
-                loginWithGoogle()
+                googleSignInClient.signOut().addOnCompleteListener {
+                    val signInIntent = googleSignInClient.signInIntent
+                    startActivityForResult(signInIntent, RC_SIGN_IN)
+                }
+//                loginWithGoogle()
             } else {
                 DialogUtils.showMessage(requireContext(), getString(R.string.no_connection))
             }
