@@ -219,6 +219,7 @@ object Utils {
 
                     val options = arrayOf(
                         context.getString(R.string.rename_dialog),
+                        context.getString(R.string.viewPass),
                         context.getString(R.string.delete_dialog)
                     )
 
@@ -264,6 +265,15 @@ object Utils {
                                 }
 
                                 1 -> {
+                                    val itemPasscodeView = item.passcode
+                                    AlertDialog.Builder(context)
+                                        .setTitle(context.getString(R.string.viewPass))
+                                        .setCancelable(true)
+                                        .setMessage(itemPasscodeView)
+                                        .show()
+                                }
+
+                                2 -> {
                                     val itemNameDelete = item.name
                                     AlertDialog.Builder(context)
                                         .setTitle(context.getString(R.string.delete_dialog))
