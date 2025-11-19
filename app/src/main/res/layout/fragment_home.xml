@@ -27,30 +27,27 @@
             android:contentDescription="@string/loading" />
     </FrameLayout>
 
-    <ImageView
-        android:id="@+id/userPhoto"
-        android:layout_width="38dp"
-        android:layout_height="38dp"
-        android:layout_gravity="center"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="15dp"
-        android:elevation="8dp"
-        android:contentDescription="@string/user_picture"
-        android:scaleType="centerInside"
-        android:src="@drawable/devminds"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <!-- barra fixa no topo -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/topBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/background_layout"
-        android:layout_marginStart="30dp"
-
-        app:titleTextAppearance="@style/ToolbarTitleStyleMain"
+        android:background="@drawable/background_toolbar"
         app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/userPhoto"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_gravity="start"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="15dp"
+            android:elevation="8dp"
+            android:contentDescription="@string/user_picture"
+            android:scaleType="centerInside"
+            android:src="@drawable/devminds"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -63,6 +60,7 @@
                 android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                style="@style/ToolbarTitleStyleMain"
                 android:layout_gravity="start"
                 android:text="@string/hi_user"
                 android:textSize="22sp"
@@ -72,6 +70,7 @@
                 android:id="@+id/subtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                style="@style/ToolbarSubTitleStyleMain"
                 android:layout_gravity="start"
                 android:text="@string/user_profile"
                 android:textSize="14sp" />

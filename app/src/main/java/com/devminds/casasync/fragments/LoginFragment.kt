@@ -62,6 +62,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
 
     fun startingAppLogo(show: Boolean) {
         if (show) {
+            statusBar(statusBarColor("white"))
             startAppOverlay.visibility = View.VISIBLE
             Animations.startInflateAndShrink(loadingImage)
         } else {

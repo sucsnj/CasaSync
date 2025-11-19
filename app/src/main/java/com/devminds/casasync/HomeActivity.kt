@@ -1,6 +1,8 @@
 package com.devminds.casasync
 
+import android.graphics.Color
 import android.os.Bundle
+import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -20,8 +22,14 @@ class HomeActivity : AppCompatActivity() {
             insets
         }
 
-        @Suppress("DEPRECATION") // TUDO migrar para Compose
-        window.statusBarColor = ContextCompat.getColor(this, R.color.entalhe)
+        @Suppress("DEPRECATION") // @(TODO migrar para Compose)
+        window.statusBarColor = ContextCompat.getColor(this, R.color.notch)
+//        window.apply {
+//            statusBarColor = Color.TRANSPARENT
+//            decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
+//                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+//        }
+
     }
 
     @Suppress("unused") // TODO

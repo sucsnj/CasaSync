@@ -13,6 +13,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.view.ContextThemeWrapper
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -72,9 +73,11 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
 
     private fun showLoading(show: Boolean) {
         if (show) {
+            statusBar(statusBarColor("white"))
             loadingOverlay.visibility = View.VISIBLE
             Animations.startPulseAnimation(loadingImage)
         } else {
+            statusBar(statusBarColor("notch"))
             Animations.stopPulseAnimation()
             loadingOverlay.visibility = View.GONE
         }
