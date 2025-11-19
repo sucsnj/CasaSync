@@ -11,12 +11,11 @@
         android:id="@+id/topBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/background_layout"
+        android:background="@drawable/background_toolbar"
         android:elevation="8dp"
         app:navigationIcon="@drawable/ico_arrow_back"
         app:navigationContentDescription="@string/button_back"
-        app:navigationIconTint="@android:color/black"
-        app:titleTextAppearance="@style/ToolbarTitleStyle"
+        app:navigationIconTint="@android:color/white"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
@@ -40,6 +39,7 @@
                 android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                style="@style/ToolbarTitleStyleMain"
                 android:layout_gravity="start"
                 android:text="@string/task"
                 android:maxLines="1"
@@ -51,6 +51,7 @@
                 android:id="@+id/subtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                style="@style/ToolbarSubTitleStyleMain"
                 android:layout_gravity="start"
                 android:text="@string/tasks"
                 android:textSize="14sp" />

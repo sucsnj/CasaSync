@@ -8,8 +8,9 @@
     <color name="branco">#FFFFFF</color>
     <color name="azul_cris">#9BE6FB</color>
     <color name="toast_background">#333333</color>
-    <color name="entalhe">#EEEEEE</color>
+    <color name="notch">#2471FF</color>
     <color name="text_primary">#212121</color>
     <color name="text_hint">#616161</color>
     <color name="google_btn_bg">#DADCE0</color>
+    <color name="tobpar_items">#EEEEEE</color>
 </resources>
