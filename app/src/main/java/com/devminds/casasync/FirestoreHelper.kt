@@ -155,6 +155,9 @@ object FirestoreHelper {
                                     "id" to dep.id,
                                     "name" to dep.name,
                                     "houseId" to dep.houseId,
+                                    "active" to dep.active,
+                                    "photo" to dep.photo,
+                                    "passcode" to dep.passcode,
                                     "email" to dep.email
                                 )
                                 depDoc.set(depMap)
@@ -254,6 +257,9 @@ object FirestoreHelper {
                                     name = depDoc.getString("name") ?: "",
                                     houseId = depDoc.getString("houseId") ?: "",
                                     email = depDoc.getString("email") ?: "",
+                                    active = depDoc.getBoolean("active") ?: false,
+                                    photo = depDoc.getString("photo") ?: "",
+                                    passcode = depDoc.getString("passcode") ?: "",
                                     tasks = mutableListOf()
                                 )
 
