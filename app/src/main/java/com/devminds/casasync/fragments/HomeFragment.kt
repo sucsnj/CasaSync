@@ -2,6 +2,7 @@ package com.devminds.casasync.fragments
 
 import android.util.Log
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -73,11 +74,10 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
 
     private fun showLoading(show: Boolean) {
         if (show) {
-            statusBar(statusBarColor("white"))
+            setStatusBarColor(requireActivity().window, statusBarColor("notch"))
             loadingOverlay.visibility = View.VISIBLE
             Animations.startPulseAnimation(loadingImage)
         } else {
-            statusBar(statusBarColor("notch"))
             Animations.stopPulseAnimation()
             loadingOverlay.visibility = View.GONE
         }
