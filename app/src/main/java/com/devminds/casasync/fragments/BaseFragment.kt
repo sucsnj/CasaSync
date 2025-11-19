@@ -12,6 +12,9 @@ import com.devminds.casasync.TransitionType
 import com.devminds.casasync.setCustomTransition
 import android.widget.EditText
 import android.content.Context
+import android.os.Build
+import android.view.Window
+import android.view.WindowInsets
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
 
@@ -51,8 +54,18 @@ abstract class BaseFragment(@param:LayoutRes private val layoutRes: Int) : Fragm
         }, delay)
     }
 
-    fun statusBar(color: Int) {
-        requireActivity().window.statusBarColor = color
+    @Suppress("DEPRECATION")
+    fun setStatusBarColor(window: Window, color: Int) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) { // Android 15+
+            window.decorView.setOnApplyWindowInsetsListener { view, insets ->
+                view.setBackgroundColor(color)
+
+                insets
+            }
+        } else {
+            // For Android 14 and below
+            window.statusBarColor = color
+        }
     }
 
     fun statusBarColor(color: String): Int {
