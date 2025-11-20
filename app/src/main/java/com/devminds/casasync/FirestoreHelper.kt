@@ -1,6 +1,7 @@
 package com.devminds.casasync
 
 import android.util.Log
+import com.devminds.casasync.parts.Dependent
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.android.gms.tasks.Tasks
 import com.devminds.casasync.parts.User
@@ -55,6 +56,25 @@ object FirestoreHelper {
             }
     }
 
+    fun getDependentByEmail(email: String, onResult: (User?) -> Unit) {
+        getDb().collection("dependents")
+            .whereEqualTo("email", email)
+            .get()
+            .addOnSuccessListener { documents ->
+                if (!documents.isEmpty) {
+                    val doc = documents.documents[0]
+                    val user = doc.toObject(User::class.java)
+                    onResult(user)
+                } else {
+                    onResult(null)
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.e("FirestoreHelper", "Erro ao buscar dependente", exception)
+                onResult(null)
+            }
+    }
+
     fun createUser(name: String, email: String, password: String, onResult: (User?) -> Unit) {
         val newUser = hashMapOf(
             "name" to name,
@@ -75,6 +95,37 @@ object FirestoreHelper {
             }
             .addOnFailureListener { e ->
                 Log.e("FirestoreHelper", "Erro ao criar usuário", e)
+                onResult(null)
+            }
+    }
+
+    fun createDependent(dependent: Dependent, onResult: (Dependent?) -> Unit) {
+        val newDependent = hashMapOf(
+            "id" to dependent.id,
+            "name" to dependent.name,
+            "email" to dependent.email,
+            "active" to dependent.active,
+            "houseId" to dependent.houseId,
+            "photo" to dependent.photo,
+            "passcode" to dependent.passcode
+        )
+        getDb().collection("dependents")
+            .add(newDependent)
+            .addOnSuccessListener { documentReference ->
+                val dependent = Dependent(
+                    id = dependent.id,
+                    name = dependent.name,
+                    email = dependent.email,
+                    active = dependent.active,
+                    houseId = dependent.houseId,
+                    photo = dependent.photo,
+                    passcode = dependent.passcode,
+                    tasks = mutableListOf()
+                )
+                onResult(dependent)
+            }
+            .addOnFailureListener { e ->
+                Log.e("FirestoreHelper", "Erro ao criar dependente", e)
                 onResult(null)
             }
     }
@@ -191,6 +242,97 @@ object FirestoreHelper {
                                         }
                                     }
                                 }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    fun syncDependentToFirestore(dependent: Dependent) {
+        val db = FirebaseFirestore.getInstance()
+
+        if (dependent.id.isBlank()) {
+            Log.e("Firestore", "ID do dependente está nulo ou vazio. Abortando sincronização.")
+            return
+        }
+
+        val dependentDoc = db.collection("dependents").document(dependent.id)
+
+        // Salva dados básicos do dependente com merge para não apagar campos existentes
+        val dependentMap = mapOf(
+            "id" to dependent.id,
+            "name" to dependent.name,
+            "email" to dependent.email,
+            "active" to dependent.active,
+            "houseId" to dependent.houseId,
+            "photo" to dependent.photo,
+            "passcode" to dependent.passcode
+        )
+
+        dependentDoc.set(dependentMap, SetOptions.merge())
+            .addOnSuccessListener { Log.d("Firestore", "Dependente sincronizado: ${dependent.id}") }
+            .addOnFailureListener { Log.e("Firestore", "Erro ao salvar dependente", it) }
+
+        // Sincroniza casas apenas se houver tarefas locais
+        if (dependent.tasks.isNotEmpty()) {
+            val tasksRef = dependentDoc.collection("tasks")
+
+            tasksRef.get().addOnSuccessListener { snapshot ->
+                val firestoreTasksIds = snapshot.documents.map { it.id }
+                val localTasksIds = dependent.tasks.map { it.id }
+
+                // Remove tarefas que não existem mais localmente
+                firestoreTasksIds.filterNot { it in localTasksIds }.forEach { idToDelete ->
+                    tasksRef.document(idToDelete).delete()
+                }
+
+                // Atualiza ou cria tarefas
+                dependent.tasks.forEach { task ->
+                    if (task.id.isBlank()) {
+                        task.id = UUID.randomUUID().toString()
+                    }
+                    val taskDoc = tasksRef.document(task.id)
+                    val taskMap = mapOf(
+                        "id" to task.id,
+                        "houseId" to task.houseId,
+                        "dependentId" to task.dependentId,
+                        "name" to task.name,
+                        "description" to task.description,
+                        "previsionDate" to task.previsionDate,
+                        "previsionHour" to task.previsionHour,
+                        "startDate" to task.startDate,
+                        "finishDate" to task.finishDate
+                    )
+                    taskDoc.set(taskMap)
+
+                    // Sincroniza tarefas apenas se houver
+                    if (dependent.tasks.isNotEmpty()) {
+                        val tasksRef = taskDoc.collection("tasks")
+
+                        tasksRef.get().addOnSuccessListener { taskSnapshot ->
+                            val firestoreTaskIds = taskSnapshot.documents.map { it.id }
+                            val localTaskIds = dependent.tasks.map { it.id }
+
+                            firestoreTaskIds.filterNot { it in localTaskIds }.forEach { idToDelete ->
+                                tasksRef.document(idToDelete).delete()
+                            }
+
+                            dependent.tasks.forEach { task ->
+                                val taskDoc = tasksRef.document(task.id)
+                                val taskMap = mapOf(
+                                    "id" to task.id,
+                                    "houseId" to task.houseId,
+                                    "dependentId" to task.dependentId,
+                                    "name" to task.name,
+                                    "description" to task.description,
+                                    "previsionDate" to task.previsionDate,
+                                    "previsionHour" to task.previsionHour,
+                                    "startDate" to task.startDate,
+                                    "finishDate" to task.finishDate
+                                )
+                                taskDoc.set(taskMap)
                             }
                         }
                     }

@@ -202,5 +202,6 @@
     <string name="dependent_name_error">Digite um nome para o dependente</string>
     <string name="viewPass">Senha Atual</string>
     <string name="dependent_passcode_error">Digite uma senha</string>
+    <string name="user_or_dependent">Administrador ou Dependente?</string>
 
 </resources>

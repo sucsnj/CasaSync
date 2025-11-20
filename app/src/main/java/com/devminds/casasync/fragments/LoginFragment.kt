@@ -24,7 +24,9 @@ import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.widget.ImageView
+import androidx.appcompat.app.AlertDialog
 import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
 import androidx.lifecycle.lifecycleScope
@@ -304,6 +306,25 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         }
     }
 
+    fun loginAsUser(context: Context, email: String, password: String) {
+        Auth().authenticateWithFirestore(email, password) { user ->
+            if (user != null) {
+                login(context, userViewModel, user)
+                DialogUtils.showMessage(context, getString(R.string.login_success_message))
+            } else {
+                DialogUtils.showMessage(
+                    requireContext(),
+                    getString(R.string.login_error_message)
+                )
+            }
+        }
+    }
+
+    fun loginAsDependent() {
+        DialogUtils.showMessage(requireContext(), "Galinha")
+        Log.d("LoginFragment", "Galinha")
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -351,15 +372,30 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
 
                 // se houver conexão
                 if (Utils.isConnected(requireContext())) {
-                    Auth().authenticateWithFirestore(email, password) { user ->
-                        if (user != null) {
-                            login(context, userViewModel, user)
-                            DialogUtils.showMessage(context, getString(R.string.login_success_message))
-                        } else {
-                            DialogUtils.showMessage(
-                                requireContext(),
-                                getString(R.string.login_error_message)
-                            )
+                    FirestoreHelper.getUserByEmail(email) { userFound ->
+                        if (userFound != null) { // existe um usuário em 'users', ou seja, é admin
+                            FirestoreHelper.getDependentByEmail(email) { dependentFound ->
+                                if (dependentFound != null) { // existe um admin que é dependente também
+                                    val options = arrayOf("Administrador", "Dependente")
+                                    val dialog = AlertDialog.Builder(requireContext())
+                                        .setTitle("Selecione o tipo de usuário")
+                                        .setItems(options) { _, which ->
+                                            when (which) {
+                                                0 -> loginAsUser(context, email, password)
+                                                1 -> loginAsDependent()  // Dependente
+                                            }
+                                        }
+                                        dialog.show()
+                                } else {
+                                    loginAsUser(context, email, password)
+                                }
+                            }
+                        } else { // não tem user, procura um dependente
+                            FirestoreHelper.getDependentByEmail(email) { dependentFound ->
+                                if (dependentFound != null) { // existe um admin que é dependente também
+                                    loginAsDependent()
+                                } // else para dizer que não tem nada, nem user e nem dependent
+                            }
                         }
                     }
                 } else {
