@@ -220,15 +220,8 @@ class HouseFragment : BaseFragment(R.layout.fragment_house) {
                         photo = "",
                         passcode = dependentPasscode,
                     )
-
-                    // cria uma collection no firestore e persiste o dependente
-//                    FirestoreHelper.createDependent(newDependent) { newDependent ->
-//                        if (newDependent != null) {
-                            // menssagem (opcional)
-                            // persiste o dependente no firestore
-                            FirestoreHelper.syncDependentToFirestore(newDependent)
-//                        }
-//                    }
+                    // sincroniza e/ou cria dependente no Firestore
+                    FirestoreHelper.syncDependentToFirestore(newDependent)
 
                     dependentList.add(newDependent)
                     houseViewModel.house.value?.dependents?.add(newDependent)

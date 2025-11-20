@@ -3,8 +3,10 @@ package com.devminds.casasync.views
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.devminds.casasync.FirestoreHelper
 import com.devminds.casasync.parts.Dependent
 import com.devminds.casasync.parts.Task
+import com.devminds.casasync.parts.User
 
 class DependentViewModel : ViewModel() {
     private val _dependent = MutableLiveData<Dependent?>()
@@ -12,6 +14,11 @@ class DependentViewModel : ViewModel() {
 
     fun setDependent(dependent: Dependent) {
         _dependent.value = dependent
+    }
+
+    fun persistAndSyncDependent() {
+        val dependent = dependent.value ?: return
+        FirestoreHelper.syncDependentToFirestore(dependent)
     }
 
     fun updateTask(updatedTask: Task) {

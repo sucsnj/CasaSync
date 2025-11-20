@@ -37,9 +37,11 @@ import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import androidx.core.content.edit
 import com.devminds.casasync.FirestoreHelper
+import com.devminds.casasync.parts.Dependent
 import com.google.firebase.auth.FirebaseUser
 import com.devminds.casasync.parts.House
 import com.devminds.casasync.utils.Animations
+import com.devminds.casasync.views.DependentViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -49,6 +51,7 @@ import com.google.android.gms.common.api.ApiException
 class LoginFragment : BaseFragment(R.layout.fragment_login) {
 
     private val userViewModel: UserViewModel by activityViewModels()
+    private val dependentViewModel: DependentViewModel by activityViewModels()
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
     private val RC_SIGN_IN = 9001
@@ -229,6 +232,25 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         Utils.saveUserToPrefs(context, user)
     }
 
+    fun loginDependent(context: Context, dependentViewModel: DependentViewModel, dependent: Dependent) {
+        DialogUtils.dismissActiveBanner()
+
+        dependentViewModel.setDependent(dependent)
+        dependentViewModel.persistAndSyncDependent()
+
+        val intent = Intent(context, HomeActivity::class.java)
+        intent.putExtra("dependentId", dependent.id)
+        startActivity(intent)
+        requireActivity().finish()
+
+        // adiciona o usuário a lista da biometria
+//        val biometric = Biometric()
+//        biometric.saveBiometricAuthUser(requireContext(), user.id)
+//        biometric.lastLoggedUser(requireContext(), user.id)
+//
+//        Utils.saveUserToPrefs(context, user)
+    }
+
     // login com google, forma antiga
     fun loginWithGoogleGSO() {
         // Configuração do Google Sign-In
@@ -320,9 +342,21 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         }
     }
 
-    fun loginAsDependent() {
-        DialogUtils.showMessage(requireContext(), "Galinha")
-        Log.d("LoginFragment", "Galinha")
+    fun loginAsDependent(context: Context, email: String, password: String) {
+        Auth().authenticateDepWithFirestore(email, password) { dependent ->
+            if (dependent != null) {
+                loginDependent(context, dependentViewModel, dependent)
+                DialogUtils.showMessage(context, getString(R.string.login_success_message))
+            } else {
+                DialogUtils.showMessage(
+                    requireContext(),
+                    getString(R.string.login_error_message)
+                )
+            }
+        }
+
+        DialogUtils.showMessage(requireContext(), "Login de Dependente realizado")
+        Log.d("LoginFragment", "Login de Dependente realizado")
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -382,7 +416,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                                         .setItems(options) { _, which ->
                                             when (which) {
                                                 0 -> loginAsUser(context, email, password)
-                                                1 -> loginAsDependent()  // Dependente
+                                                1 -> loginAsDependent(context, email, password)  // Dependente
                                             }
                                         }
                                         dialog.show()
@@ -393,7 +427,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                         } else { // não tem user, procura um dependente
                             FirestoreHelper.getDependentByEmail(email) { dependentFound ->
                                 if (dependentFound != null) { // existe um admin que é dependente também
-                                    loginAsDependent()
+                                    loginAsDependent(context, email, password)
                                 } // else para dizer que não tem nada, nem user e nem dependent
                             }
                         }
