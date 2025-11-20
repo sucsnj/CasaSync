@@ -176,7 +176,6 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                         // salva com casas
                         userViewModel.setUser(newUser)
                         userViewModel.persistAndSyncUser()
-                        navigateToHome(newUser)
                     }
 
                     val biometric = Biometric()
@@ -346,7 +345,6 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         Auth().authenticateDepWithFirestore(email, password) { dependent ->
             if (dependent != null) {
                 loginDependent(context, dependentViewModel, dependent)
-                DialogUtils.showMessage(context, getString(R.string.login_success_message))
             } else {
                 DialogUtils.showMessage(
                     requireContext(),
@@ -355,7 +353,6 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
             }
         }
 
-        DialogUtils.showMessage(requireContext(), "Login de Dependente realizado")
         Log.d("LoginFragment", "Login de Dependente realizado")
     }
 
@@ -428,7 +425,9 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                             FirestoreHelper.getDependentByEmail(email) { dependentFound ->
                                 if (dependentFound != null) { // existe um admin que é dependente também
                                     loginAsDependent(context, email, password)
-                                } // else para dizer que não tem nada, nem user e nem dependent
+                                } else {
+                                    DialogUtils.showMessage(requireContext(), getString(R.string.user_not_found))
+                                }
                             }
                         }
                     }

@@ -7,6 +7,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
+import com.devminds.casasync.fragments.DependentFragment
+import com.devminds.casasync.fragments.HomeFragment
 
 class HomeActivity : AppCompatActivity() {
 
@@ -21,6 +23,21 @@ class HomeActivity : AppCompatActivity() {
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
+        }
+
+        if (savedInstanceState == null) {
+            val userId = intent.getStringExtra("userId")
+            val dependentId = intent.getStringExtra("dependentId")
+
+            val fragment: Fragment = when {
+                userId != null -> HomeFragment()
+                dependentId != null -> DependentFragment()
+                else -> HomeFragment()
+            }
+
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .commit()
         }
 
     }

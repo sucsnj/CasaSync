@@ -24,6 +24,7 @@ import com.google.android.material.appbar.MaterialToolbar
 import java.time.format.DateTimeFormatter
 import java.util.UUID
 import android.text.InputType
+import android.util.Log
 import android.widget.ImageView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import java.time.Instant
@@ -96,6 +97,8 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        Log.d("DependentFragment", "onViewCreated()")
 
         val context = requireContext()
 

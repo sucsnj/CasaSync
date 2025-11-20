@@ -203,5 +203,6 @@
     <string name="viewPass">Senha Atual</string>
     <string name="dependent_passcode_error">Digite uma senha</string>
     <string name="user_or_dependent">Administrador ou Dependente?</string>
+    <string name="user_not_found">Nenhum usuário encontrado!</string>
 
 </resources>
