@@ -1,10 +1,14 @@
 package com.devminds.casasync.views
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.devminds.casasync.parts.User
 import com.devminds.casasync.FirestoreHelper
+import com.devminds.casasync.R
+import com.devminds.casasync.fragments.HomeFragment
+import com.google.firebase.firestore.FirebaseFirestore
 
 class UserViewModel : ViewModel() {
     private val _user = MutableLiveData<User?>()

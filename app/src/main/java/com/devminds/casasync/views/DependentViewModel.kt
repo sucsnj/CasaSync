@@ -27,6 +27,14 @@ class DependentViewModel : ViewModel() {
         if (index != -1) {
             current.tasks[index] = updatedTask
             _dependent.value = current // dispara o observer
+
+            // sincroniza no Firestore (dependents + users)
+            FirestoreHelper.persistTaskForDependent(current, updatedTask)
         }
+    }
+
+    fun deleteTask(taskId: String) {
+        val dependent = dependent.value ?: return
+        FirestoreHelper.syncUserToFirestoreRemoveTaskDep(dependent, taskId)
     }
 }

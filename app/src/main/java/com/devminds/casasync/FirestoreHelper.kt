@@ -2,6 +2,7 @@ package com.devminds.casasync
 
 import android.util.Log
 import com.devminds.casasync.parts.Dependent
+import com.devminds.casasync.parts.Task
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.android.gms.tasks.Tasks
 import com.devminds.casasync.parts.User
@@ -33,6 +34,33 @@ object FirestoreHelper {
             }
             .addOnFailureListener { exception ->
                 Log.e("FirestoreHelper", "Erro ao buscar usuário por ID", exception)
+                onResult(null)
+            }
+    }
+
+    fun getDependentById(dependentId: String, onResult: (Dependent?) -> Unit) {
+        val dependentDoc = getDb().collection("dependents").document(dependentId)
+        dependentDoc.get()
+            .addOnSuccessListener { document ->
+                if (document != null && document.exists()) {
+                    val dependent = Dependent(
+                        id = document.id,
+                        name = document.getString("name") ?: "",
+                        email = document.getString("email") ?: "",
+                        active = document.getBoolean("active") ?: false,
+                        houseId = document.getString("houseId") ?: "",
+                        photo = document.getString("photo") ?: "",
+                        passcode = document.getString("passcode") ?: "",
+                        tasks = mutableListOf()
+                    )
+                    onResult(dependent)
+                } else {
+                    Log.w("FirestoreHelper", "Dependent não encontrado com ID: $dependentId")
+                    onResult(null)
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.e("FirestoreHelper", "Erro ao buscar dependent por ID", exception)
                 onResult(null)
             }
     }
@@ -139,6 +167,28 @@ object FirestoreHelper {
         userDoc.update(userMap)
     }
 
+    fun persistTaskForDependent(dependent: Dependent, task: Task) {
+        val db = FirebaseFirestore.getInstance()
+
+        // Atualiza na collection dependents
+        db.collection("dependents")
+            .document(dependent.id)
+            .collection("tasks")
+            .document(task.id)
+            .set(task)
+
+        // Atualiza também na collection users (usando ownerId)
+        db.collection("users")
+            .document(task.ownerId) // vínculo com o admin
+            .collection("houses")
+            .document(task.houseId)
+            .collection("dependents")
+            .document(task.dependentId)
+            .collection("tasks")
+            .document(task.id)
+            .set(task)
+    }
+
     fun syncUserToFirestore(user: User) {
         val db = FirebaseFirestore.getInstance()
 
@@ -229,6 +279,7 @@ object FirestoreHelper {
                                             val taskDoc = tasksRef.document(task.id)
                                             val taskMap = mapOf(
                                                 "id" to task.id,
+                                                "ownerId" to task.ownerId,
                                                 "houseId" to task.houseId,
                                                 "dependentId" to task.dependentId,             
                                                 "name" to task.name,
@@ -296,6 +347,7 @@ object FirestoreHelper {
                     val taskDoc = tasksRef.document(task.id)
                     val taskMap = mapOf(
                         "id" to task.id,
+                        "ownerId" to task.ownerId,
                         "houseId" to task.houseId,
                         "dependentId" to task.dependentId,
                         "name" to task.name,
@@ -323,6 +375,7 @@ object FirestoreHelper {
                                 val taskDoc = tasksRef.document(task.id)
                                 val taskMap = mapOf(
                                     "id" to task.id,
+                                    "ownerId" to task.ownerId,
                                     "houseId" to task.houseId,
                                     "dependentId" to task.dependentId,
                                     "name" to task.name,
@@ -413,6 +466,7 @@ object FirestoreHelper {
                                         taskDocs.forEach { taskDoc ->
                                             val task = com.devminds.casasync.parts.Task(
                                                 id = taskDoc.getString("id") ?: taskDoc.id,
+                                                ownerId = taskDoc.getString("ownerId") ?: "",
                                                 houseId = taskDoc.getString("houseId") ?: "",
                                                 dependentId = taskDoc.getString("dependentId") ?: "",
                                                 name = taskDoc.getString("name") ?: "",
@@ -533,5 +587,25 @@ object FirestoreHelper {
                 .addOnFailureListener {
                     Log.e("Firestore", "Erro ao remover tarefa $taskId", it)
                 }
+    }
+
+    fun syncUserToFirestoreRemoveTaskDep(dependent: Dependent, taskId: String) {
+        if (dependent.id.isBlank()) {
+            Log.e("Firestore", "ID do dependent está nulo ou vazio. Abortando sincronização.")
+            return
+        }
+
+        val taskRef = getDb().collection("dependents")
+            .document(dependent.id)
+            .collection("tasks")
+            .document(taskId)
+
+        taskRef.delete()
+            .addOnSuccessListener {
+                Log.d("Firestore", "Tarefa $taskId removida com sucesso.")
+            }
+            .addOnFailureListener {
+                Log.e("Firestore", "Erro ao remover tarefa $taskId", it)
+            }
     }
 }

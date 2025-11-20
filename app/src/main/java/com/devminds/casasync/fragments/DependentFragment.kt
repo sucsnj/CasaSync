@@ -285,6 +285,7 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
                     if (name.isNotEmpty()) {
                         val newTask = Task(
                             id = UUID.randomUUID().toString(),
+                            ownerId = userViewModel.user.value?.id.toString(),
                             houseId = houseId,
                             dependentId = dependentId,
                             name = name,
@@ -307,6 +308,7 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
 
                         // persiste o usuário
                         userViewModel.persistAndSyncUser()
+                        dependentViewModel.persistAndSyncDependent()
 
                         DialogUtils.showMessage(context, getString(R.string.created_task))
                     }

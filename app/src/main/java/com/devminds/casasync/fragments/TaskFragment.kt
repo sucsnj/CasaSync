@@ -1,6 +1,7 @@
 package com.devminds.casasync.fragments
 
 import android.app.AlertDialog
+import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -109,6 +110,7 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
 
             dependentViewModel.updateTask(task)
             userViewModel.persistAndSyncUser()
+            dependentViewModel.persistAndSyncDependent()
 
             // agenda notificações
             scheduleTaskNotification(context, taskViewModel)
@@ -330,6 +332,7 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
             val task = taskViewModel.task.value
             if (task != null) {
                 userViewModel.persistAndSyncUser()
+//                userViewModel.persistAndSyncUserDep()
                 DialogUtils.showMessage(context, getString(R.string.task_saved))
             }
         }

@@ -187,6 +187,8 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
 
     // autentica o usuário com o firebase
     private fun firebaseAuthWithGoogle(idToken: String) {
+
+        Log.d("LoginFragment", "Chegou aqui")
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         firebaseAuth.signInWithCredential(credential)
             .addOnCompleteListener(requireActivity()) { task ->

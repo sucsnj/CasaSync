@@ -32,6 +32,7 @@ import androidx.core.content.edit
 import com.devminds.casasync.MainActivity
 import com.devminds.casasync.fragments.LoginFragment
 import com.devminds.casasync.parts.User
+import com.devminds.casasync.views.DependentViewModel
 
 // classe utilitária
 object Utils {
@@ -489,6 +490,187 @@ object Utils {
 
                                     userViewModel.user.value?.let {
                                         userViewModel.persistAndSyncUser()
+                                    }
+
+                                    DialogUtils.showMessage(context,
+                                        context.getString(R.string.task_finished))
+                                }
+                            }
+                        }
+                        .show()
+                    true
+                }
+            },
+            onItemClick = { selectedItem ->
+                val targetFragment = fragmentFactory(selectedItem.id)
+
+                fragmentManager.beginTransaction()
+                    .setCustomTransition(TransitionType.SLIDE)
+                    .replace(R.id.fragment_container, targetFragment)
+                    .addToBackStack(null)
+                    .commit()
+            }
+        )
+    }
+
+    fun createTaskAdapterDep(
+        recycler: RecyclerView,
+        list: MutableList<Task>,
+        fragmentFactory: (String) -> Fragment,
+        fragmentManager: FragmentManager,
+        itemOptions: String,
+        successRenameToast: String,
+        dependentViewModel: DependentViewModel,
+        taskViewModel: TaskViewModel, // precisa para acessar o TaskViewModel com as datas e horas
+        context: Context
+    ): GenericAdapter<Task> {
+        return GenericAdapter(
+            items = list,
+            layoutResId = R.layout.item_generic,
+            bind = { itemView, item, position, _ ->
+
+                // manipula a imagem do recycler (item_generic)
+                val imageView = itemView.findViewById<ImageView>(R.id.itemImage)
+                imageView.setImageResource(R.drawable.ico_task)
+
+                val textView = itemView.findViewById<TextView>(R.id.itemName)
+                textView.text = item.name
+
+                itemView.setOnLongClickListener {
+                    if (context !is Activity) return@setOnLongClickListener false
+
+                    // lógica para fazer aparecer o "Concluir tarefa"
+                    options = if (item.finishDate != null) {
+                        arrayOf(
+                            context.getString(R.string.rename_dialog),
+                            context.getString(R.string.delete_dialog)
+                        )
+                    } else {
+                        arrayOf(
+                            context.getString(R.string.rename_dialog),
+                            context.getString(R.string.delete_dialog),
+                            context.getString(R.string.finish_dialog)
+                        )
+                    }
+
+                    AlertDialog.Builder(context)
+                        .setTitle("$itemOptions ${item.name}")
+                        .setItems(options) { _, which ->
+                            when (which) {
+                                0 -> {
+                                    val (dialogView, editTextDialog) = renameDialogItem(
+                                        context,
+                                        item.name
+                                    )
+                                    val dialogNameEdit = AlertDialog.Builder(context)
+                                        .setTitle(context.getString(R.string.rename_dialog))
+                                        .setView(dialogView)
+                                        .setCancelable(false)
+                                        .setPositiveButton(context.getString(R.string.accept_dialog)) { _, _ ->
+                                            val newName = editTextDialog.text.toString().trim()
+                                            if (newName.isNotEmpty()) {
+                                                item.name = newName
+                                                recycler.adapter?.notifyItemChanged(position)
+
+                                                dependentViewModel.dependent.value?.let {
+                                                    dependentViewModel.persistAndSyncDependent()
+                                                }
+
+                                                DialogUtils.showMessage(
+                                                    context,
+                                                    successRenameToast
+                                                )
+                                                TaskAlarmReceiver().scheduleNotification(
+                                                    context,
+                                                    item.id,
+                                                    item.name,
+                                                    context.getString(R.string.less_than_one_hour),
+                                                    DateUtils.minusHour(
+                                                        item.previsionDate,
+                                                        item.previsionHour,
+                                                        1
+                                                    ),
+                                                    "hour"
+                                                )
+                                                TaskAlarmReceiver().scheduleNotification(
+                                                    context,
+                                                    item.id,
+                                                    item.name,
+                                                    context.getString(R.string.less_than_one_day),
+                                                    DateUtils.minusDay(
+                                                        item.previsionDate,
+                                                        item.previsionHour,
+                                                        1
+                                                    ),
+                                                    "day"
+                                                )
+                                            }
+                                        }
+                                        .setNegativeButton(
+                                            context.getString(R.string.cancel_dialog),
+                                            null
+                                        )
+                                        .create()
+                                    dialogNameEdit.setOnShowListener {
+                                        editTextDialog.requestFocus()
+                                        editTextDialog.keyboardDelay(context, 100)
+                                    }
+                                    dialogNameEdit.show()
+                                }
+
+                                1 -> {
+                                    val itemNameDelete = item.name
+                                    AlertDialog.Builder(context)
+                                        .setTitle(context.getString(R.string.delete_dialog))
+                                        .setCancelable(false)
+                                        .setMessage(
+                                            context.getString(R.string.confirm_delete_dialog) +
+                                                    itemNameDelete +
+                                                    context.getString(R.string.question_mark)
+                                        )
+                                        .setPositiveButton(context.getString(R.string.delete_dialog)) { _, _ ->
+                                            TaskFragment().cancelAllTaskNotifications(context, item)
+
+                                            val index = list.indexOfFirst { it.id == item.id }
+                                            if (index != -1) {
+                                                list.removeAt(index)
+                                                recycler.adapter?.notifyItemRemoved(index)
+
+                                                dependentViewModel.dependent.value?.let { dependent ->
+                                                    // remover o task do dependente
+                                                    dependent.tasks.removeAll { it.id == item.id }
+
+                                                    dependentViewModel.deleteTask(item.id)
+                                                }
+
+                                                DialogUtils.showMessage(context,
+                                                    itemNameDelete + context.getString(R.string.success_delete_dialog)
+                                                )
+                                            }
+                                        }
+                                        .setNegativeButton(
+                                            context.getString(R.string.cancel_dialog),
+                                            null
+                                        )
+                                        .show()
+                                }
+
+                                2 -> {
+                                    taskViewModel.task.value?.let { task ->
+                                        val previsionDate = task.previsionDate
+                                        val previsionHour = task.previsionHour
+
+                                        TaskFragment().cancelAllTaskNotifications(context, item)
+
+                                        item.finishDate = DateUtils.date(0).fullDate
+                                        item.previsionDate = previsionDate
+                                        item.previsionHour = previsionHour
+                                    }
+
+                                    recycler.adapter?.notifyItemChanged(position)
+
+                                    dependentViewModel.dependent.value?.let {
+                                        dependentViewModel.persistAndSyncDependent()
                                     }
 
                                     DialogUtils.showMessage(context,

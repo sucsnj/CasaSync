@@ -7,6 +7,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
+import com.devminds.casasync.fragments.DepFragment
 import com.devminds.casasync.fragments.DependentFragment
 import com.devminds.casasync.fragments.HomeFragment
 
@@ -31,7 +32,7 @@ class HomeActivity : AppCompatActivity() {
 
             val fragment: Fragment = when {
                 userId != null -> HomeFragment()
-                dependentId != null -> DependentFragment()
+                dependentId != null -> DepFragment()
                 else -> HomeFragment()
             }
 

@@ -66,7 +66,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
         }
     }
 
-    private fun resolveUserId(): String {
+    fun resolveUserId(): String {
         return activity?.intent?.getStringExtra("userId")
             ?: userViewModel.user.value?.id
             ?: getString(R.string.devminds_text)
