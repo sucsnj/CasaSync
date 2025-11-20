@@ -127,37 +127,6 @@ object FirestoreHelper {
             }
     }
 
-    fun createDependent(dependent: Dependent, onResult: (Dependent?) -> Unit) {
-        val newDependent = hashMapOf(
-            "id" to dependent.id,
-            "name" to dependent.name,
-            "email" to dependent.email,
-            "active" to dependent.active,
-            "houseId" to dependent.houseId,
-            "photo" to dependent.photo,
-            "passcode" to dependent.passcode
-        )
-        getDb().collection("dependents")
-            .add(newDependent)
-            .addOnSuccessListener { documentReference ->
-                val dependent = Dependent(
-                    id = dependent.id,
-                    name = dependent.name,
-                    email = dependent.email,
-                    active = dependent.active,
-                    houseId = dependent.houseId,
-                    photo = dependent.photo,
-                    passcode = dependent.passcode,
-                    tasks = mutableListOf()
-                )
-                onResult(dependent)
-            }
-            .addOnFailureListener { e ->
-                Log.e("FirestoreHelper", "Erro ao criar dependente", e)
-                onResult(null)
-            }
-    }
-
     fun updateUserPassword(user: User?, password: String) {
         val userId = user?.id.toString()
         val userDoc = getDb().collection("users").document(userId)
@@ -165,6 +134,30 @@ object FirestoreHelper {
             "password" to password
         )
         userDoc.update(userMap)
+    }
+
+    fun persistTaskForUser(user: User, houseId: String, dependentId: String, task: Task) {
+        val db = FirebaseFirestore.getInstance()
+
+        // Atualiza na collection users
+        db.collection("users")
+            .document(user.id)
+            .collection("houses")
+            .document(houseId)
+            .collection("dependents")
+            .document(dependentId)
+            .collection("tasks")
+            .document(task.id)
+            .set(task)
+
+        // Atualiza também na collection dependents
+        if (task.dependentId.isNotBlank()) {
+            db.collection("dependents")
+                .document(task.dependentId)
+                .collection("tasks")
+                .document(task.id)
+                .set(task)
+        }
     }
 
     fun persistTaskForDependent(dependent: Dependent, task: Task) {
@@ -447,7 +440,7 @@ object FirestoreHelper {
                             }
 
                             depDocs.forEach { depDoc ->
-                                val dep = com.devminds.casasync.parts.Dependent(
+                                val dep = Dependent(
                                     id = depDoc.getString("id") ?: depDoc.id,
                                     name = depDoc.getString("name") ?: "",
                                     houseId = depDoc.getString("houseId") ?: "",
@@ -489,6 +482,64 @@ object FirestoreHelper {
                             }
                         }
                 }
+            }
+        }.addOnFailureListener {
+            onResult(null)
+        }
+    }
+
+    fun syncFirestoreToDependent(dependentId: String, onResult: (Dependent?) -> Unit) {
+        val db = FirebaseFirestore.getInstance()
+
+        val dependentDoc = db.collection("dependents").document(dependentId)
+
+        dependentDoc.get().addOnSuccessListener { dependentSnapshot ->
+            if (!dependentSnapshot.exists()) {
+                onResult(null)
+                return@addOnSuccessListener
+            }
+
+            // Monta o Dependente básico
+            val dependent = Dependent(
+                id = dependentSnapshot.getString("id") ?: dependentSnapshot.id,
+                name = dependentSnapshot.getString("name") ?: "",
+                email = dependentSnapshot.getString("login") ?: "",
+                active = dependentSnapshot.getBoolean("active") ?: false,
+                houseId = dependentSnapshot.getString("houseId") ?: "",
+                photo = dependentSnapshot.getString("photoUrl") ?: "",
+                passcode = dependentSnapshot.getString("passcode") ?: "",
+                tasks = mutableListOf()
+            )
+
+            // Agora pega as tasks
+            dependentDoc.collection("tasks").get().addOnSuccessListener { taskSnapshot ->
+
+                val taskDocs = taskSnapshot.documents
+                if (taskDocs.isEmpty()) {
+                    onResult(dependent)
+                    return@addOnSuccessListener
+                }
+
+                taskDocs.forEach { taskDoc ->
+                    val task = Task(
+                        id = taskDoc.getString("id") ?: taskDoc.id,
+                        ownerId = taskDoc.getString("ownerId") ?: "",
+                        houseId = taskDoc.getString("houseId") ?: "",
+                        dependentId = taskDoc.getString("dependentId") ?: "",
+                        name = taskDoc.getString("name") ?: "",
+                        description = taskDoc.getString("description") ?: "",
+                        previsionDate = taskDoc.getString("previsionDate"),
+                        previsionHour = taskDoc.getString("previsionHour"),
+                        startDate = taskDoc.getString("startDate"),
+                        finishDate = taskDoc.getString("finishDate")
+                    )
+
+                    dependent.tasks.add(task)
+                }
+
+                onResult(dependent)
+            }.addOnFailureListener {
+                onResult(null)
             }
         }.addOnFailureListener {
             onResult(null)

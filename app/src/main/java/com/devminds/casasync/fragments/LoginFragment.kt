@@ -245,11 +245,11 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         requireActivity().finish()
 
         // adiciona o usuário a lista da biometria
-//        val biometric = Biometric()
-//        biometric.saveBiometricAuthUser(requireContext(), user.id)
-//        biometric.lastLoggedUser(requireContext(), user.id)
-//
-//        Utils.saveUserToPrefs(context, user)
+        val biometric = Biometric()
+        biometric.saveBiometricAuthUser(requireContext(), dependent.id)
+        biometric.lastLoggedUser(requireContext(), dependent.id)
+
+//        Utils.saveDependentToPrefs(context, dependent)
     }
 
     // login com google, forma antiga

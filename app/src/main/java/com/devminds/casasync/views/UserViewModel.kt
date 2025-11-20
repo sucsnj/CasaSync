@@ -8,6 +8,7 @@ import com.devminds.casasync.parts.User
 import com.devminds.casasync.FirestoreHelper
 import com.devminds.casasync.R
 import com.devminds.casasync.fragments.HomeFragment
+import com.devminds.casasync.parts.Task
 import com.google.firebase.firestore.FirebaseFirestore
 
 class UserViewModel : ViewModel() {
@@ -21,6 +22,11 @@ class UserViewModel : ViewModel() {
     fun persistAndSyncUser() {
         val user = user.value ?: return
         FirestoreHelper.syncUserToFirestore(user)
+    }
+
+    fun updateTask(houseId: String, dependentId: String, updatedTask: Task) {
+        val currentUser = _user.value ?: return
+        FirestoreHelper.persistTaskForUser(currentUser, houseId, dependentId, updatedTask)
     }
 
     fun deleteHouse(houseId: String) {

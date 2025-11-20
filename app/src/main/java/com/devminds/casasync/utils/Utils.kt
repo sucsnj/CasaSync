@@ -729,6 +729,15 @@ object Utils {
         }
     }
 
+    fun saveDependentToPrefs(context: Context, dependent: Dependent) {
+        val prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        prefs.edit {
+            putString(
+                "logged_user_id",
+                dependent.id)
+        }
+    }
+
     fun checkIfUserIsLoggedIn(context: Context) {
         val prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
         val userId = prefs.getString("logged_user_id", null)

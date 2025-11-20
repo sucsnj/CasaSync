@@ -37,7 +37,6 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
     private val taskViewModel: TaskViewModel by activityViewModels()
     private var currentTask: Task? = null
     private var taskId: String? = null
-
     private lateinit var toolbar: MaterialToolbar
     private lateinit var taskDescription: TextView
     private lateinit var menu: Menu
@@ -109,11 +108,18 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
             }
 
             dependentViewModel.updateTask(task)
+
+            val houseId = task.houseId
+            val depId = task.dependentId
+            userViewModel.updateTask(houseId, depId, task)
+
             userViewModel.persistAndSyncUser()
             dependentViewModel.persistAndSyncDependent()
 
             // agenda notificações
             scheduleTaskNotification(context, taskViewModel)
+
+            Log.d("TaskFragment", "Sincronizado com sucesso")
         }
     }
 
@@ -150,12 +156,30 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
         }
     }
 
+    fun syncFirestoreToAppDep() {
+        val depId = dependentViewModel.dependent.value?.id
+        depId?.let {
+            FirestoreHelper.syncFirestoreToDependent(it) { result ->
+                if (result != null) {
+                    dependentViewModel.setDependent(result)
+                    // também atualiza a task atual se precisar
+                    val currentTaskId = taskViewModel.task.value?.id
+                    val updatedTask = result.tasks.find { it.id == currentTaskId }
+                    if (updatedTask != null) {
+                        taskViewModel.setTask(updatedTask)
+                    }
+                }
+            }
+        }
+    }
+
     fun refreshPage(swipeRefresh: SwipeRefreshLayout, userViewModel: UserViewModel) {
         swipeRefresh.setOnRefreshListener {
             // pega o usuário atual do ViewModel
             val user = userViewModel.user.value
             if (user != null) {
                 syncFirestoreToApp()
+                syncFirestoreToAppDep()
             }
             // encerra o efeito de refresh
             swipeRefresh.isRefreshing = false
