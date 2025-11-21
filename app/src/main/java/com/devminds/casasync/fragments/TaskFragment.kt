@@ -195,6 +195,10 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
         swipeRefresh = view.findViewById(R.id.swipeRefresh)
         refreshPage(swipeRefresh, userViewModel)
 
+        // variáveis para condicionar o tipo de login
+        val user = userViewModel.user.value
+        val dep = dependentViewModel.dependent.value
+
         // observa a tarefa selecionada
         taskViewModel.task.observe(viewLifecycleOwner) { task ->
             title.text = task?.name ?: "Tarefa" // nome no título
@@ -206,41 +210,45 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
 
             // alterar descrição
             taskDescription.setOnClickListener {
-                // layout do diálogo
-                val layout = LinearLayout(context).apply {
-                    orientation = LinearLayout.VERTICAL
-                    setPadding(50, 40, 50, 10)
-                }
-
-                val editText = EditText(context).apply {
-                    setText(taskDescription.text)
-                    layoutParams = LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT
-                    )
-                }
-
-                // teclado com delay
-                delayEditText(editText, context)
-                layout.addView(editText)
-
-                // diálogo
-                AlertDialog.Builder(context)
-                    .setTitle("Editar Descrição")
-                    .setView(layout)
-                    .setCancelable(false)
-                    .setNegativeButton("Cancelar") { dialog, _ ->
-                        dialog.dismiss()
+                if (user != null) {
+                    // layout do diálogo
+                    val layout = LinearLayout(context).apply {
+                        orientation = LinearLayout.VERTICAL
+                        setPadding(50, 40, 50, 10)
                     }
-                    .setPositiveButton("Salvar") { dialog, _ ->
-                        val newDescription = editText.text.toString()
-                        taskDescription.text = newDescription
 
-                        // atualizar descrição na task e no dependent e persiste no usuário
-                        saveTask(context, item = "description", newDescription)
-                        dialog.dismiss() // fecha o diálogo
+                    val editText = EditText(context).apply {
+                        setText(taskDescription.text)
+                        layoutParams = LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT
+                        )
                     }
-                    .show() // mostra o diálogo
+
+                    // teclado com delay
+                    delayEditText(editText, context)
+                    layout.addView(editText)
+
+                    // diálogo
+                    AlertDialog.Builder(context)
+                        .setTitle("Editar Descrição")
+                        .setView(layout)
+                        .setCancelable(false)
+                        .setNegativeButton("Cancelar") { dialog, _ ->
+                            dialog.dismiss()
+                        }
+                        .setPositiveButton("Salvar") { dialog, _ ->
+                            val newDescription = editText.text.toString()
+                            taskDescription.text = newDescription
+
+                            // atualizar descrição na task e no dependent e persiste no usuário
+                            saveTask(context, item = "description", newDescription)
+                            dialog.dismiss() // fecha o diálogo
+                        }
+                        .show() // mostra o diálogo
+                } else if (dep != null) {
+                    DialogUtils.showMessage(context, "Você não tem permissão para editar a descrição")
+                }
             }
 
             // checkbox de conclusão (se comunica com a data de conclusão)
@@ -280,37 +288,45 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
         // data de conclusão prevista
         previsionDate = view.findViewById(R.id.previsionDate)
         previsionDate.setOnClickListener {
-            val datePicker = DatePickers.datePicker(getString(R.string.expected_date))
+            if (user != null) {
+                val datePicker = DatePickers.datePicker(getString(R.string.expected_date))
 
-            // transformar data em string
-            datePicker.addOnPositiveButtonClickListener { selection ->
-                val instant = Instant.ofEpochMilli(selection).plusSeconds(12 * 60 * 60)
-                val zoneId = ZoneId.systemDefault()
-                val localDate = instant.atZone(zoneId).toLocalDate()
+                // transformar data em string
+                datePicker.addOnPositiveButtonClickListener { selection ->
+                    val instant = Instant.ofEpochMilli(selection).plusSeconds(12 * 60 * 60)
+                    val zoneId = ZoneId.systemDefault()
+                    val localDate = instant.atZone(zoneId).toLocalDate()
 
-                val formattedDate = localDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-                previsionDate.setText(formattedDate)
-                // atualiza a tarefa e o usuário no json
-                saveTask(context, item = "previsionDate", formattedDate)
-                previsionHour.isEnabled = true // permite editar hora após selecionar uma data
+                    val formattedDate = localDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                    previsionDate.setText(formattedDate)
+                    // atualiza a tarefa e o usuário no json
+                    saveTask(context, item = "previsionDate", formattedDate)
+                    previsionHour.isEnabled = true // permite editar hora após selecionar uma data
+                }
+                datePicker.show(parentFragmentManager, "DATE_PICKER") // mostra o datePicker (calendário)
+            } else if (dep != null) {
+                DialogUtils.showMessage(context, "Você não tem permissão para editar a data prevista")
             }
-            datePicker.show(parentFragmentManager, "DATE_PICKER") // mostra o datePicker (calendário)
         }
 
         // hora de conclusão prevista
         previsionHour = view.findViewById(R.id.previsionHour)
         previsionHour.setOnClickListener {
-            val hourPicker = DatePickers.hourPicker(getString(R.string.expected_hour))
+            if (user != null) {
+                val hourPicker = DatePickers.hourPicker(getString(R.string.expected_hour))
 
-            hourPicker.addOnPositiveButtonClickListener {
-                val hour = hourPicker.hour
-                val minute = hourPicker.minute
-                val formattedTime = String.format(Locale.getDefault(), "%02d:%02d", hour, minute)
-                previsionHour.setText(formattedTime)
-                // atualiza a tarefa e o usuário no json
-                saveTask(context, item = "previsionHour", formattedTime)
+                hourPicker.addOnPositiveButtonClickListener {
+                    val hour = hourPicker.hour
+                    val minute = hourPicker.minute
+                    val formattedTime = String.format(Locale.getDefault(), "%02d:%02d", hour, minute)
+                    previsionHour.setText(formattedTime)
+                    // atualiza a tarefa e o usuário no json
+                    saveTask(context, item = "previsionHour", formattedTime)
+                }
+                hourPicker.show(parentFragmentManager, "HOUR_PICKER") // mostra o hourPicker (hora)
+            } else if (dep != null) {
+                DialogUtils.showMessage(context, "Você não tem permissão para editar a hora prevista")
             }
-            hourPicker.show(parentFragmentManager, "HOUR_PICKER") // mostra o hourPicker (hora)
         }
 
         // data de conclusão
