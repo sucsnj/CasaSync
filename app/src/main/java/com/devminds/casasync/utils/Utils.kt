@@ -456,7 +456,7 @@ object Utils {
                                                 recycler.adapter?.notifyItemRemoved(index)
 
                                                 // Atualiza nos dois lados
-                                                dependentViewModel.deleteTask(item.dependentId)
+                                                dependentViewModel.deleteTask(item.id)
                                                 userViewModel.deleteTask(item.houseId, item.dependentId, item.id)
 
                                                 // Persiste
@@ -638,7 +638,6 @@ object Utils {
         }
     }
 
-    // salva o id do usuário nas shared preferences
     fun saveUserToPrefs(context: Context, user: User) {
         val prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
         prefs.edit {
@@ -657,6 +656,7 @@ object Utils {
         }
     }
 
+    // salva o id logado nas shared preferences
     fun saveLoginToPrefs(context: Context, id: String, role: String) {
         val prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
         prefs.edit {
@@ -664,7 +664,6 @@ object Utils {
             putString("logged_role", role) // "admin" ou "dependent"
         }
     }
-
 
     fun checkIfUserIsLoggedIn(context: Context) {
         val prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)

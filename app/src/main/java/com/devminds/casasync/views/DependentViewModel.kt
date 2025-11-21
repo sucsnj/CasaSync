@@ -35,6 +35,10 @@ class DependentViewModel : ViewModel() {
 
     fun deleteTask(taskId: String) {
         val dependent = dependent.value ?: return
+
+        dependent.tasks.removeAll { it.id == taskId } // remove da lista local
+        setDependent(dependent) // atualiza o LiveData
+
         FirestoreHelper.syncUserToFirestoreRemoveTaskDep(dependent, taskId)
     }
 }
