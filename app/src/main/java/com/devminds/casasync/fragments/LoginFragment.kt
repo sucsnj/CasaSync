@@ -333,6 +333,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         Auth().authenticateWithFirestore(email, password) { user ->
             if (user != null) {
                 login(context, userViewModel, user)
+                Utils.saveLoginToPrefs(context, user.id, "admin")
                 DialogUtils.showMessage(context, getString(R.string.login_success_message))
             } else {
                 DialogUtils.showMessage(
@@ -347,6 +348,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         Auth().authenticateDepWithFirestore(email, password) { dependent ->
             if (dependent != null) {
                 loginDependent(context, dependentViewModel, dependent)
+                Utils.saveLoginToPrefs(context, dependent.id, "dependent")
             } else {
                 DialogUtils.showMessage(
                     requireContext(),

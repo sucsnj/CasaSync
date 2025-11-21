@@ -621,14 +621,16 @@ object Utils {
     // checa se há um usuário logado
     fun isLogged(context: Context): Boolean {
         val prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
-        val userId = prefs.getString("logged_user_id", null)
+        val id = prefs.getString("logged_user_id", null)
+        val role = prefs.getString("logged_role", null)
 
-        return if (!userId.isNullOrEmpty()) {
+        return if (!id.isNullOrEmpty() && !role.isNullOrEmpty()) {
             val intent = Intent(context, HomeActivity::class.java)
-            intent.putExtra("userId", userId)
+            intent.putExtra("logged_id", id)
+            intent.putExtra("logged_role", role)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             context.startActivity(intent)
-            Log.d("LoginFragment", "Usuário já está logado.")
+            Log.d("LoginFragment", "Usuário já está logado como $role.")
             true
         } else {
             Log.d("LoginFragment", "Nenhum usuário salvo nas prefs.")
@@ -654,6 +656,15 @@ object Utils {
                 dependent.id)
         }
     }
+
+    fun saveLoginToPrefs(context: Context, id: String, role: String) {
+        val prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        prefs.edit {
+            putString("logged_id", id)
+            putString("logged_role", role) // "admin" ou "dependent"
+        }
+    }
+
 
     fun checkIfUserIsLoggedIn(context: Context) {
         val prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
