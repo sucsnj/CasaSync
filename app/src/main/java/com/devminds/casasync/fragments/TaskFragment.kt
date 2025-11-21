@@ -63,7 +63,7 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
                         context,
                         task.id,
                         task.name,
-                        getString(R.string.less_than_one_hour),
+                        context.getString(R.string.less_than_one_hour),
                         DateUtils.minusHour(
                             task.previsionDate,
                             task.previsionHour,
@@ -77,7 +77,7 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
                         context,
                         task.id,
                         task.name,
-                        getString(R.string.less_than_one_day),
+                        context.getString(R.string.less_than_one_day),
                         DateUtils.minusDay(
                             task.previsionDate,
                             task.previsionHour,
