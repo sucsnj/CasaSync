@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -79,9 +80,28 @@ class DepFragment : BaseFragment(R.layout.fragment_dependent) {
 
                     dependentViewModel.setDependent(it)
 
+                    // guardando a lista antiga
+                    val oldList = ArrayList(taskList)
+
+                    // calcula a diferença entra a lista antiga e a nova lista a ser criada depois da modificação
+                    val diffCallback = object : DiffUtil.Callback() {
+                        override fun getOldListSize() = oldList.size
+                        override fun getNewListSize() = tasks.size
+
+                        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =
+                            oldList[oldItemPosition].id == tasks[newItemPosition].id
+
+                        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) =
+                            oldList[oldItemPosition] == tasks[newItemPosition]
+                    }
+                    // retorna o calculo das diferenças
+                    val diffResult = DiffUtil.calculateDiff(diffCallback)
+
                     taskList.clear()
                     taskList.addAll(tasks)
-                    adapter.notifyItemRangeChanged(0, taskList.size)
+//                    adapter.notifyItemRangeChanged(0, taskList.size) // não funciona para deletes
+//                    adapter.notifyDataSetChanged() // muito pesado
+                    diffResult.dispatchUpdatesTo(adapter)
                 }
             }
         }
