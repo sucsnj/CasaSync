@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/background_layout">
 
-    <!--  overlay para esconder lentidão no login com google  -->
+    <!--  overlay para esconder atraso no login  -->
     <FrameLayout
         android:id="@+id/loadingOverlay"
         android:layout_width="match_parent"

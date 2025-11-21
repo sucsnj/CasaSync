@@ -50,14 +50,6 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
     private lateinit var btnSaveTask: TextView
     private lateinit var swipeRefresh: SwipeRefreshLayout
 
-    // cancela notificações anteriores
-    fun cancelAllTaskNotifications(context: Context, task: Task) {
-        TaskAlarmReceiver().cancelScheduleNotification(
-            context, task.id, "hour", task.name, getString(R.string.less_than_one_hour))
-        TaskAlarmReceiver().cancelScheduleNotification(
-            context, task.id, "day", task.name, getString(R.string.less_than_one_day))
-    }
-
     fun scheduleTaskNotification(context: Context, viewModel: TaskViewModel) {
         viewModel.task.value?.let { task ->
 
@@ -98,7 +90,7 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
         }
     }
 
-    private fun saveTask(context: Context, item: String, itemValue: String?) {
+    fun saveTask(context: Context, item: String, itemValue: String?) {
         taskViewModel.task.value?.let { task ->
             when (item) {
                 "description" -> itemValue?.let { task.description = it }
@@ -177,9 +169,13 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
         swipeRefresh.setOnRefreshListener {
             // pega o usuário atual do ViewModel
             val user = userViewModel.user.value
+            // pega o dependente atual do ViewModel -> dependente vindo do login
+            val dep = dependentViewModel.dependent.value
+
             if (user != null) {
-                syncFirestoreToApp()
-                syncFirestoreToAppDep()
+                syncFirestoreToApp() // fluxo do admin
+            } else if (dep != null) {
+                syncFirestoreToAppDep() // fluxo do dependent
             }
             // encerra o efeito de refresh
             swipeRefresh.isRefreshing = false

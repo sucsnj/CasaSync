@@ -211,7 +211,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
         requireActivity().finish()
-        Utils.saveUserToPrefs(requireContext(), user)
+//        Utils.saveUserToPrefs(requireContext(), user)
     }
 
     fun login(context: Context, userViewModel: UserViewModel, user: User) {
@@ -230,7 +230,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         biometric.saveBiometricAuthUser(requireContext(), user.id)
         biometric.lastLoggedUser(requireContext(), user.id)
 
-        Utils.saveUserToPrefs(context, user)
+//        Utils.saveUserToPrefs(context, user)
     }
 
     fun loginDependent(context: Context, dependentViewModel: DependentViewModel, dependent: Dependent) {

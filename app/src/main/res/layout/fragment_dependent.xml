@@ -6,6 +6,27 @@
     android:layout_height="match_parent"
     android:background="@drawable/background_layout">
 
+    <!--  overlay para esconder atraso no login  -->
+    <FrameLayout
+        android:id="@+id/loadingOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FFFFFFFF"
+        android:visibility="gone"
+        android:gravity="center"
+        android:elevation="16dp"
+        android:clickable="true"
+        android:focusable="true">
+
+        <ImageView
+            android:id="@+id/loadingImage"
+            android:layout_width="192dp"
+            android:layout_height="192dp"
+            android:layout_gravity="center"
+            android:src="@drawable/casasync"
+            android:contentDescription="@string/loading" />
+    </FrameLayout>
+
     <!-- barra fixa no top-->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/topBar"

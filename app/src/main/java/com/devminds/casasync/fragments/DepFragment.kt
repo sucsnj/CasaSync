@@ -1,37 +1,25 @@
 package com.devminds.casasync.fragments
 
 import android.util.Log
-import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.view.ContextThemeWrapper
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.bumptech.glide.Glide
 import com.devminds.casasync.FirestoreHelper
 import com.devminds.casasync.GenericAdapter
 import com.devminds.casasync.R
-import com.devminds.casasync.TransitionType
-import com.devminds.casasync.parts.House
 import com.devminds.casasync.parts.Task
 import com.devminds.casasync.utils.Animations
-import com.devminds.casasync.utils.DialogUtils
 import com.devminds.casasync.utils.Utils
 import com.devminds.casasync.views.UserViewModel
 import com.google.android.material.appbar.MaterialToolbar
-import java.util.UUID
 import com.devminds.casasync.utils.PopupMenu
 import com.devminds.casasync.views.DependentViewModel
 import com.devminds.casasync.views.TaskViewModel
@@ -39,6 +27,7 @@ import com.devminds.casasync.views.TaskViewModel
 class DepFragment : BaseFragment(R.layout.fragment_dependent) {
 
     private val dependentViewModel: DependentViewModel by activityViewModels() // @TODO userViewModel: UserViewModel
+    private val userViewModel: UserViewModel by activityViewModels()
     private val taskViewModel: TaskViewModel by activityViewModels()
     private val taskList = mutableListOf<Task>() // @TODO houseList = mutableListOf<House>()
     private lateinit var adapter: GenericAdapter<Task>
@@ -54,21 +43,6 @@ class DepFragment : BaseFragment(R.layout.fragment_dependent) {
     private lateinit var loadingOverlay: View
     private lateinit var loadingImage: ImageView
     private lateinit var swipeRefresh: SwipeRefreshLayout
-
-    private fun openDependentProfile() { // permite abrir a tela de perfil do dependente
-        photo = view?.findViewById(R.id.dependentPhoto)!! // foto
-        title = view?.findViewById(R.id.title)!! // nome
-        subtitle = view?.findViewById(R.id.subtitle)!! // perfil
-        photo.setOnClickListener {
-            // @TODO abrir configuração de dependente ou fragment
-        }
-        title.setOnClickListener {
-            // @TODO abrir configuração de dependente ou fragment
-        }
-        subtitle.setOnClickListener {
-            // @TODO abrir configuração de dependente ou fragment
-        }
-    }
 
     private fun resolveDependentId(): String {
         return activity?.intent?.getStringExtra("dependentId")
@@ -126,13 +100,12 @@ class DepFragment : BaseFragment(R.layout.fragment_dependent) {
 
         val context = requireContext()
 
-//        loadingOverlay = view.findViewById(R.id.loadingOverlay)
-//        loadingImage = view.findViewById(R.id.loadingImage)
+        loadingOverlay = view.findViewById(R.id.loadingOverlay)
+        loadingImage = view.findViewById(R.id.loadingImage)
 
-//        showLoading(true) // mostra loading
+        showLoading(true) // mostra loading
 
         clearNavHistory()
-        openDependentProfile()
 
         syncFirestoreToApp()
 
@@ -147,20 +120,20 @@ class DepFragment : BaseFragment(R.layout.fragment_dependent) {
             title.text = welcome
 
             // foto do dependent
-            dependent?.photo?.let { url ->
-                Glide.with(this)
-                    .load(url)
-                    .placeholder(R.drawable.user_photo) // imagem padrão
-                    .error(R.drawable.user_photo_error) // em caso de erro
-                    .circleCrop() // arredonda a imagem
-                    .into(photo)
-            }
-
-//            if (dependent != null) {
-//                Handler(Looper.getMainLooper()).postDelayed({
-//                    showLoading(false)
-//                }, 200)
+//            dependent?.photo?.let { url ->
+//                Glide.with(this)
+//                    .load(url)
+//                    .placeholder(R.drawable.user_photo) // imagem padrão
+//                    .error(R.drawable.user_photo_error) // em caso de erro
+//                    .circleCrop() // arredonda a imagem
+//                    .into(photo)
 //            }
+
+            if (dependent != null) {
+                Handler(Looper.getMainLooper()).postDelayed({
+                    showLoading(false)
+                }, 200)
+            }
         }
 
         toolbar.inflateMenu(R.menu.topbar_menu)
@@ -183,12 +156,9 @@ class DepFragment : BaseFragment(R.layout.fragment_dependent) {
             }
         }
 
-        // cria uma tarefa
+        // cria uma tarefa não é ativa para dependente
         btnNewTask = view.findViewById(R.id.btnAddTask)
-        btnNewTask.setOnClickListener {
-            DialogUtils.showMessage(context, "Criar tarefa")
-            Log.d("DepFragment", "Criar tarefa")
-        }
+        btnNewTask.visibility = View.INVISIBLE
 
         // atualiza o adapter
         swipeRefresh = view.findViewById(R.id.swipeRefresh)
@@ -201,7 +171,6 @@ class DepFragment : BaseFragment(R.layout.fragment_dependent) {
 
         // manuseia a lista de casas
         adapter = Utils.createTaskAdapterDep(
-            recycler = recyclerTasks,
             list = taskList,
             fragmentFactory = { taskId ->
                 TaskFragment().apply {
@@ -212,8 +181,8 @@ class DepFragment : BaseFragment(R.layout.fragment_dependent) {
             },
             fragmentManager = parentFragmentManager,
             itemOptions = getString(R.string.task_options),
-            successRenameToast = getString(R.string.rename_success_task_toast),
             dependentViewModel = dependentViewModel,
+            userViewModel = userViewModel,
             taskViewModel = taskViewModel,
             context = context
         )
