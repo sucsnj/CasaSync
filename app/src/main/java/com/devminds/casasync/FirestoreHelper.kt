@@ -304,7 +304,7 @@ object FirestoreHelper {
 
         val dependentDoc = db.collection("dependents").document(dependent.id)
 
-        // Salva dados básicos do dependente com merge para não apagar campos existentes
+        // Salva dados básicos do dependente
         val dependentMap = mapOf(
             "id" to dependent.id,
             "name" to dependent.name,
@@ -319,70 +319,37 @@ object FirestoreHelper {
             .addOnSuccessListener { Log.d("Firestore", "Dependente sincronizado: ${dependent.id}") }
             .addOnFailureListener { Log.e("Firestore", "Erro ao salvar dependente", it) }
 
-        // Sincroniza casas apenas se houver tarefas locais
-        if (dependent.tasks.isNotEmpty()) {
-            val tasksRef = dependentDoc.collection("tasks")
+        // Sincroniza tarefas
+        val tasksRef = dependentDoc.collection("tasks")
 
-            tasksRef.get().addOnSuccessListener { snapshot ->
-                val firestoreTasksIds = snapshot.documents.map { it.id }
-                val localTasksIds = dependent.tasks.map { it.id }
+        tasksRef.get().addOnSuccessListener { snapshot ->
+            val firestoreTasksIds = snapshot.documents.map { it.id }
+            val localTasksIds = dependent.tasks.map { it.id }
 
-                // Remove tarefas que não existem mais localmente
-                firestoreTasksIds.filterNot { it in localTasksIds }.forEach { idToDelete ->
-                    tasksRef.document(idToDelete).delete()
+            // Remove tarefas que não existem mais localmente
+            firestoreTasksIds.filterNot { it in localTasksIds }.forEach { idToDelete ->
+                tasksRef.document(idToDelete).delete()
+            }
+
+            // Atualiza ou cria tarefas
+            dependent.tasks.forEach { task ->
+                if (task.id.isBlank()) {
+                    task.id = UUID.randomUUID().toString()
                 }
-
-                // Atualiza ou cria tarefas
-                dependent.tasks.forEach { task ->
-                    if (task.id.isBlank()) {
-                        task.id = UUID.randomUUID().toString()
-                    }
-                    val taskDoc = tasksRef.document(task.id)
-                    val taskMap = mapOf(
-                        "id" to task.id,
-                        "ownerId" to task.ownerId,
-                        "houseId" to task.houseId,
-                        "dependentId" to task.dependentId,
-                        "name" to task.name,
-                        "description" to task.description,
-                        "previsionDate" to task.previsionDate,
-                        "previsionHour" to task.previsionHour,
-                        "startDate" to task.startDate,
-                        "finishDate" to task.finishDate
-                    )
-                    taskDoc.set(taskMap)
-
-                    // Sincroniza tarefas apenas se houver
-                    if (dependent.tasks.isNotEmpty()) {
-                        val tasksRef = taskDoc.collection("tasks")
-
-                        tasksRef.get().addOnSuccessListener { taskSnapshot ->
-                            val firestoreTaskIds = taskSnapshot.documents.map { it.id }
-                            val localTaskIds = dependent.tasks.map { it.id }
-
-                            firestoreTaskIds.filterNot { it in localTaskIds }.forEach { idToDelete ->
-                                tasksRef.document(idToDelete).delete()
-                            }
-
-                            dependent.tasks.forEach { task ->
-                                val taskDoc = tasksRef.document(task.id)
-                                val taskMap = mapOf(
-                                    "id" to task.id,
-                                    "ownerId" to task.ownerId,
-                                    "houseId" to task.houseId,
-                                    "dependentId" to task.dependentId,
-                                    "name" to task.name,
-                                    "description" to task.description,
-                                    "previsionDate" to task.previsionDate,
-                                    "previsionHour" to task.previsionHour,
-                                    "startDate" to task.startDate,
-                                    "finishDate" to task.finishDate
-                                )
-                                taskDoc.set(taskMap)
-                            }
-                        }
-                    }
-                }
+                val taskDoc = tasksRef.document(task.id)
+                val taskMap = mapOf(
+                    "id" to task.id,
+                    "ownerId" to task.ownerId,
+                    "houseId" to task.houseId,
+                    "dependentId" to task.dependentId,
+                    "name" to task.name,
+                    "description" to task.description,
+                    "previsionDate" to task.previsionDate,
+                    "previsionHour" to task.previsionHour,
+                    "startDate" to task.startDate,
+                    "finishDate" to task.finishDate
+                )
+                taskDoc.set(taskMap)
             }
         }
     }
