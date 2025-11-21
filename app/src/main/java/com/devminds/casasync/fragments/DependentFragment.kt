@@ -179,6 +179,7 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
                 itemOptions = getString(R.string.task_options),
                 successRenameToast = getString(R.string.rename_success_task_toast),
                 userViewModel = userViewModel,
+                dependentViewModel = dependentViewModel,
                 taskViewModel = taskViewModel, // *insere data e hora quando a tarefa é concluída via menu de contexto
                 context = context
             )

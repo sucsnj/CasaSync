@@ -337,6 +337,7 @@ object Utils {
         itemOptions: String,
         successRenameToast: String,
         userViewModel: UserViewModel,
+        dependentViewModel: DependentViewModel,
         taskViewModel: TaskViewModel, // precisa para acessar o TaskViewModel com as datas e horas
         context: Context
     ): GenericAdapter<Task> {
@@ -388,9 +389,11 @@ object Utils {
                                                 item.name = newName
                                                 recycler.adapter?.notifyItemChanged(position)
 
-                                                userViewModel.user.value?.let {
-                                                    userViewModel.persistAndSyncUser()
-                                                }
+                                                dependentViewModel.updateTask(item)
+                                                userViewModel.updateTask(item.houseId, item.dependentId, item)
+
+                                                userViewModel.persistAndSyncUser()
+                                                dependentViewModel.persistAndSyncDependent()
 
                                                 DialogUtils.showMessage(
                                                     context,
@@ -452,15 +455,13 @@ object Utils {
                                                 list.removeAt(index)
                                                 recycler.adapter?.notifyItemRemoved(index)
 
-                                                userViewModel.user.value?.let { user ->
-                                                    // remover o task do user
-                                                    user.houses.find { it.id == item.houseId }?.let { house ->
-                                                        house.dependents.find { it.id == item.dependentId }?.let { dep ->
-                                                            dep.tasks.removeAll { it.id == item.id }
-                                                        }
-                                                    }
-                                                    userViewModel.deleteTask(item.houseId, item.dependentId, item.id)
-                                                }
+                                                // Atualiza nos dois lados
+                                                dependentViewModel.deleteTask(item.dependentId)
+                                                userViewModel.deleteTask(item.houseId, item.dependentId, item.id)
+
+                                                // Persiste
+                                                userViewModel.persistAndSyncUser()
+                                                dependentViewModel.persistAndSyncDependent()
 
                                                 DialogUtils.showMessage(context,
                                                     itemNameDelete + context.getString(R.string.success_delete_dialog)
@@ -475,22 +476,16 @@ object Utils {
                                 }
 
                                 2 -> {
-                                    taskViewModel.task.value?.let { task -> 
-                                        val previsionDate = task.previsionDate
-                                        val previsionHour = task.previsionHour
-
-                                        TaskAlarmReceiver().cancelAllTaskNotifications(context, item)
-
-                                        item.finishDate = DateUtils.date(0).fullDate
-                                        item.previsionDate = previsionDate
-                                        item.previsionHour = previsionHour
-                                    }
-
+                                    item.finishDate = DateUtils.date(0).fullDate
                                     recycler.adapter?.notifyItemChanged(position)
 
-                                    userViewModel.user.value?.let {
-                                        userViewModel.persistAndSyncUser()
-                                    }
+                                    // Atualiza nos dois lados
+                                    dependentViewModel.updateTask(item)
+                                    userViewModel.updateTask(item.houseId, item.dependentId, item)
+
+                                    // Persiste
+                                    userViewModel.persistAndSyncUser()
+                                    dependentViewModel.persistAndSyncDependent()
 
                                     DialogUtils.showMessage(context,
                                         context.getString(R.string.task_finished))
