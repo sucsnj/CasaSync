@@ -652,35 +652,13 @@ object Utils {
         }
     }
 
-    fun checkIfUserIsLoggedIn(context: Context): String? {
-        val prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
-        val id = prefs.getString("logged_id", null)
-        val role = prefs.getString("logged_role", null)
-
-        if (!id.isNullOrEmpty() && !role.isNullOrEmpty()) {
-            when (role) {
-                "admin" -> FirestoreHelper.getUserById(id) { user ->
-                    if (user != null) {
-                        login(context, UserViewModel(), user)
-                    }
-                }
-                "dependent" -> FirestoreHelper.getDependentById(id) { dep ->
-                    if (dep != null) {
-                        LoginFragment().loginDependent(context, DependentViewModel(), dep)
-                    }
-                }
-            }
-            return role
-        } else {
-            Log.d("LoginFragment", "Nenhum usuário salvo nas prefs.")
-            return null
-        }
-    }
-
     // remove usuário do SharedPreferences
     fun logout(context: Context) {
         val prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
-        prefs.edit { clear() }
+        prefs.edit {
+            remove("logged_id")
+            remove("logged_role")
+        }
 
         val intent = Intent(context, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

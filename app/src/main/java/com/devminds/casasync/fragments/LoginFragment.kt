@@ -359,10 +359,8 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         val context = requireContext()
         firebaseAuth = Firebase.auth // inicializa o firebase auth
         clearNavHistory() // limpa o histórico de navegação
-        val role = Utils.checkIfUserIsLoggedIn(context)
-        role?.let {
-            biometricCaller(requireActivity(), 2700, role) // biometria
-        }
+
+        biometricCaller(context, 2700, "") // @TODO corrigir
 
         txtLoginPrompt = view.findViewById(R.id.txtLoginPrompt)
         txtPasswordPrompt = view.findViewById(R.id.txtPasswordPrompt)
@@ -454,9 +452,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         // botão para biometria
         btnBiometricLogin = view.findViewById(R.id.btnBiometricLogin)
         btnBiometricLogin.setOnClickListener {
-            role?.let {
-                biometricCaller(requireActivity(), 100, role) // biometria
-            }
+            biometricCaller(requireActivity(), 100, "dependent") // biometria
         }
     }
 }
