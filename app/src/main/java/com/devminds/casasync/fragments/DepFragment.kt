@@ -27,18 +27,18 @@ import com.devminds.casasync.views.TaskViewModel
 
 class DepFragment : BaseFragment(R.layout.fragment_dependent) {
 
-    private val dependentViewModel: DependentViewModel by activityViewModels() // @TODO userViewModel: UserViewModel
+    private val dependentViewModel: DependentViewModel by activityViewModels()
     private val userViewModel: UserViewModel by activityViewModels()
     private val taskViewModel: TaskViewModel by activityViewModels()
-    private val taskList = mutableListOf<Task>() // @TODO houseList = mutableListOf<House>()
+    private val taskList = mutableListOf<Task>()
     private lateinit var adapter: GenericAdapter<Task>
     private lateinit var toolbar: MaterialToolbar
     private lateinit var menu: Menu
     private lateinit var menuItemView: View
-    private lateinit var btnNewTask: TextView // @TODO btnNewHouse
-    private lateinit var recyclerTasks: RecyclerView // @TODO recyclerHouses
+    private lateinit var btnNewTask: TextView
+    private lateinit var recyclerTasks: RecyclerView
     private lateinit var recycler: RecyclerView
-    private lateinit var photo: ImageView // @TOTO userPhoto
+    private lateinit var photo: ImageView
     private lateinit var title: TextView
     private lateinit var subtitle: TextView
     private lateinit var loadingOverlay: View

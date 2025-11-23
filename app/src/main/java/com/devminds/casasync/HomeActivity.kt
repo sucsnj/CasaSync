@@ -4,11 +4,9 @@ import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
-import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import com.devminds.casasync.fragments.DepFragment
-import com.devminds.casasync.fragments.DependentFragment
 import com.devminds.casasync.fragments.HomeFragment
 
 class HomeActivity : AppCompatActivity() {
@@ -27,12 +25,11 @@ class HomeActivity : AppCompatActivity() {
         }
 
         if (savedInstanceState == null) {
-            val userId = intent.getStringExtra("userId")
-            val dependentId = intent.getStringExtra("dependentId")
+            val role = intent.getStringExtra("role")
 
-            val fragment: Fragment = when {
-                userId != null -> HomeFragment()
-                dependentId != null -> DepFragment()
+            val fragment: Fragment = when (role) {
+                "admin" -> HomeFragment()
+                "dependent" -> DepFragment()
                 else -> HomeFragment()
             }
 
@@ -41,14 +38,5 @@ class HomeActivity : AppCompatActivity() {
                 .commit()
         }
 
-    }
-
-    @Suppress("unused") // TODO
-    private fun replaceFragment(fragment: Fragment, transitionType: TransitionType) {
-        supportFragmentManager.beginTransaction()
-            .setCustomTransition(transitionType)
-            .replace(R.id.fragment_container, fragment)
-            .addToBackStack(null)
-            .commit()
     }
 }

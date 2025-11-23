@@ -6,7 +6,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.fragment.app.Fragment
 import com.devminds.casasync.utils.PermissionHelper
 import com.devminds.casasync.utils.Utils
 
@@ -42,14 +41,5 @@ class MainActivity : AppCompatActivity() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         PermissionHelper.handlePermissionResult(this, requestCode, grantResults)
-    }
-
-    @Suppress("unused") // TODO
-    private fun replaceFragment(fragment: Fragment, transitionType: TransitionType) {
-        supportFragmentManager.beginTransaction()
-            .setCustomTransition(transitionType)
-            .replace(R.id.fragment_container, fragment)
-            .addToBackStack(null)
-            .commit()
     }
 }

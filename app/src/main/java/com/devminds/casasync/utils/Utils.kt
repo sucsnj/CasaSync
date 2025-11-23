@@ -29,6 +29,7 @@ import com.devminds.casasync.setCustomTransition
 import com.devminds.casasync.views.UserViewModel
 import com.devminds.casasync.views.TaskViewModel
 import androidx.core.content.edit
+import com.devminds.casasync.FirestoreHelper
 import com.devminds.casasync.MainActivity
 import com.devminds.casasync.fragments.LoginFragment
 import com.devminds.casasync.parts.User
@@ -621,38 +622,24 @@ object Utils {
     // checa se há um usuário logado
     fun isLogged(context: Context): Boolean {
         val prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
-        val id = prefs.getString("logged_user_id", null)
+        val id = prefs.getString("logged_id", null)
         val role = prefs.getString("logged_role", null)
 
         return if (!id.isNullOrEmpty() && !role.isNullOrEmpty()) {
-            val intent = Intent(context, HomeActivity::class.java)
-            intent.putExtra("logged_id", id)
-            intent.putExtra("logged_role", role)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            val intent = Intent(context, HomeActivity::class.java).apply {
+                when (role) {
+                    "admin" -> putExtra("userId", id)
+                    "dependent" -> putExtra("dependentId", id)
+                }
+                putExtra("role", role)
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
             context.startActivity(intent)
             Log.d("LoginFragment", "Usuário já está logado como $role.")
             true
         } else {
             Log.d("LoginFragment", "Nenhum usuário salvo nas prefs.")
             false
-        }
-    }
-
-    fun saveUserToPrefs(context: Context, user: User) {
-        val prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
-        prefs.edit {
-            putString(
-                "logged_user_id",
-                user.id)
-        }
-    }
-
-    fun saveDependentToPrefs(context: Context, dependent: Dependent) {
-        val prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
-        prefs.edit {
-            putString(
-                "logged_user_id",
-                dependent.id)
         }
     }
 
@@ -665,16 +652,28 @@ object Utils {
         }
     }
 
-    fun checkIfUserIsLoggedIn(context: Context) {
+    fun checkIfUserIsLoggedIn(context: Context): String? {
         val prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
-        val userId = prefs.getString("logged_user_id", null)
+        val id = prefs.getString("logged_id", null)
+        val role = prefs.getString("logged_role", null)
 
-        if (!userId.isNullOrEmpty()) {
-            // Usuário já está logado, tenta carregar os dados dele
-            LoginFragment().loginWithUserId(userId)
+        if (!id.isNullOrEmpty() && !role.isNullOrEmpty()) {
+            when (role) {
+                "admin" -> FirestoreHelper.getUserById(id) { user ->
+                    if (user != null) {
+                        login(context, UserViewModel(), user)
+                    }
+                }
+                "dependent" -> FirestoreHelper.getDependentById(id) { dep ->
+                    if (dep != null) {
+                        LoginFragment().loginDependent(context, DependentViewModel(), dep)
+                    }
+                }
+            }
+            return role
         } else {
-            // Nenhum usuário logado, segue com o fluxo normal de login
             Log.d("LoginFragment", "Nenhum usuário salvo nas prefs.")
+            return null
         }
     }
 
@@ -690,5 +689,25 @@ object Utils {
         if (context is Activity) {
             context.finish()
         }
+    }
+
+    fun login(context: Context, userViewModel: UserViewModel, user: User) {
+        DialogUtils.dismissActiveBanner()
+
+        userViewModel.setUser(user)
+        userViewModel.persistAndSyncUser()
+
+        val intent = Intent(context, HomeActivity::class.java).apply {
+            putExtra("userId", user.id)
+            putExtra("role", "admin")
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        context.startActivity(intent)
+
+        val biometric = Biometric()
+        biometric.saveBiometricAuthUser(context, user.id)
+        biometric.lastLoggedUser(context, user.id)
+
+        saveLoginToPrefs(context, user.id, "admin")
     }
 }
