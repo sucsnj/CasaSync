@@ -24,6 +24,7 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.devminds.casasync.utils.PopupMenu
 import com.devminds.casasync.views.DependentViewModel
 import com.devminds.casasync.views.TaskViewModel
+import com.bumptech.glide.Glide
 
 class DepFragment : BaseFragment(R.layout.fragment_dependent) {
 
@@ -130,6 +131,8 @@ class DepFragment : BaseFragment(R.layout.fragment_dependent) {
         syncFirestoreToApp()
 
         toolbar = view.findViewById(R.id.topBar)
+        toolbar.navigationIcon = null // esconde o botão de voltar
+
         title = view.findViewById(R.id.title)
 
         // cabeçalho
@@ -140,14 +143,15 @@ class DepFragment : BaseFragment(R.layout.fragment_dependent) {
             title.text = welcome
 
             // foto do dependent
-//            dependent?.photo?.let { url ->
-//                Glide.with(this)
-//                    .load(url)
-//                    .placeholder(R.drawable.user_photo) // imagem padrão
-//                    .error(R.drawable.user_photo_error) // em caso de erro
-//                    .circleCrop() // arredonda a imagem
-//                    .into(photo)
-//            }
+            photo = view?.findViewById(R.id.dependentPhoto)!! // foto
+            dependent?.photo?.let { url ->
+                Glide.with(this)
+                    .load(url)
+                    .placeholder(R.drawable.user_photo) // imagem padrão
+                    .error(R.drawable.user_photo_error) // em caso de erro
+                    .circleCrop() // arredonda a imagem
+                    .into(photo)
+            }
 
             if (dependent != null) {
                 Handler(Looper.getMainLooper()).postDelayed({
