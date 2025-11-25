@@ -267,11 +267,14 @@ object Utils {
                                 }
 
                                 1 -> {
-                                    val itemPasscodeView = item.passcode
+                                    //val itemPasscodeView = item.passcode       
+                                    val date = Pair(item.email, item.passcode)
                                     AlertDialog.Builder(context)
-                                        .setTitle(context.getString(R.string.viewPass))
+                                        //.setTitle(context.getString(R.string.viewPass))
+                                        .setTitle("Ver usuário e senha")
                                         .setCancelable(true)
-                                        .setMessage(itemPasscodeView)
+                                        //.setMessage(itemPasscodeView)
+                                        .setMessage(date.toString())
                                         .show()
                                 }
 
