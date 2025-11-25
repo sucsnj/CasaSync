@@ -1,9 +1,9 @@
 package com.devminds.casasync.fragments
 
-import android.util.Log
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.Menu
 import android.view.View
 import android.widget.ImageView
@@ -18,12 +18,12 @@ import com.devminds.casasync.GenericAdapter
 import com.devminds.casasync.R
 import com.devminds.casasync.parts.Task
 import com.devminds.casasync.utils.Animations
-import com.devminds.casasync.utils.Utils
-import com.devminds.casasync.views.UserViewModel
-import com.google.android.material.appbar.MaterialToolbar
 import com.devminds.casasync.utils.PopupMenu
+import com.devminds.casasync.utils.Utils
 import com.devminds.casasync.views.DependentViewModel
 import com.devminds.casasync.views.TaskViewModel
+import com.devminds.casasync.views.UserViewModel
+import com.google.android.material.appbar.MaterialToolbar
 
 class DepFragment : BaseFragment(R.layout.fragment_dependent) {
 
@@ -130,6 +130,11 @@ class DepFragment : BaseFragment(R.layout.fragment_dependent) {
         syncFirestoreToApp()
 
         toolbar = view.findViewById(R.id.topBar)
+        title = view.findViewById(R.id.title)
+
+        // Adicione esta linha para remover a seta de voltar
+        toolbar.navigationIcon = null
+
         title = view.findViewById(R.id.title)
 
         // cabeçalho
