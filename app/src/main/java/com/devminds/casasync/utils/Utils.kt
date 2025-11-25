@@ -683,8 +683,8 @@ object Utils {
         context.startActivity(intent)
 
         val biometric = Biometric()
-        biometric.saveBiometricAuthUser(context, user.id)
-        biometric.lastLoggedUser(context, user.id)
+        biometric.saveBiometricAuthUser(context, user.id, "admin")
+        biometric.lastLoggedUser(context, user.id, "admin")
 
         saveLoginToPrefs(context, user.id, "admin")
     }

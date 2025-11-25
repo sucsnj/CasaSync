@@ -32,15 +32,15 @@ object BiometricAuthManager {
     fun tryBiometricLogin(
         context: Context, // contexto da activity
         activity: FragmentActivity, // é necessário uma activity para usar o BiometricPrompt
-        onSuccess: (String) -> Unit, // quando for sucesso, retorna o id do usuário
+        onSuccess: (String, String) -> Unit, // quando for sucesso, retorna o id e role
         onError: (String) -> Unit // quando for erro, retorna a mensagem de erro
     ) {
         val biometric = Biometric() // instancia da classe Biometric
-        val lastUser = biometric.getLastLoggedUser(context) // ultimo usuário logado
+        val (lastId, lastRole) = biometric.getLastLoggedUser(context) // ultimo usuário logado
         val biometricUsers = biometric.getBiometricAuthUsers(context) // lista  de usuário da biometria (o xml)
 
         // se houver um último usuário logado e ele está na lista...
-        if (lastUser != null && biometricUsers.contains(lastUser)) {
+        if (lastId != null && lastRole != null && biometricUsers.contains("$lastId:$lastRole")) {
             val executor = ContextCompat.getMainExecutor(context) // retorna o que roda na thread principal
             // também é ele que permite a interação com a tela do usuário, como modificações e mensagens...
 
@@ -52,7 +52,7 @@ object BiometricAuthManager {
                     // quando há uma biometria reconhecida
                     override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                         super.onAuthenticationSucceeded(result)
-                        onSuccess(lastUser)
+                        onSuccess(lastId, lastRole) // retorna o id e role
                     }
 
                     // quando não há autenticação, seja por cancelamento, erro ou falta de hardware

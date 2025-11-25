@@ -13,7 +13,7 @@ class Biometric : BiometricPrompt.AuthenticationCallback(){
     }
 
     // adiciona o usuário a lista da biometria
-    fun saveBiometricAuthUser(context: Context, userId: String) {
+    fun saveBiometricAuthUser(context: Context, id: String, role: String) {
         // o arquivo.xml com a lista
         val sharedPref = sharedPreferences(context)
 
@@ -22,7 +22,7 @@ class Biometric : BiometricPrompt.AuthenticationCallback(){
         val copySet = originalSet.toMutableSet() // a cópia é mutável
 
         // adiciona o novo usuário à lista
-        copySet.add(userId)
+        copySet.add("$id:$role")
 
         // salva a lista atualizada no arquivo.xml
         sharedPref.edit { putStringSet("biometricUsers", copySet) }
@@ -35,14 +35,27 @@ class Biometric : BiometricPrompt.AuthenticationCallback(){
     }
 
     // grava o ultimo usuário logado na lista
-    fun lastLoggedUser(context: Context, userId: String) {
+    fun lastLoggedUser(context: Context, id: String, role: String) {
         val sharedPref = sharedPreferences(context)
-        sharedPref.edit { putString("lastLoggedUser", userId) }
+        sharedPref.edit {
+            putString("lastLoggedUser", id)
+            putString("lastLoggedUserRole", role)
+        }
     }
 
     // pega o ultimo usuário logado na lista
-    fun getLastLoggedUser(context: Context): String? {
+    fun getLastLoggedUser(context: Context): Pair<String?, String?> {
         val sharedPref = sharedPreferences(context)
-        return sharedPref.getString("lastLoggedUser", null)
+        // retorna o lastLoggedUser e lastLoggedUserRole
+        val id = sharedPref.getString("lastLoggedUser", null)
+        val role = sharedPref.getString("lastLoggedUserRole", null)
+        return id to role
+    }
+
+    // utilitário: dado um id, retorna o role da lista
+    fun getRoleForUser(context: Context, id: String): String? {
+        val users = getBiometricAuthUsers(context)
+        val match = users.find { it.startsWith("$id:") }
+        return match?.split(":")?.getOrNull(1)
     }
 }

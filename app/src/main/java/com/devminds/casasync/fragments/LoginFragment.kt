@@ -100,11 +100,11 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                 BiometricAuthManager.tryBiometricLogin(
                     context,
                     (context as? Activity ?: return@postDelayed) as FragmentActivity,
-                    onSuccess = { id ->
+                    onSuccess = { id, role ->
                         if (Utils.isConnected(requireContext())) {
                             if (role == "admin") {
                                 loginWithUserId(id)
-                                userViewModel.persistAndSyncUser()
+//                                userViewModel.persistAndSyncUser()
                             } else if (role == "dependent") {
                                 FirestoreHelper.getDependentById(id) { dep ->
                                     if (dep != null) {
@@ -112,7 +112,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                                     }
                                 }
                             }
-                            userViewModel.persistAndSyncUser()
+//                            userViewModel.persistAndSyncUser()
 
                             Utils.saveLoginToPrefs(context, id, role)
                         } else {
@@ -149,8 +149,8 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                     navigateToHome(existingUser)
 
                     val biometric = Biometric()
-                    biometric.saveBiometricAuthUser(requireContext(), existingUser.id)
-                    biometric.lastLoggedUser(requireContext(), existingUser.id)
+                    biometric.saveBiometricAuthUser(requireContext(), existingUser.id, "admin")
+                    biometric.lastLoggedUser(requireContext(), existingUser.id, "admin")
 
                 } else {
 
@@ -182,8 +182,8 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                     }
 
                     val biometric = Biometric()
-                    biometric.saveBiometricAuthUser(requireContext(), newUser.id)
-                    biometric.lastLoggedUser(requireContext(), newUser.id)
+                    biometric.saveBiometricAuthUser(requireContext(), newUser.id, "admin")
+                    biometric.lastLoggedUser(requireContext(), newUser.id, "admin")
                 }
             }
     }
@@ -232,8 +232,8 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         (context as? Activity)?.finish()
 
         val biometric = Biometric()
-        biometric.saveBiometricAuthUser(context, dependent.id)
-        biometric.lastLoggedUser(context, dependent.id)
+        biometric.saveBiometricAuthUser(context, dependent.id, "dependent")
+        biometric.lastLoggedUser(context, dependent.id, "dependent")
 
         Utils.saveLoginToPrefs(context, dependent.id, "dependent")
     }
@@ -349,6 +349,8 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val biometric = Biometric()
+
         startAppOverlay = view.findViewById(R.id.startAppOverlay)
         loadingImage = view.findViewById(R.id.loadingImage)
         startingAppLogo(true)
@@ -360,7 +362,11 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         firebaseAuth = Firebase.auth // inicializa o firebase auth
         clearNavHistory() // limpa o histórico de navegação
 
-        biometricCaller(context, 2700, "") // @TODO corrigir
+        val (lastRole) = biometric.getLastLoggedUser(requireContext())
+
+        lastRole?.let {
+            biometricCaller(context, 2700, lastRole)
+        }
 
         txtLoginPrompt = view.findViewById(R.id.txtLoginPrompt)
         txtPasswordPrompt = view.findViewById(R.id.txtPasswordPrompt)
@@ -452,7 +458,9 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         // botão para biometria
         btnBiometricLogin = view.findViewById(R.id.btnBiometricLogin)
         btnBiometricLogin.setOnClickListener {
-            biometricCaller(requireActivity(), 100, "dependent") // biometria
+            lastRole?.let {
+                biometricCaller(context, 100, lastRole)
+            }
         }
     }
 }
