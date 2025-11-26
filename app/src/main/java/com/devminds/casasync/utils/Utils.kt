@@ -612,6 +612,7 @@ object Utils {
         )
     }
 
+    // checa conexão com a internet
     fun isConnected(context: Context): Boolean {
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val network = connectivityManager.activeNetwork ?: return false
@@ -624,6 +625,26 @@ object Utils {
         val prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
         val id = prefs.getString("logged_id", null)
         val role = prefs.getString("logged_role", null)
+        // var idRole = id // será modificado para procurar no Firestore
+
+        // procurar usuário no firestore
+        if (role == "admin" && id != null) {
+            FirestoreHelper.getUserById(id) { user ->
+                if (user == null) {
+                    DialogUtils.showMessage(context, "Usuário não encontrado. Fazendo logout.")
+                    Log.d("Utils", "Nenhum usuário encontrado no Firestore com o ID: $id")
+                    logout(context)
+                }
+            }
+        } else if (role == "dependent" && id != null) {
+            FirestoreHelper.getDependentById(id) { dependent ->
+                if (dependent == null) {
+                    DialogUtils.showMessage(context, "Dependente não encontrado. Fazendo logout.")
+                    Log.d("Utils", "Nenhum dependente encontrado no Firestore com o ID: $id")
+                    logout(context)
+                }
+            }
+        }
 
         return if (!id.isNullOrEmpty() && !role.isNullOrEmpty()) {
             val intent = Intent(context, HomeActivity::class.java).apply {
