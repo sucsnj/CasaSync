@@ -221,7 +221,7 @@ object Utils {
 
                     val options = arrayOf(
                         context.getString(R.string.rename_dialog),
-                        context.getString(R.string.viewPass),
+                        "Ver usuário e senha",
                         context.getString(R.string.delete_dialog)
                     )
 
@@ -267,14 +267,11 @@ object Utils {
                                 }
 
                                 1 -> {
-                                    //val itemPasscodeView = item.passcode       
                                     val date = Pair(item.email, item.passcode)
                                     AlertDialog.Builder(context)
-                                        //.setTitle(context.getString(R.string.viewPass))
-                                        .setTitle("Ver usuário e senha")
+                                        .setTitle(item.name)
                                         .setCancelable(true)
-                                        //.setMessage(itemPasscodeView)
-                                        .setMessage(date.toString())
+                                        .setMessage("${date.first}\n${date.second}")
                                         .show()
                                 }
 
