@@ -34,6 +34,11 @@ import com.devminds.casasync.MainActivity
 import com.devminds.casasync.fragments.LoginFragment
 import com.devminds.casasync.parts.User
 import com.devminds.casasync.views.DependentViewModel
+import android.text.InputType
+import androidx.core.content.ContextCompat
+import android.view.MotionEvent
+
+import com.google.android.material.textfield.TextInputEditText
 
 // classe utilitária
 object Utils {
@@ -202,6 +207,7 @@ object Utils {
         itemOptions: String,
         successRenameToast: String,
         userViewModel: UserViewModel,
+        dependentViewModel: DependentViewModel,
         context: Context
     ): GenericAdapter<Dependent> {
         return GenericAdapter(
@@ -221,12 +227,12 @@ object Utils {
 
                     val options = arrayOf(
                         context.getString(R.string.rename_dialog),
-                        "Ver usuário e senha",
+                        "Ver/trocar senha",
                         context.getString(R.string.delete_dialog)
                     )
 
                     AlertDialog.Builder(context)
-                        .setTitle("$itemOptions ${item.name}")
+                        .setTitle("$itemOptions ${item.name}\nLogin: ${item.email}")
                         .setItems(options) { _, which ->
                             when (which) {
                                 0 -> {
@@ -267,11 +273,33 @@ object Utils {
                                 }
 
                                 1 -> {
-                                    val date = Pair(item.email, item.passcode)
+                                    // edittext para permitir edição da senha com olho de tandera
+                                    val dialogView = LayoutInflater.from(context)
+                                        .inflate(R.layout.password_dialog, null)
+                                    val editText = dialogView.findViewById<TextInputEditText>(R.id.passcodeEditText)
+                                    editText.setText(item.passcode)
+                                    editText.setSelection(editText.text?.length ?: 0)
+
                                     AlertDialog.Builder(context)
                                         .setTitle(item.name)
+                                        .setView(dialogView) // o edittext para editar a senha
                                         .setCancelable(true)
-                                        .setMessage("${date.first}\n${date.second}")
+                                        .setPositiveButton(context.getString(R.string.accept_dialog)) { _, _ ->
+                                            val newPasscode = editText.text.toString().trim()
+                                            if (newPasscode.isNotEmpty()) {
+                                                item.passcode = newPasscode
+                                                recycler.adapter?.notifyItemChanged(position)
+
+                                                userViewModel.persistAndSyncUser()
+                                                dependentViewModel.persistAndSyncDependent()
+
+                                                DialogUtils.showMessage(
+                                                    context,
+                                                    "Senha atualizada com sucesso!"
+                                                )
+                                            }
+                                        }
+                                        .setNegativeButton(context.getString(R.string.cancel_dialog), null)
                                         .show()
                                 }
 
