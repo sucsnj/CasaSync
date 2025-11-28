@@ -8,9 +8,6 @@ import com.google.android.gms.tasks.Tasks
 import com.devminds.casasync.parts.User
 import com.google.firebase.firestore.SetOptions
 import java.util.UUID
-import android.content.Context
-import com.devminds.casasync.utils.DialogUtils
-import com.google.firebase.firestore.ListenerRegistration
 
 object FirestoreHelper {
 
@@ -461,7 +458,7 @@ object FirestoreHelper {
                                         val taskDocs = taskSnapshot.documents
 
                                         taskDocs.forEach { taskDoc ->
-                                            val task = com.devminds.casasync.parts.Task(
+                                            val task = Task(
                                                 id = taskDoc.getString("id") ?: taskDoc.id,
                                                 ownerId = taskDoc.getString("ownerId") ?: "",
                                                 houseId = taskDoc.getString("houseId") ?: "",
@@ -663,38 +660,5 @@ object FirestoreHelper {
             .addOnFailureListener {
                 Log.e("Firestore", "Erro ao remover tarefa $taskId", it)
             }
-    }
-
-    // envia uma notificação para o dependente
-    fun listenForTaskChanges(context: Context, userId: String, dependentId: String): ListenerRegistration  {
-        val db = FirebaseFirestore.getInstance()
-
-        // pega a referência da task
-        val taskRef = db.collection("users")
-            .document(userId)
-            .collection("dependents")
-            .document(dependentId)
-            .collection("tasks")
-
-        return taskRef.addSnapshotListener { snapshot, error ->
-            // se houver um erro, já para aqui
-            if (error != null) {
-                Log.e("Firestore", "Erro ao escutar mudanças de tarefas", error)
-                return@addSnapshotListener
-            }
-
-            // só continua se tiver algo no snapshot
-            if (snapshot != null && !snapshot.isEmpty) {
-
-                // aqui é feita a comparação entre as tasks atuais e as do snapshot
-                val tasks = snapshot.documents.mapNotNull { it.toObject(Task::class.java) }
-
-                // a notificação
-                DialogUtils.showMessage(context, "Tem mudanças nas suas tarefas!")
-
-                // a implementar...
-                
-            }
-        }
     }
 }

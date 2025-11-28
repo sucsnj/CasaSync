@@ -27,6 +27,8 @@ import com.devminds.casasync.views.TaskViewModel
 import com.bumptech.glide.Glide
 import com.google.firebase.firestore.ListenerRegistration
 import com.devminds.casasync.utils.DialogUtils
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.DocumentChange
 
 class DepFragment : BaseFragment(R.layout.fragment_dependent) {
 
@@ -43,7 +45,6 @@ class DepFragment : BaseFragment(R.layout.fragment_dependent) {
     private lateinit var recycler: RecyclerView
     private lateinit var photo: ImageView
     private lateinit var title: TextView
-    private lateinit var subtitle: TextView
     private lateinit var loadingOverlay: View
     private lateinit var loadingImage: ImageView
     private lateinit var swipeRefresh: SwipeRefreshLayout
@@ -66,6 +67,31 @@ class DepFragment : BaseFragment(R.layout.fragment_dependent) {
         }
     }
 
+    // função apenas para atualizar o adapater (tela do dependente)
+    private fun updateAdapter(tasks: List<Task>) {
+        // guarda a lista antiga
+        val oldList = ArrayList(taskList)
+
+        // calcula a diferença entre a lista antiga e a nova
+        val diffCallback = object : DiffUtil.Callback() {
+            override fun getOldListSize() = oldList.size
+            override fun getNewListSize() = tasks.size
+
+            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =
+                oldList[oldItemPosition].id == tasks[newItemPosition].id
+
+            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) =
+                oldList[oldItemPosition] == tasks[newItemPosition]
+        }
+
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+
+        taskList.clear()
+        taskList.addAll(tasks)
+
+        diffResult.dispatchUpdatesTo(adapter)
+    }
+
     fun syncFirestoreToApp() {
         FirestoreHelper.getDependentById(resolveDependentId()) { dependent ->
             dependent?.let {
@@ -75,37 +101,18 @@ class DepFragment : BaseFragment(R.layout.fragment_dependent) {
                     .collection("tasks")
 
                 dependentesRef.get().addOnSuccessListener { snapshot ->
-                    val tasks = snapshot.documents.mapNotNull { doc ->
-                        doc.toObject(Task::class.java)
-                    }
+                    val tasks = snapshot.documents.mapNotNull { doc -> doc.toObject(Task::class.java) }
+                    updateAdapter(tasks)
 
                     it.tasks.clear()
                     it.tasks.addAll(tasks)
 
                     dependentViewModel.setDependent(it)
 
-                    // guardando a lista antiga
-                    val oldList = ArrayList(taskList)
-
-                    // calcula a diferença entra a lista antiga e a nova lista a ser criada depois da modificação
-                    val diffCallback = object : DiffUtil.Callback() {
-                        override fun getOldListSize() = oldList.size
-                        override fun getNewListSize() = tasks.size
-
-                        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =
-                            oldList[oldItemPosition].id == tasks[newItemPosition].id
-
-                        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) =
-                            oldList[oldItemPosition] == tasks[newItemPosition]
-                    }
-                    // retorna o calculo das diferenças
-                    val diffResult = DiffUtil.calculateDiff(diffCallback)
-
                     taskList.clear()
                     taskList.addAll(tasks)
 //                    adapter.notifyItemRangeChanged(0, taskList.size) // não funciona para deletes
 //                    adapter.notifyDataSetChanged() // muito pesado
-                    diffResult.dispatchUpdatesTo(adapter)
                 }
             }
         }
@@ -119,38 +126,51 @@ class DepFragment : BaseFragment(R.layout.fragment_dependent) {
         }
     }
 
-    // chama o listener e avisar quando há mudanças na coleção de tarefas
-    override fun onStart() {
-        super.onStart()
+    // envia uma notificação para o dependente usando um listener
+    fun listenForDependentTasks(dependentId: String): ListenerRegistration {
+        val db = FirebaseFirestore.getInstance()
+        val taskRef = db.collection("dependents")
+            .document(dependentId)
+            .collection("tasks")
 
-        val dependent = dependentViewModel.dependent.value
-        dependent?.let {
+        return taskRef.addSnapshotListener { snapshot, error ->
+            if (error != null) {
+                Log.e("Firestore", "Erro ao escutar mudanças de tarefas", error)
+                return@addSnapshotListener
+            }
 
-            val dependentId = dependent.id
-            val userId = dependent.userId
-
-            listenerRegistration = FirestoreHelper.listenForTaskChanges(requireContext(), userId, dependentId)
+            if (snapshot != null) {
+                for (change in snapshot.documentChanges) {
+                    when (change.type) {
+                        DocumentChange.Type.ADDED -> {
+                            DialogUtils.showMessage(requireContext(), getString(R.string.new_task_text))
+                            Log.d("Firestore", "Task adicionada: ${change.document.id}")
+                        }
+                        DocumentChange.Type.MODIFIED -> {
+                            DialogUtils.showMessage(requireContext(), getString(R.string.modified_task_text))
+                            Log.d("Firestore", "Task modificada: ${change.document.id}")
+                        }
+                        DocumentChange.Type.REMOVED -> {
+                            DialogUtils.showMessage(requireContext(), getString(R.string.removed_task_text))
+                            Log.d("Firestore", "Task removida: ${change.document.id}")
+                        }
+                    }
+                    // atualiza o adapter
+                    val tasks = snapshot.documents.mapNotNull { doc -> doc.toObject(Task::class.java) }
+                    updateAdapter(tasks)
+                }
+            }
         }
     }
 
     // remove o listener para evitar vazamento de memória
-    // override fun onStop() {
-    //     super.onStop()
-    //     listenerRegistration.remove()
-    // }
+    override fun onStop() {
+        super.onStop()
+        listenerRegistration.remove()
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
-        dependentViewModel.dependent.observe(viewLifecycleOwner) { dependent ->
-            dependent?.let {
-
-                val dependentId = it.id
-                val userId = it.userId
-                listenerRegistration = FirestoreHelper.listenForTaskChanges(requireContext(), userId, dependentId)
-            }
-        }
 
         val context = requireContext()
 
@@ -170,23 +190,25 @@ class DepFragment : BaseFragment(R.layout.fragment_dependent) {
 
         // cabeçalho
         dependentViewModel.dependent.observe(viewLifecycleOwner) { dependent ->
-            Log.d("DepFragment", "Chegou aqui")
-            // nome do dependent
-            val welcome = getString(R.string.welcome_text) + (dependent?.name ?: "Dependente")
-            title.text = welcome
+            dependent?.let {
+                // nome do dependent
+                val welcome = getString(R.string.welcome_text) + dependent.name
+                title.text = welcome
 
-            // foto do dependent
-            photo = view?.findViewById(R.id.dependentPhoto)!! // foto
-            dependent?.photo?.let { url ->
-                Glide.with(this)
-                    .load(url)
-                    .placeholder(R.drawable.user_photo) // imagem padrão
-                    .error(R.drawable.user_photo_error) // em caso de erro
-                    .circleCrop() // arredonda a imagem
-                    .into(photo)
-            }
+                val dependentId = it.id
+                listenerRegistration = listenForDependentTasks(dependentId)
 
-            if (dependent != null) {
+                // foto do dependent
+                photo = view.findViewById(R.id.dependentPhoto)!! // foto
+                dependent.photo.let { url ->
+                    Glide.with(this)
+                        .load(url)
+                        .placeholder(R.drawable.user_photo) // imagem padrão
+                        .error(R.drawable.user_photo_error) // em caso de erro
+                        .circleCrop() // arredonda a imagem
+                        .into(photo)
+                }
+
                 Handler(Looper.getMainLooper()).postDelayed({
                     showLoading(false)
                 }, 200)

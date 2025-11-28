@@ -205,5 +205,8 @@
     <string name="user_or_dependent">Administrador ou Dependente?</string>
     <string name="user_not_found">Nenhum usuário encontrado!</string>
     <string name="open">Abrir</string>
+    <string name="new_task_text">Você tem uma nova tarefa!</string>
+    <string name="modified_task_text">Uma terefa foi modificada</string>
+    <string name="removed_task_text">Uma tarefa foi removida</string>
 
 </resources>

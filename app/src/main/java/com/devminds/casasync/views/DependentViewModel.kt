@@ -6,11 +6,14 @@ import androidx.lifecycle.ViewModel
 import com.devminds.casasync.FirestoreHelper
 import com.devminds.casasync.parts.Dependent
 import com.devminds.casasync.parts.Task
-import com.devminds.casasync.parts.User
 
 class DependentViewModel : ViewModel() {
     private val _dependent = MutableLiveData<Dependent?>()
     val dependent: LiveData<Dependent?> get() = _dependent
+
+    private val _tasksLiveData = MutableLiveData<List<Task>>()
+    @Suppress("unused")
+    val tasksLiveData: LiveData<List<Task>> get() = _tasksLiveData
 
     fun setDependent(dependent: Dependent) {
         _dependent.value = dependent
