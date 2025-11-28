@@ -167,6 +167,9 @@ object Utils {
                                                     user.houses.removeAll { it.id == item.id }
 
                                                     userViewModel.deleteHouse(item.id)
+
+                                                    // deleta os dependentes associados à casa na collection de dependents
+                                                    FirestoreHelper.deleteHouseAndDependents(item.id)
                                                 }
 
                                                 DialogUtils.showMessage(context,
@@ -344,6 +347,7 @@ object Utils {
                                                     }
                                                     
                                                     userViewModel.deleteDependent(item.houseId, item.id)
+                                                    FirestoreHelper.deleteDependentForDependent(item.id)
                                                 }
 
                                                 DialogUtils.showMessage(context,

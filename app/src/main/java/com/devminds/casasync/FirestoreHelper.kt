@@ -8,6 +8,9 @@ import com.google.android.gms.tasks.Tasks
 import com.devminds.casasync.parts.User
 import com.google.firebase.firestore.SetOptions
 import java.util.UUID
+import android.content.Context
+import com.devminds.casasync.utils.DialogUtils
+import com.google.firebase.firestore.ListenerRegistration
 
 object FirestoreHelper {
 
@@ -45,6 +48,7 @@ object FirestoreHelper {
                 if (document != null && document.exists()) {
                     val dependent = Dependent(
                         id = document.id,
+                        userId = document.getString("userId") ?: "",
                         name = document.getString("name") ?: "",
                         email = document.getString("email") ?: "",
                         active = document.getBoolean("active") ?: false,
@@ -247,6 +251,7 @@ object FirestoreHelper {
                                 val depDoc = dependentsRef.document(dep.id)
                                 val depMap = mapOf(
                                     "id" to dep.id,
+                                    "userId" to dep.userId,
                                     "name" to dep.name,
                                     "houseId" to dep.houseId,
                                     "active" to dep.active,
@@ -307,6 +312,7 @@ object FirestoreHelper {
         // Salva dados básicos do dependente com merge para não apagar campos existentes
         val dependentMap = mapOf(
             "id" to dependent.id,
+            "userId" to dependent.userId,
             "name" to dependent.name,
             "email" to dependent.email,
             "active" to dependent.active,
@@ -354,6 +360,34 @@ object FirestoreHelper {
                 }
             }
         }
+    }
+
+    fun deleteDependentForDependent(dependentId: String) {
+        val db = FirebaseFirestore.getInstance()
+
+        db.collection("dependents")
+            .document(dependentId)
+            .delete()
+            .addOnSuccessListener {
+                Log.d("Firestore", "Dependente $dependentId deletado com sucesso.")
+            }
+            .addOnFailureListener {
+                Log.e("Firestore", "Erro ao deletar dependente $dependentId", it)
+            }
+    }
+
+    fun deleteHouseAndDependents(houseId: String) {
+        val db = FirebaseFirestore.getInstance()
+
+        db.collection("dependents")
+            .whereEqualTo("houseId", houseId)
+            .get()
+            .addOnSuccessListener { snapshot ->
+                snapshot.documents.forEach { doc ->
+                    doc.reference.delete()
+                        Log.d("Firestore", "Dependente ${doc.id} deletado com sucesso.")
+                }
+            }
     }
 
     fun syncFirestoreToUser(userId: String, onResult: (User?) -> Unit) {
@@ -411,6 +445,7 @@ object FirestoreHelper {
                             depDocs.forEach { depDoc ->
                                 val dep = Dependent(
                                     id = depDoc.getString("id") ?: depDoc.id,
+                                    userId = depDoc.getString("userId") ?: "",
                                     name = depDoc.getString("name") ?: "",
                                     houseId = depDoc.getString("houseId") ?: "",
                                     email = depDoc.getString("email") ?: "",
@@ -471,6 +506,7 @@ object FirestoreHelper {
             // Monta o Dependente básico
             val dependent = Dependent(
                 id = dependentSnapshot.getString("id") ?: dependentSnapshot.id,
+                userId = dependentSnapshot.getString("userId") ?: "",
                 name = dependentSnapshot.getString("name") ?: "",
                 email = dependentSnapshot.getString("login") ?: "",
                 active = dependentSnapshot.getBoolean("active") ?: false,
@@ -627,5 +663,38 @@ object FirestoreHelper {
             .addOnFailureListener {
                 Log.e("Firestore", "Erro ao remover tarefa $taskId", it)
             }
+    }
+
+    // envia uma notificação para o dependente
+    fun listenForTaskChanges(context: Context, userId: String, dependentId: String): ListenerRegistration  {
+        val db = FirebaseFirestore.getInstance()
+
+        // pega a referência da task
+        val taskRef = db.collection("users")
+            .document(userId)
+            .collection("dependents")
+            .document(dependentId)
+            .collection("tasks")
+
+        return taskRef.addSnapshotListener { snapshot, error ->
+            // se houver um erro, já para aqui
+            if (error != null) {
+                Log.e("Firestore", "Erro ao escutar mudanças de tarefas", error)
+                return@addSnapshotListener
+            }
+
+            // só continua se tiver algo no snapshot
+            if (snapshot != null && !snapshot.isEmpty) {
+
+                // aqui é feita a comparação entre as tasks atuais e as do snapshot
+                val tasks = snapshot.documents.mapNotNull { it.toObject(Task::class.java) }
+
+                // a notificação
+                DialogUtils.showMessage(context, "Tem mudanças nas suas tarefas!")
+
+                // a implementar...
+                
+            }
+        }
     }
 }

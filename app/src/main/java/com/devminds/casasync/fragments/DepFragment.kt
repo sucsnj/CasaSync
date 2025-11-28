@@ -25,6 +25,8 @@ import com.devminds.casasync.utils.PopupMenu
 import com.devminds.casasync.views.DependentViewModel
 import com.devminds.casasync.views.TaskViewModel
 import com.bumptech.glide.Glide
+import com.google.firebase.firestore.ListenerRegistration
+import com.devminds.casasync.utils.DialogUtils
 
 class DepFragment : BaseFragment(R.layout.fragment_dependent) {
 
@@ -45,6 +47,7 @@ class DepFragment : BaseFragment(R.layout.fragment_dependent) {
     private lateinit var loadingOverlay: View
     private lateinit var loadingImage: ImageView
     private lateinit var swipeRefresh: SwipeRefreshLayout
+    private lateinit var listenerRegistration: ListenerRegistration
 
     private fun resolveDependentId(): String {
         return activity?.intent?.getStringExtra("dependentId")
@@ -116,8 +119,38 @@ class DepFragment : BaseFragment(R.layout.fragment_dependent) {
         }
     }
 
+    // chama o listener e avisar quando há mudanças na coleção de tarefas
+    override fun onStart() {
+        super.onStart()
+
+        val dependent = dependentViewModel.dependent.value
+        dependent?.let {
+
+            val dependentId = dependent.id
+            val userId = dependent.userId
+
+            listenerRegistration = FirestoreHelper.listenForTaskChanges(requireContext(), userId, dependentId)
+        }
+    }
+
+    // remove o listener para evitar vazamento de memória
+    // override fun onStop() {
+    //     super.onStop()
+    //     listenerRegistration.remove()
+    // }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
+        dependentViewModel.dependent.observe(viewLifecycleOwner) { dependent ->
+            dependent?.let {
+
+                val dependentId = it.id
+                val userId = it.userId
+                listenerRegistration = FirestoreHelper.listenForTaskChanges(requireContext(), userId, dependentId)
+            }
+        }
 
         val context = requireContext()
 

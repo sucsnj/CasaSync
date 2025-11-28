@@ -160,6 +160,7 @@ class HouseFragment : BaseFragment(R.layout.fragment_house) {
         btnAddDependent.setOnClickListener {
             // recupera o id da house
             val houseId = currentHouse?.id.toString()
+            val userId = userViewModel.user.value?.id ?: ""
 
             val layout = LinearLayout(context).apply {
                 orientation = LinearLayout.VERTICAL
@@ -222,6 +223,7 @@ class HouseFragment : BaseFragment(R.layout.fragment_house) {
 
                     val newDependent = Dependent(
                         id = UUID.randomUUID().toString(),
+                        userId = userId,
                         name = dependentName,
                         email = dependentEmail,
                         active = dependentActive,
