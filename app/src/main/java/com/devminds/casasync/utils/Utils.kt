@@ -226,82 +226,100 @@ object Utils {
                     if (context !is Activity) return@setOnLongClickListener false
 
                     val options = arrayOf(
-                        context.getString(R.string.rename_dialog),
-                        "Ver/trocar senha",
+                        // context.getString(R.string.rename_dialog), // renomear desativado para dependentes
+                        "Login: ${item.email}", // mostra o login
+                        "Senha: ${item.passcode}", // mostra a senha
                         context.getString(R.string.delete_dialog)
                     )
 
                     AlertDialog.Builder(context)
-                        .setTitle("$itemOptions ${item.name}\nLogin: ${item.email}")
+                        .setTitle("$itemOptions ${item.name}")
                         .setItems(options) { _, which ->
                             when (which) {
                                 0 -> {
-                                    val (dialogView, editTextDialog) = renameDialogItem(
-                                        context,
-                                        item.name
-                                    )
-                                    val dialogNameEdit = AlertDialog.Builder(context)
-                                        .setTitle(context.getString(R.string.rename_dialog))
-                                        .setView(dialogView)
-                                        .setCancelable(false)
-                                        .setPositiveButton(context.getString(R.string.accept_dialog)) { _, _ ->
-                                            val newName = editTextDialog.text.toString().trim()
-                                            if (newName.isNotEmpty()) {
-                                                item.name = newName
-                                                recycler.adapter?.notifyItemChanged(position)
-
-                                                userViewModel.user.value?.let {
-                                                    userViewModel.persistAndSyncUser()
-                                                }
-
-                                                DialogUtils.showMessage(
-                                                    context,
-                                                    successRenameToast
-                                                )
-                                            }
-                                        }
-                                        .setNegativeButton(
-                                            context.getString(R.string.cancel_dialog),
-                                            null
-                                        )
-                                        .create()
-                                    dialogNameEdit.setOnShowListener {
-                                        editTextDialog.requestFocus()
-                                        editTextDialog.keyboardDelay(context, 100)
-                                    }
-                                    dialogNameEdit.show()
+                                    return@setItems
                                 }
 
                                 1 -> {
-                                    // edittext para permitir edição da senha com olho de tandera
-                                    val dialogView = LayoutInflater.from(context)
-                                        .inflate(R.layout.password_dialog, null)
-                                    val editText = dialogView.findViewById<TextInputEditText>(R.id.passcodeEditText)
-                                    editText.setText(item.passcode)
-                                    editText.setSelection(editText.text?.length ?: 0)
-
-                                    AlertDialog.Builder(context)
-                                        .setTitle(item.name)
-                                        .setView(dialogView) // o edittext para editar a senha
-                                        .setCancelable(true)
-                                        .setPositiveButton(context.getString(R.string.accept_dialog)) { _, _ ->
-                                            val newPasscode = editText.text.toString().trim()
-                                            if (newPasscode.isNotEmpty()) {
-                                                item.passcode = newPasscode
-                                                recycler.adapter?.notifyItemChanged(position)
-
-                                                userViewModel.persistAndSyncUser()
-                                                dependentViewModel.persistAndSyncDependent()
-
-                                                DialogUtils.showMessage(
-                                                    context,
-                                                    "Senha atualizada com sucesso!"
-                                                )
-                                            }
-                                        }
-                                        .setNegativeButton(context.getString(R.string.cancel_dialog), null)
-                                        .show()
+                                    return@setItems
                                 }
+
+                                // 0 -> {
+                                //     val (dialogView, editTextDialog) = renameDialogItem(
+                                //         context,
+                                //         item.name
+                                //     )
+                                //     val dialogNameEdit = AlertDialog.Builder(context)
+                                //         .setTitle(context.getString(R.string.rename_dialog))
+                                //         .setView(dialogView)
+                                //         .setCancelable(false)
+                                //         .setPositiveButton(context.getString(R.string.accept_dialog)) { _, _ ->
+                                //             val newName = editTextDialog.text.toString().trim()
+                                //             if (newName.isNotEmpty()) {
+                                //                 item.name = newName
+                                //                 recycler.adapter?.notifyItemChanged(position)
+
+                                //                 userViewModel.user.value?.let {
+                                //                     userViewModel.persistAndSyncUser()
+                                //                 }
+
+                                //                 DialogUtils.showMessage(
+                                //                     context,
+                                //                     successRenameToast
+                                //                 )
+                                //             }
+                                //         }
+                                //         .setNegativeButton(
+                                //             context.getString(R.string.cancel_dialog),
+                                //             null
+                                //         )
+                                //         .create()
+                                //     dialogNameEdit.setOnShowListener {
+                                //         editTextDialog.requestFocus()
+                                //         editTextDialog.keyboardDelay(context, 100)
+                                //     }
+                                //     dialogNameEdit.show()
+                                // }
+
+                                // 1 -> {
+                                //     AlertDialog.Builder(context)
+                                //         .setTitle(item.name)
+                                //         .setMessage("Senha: ${item.passcode}")
+                                //         .setCancelable(true)
+                                //         .setPositiveButton("Fechar", null)
+                                //         .show()
+
+                                    // lógica desativada para uso futuro
+                                    // edittext para permitir edição da senha com olho de tandera
+                                    // val dialogView = LayoutInflater.from(context)
+                                    //     .inflate(R.layout.password_dialog, null)
+                                    // val editText = dialogView.findViewById<TextInputEditText>(R.id.passcodeEditText)
+                                    // editText.setText(item.passcode)
+                                    // editText.setSelection(editText.text?.length ?: 0)
+
+                                    // AlertDialog.Builder(context)
+                                    //     .setTitle(item.name)
+                                    //     .setView(dialogView) // o edittext para editar a senha
+                                    //     .setCancelable(true)
+                                    //     .setPositiveButton(context.getString(R.string.accept_dialog)) { _, _ ->
+                                    //         val newPasscode = editText.text.toString().trim()
+                                    //         if (newPasscode.isNotEmpty()) {
+                                    //             item.passcode = newPasscode
+                                    //             recycler.adapter?.notifyItemChanged(position)
+
+                                    //             // ainda não persiste no firestore
+                                    //             userViewModel.persistAndSyncUser()
+                                    //             dependentViewModel.persistAndSyncDependent()
+
+                                    //             DialogUtils.showMessage(
+                                    //                 context,
+                                    //                 "Senha atualizada com sucesso!"
+                                    //             )
+                                    //         }
+                                    //     }
+                                    //     .setNegativeButton(context.getString(R.string.cancel_dialog), null)
+                                    //     .show()
+                                // }
 
                                 2 -> {
                                     val itemNameDelete = item.name
