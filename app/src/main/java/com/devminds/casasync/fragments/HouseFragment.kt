@@ -19,6 +19,7 @@ import com.devminds.casasync.parts.House
 import com.devminds.casasync.utils.Utils
 import com.devminds.casasync.views.HouseViewModel
 import com.devminds.casasync.views.UserViewModel
+import com.devminds.casasync.views.DependentViewModel
 import com.google.android.material.appbar.MaterialToolbar
 import java.util.UUID
 import com.devminds.casasync.TransitionType
@@ -29,6 +30,7 @@ class HouseFragment : BaseFragment(R.layout.fragment_house) {
     private lateinit var adapter: GenericAdapter<Dependent>
     private val userViewModel: UserViewModel by activityViewModels()
     private val houseViewModel: HouseViewModel by activityViewModels()
+    private val dependentViewModel: DependentViewModel by activityViewModels()
     private var currentHouse: House? = null
     private val dependentList = mutableListOf<Dependent>()
     private lateinit var toolbar: MaterialToolbar
@@ -147,6 +149,7 @@ class HouseFragment : BaseFragment(R.layout.fragment_house) {
                 itemOptions = getString(R.string.dependent_options),
                 successRenameToast = getString(R.string.rename_success_dependent_toast),
                 userViewModel = userViewModel,
+                dependentViewModel = dependentViewModel,
                 context = context
             )
             recyclerDependents.adapter = adapter
@@ -157,6 +160,7 @@ class HouseFragment : BaseFragment(R.layout.fragment_house) {
         btnAddDependent.setOnClickListener {
             // recupera o id da house
             val houseId = currentHouse?.id.toString()
+            val userId = userViewModel.user.value?.id ?: ""
 
             val layout = LinearLayout(context).apply {
                 orientation = LinearLayout.VERTICAL
@@ -166,37 +170,80 @@ class HouseFragment : BaseFragment(R.layout.fragment_house) {
             val inputName = EditText(context).apply {
                 hint = context.getString(R.string.dependent_name_prompt)
             }
+            val inputEmail = EditText(context).apply {
+                hint = "Login (6 Dígitos)"
+            }
+            val inputPasscode = EditText(context).apply {
+                hint = context.getString(R.string.dependent_passcode_prompt)
+            }
 
             // teclado com delay
             delayEditText(inputName, context)
 
             layout.addView(inputName)
+            layout.addView(inputEmail)
+            layout.addView(inputPasscode)
+
             // diálogo para adicionar dependente
-            AlertDialog.Builder(context)
+            val dialog = AlertDialog.Builder(context)
                 .setTitle(getString(R.string.btn_add_dependent))
                 .setView(layout)
                 .setCancelable(false)
-                .setPositiveButton(getString(R.string.button_add)) { _, _ ->
+                .setPositiveButton(getString(R.string.button_add), null) // botão sem ação
+                .setNegativeButton(getString(R.string.button_cancel), null) // botão sem ação
+                .create()
+
+            dialog.setOnShowListener {
+                val button = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+                button.setOnClickListener {
                     val dependentName = inputName.text.toString().trim()
-                    if (dependentName.isNotEmpty()) {
-                        val newDependent = Dependent(
-                            id = UUID.randomUUID().toString(),
-                            email = "",
-                            houseId = houseId,
-                            name = dependentName
-                        )
-                        dependentList.add(newDependent)
+                    val dependentEmail = inputEmail.text.toString().trim()
+                    val dependentPasscode = inputPasscode.text.toString().trim()
+                    var dependentActive = true
 
-                        houseViewModel.house.value?.dependents?.add(newDependent)
-                        adapter.notifyItemInserted(dependentList.size - 1)
-
-                        userViewModel.persistAndSyncUser()
-
-                        DialogUtils.showMessage(context, getString(R.string.dependent_added))
+                    // login com 6 dígitos
+                    if (dependentEmail.length != 6) {
+                        inputEmail.error = "O login deve ter 6 dígitos"
+                        return@setOnClickListener
                     }
+
+                    if (dependentEmail.isEmpty()) {
+                        dependentActive = false
+                    }
+
+                    if (dependentName.isEmpty()) {
+                        inputName.error = context.getString(R.string.dependent_name_prompt)
+                        return@setOnClickListener
+                    }
+
+                    if (dependentEmail.isNotEmpty() && dependentPasscode.isEmpty()) {
+                        inputPasscode.error = context.getString(R.string.dependent_passcode_error)
+                        return@setOnClickListener // não fecha o diálogo
+                    }
+
+                    val newDependent = Dependent(
+                        id = UUID.randomUUID().toString(),
+                        userId = userId,
+                        name = dependentName,
+                        email = dependentEmail,
+                        active = dependentActive,
+                        houseId = houseId,
+                        photo = "",
+                        passcode = dependentPasscode,
+                    )
+                    // sincroniza e/ou cria dependente no Firestore
+                    FirestoreHelper.syncDependentToFirestore(newDependent)
+
+                    dependentList.add(newDependent)
+                    houseViewModel.house.value?.dependents?.add(newDependent)
+                    adapter.notifyItemInserted(dependentList.size - 1)
+                    userViewModel.persistAndSyncUser()
+
+                    DialogUtils.showMessage(context, getString(R.string.dependent_added))
+                    dialog.dismiss() // fecha só quando deu certo
                 }
-                .setNegativeButton(getString(R.string.button_cancel), null)
-                .show()
+            }
+            dialog.show()
         }
     }
 }

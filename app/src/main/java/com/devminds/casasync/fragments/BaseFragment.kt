@@ -12,7 +12,11 @@ import com.devminds.casasync.TransitionType
 import com.devminds.casasync.setCustomTransition
 import android.widget.EditText
 import android.content.Context
+import android.os.Build
+import android.view.Window
+import android.view.WindowInsets
 import android.view.inputmethod.InputMethodManager
+import androidx.core.content.ContextCompat
 
 // passa um fragmento como parâmetro para a classe
 abstract class BaseFragment(@param:LayoutRes private val layoutRes: Int) : Fragment() {
@@ -48,5 +52,31 @@ abstract class BaseFragment(@param:LayoutRes private val layoutRes: Int) : Fragm
             imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
             editText.setSelection(0, editText.length()) // texto selecionado
         }, delay)
+    }
+
+    @Suppress("DEPRECATION")
+    fun setStatusBarColor(window: Window, color: Int) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) { // Android 15+
+            window.decorView.setOnApplyWindowInsetsListener { view, insets ->
+                view.setBackgroundColor(color)
+
+                insets
+            }
+        } else {
+            // For Android 14 and below
+            window.statusBarColor = color
+        }
+    }
+
+    fun statusBarColor(color: String): Int {
+        var statusBarColor = 0
+        if (color == "white") {
+            statusBarColor = ContextCompat.getColor(requireContext(), R.color.white)
+        } else if (color == "notch") {
+            statusBarColor = ContextCompat.getColor(requireContext(), R.color.notch)
+        } else {
+            statusBarColor = ContextCompat.getColor(requireContext(), R.color.black)
+        }
+        return statusBarColor
     }
 }

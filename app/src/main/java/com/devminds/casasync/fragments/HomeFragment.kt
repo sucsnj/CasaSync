@@ -64,7 +64,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
         }
     }
 
-    private fun resolveUserId(): String {
+    fun resolveUserId(): String {
         return activity?.intent?.getStringExtra("userId")
             ?: userViewModel.user.value?.id
             ?: getString(R.string.devminds_text)
@@ -72,6 +72,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
 
     private fun showLoading(show: Boolean) {
         if (show) {
+            setStatusBarColor(requireActivity().window, statusBarColor("notch"))
             loadingOverlay.visibility = View.VISIBLE
             Animations.startPulseAnimation(loadingImage)
         } else {
@@ -116,6 +117,8 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        Log.d("HomeFragment", "onViewCreated()")
 
         val context = requireContext()
 

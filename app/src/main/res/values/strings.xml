@@ -70,7 +70,9 @@
 
     <!-- Dependent -->
     <string name="new_dependent_button">Adicionar Dependente</string>
-    <string name="dependent_name_prompt">Nome do dependente</string>
+    <string name="dependent_name_prompt">Nome</string>
+    <string name="dependent_email_prompt">Email</string>
+    <string name="dependent_passcode_prompt">Senha</string>
 
     <!-- Buttons -->
     <string name="button_add">Adicionar</string>
@@ -197,5 +199,14 @@
     <string name="logout_prompt_confirm">Quer mesmo deslogar?</string>
     <string name="yes">Sim</string>
     <string name="no">Não</string>
+    <string name="dependent_name_error">Digite um nome para o dependente</string>
+    <string name="viewPass">Senha Atual</string>
+    <string name="dependent_passcode_error">Digite uma senha</string>
+    <string name="user_or_dependent">Administrador ou Dependente?</string>
+    <string name="user_not_found">Nenhum usuário encontrado!</string>
+    <string name="open">Abrir</string>
+    <string name="new_task_text">Você tem uma nova tarefa!</string>
+    <string name="modified_task_text">Uma terefa foi modificada</string>
+    <string name="removed_task_text">Uma tarefa foi removida</string>
 
 </resources>
