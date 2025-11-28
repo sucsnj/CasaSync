@@ -24,7 +24,9 @@ import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.widget.ImageView
+import androidx.appcompat.app.AlertDialog
 import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
 import androidx.lifecycle.lifecycleScope
@@ -33,11 +35,12 @@ import com.devminds.casasync.utils.Utils
 import kotlinx.coroutines.launch
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
-import androidx.core.content.edit
 import com.devminds.casasync.FirestoreHelper
+import com.devminds.casasync.parts.Dependent
 import com.google.firebase.auth.FirebaseUser
 import com.devminds.casasync.parts.House
 import com.devminds.casasync.utils.Animations
+import com.devminds.casasync.views.DependentViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -47,6 +50,7 @@ import com.google.android.gms.common.api.ApiException
 class LoginFragment : BaseFragment(R.layout.fragment_login) {
 
     private val userViewModel: UserViewModel by activityViewModels()
+    private val dependentViewModel: DependentViewModel by activityViewModels()
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
     private val RC_SIGN_IN = 9001
@@ -88,7 +92,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
     }
 
     // chama o menu de biometria
-    private fun biometricCaller(context: Context, delay: Long) {
+    private fun biometricCaller(context: Context, delay: Long, role: String) {
         // delay para chamar a biometria
         Handler(Looper.getMainLooper()).postDelayed({
             // chama a biometria
@@ -96,17 +100,21 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                 BiometricAuthManager.tryBiometricLogin(
                     context,
                     (context as? Activity ?: return@postDelayed) as FragmentActivity,
-                    onSuccess = { userId ->
+                    onSuccess = { id, role ->
                         if (Utils.isConnected(requireContext())) {
-                            loginWithUserId(userId)
-                            userViewModel.persistAndSyncUser()
-
-                            val prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
-                            prefs.edit {
-                                putString(
-                                    "logged_user_id",
-                                    userId)
+                            if (role == "admin") {
+                                loginWithUserId(id)
+//                                userViewModel.persistAndSyncUser()
+                            } else if (role == "dependent") {
+                                FirestoreHelper.getDependentById(id) { dep ->
+                                    if (dep != null) {
+                                        loginDependent(context, dependentViewModel, dep)
+                                    }
+                                }
                             }
+//                            userViewModel.persistAndSyncUser()
+
+                            Utils.saveLoginToPrefs(context, id, role)
                         } else {
                             DialogUtils.showMessage(context, getString(R.string.no_connection))
                         }
@@ -141,8 +149,8 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                     navigateToHome(existingUser)
 
                     val biometric = Biometric()
-                    biometric.saveBiometricAuthUser(requireContext(), existingUser.id)
-                    biometric.lastLoggedUser(requireContext(), existingUser.id)
+                    biometric.saveBiometricAuthUser(requireContext(), existingUser.id, "admin")
+                    biometric.lastLoggedUser(requireContext(), existingUser.id, "admin")
 
                 } else {
 
@@ -171,18 +179,19 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                         // salva com casas
                         userViewModel.setUser(newUser)
                         userViewModel.persistAndSyncUser()
-                        navigateToHome(newUser)
                     }
 
                     val biometric = Biometric()
-                    biometric.saveBiometricAuthUser(requireContext(), newUser.id)
-                    biometric.lastLoggedUser(requireContext(), newUser.id)
+                    biometric.saveBiometricAuthUser(requireContext(), newUser.id, "admin")
+                    biometric.lastLoggedUser(requireContext(), newUser.id, "admin")
                 }
             }
     }
 
     // autentica o usuário com o firebase
     private fun firebaseAuthWithGoogle(idToken: String) {
+
+        Log.d("LoginFragment", "Chegou aqui")
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         firebaseAuth.signInWithCredential(credential)
             .addOnCompleteListener(requireActivity()) { task ->
@@ -205,26 +214,28 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
         requireActivity().finish()
-        Utils.saveUserToPrefs(requireContext(), user)
+        Utils.saveLoginToPrefs(requireContext(), user.id, "admin")
     }
 
-    fun login(context: Context, userViewModel: UserViewModel, user: User) {
-        DialogUtils.dismissActiveBanner() // elimina qualquer banner ativo
+    fun loginDependent(context: Context, dependentViewModel: DependentViewModel, dependent: Dependent) {
+        DialogUtils.dismissActiveBanner()
 
-        userViewModel.setUser(user)
-        userViewModel.persistAndSyncUser()
+        dependentViewModel.setDependent(dependent)
+        dependentViewModel.persistAndSyncDependent()
 
-        val intent = Intent(context, HomeActivity::class.java)
-        intent.putExtra("userId", user.id)
-        startActivity(intent)
-        requireActivity().finish()
+        val intent = Intent(context, HomeActivity::class.java).apply {
+            putExtra("dependentId", dependent.id)
+            putExtra("role", "dependent")   // <-- ESSENCIAL
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        context.startActivity(intent)
+        (context as? Activity)?.finish()
 
-        // adiciona o usuário a lista da biometria
         val biometric = Biometric()
-        biometric.saveBiometricAuthUser(requireContext(), user.id)
-        biometric.lastLoggedUser(requireContext(), user.id)
+        biometric.saveBiometricAuthUser(context, dependent.id, "dependent")
+        biometric.lastLoggedUser(context, dependent.id, "dependent")
 
-        Utils.saveUserToPrefs(context, user)
+        Utils.saveLoginToPrefs(context, dependent.id, "dependent")
     }
 
     // login com google, forma antiga
@@ -304,8 +315,41 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         }
     }
 
+    fun loginAsUser(context: Context, email: String, password: String) {
+        Auth().authenticateWithFirestore(email, password) { user ->
+            if (user != null) {
+                Utils.login(context, userViewModel, user)
+                Utils.saveLoginToPrefs(context, user.id, "admin")
+                DialogUtils.showMessage(context, getString(R.string.login_success_message))
+            } else {
+                DialogUtils.showMessage(
+                    requireContext(),
+                    getString(R.string.login_error_message)
+                )
+            }
+        }
+    }
+
+    fun loginAsDependent(context: Context, email: String, password: String) {
+        Auth().authenticateDepWithFirestore(email, password) { dependent ->
+            if (dependent != null) {
+                loginDependent(context, dependentViewModel, dependent)
+                Utils.saveLoginToPrefs(context, dependent.id, "dependent")
+            } else {
+                DialogUtils.showMessage(
+                    requireContext(),
+                    getString(R.string.login_error_message)
+                )
+            }
+        }
+
+        Log.d("LoginFragment", "Login de Dependente realizado")
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val biometric = Biometric()
 
         startAppOverlay = view.findViewById(R.id.startAppOverlay)
         loadingImage = view.findViewById(R.id.loadingImage)
@@ -317,8 +361,12 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         val context = requireContext()
         firebaseAuth = Firebase.auth // inicializa o firebase auth
         clearNavHistory() // limpa o histórico de navegação
-        Utils.checkIfUserIsLoggedIn(context)
-        biometricCaller(requireActivity(), 2700) // biometria
+
+        val (lastRole) = biometric.getLastLoggedUser(requireContext())
+
+        lastRole?.let {
+            biometricCaller(context, 2700, lastRole)
+        }
 
         txtLoginPrompt = view.findViewById(R.id.txtLoginPrompt)
         txtPasswordPrompt = view.findViewById(R.id.txtPasswordPrompt)
@@ -351,15 +399,32 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
 
                 // se houver conexão
                 if (Utils.isConnected(requireContext())) {
-                    Auth().authenticateWithFirestore(email, password) { user ->
-                        if (user != null) {
-                            login(context, userViewModel, user)
-                            DialogUtils.showMessage(context, getString(R.string.login_success_message))
-                        } else {
-                            DialogUtils.showMessage(
-                                requireContext(),
-                                getString(R.string.login_error_message)
-                            )
+                    FirestoreHelper.getUserByEmail(email) { userFound ->
+                        if (userFound != null) { // existe um usuário em 'users', ou seja, é admin
+                            FirestoreHelper.getDependentByEmail(email) { dependentFound ->
+                                if (dependentFound != null) { // existe um admin que é dependente também
+                                    val options = arrayOf("Administrador", "Dependente")
+                                    val dialog = AlertDialog.Builder(requireContext())
+                                        .setTitle("Selecione o tipo de usuário")
+                                        .setItems(options) { _, which ->
+                                            when (which) {
+                                                0 -> loginAsUser(context, email, password)
+                                                1 -> loginAsDependent(context, email, password)  // Dependente
+                                            }
+                                        }
+                                        dialog.show()
+                                } else {
+                                    loginAsUser(context, email, password)
+                                }
+                            }
+                        } else { // não tem user, procura um dependente
+                            FirestoreHelper.getDependentByEmail(email) { dependentFound ->
+                                if (dependentFound != null) { // existe um admin que é dependente também
+                                    loginAsDependent(context, email, password)
+                                } else {
+                                    DialogUtils.showMessage(requireContext(), getString(R.string.user_not_found))
+                                }
+                            }
                         }
                     }
                 } else {
@@ -393,7 +458,9 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         // botão para biometria
         btnBiometricLogin = view.findViewById(R.id.btnBiometricLogin)
         btnBiometricLogin.setOnClickListener {
-            biometricCaller(context, 100)
+            lastRole?.let {
+                biometricCaller(context, 100, lastRole)
+            }
         }
     }
 }

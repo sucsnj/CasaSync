@@ -5,6 +5,7 @@ import androidx.annotation.Keep
 @Keep
 data class Dependent(
     var id: String = "",
+    var userId: String = "",
     var name: String = "",
     var email: String = "",
     var active: Boolean = false,

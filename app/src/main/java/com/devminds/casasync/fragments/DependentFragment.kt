@@ -24,6 +24,7 @@ import com.google.android.material.appbar.MaterialToolbar
 import java.time.format.DateTimeFormatter
 import java.util.UUID
 import android.text.InputType
+import android.util.Log
 import android.widget.ImageView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import java.time.Instant
@@ -96,6 +97,8 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        Log.d("DependentFragment", "onViewCreated()")
 
         val context = requireContext()
 
@@ -176,6 +179,7 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
                 itemOptions = getString(R.string.task_options),
                 successRenameToast = getString(R.string.rename_success_task_toast),
                 userViewModel = userViewModel,
+                dependentViewModel = dependentViewModel,
                 taskViewModel = taskViewModel, // *insere data e hora quando a tarefa é concluída via menu de contexto
                 context = context
             )
@@ -282,6 +286,7 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
                     if (name.isNotEmpty()) {
                         val newTask = Task(
                             id = UUID.randomUUID().toString(),
+                            ownerId = userViewModel.user.value?.id.toString(),
                             houseId = houseId,
                             dependentId = dependentId,
                             name = name,
@@ -304,6 +309,7 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
 
                         // persiste o usuário
                         userViewModel.persistAndSyncUser()
+                        dependentViewModel.persistAndSyncDependent()
 
                         DialogUtils.showMessage(context, getString(R.string.created_task))
                     }

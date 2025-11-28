@@ -13,6 +13,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import android.provider.Settings
 import androidx.core.net.toUri
+import com.devminds.casasync.parts.Task
 
 class TaskAlarmReceiver : BroadcastReceiver() {
     @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS) // permissão do usuário
@@ -120,5 +121,13 @@ class TaskAlarmReceiver : BroadcastReceiver() {
         // manuseia o alarme e cancela a notificação
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         alarmManager.cancel(pendingIntent) // aqui faz o cancelamento do intent do agendamento
+    }
+
+    // cancela notificações anteriores
+    fun cancelAllTaskNotifications(context: Context, task: Task) {
+        TaskAlarmReceiver().cancelScheduleNotification(
+            context, task.id, "hour", task.name, context.getString(R.string.less_than_one_hour))
+        TaskAlarmReceiver().cancelScheduleNotification(
+            context, task.id, "day", task.name, context.getString(R.string.less_than_one_day))
     }
 }

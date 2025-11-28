@@ -29,9 +29,16 @@ import com.devminds.casasync.setCustomTransition
 import com.devminds.casasync.views.UserViewModel
 import com.devminds.casasync.views.TaskViewModel
 import androidx.core.content.edit
+import com.devminds.casasync.FirestoreHelper
 import com.devminds.casasync.MainActivity
 import com.devminds.casasync.fragments.LoginFragment
 import com.devminds.casasync.parts.User
+import com.devminds.casasync.views.DependentViewModel
+import android.text.InputType
+import androidx.core.content.ContextCompat
+import android.view.MotionEvent
+
+import com.google.android.material.textfield.TextInputEditText
 
 // classe utilitária
 object Utils {
@@ -160,6 +167,9 @@ object Utils {
                                                     user.houses.removeAll { it.id == item.id }
 
                                                     userViewModel.deleteHouse(item.id)
+
+                                                    // deleta os dependentes associados à casa na collection de dependents
+                                                    FirestoreHelper.deleteHouseAndDependents(item.id)
                                                 }
 
                                                 DialogUtils.showMessage(context,
@@ -200,6 +210,7 @@ object Utils {
         itemOptions: String,
         successRenameToast: String,
         userViewModel: UserViewModel,
+        dependentViewModel: DependentViewModel,
         context: Context
     ): GenericAdapter<Dependent> {
         return GenericAdapter(
@@ -218,8 +229,9 @@ object Utils {
                     if (context !is Activity) return@setOnLongClickListener false
 
                     val options = arrayOf(
-                        context.getString(R.string.rename_dialog),
-                        context.getString(R.string.viewPass),
+                        // context.getString(R.string.rename_dialog), // renomear desativado para dependentes
+                        "Login: ${item.email}", // mostra o login
+                        "Senha: ${item.passcode}", // mostra a senha
                         context.getString(R.string.delete_dialog)
                     )
 
@@ -228,50 +240,89 @@ object Utils {
                         .setItems(options) { _, which ->
                             when (which) {
                                 0 -> {
-                                    val (dialogView, editTextDialog) = renameDialogItem(
-                                        context,
-                                        item.name
-                                    )
-                                    val dialogNameEdit = AlertDialog.Builder(context)
-                                        .setTitle(context.getString(R.string.rename_dialog))
-                                        .setView(dialogView)
-                                        .setCancelable(false)
-                                        .setPositiveButton(context.getString(R.string.accept_dialog)) { _, _ ->
-                                            val newName = editTextDialog.text.toString().trim()
-                                            if (newName.isNotEmpty()) {
-                                                item.name = newName
-                                                recycler.adapter?.notifyItemChanged(position)
-
-                                                userViewModel.user.value?.let {
-                                                    userViewModel.persistAndSyncUser()
-                                                }
-
-                                                DialogUtils.showMessage(
-                                                    context,
-                                                    successRenameToast
-                                                )
-                                            }
-                                        }
-                                        .setNegativeButton(
-                                            context.getString(R.string.cancel_dialog),
-                                            null
-                                        )
-                                        .create()
-                                    dialogNameEdit.setOnShowListener {
-                                        editTextDialog.requestFocus()
-                                        editTextDialog.keyboardDelay(context, 100)
-                                    }
-                                    dialogNameEdit.show()
+                                    return@setItems
                                 }
 
                                 1 -> {
-                                    val itemPasscodeView = item.passcode
-                                    AlertDialog.Builder(context)
-                                        .setTitle(context.getString(R.string.viewPass))
-                                        .setCancelable(true)
-                                        .setMessage(itemPasscodeView)
-                                        .show()
+                                    return@setItems
                                 }
+
+                                // 0 -> {
+                                //     val (dialogView, editTextDialog) = renameDialogItem(
+                                //         context,
+                                //         item.name
+                                //     )
+                                //     val dialogNameEdit = AlertDialog.Builder(context)
+                                //         .setTitle(context.getString(R.string.rename_dialog))
+                                //         .setView(dialogView)
+                                //         .setCancelable(false)
+                                //         .setPositiveButton(context.getString(R.string.accept_dialog)) { _, _ ->
+                                //             val newName = editTextDialog.text.toString().trim()
+                                //             if (newName.isNotEmpty()) {
+                                //                 item.name = newName
+                                //                 recycler.adapter?.notifyItemChanged(position)
+
+                                //                 userViewModel.user.value?.let {
+                                //                     userViewModel.persistAndSyncUser()
+                                //                 }
+
+                                //                 DialogUtils.showMessage(
+                                //                     context,
+                                //                     successRenameToast
+                                //                 )
+                                //             }
+                                //         }
+                                //         .setNegativeButton(
+                                //             context.getString(R.string.cancel_dialog),
+                                //             null
+                                //         )
+                                //         .create()
+                                //     dialogNameEdit.setOnShowListener {
+                                //         editTextDialog.requestFocus()
+                                //         editTextDialog.keyboardDelay(context, 100)
+                                //     }
+                                //     dialogNameEdit.show()
+                                // }
+
+                                // 1 -> {
+                                //     AlertDialog.Builder(context)
+                                //         .setTitle(item.name)
+                                //         .setMessage("Senha: ${item.passcode}")
+                                //         .setCancelable(true)
+                                //         .setPositiveButton("Fechar", null)
+                                //         .show()
+
+                                    // lógica desativada para uso futuro
+                                    // edittext para permitir edição da senha com olho de tandera
+                                    // val dialogView = LayoutInflater.from(context)
+                                    //     .inflate(R.layout.password_dialog, null)
+                                    // val editText = dialogView.findViewById<TextInputEditText>(R.id.passcodeEditText)
+                                    // editText.setText(item.passcode)
+                                    // editText.setSelection(editText.text?.length ?: 0)
+
+                                    // AlertDialog.Builder(context)
+                                    //     .setTitle(item.name)
+                                    //     .setView(dialogView) // o edittext para editar a senha
+                                    //     .setCancelable(true)
+                                    //     .setPositiveButton(context.getString(R.string.accept_dialog)) { _, _ ->
+                                    //         val newPasscode = editText.text.toString().trim()
+                                    //         if (newPasscode.isNotEmpty()) {
+                                    //             item.passcode = newPasscode
+                                    //             recycler.adapter?.notifyItemChanged(position)
+
+                                    //             // ainda não persiste no firestore
+                                    //             userViewModel.persistAndSyncUser()
+                                    //             dependentViewModel.persistAndSyncDependent()
+
+                                    //             DialogUtils.showMessage(
+                                    //                 context,
+                                    //                 "Senha atualizada com sucesso!"
+                                    //             )
+                                    //         }
+                                    //     }
+                                    //     .setNegativeButton(context.getString(R.string.cancel_dialog), null)
+                                    //     .show()
+                                // }
 
                                 2 -> {
                                     val itemNameDelete = item.name
@@ -296,6 +347,7 @@ object Utils {
                                                     }
                                                     
                                                     userViewModel.deleteDependent(item.houseId, item.id)
+                                                    FirestoreHelper.deleteDependentForDependent(item.id)
                                                 }
 
                                                 DialogUtils.showMessage(context,
@@ -336,6 +388,7 @@ object Utils {
         itemOptions: String,
         successRenameToast: String,
         userViewModel: UserViewModel,
+        dependentViewModel: DependentViewModel,
         taskViewModel: TaskViewModel, // precisa para acessar o TaskViewModel com as datas e horas
         context: Context
     ): GenericAdapter<Task> {
@@ -387,9 +440,11 @@ object Utils {
                                                 item.name = newName
                                                 recycler.adapter?.notifyItemChanged(position)
 
-                                                userViewModel.user.value?.let {
-                                                    userViewModel.persistAndSyncUser()
-                                                }
+                                                dependentViewModel.updateTask(item)
+                                                userViewModel.updateTask(item.houseId, item.dependentId, item)
+
+                                                userViewModel.persistAndSyncUser()
+                                                dependentViewModel.persistAndSyncDependent()
 
                                                 DialogUtils.showMessage(
                                                     context,
@@ -444,22 +499,20 @@ object Utils {
                                                     context.getString(R.string.question_mark)
                                         )
                                         .setPositiveButton(context.getString(R.string.delete_dialog)) { _, _ ->
-                                            TaskFragment().cancelAllTaskNotifications(context, item)
+                                            TaskAlarmReceiver().cancelAllTaskNotifications(context, item)
 
                                             val index = list.indexOfFirst { it.id == item.id }
                                             if (index != -1) {
                                                 list.removeAt(index)
                                                 recycler.adapter?.notifyItemRemoved(index)
 
-                                                userViewModel.user.value?.let { user ->
-                                                    // remover o task do user
-                                                    user.houses.find { it.id == item.houseId }?.let { house ->
-                                                        house.dependents.find { it.id == item.dependentId }?.let { dep ->
-                                                            dep.tasks.removeAll { it.id == item.id }
-                                                        }
-                                                    }
-                                                    userViewModel.deleteTask(item.houseId, item.dependentId, item.id)
-                                                }
+                                                // Atualiza nos dois lados
+                                                dependentViewModel.deleteTask(item.id)
+                                                userViewModel.deleteTask(item.houseId, item.dependentId, item.id)
+
+                                                // Persiste
+                                                userViewModel.persistAndSyncUser()
+                                                dependentViewModel.persistAndSyncDependent()
 
                                                 DialogUtils.showMessage(context,
                                                     itemNameDelete + context.getString(R.string.success_delete_dialog)
@@ -474,18 +527,115 @@ object Utils {
                                 }
 
                                 2 -> {
-                                    taskViewModel.task.value?.let { task -> 
+                                    item.finishDate = DateUtils.date(0).fullDate
+                                    recycler.adapter?.notifyItemChanged(position)
+
+                                    // Atualiza nos dois lados
+                                    dependentViewModel.updateTask(item)
+                                    userViewModel.updateTask(item.houseId, item.dependentId, item)
+
+                                    // Persiste
+                                    userViewModel.persistAndSyncUser()
+                                    dependentViewModel.persistAndSyncDependent()
+
+                                    DialogUtils.showMessage(context,
+                                        context.getString(R.string.task_finished))
+                                }
+                            }
+                        }
+                        .show()
+                    true
+                }
+            },
+            onItemClick = { selectedItem ->
+                val targetFragment = fragmentFactory(selectedItem.id)
+
+                fragmentManager.beginTransaction()
+                    .setCustomTransition(TransitionType.SLIDE)
+                    .replace(R.id.fragment_container, targetFragment)
+                    .addToBackStack(null)
+                    .commit()
+            }
+        )
+    }
+
+    fun createTaskAdapterDep(
+        list: MutableList<Task>,
+        fragmentFactory: (String) -> Fragment,
+        fragmentManager: FragmentManager,
+        itemOptions: String,
+        dependentViewModel: DependentViewModel,
+        userViewModel: UserViewModel,
+        taskViewModel: TaskViewModel,
+        context: Context
+    ): GenericAdapter<Task> {
+        return GenericAdapter(
+            items = list,
+            layoutResId = R.layout.item_generic,
+            bind = { itemView, item, _, _ ->
+
+                // manipula a imagem do recycler (item_generic)
+                val imageView = itemView.findViewById<ImageView>(R.id.itemImage)
+                imageView.setImageResource(R.drawable.ico_task)
+
+                val textView = itemView.findViewById<TextView>(R.id.itemName)
+                textView.text = item.name
+
+                itemView.setOnLongClickListener {
+                    if (context !is Activity) return@setOnLongClickListener false
+
+                    // lógica para fazer aparecer o "Concluir tarefa"
+                    options = if (item.finishDate != null) {
+                        arrayOf(
+                            context.getString(R.string.open)
+                        )
+                    } else {
+                        arrayOf(
+                            context.getString(R.string.open),
+                            context.getString(R.string.finish_dialog)
+                        )
+                    }
+
+                    AlertDialog.Builder(context)
+                        .setTitle("$itemOptions ${item.name}")
+                        .setItems(options) { _, which ->
+                            when (which) {
+                                0 -> {
+                                    fragmentManager.beginTransaction()
+                                        .setCustomTransition(TransitionType.SLIDE)
+                                        .replace(R.id.fragment_container, TaskFragment())
+                                        .addToBackStack(null)
+                                        .commit()
+                                }
+
+                                1 -> {
+                                    val date = DateUtils.date(0).fullDate // data atual
+
+                                    // Atualiza o objeto da task
+                                    item.finishDate = date
+
+                                    // Atualiza no ViewModel do dependent
+                                    dependentViewModel.updateTask(item)
+
+                                    // Atualiza também no Firestore (dependents + users)
+                                    val houseId = item.houseId
+                                    val depId = item.dependentId
+                                    userViewModel.updateTask(houseId, depId, item)
+
+                                    // Persiste nos dois lados
+                                    userViewModel.persistAndSyncUser()
+                                    dependentViewModel.persistAndSyncDependent()
+
+                                    taskViewModel.task.value?.let { task ->
                                         val previsionDate = task.previsionDate
                                         val previsionHour = task.previsionHour
 
-                                        TaskFragment().cancelAllTaskNotifications(context, item)
+                                        TaskAlarmReceiver().cancelAllTaskNotifications(context, item)
 
                                         item.finishDate = DateUtils.date(0).fullDate
                                         item.previsionDate = previsionDate
                                         item.previsionHour = previsionHour
                                     }
-
-                                    recycler.adapter?.notifyItemChanged(position)
 
                                     userViewModel.user.value?.let {
                                         userViewModel.persistAndSyncUser()
@@ -512,6 +662,7 @@ object Utils {
         )
     }
 
+    // checa conexão com a internet
     fun isConnected(context: Context): Boolean {
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val network = connectivityManager.activeNetwork ?: return false
@@ -522,14 +673,40 @@ object Utils {
     // checa se há um usuário logado
     fun isLogged(context: Context): Boolean {
         val prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
-        val userId = prefs.getString("logged_user_id", null)
+        val id = prefs.getString("logged_id", null)
+        val role = prefs.getString("logged_role", null)
+        // var idRole = id // será modificado para procurar no Firestore
 
-        return if (!userId.isNullOrEmpty()) {
-            val intent = Intent(context, HomeActivity::class.java)
-            intent.putExtra("userId", userId)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        // procurar usuário no firestore
+        if (role == "admin" && id != null) {
+            FirestoreHelper.getUserById(id) { user ->
+                if (user == null) {
+                    DialogUtils.showMessage(context, "Usuário não encontrado. Fazendo logout.")
+                    Log.d("Utils", "Nenhum usuário encontrado no Firestore com o ID: $id")
+                    logout(context)
+                }
+            }
+        } else if (role == "dependent" && id != null) {
+            FirestoreHelper.getDependentById(id) { dependent ->
+                if (dependent == null) {
+                    DialogUtils.showMessage(context, "Dependente não encontrado. Fazendo logout.")
+                    Log.d("Utils", "Nenhum dependente encontrado no Firestore com o ID: $id")
+                    logout(context)
+                }
+            }
+        }
+
+        return if (!id.isNullOrEmpty() && !role.isNullOrEmpty()) {
+            val intent = Intent(context, HomeActivity::class.java).apply {
+                when (role) {
+                    "admin" -> putExtra("userId", id)
+                    "dependent" -> putExtra("dependentId", id)
+                }
+                putExtra("role", role)
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
             context.startActivity(intent)
-            Log.d("LoginFragment", "Usuário já está logado.")
+            Log.d("LoginFragment", "Usuário já está logado como $role.")
             true
         } else {
             Log.d("LoginFragment", "Nenhum usuário salvo nas prefs.")
@@ -537,33 +714,22 @@ object Utils {
         }
     }
 
-    // salva o id do usuário nas shared preferences
-    fun saveUserToPrefs(context: Context, user: User) {
+    // salva o id logado nas shared preferences
+    fun saveLoginToPrefs(context: Context, id: String, role: String) {
         val prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
         prefs.edit {
-            putString(
-                "logged_user_id",
-                user.id)
-        }
-    }
-
-    fun checkIfUserIsLoggedIn(context: Context) {
-        val prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
-        val userId = prefs.getString("logged_user_id", null)
-
-        if (!userId.isNullOrEmpty()) {
-            // Usuário já está logado, tenta carregar os dados dele
-            LoginFragment().loginWithUserId(userId)
-        } else {
-            // Nenhum usuário logado, segue com o fluxo normal de login
-            Log.d("LoginFragment", "Nenhum usuário salvo nas prefs.")
+            putString("logged_id", id)
+            putString("logged_role", role) // "admin" ou "dependent"
         }
     }
 
     // remove usuário do SharedPreferences
     fun logout(context: Context) {
         val prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
-        prefs.edit { clear() }
+        prefs.edit {
+            remove("logged_id")
+            remove("logged_role")
+        }
 
         val intent = Intent(context, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -572,5 +738,25 @@ object Utils {
         if (context is Activity) {
             context.finish()
         }
+    }
+
+    fun login(context: Context, userViewModel: UserViewModel, user: User) {
+        DialogUtils.dismissActiveBanner()
+
+        userViewModel.setUser(user)
+        userViewModel.persistAndSyncUser()
+
+        val intent = Intent(context, HomeActivity::class.java).apply {
+            putExtra("userId", user.id)
+            putExtra("role", "admin")
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        context.startActivity(intent)
+
+        val biometric = Biometric()
+        biometric.saveBiometricAuthUser(context, user.id, "admin")
+        biometric.lastLoggedUser(context, user.id, "admin")
+
+        saveLoginToPrefs(context, user.id, "admin")
     }
 }
