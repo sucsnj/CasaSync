@@ -154,6 +154,30 @@ abstract class BaseFragment(@param:LayoutRes private val layoutRes: Int) : Fragm
         return registration
     }
 
+    // listener para os documentos
+    fun <T> listenDocumentRealtime(
+        documentPath: String,
+        clazz: Class<T>,
+        onUpdate: (T?) -> Unit
+    ): ListenerRegistration {
+        val db = FirebaseFirestore.getInstance()
+        val ref = db.document(documentPath)
+
+        val registration = ref.addSnapshotListener { snapshot, error ->
+            if (error != null) {
+                Log.e("Firestore", "Erro ao escutar $documentPath", error)
+                return@addSnapshotListener
+            }
+
+            snapshot?.let {
+                val obj = it.toObject(clazz)
+                onUpdate(obj)
+            }
+        }
+
+        return registration
+    }
+
     override fun onStop() {
         super.onStop()
         listenerRegistration?.remove()

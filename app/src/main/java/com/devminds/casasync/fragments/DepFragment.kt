@@ -25,6 +25,7 @@ import com.devminds.casasync.utils.PopupMenu
 import com.devminds.casasync.views.DependentViewModel
 import com.devminds.casasync.views.TaskViewModel
 import com.bumptech.glide.Glide
+import com.devminds.casasync.parts.Dependent
 import com.google.firebase.firestore.ListenerRegistration
 import com.devminds.casasync.utils.DialogUtils
 import com.google.firebase.firestore.FirebaseFirestore
@@ -48,7 +49,7 @@ class DepFragment : BaseFragment(R.layout.fragment_dependent) {
     private lateinit var loadingOverlay: View
     private lateinit var loadingImage: ImageView
     private lateinit var swipeRefresh: SwipeRefreshLayout
-    private lateinit var listenerRegistration: ListenerRegistration
+    private val listeners = mutableListOf<ListenerRegistration>()
 
     private fun resolveDependentId(): String {
         return activity?.intent?.getStringExtra("dependentId")
@@ -112,47 +113,10 @@ class DepFragment : BaseFragment(R.layout.fragment_dependent) {
         }
     }
 
-    // envia uma notificação para o dependente usando um listener
-    fun listenForDependentTasks(dependentId: String): ListenerRegistration {
-        val db = FirebaseFirestore.getInstance()
-        val taskRef = db.collection("dependents")
-            .document(dependentId)
-            .collection("tasks")
-
-        return taskRef.addSnapshotListener { snapshot, error ->
-            if (error != null) {
-                Log.e("Firestore", "Erro ao escutar mudanças de tarefas", error)
-                return@addSnapshotListener
-            }
-
-            if (snapshot != null) {
-                for (change in snapshot.documentChanges) {
-                    when (change.type) {
-                        DocumentChange.Type.ADDED -> {
-                            DialogUtils.showMessage(requireContext(), getString(R.string.new_task_text))
-                            Log.d("Firestore", "Task adicionada: ${change.document.id}")
-                        }
-                        DocumentChange.Type.MODIFIED -> {
-                            DialogUtils.showMessage(requireContext(), getString(R.string.modified_task_text))
-                            Log.d("Firestore", "Task modificada: ${change.document.id}")
-                        }
-                        DocumentChange.Type.REMOVED -> {
-                            DialogUtils.showMessage(requireContext(), getString(R.string.removed_task_text))
-                            Log.d("Firestore", "Task removida: ${change.document.id}")
-                        }
-                    }
-                    // atualiza o adapter
-                    val tasks = snapshot.documents.mapNotNull { doc -> doc.toObject(Task::class.java) }
-                    updateAdapter(tasks)
-                }
-            }
-        }
-    }
-
-    // remove o listener para evitar vazamento de memória
     override fun onStop() {
         super.onStop()
-        listenerRegistration.remove()
+        listeners.forEach { it.remove() }
+        listeners.clear()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -170,6 +134,49 @@ class DepFragment : BaseFragment(R.layout.fragment_dependent) {
         toolbar = view.findViewById(R.id.topBar)
         toolbar.navigationIcon = null // esconde o botão de voltar
         title = view.findViewById(R.id.title)
+        photo = view.findViewById(R.id.dependentPhoto)!! // foto
+
+        // ativa os listeners
+        val depId = resolveDependentId()
+        // listener para atualizar nome e foto do dependente
+        listeners.add(listenDocumentRealtime(
+            documentPath = "dependents/${depId}",
+            clazz = Dependent::class.java,
+            onUpdate = { updatedDependent ->
+                updatedDependent?.let { dep ->
+                    // Atualiza título em tempo real
+                    val welcome = getString(R.string.welcome_text) + dep.name
+                    title.text = welcome
+
+                    // Atualiza foto em tempo real
+                    Glide.with(this)
+                        .load(dep.photo)
+                        .placeholder(R.drawable.user_photo)
+                        .error(R.drawable.user_photo_error)
+                        .circleCrop()
+                        .into(photo)
+
+                    // Atualiza ViewModel também
+                    dependentViewModel.setDependent(dep)
+                }
+            }
+        ))
+
+        // listener para capturar as mudanças de task
+        listeners.add(listenRealtime(
+            collectionPath = "dependents/${depId}/tasks", // a collection
+            clazz = Task::class.java, // classe Task
+            onUpdate = { tasks ->
+                updateAdapter(tasks) // atualiza a lista em tempo real
+            },
+            onChange = { change ->
+                when (change.type) { // mensagens para cada tipo de mudança
+                    DocumentChange.Type.ADDED -> DialogUtils.showMessage(context, getString(R.string.new_task_text))
+                    DocumentChange.Type.MODIFIED -> DialogUtils.showMessage(context, getString(R.string.modified_task_text))
+                    DocumentChange.Type.REMOVED -> DialogUtils.showMessage(context, getString(R.string.removed_task_text))
+                }
+            }
+        ))
 
         // cabeçalho
         dependentViewModel.dependent.observe(viewLifecycleOwner) { dependent ->
@@ -178,26 +185,7 @@ class DepFragment : BaseFragment(R.layout.fragment_dependent) {
                 val welcome = getString(R.string.welcome_text) + dependent.name
                 title.text = welcome
 
-                val dependentId = it.id
-                //listenerRegistration = listenForDependentTasks(dependentId)
-
-                listenerRegistration = listenRealtime(
-                    collectionPath = "dependents/${it.id}/tasks",
-                    clazz = Task::class.java,
-                    onUpdate = { tasks ->
-                        updateAdapter(tasks) // atualiza a lista em tempo real
-                    },
-                    onChange = { change ->
-                        when (change.type) {
-                            DocumentChange.Type.ADDED -> DialogUtils.showMessage(context, getString(R.string.new_task_text))
-                            DocumentChange.Type.MODIFIED -> DialogUtils.showMessage(context, getString(R.string.modified_task_text))
-                            DocumentChange.Type.REMOVED -> DialogUtils.showMessage(context, getString(R.string.removed_task_text))
-                        }
-                    }
-                )
-
                 // foto do dependent
-                photo = view.findViewById(R.id.dependentPhoto)!! // foto
                 dependent.photo.let { url ->
                     Glide.with(this)
                         .load(url)
