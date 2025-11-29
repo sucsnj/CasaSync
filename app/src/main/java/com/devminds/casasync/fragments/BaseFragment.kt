@@ -17,6 +17,9 @@ import android.view.Window
 import android.view.WindowInsets
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.RecyclerView
+import com.devminds.casasync.parts.Task
 
 // passa um fragmento como parâmetro para a classe
 abstract class BaseFragment(@param:LayoutRes private val layoutRes: Int) : Fragment() {
@@ -78,5 +81,33 @@ abstract class BaseFragment(@param:LayoutRes private val layoutRes: Int) : Fragm
             statusBarColor = ContextCompat.getColor(requireContext(), R.color.black)
         }
         return statusBarColor
+    }
+
+    fun <T> updateAdapterGeneric(
+        oldList: MutableList<T>,
+        newList: List<T>,
+        adapter: RecyclerView.Adapter<*>,
+        areItemsTheSame: (T, T) -> Boolean,
+        areContentsTheSame: (T, T) -> Boolean = { old, new -> old == new }
+    ) {
+        val diffCallback = object : DiffUtil.Callback() {
+            override fun getOldListSize() = oldList.size
+            override fun getNewListSize() = newList.size
+
+            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                return areItemsTheSame(oldList[oldItemPosition], newList[newItemPosition])
+            }
+
+            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                return areContentsTheSame(oldList[oldItemPosition], newList[newItemPosition])
+            }
+        }
+
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+
+        oldList.clear()
+        oldList.addAll(newList)
+
+        diffResult.dispatchUpdatesTo(adapter)
     }
 }

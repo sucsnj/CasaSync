@@ -69,27 +69,13 @@ class DepFragment : BaseFragment(R.layout.fragment_dependent) {
 
     // função apenas para atualizar o adapater (tela do dependente)
     private fun updateAdapter(tasks: List<Task>) {
-        // guarda a lista antiga
-        val oldList = ArrayList(taskList)
-
-        // calcula a diferença entre a lista antiga e a nova
-        val diffCallback = object : DiffUtil.Callback() {
-            override fun getOldListSize() = oldList.size
-            override fun getNewListSize() = tasks.size
-
-            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =
-                oldList[oldItemPosition].id == tasks[newItemPosition].id
-
-            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) =
-                oldList[oldItemPosition] == tasks[newItemPosition]
-        }
-
-        val diffResult = DiffUtil.calculateDiff(diffCallback)
-
-        taskList.clear()
-        taskList.addAll(tasks)
-
-        diffResult.dispatchUpdatesTo(adapter)
+        updateAdapterGeneric(
+            oldList = taskList,
+            newList = tasks,
+            adapter = adapter,
+            areItemsTheSame = { old, new -> old.id == new.id },
+            areContentsTheSame = { old, new -> old == new }
+        )
     }
 
     fun syncFirestoreToApp() {
