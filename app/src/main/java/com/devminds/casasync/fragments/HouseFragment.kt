@@ -216,11 +216,17 @@ class HouseFragment : BaseFragment(R.layout.fragment_house) {
                         if (dependentEmail.length !in 4..6) {
                             inputEmail.error = "O login deve ter de 4 até 6 caracteres"
                             return@setOnClickListener
+                        } else {
+                            // verifica a senha
+                            if (dependentPasscode.length < 4) {
+                                inputPasscode.error = "A senha deve conter pelo menos 4 caracteres"
+                                return@setOnClickListener
+                            }
                         }
                     }
 
                     if (dependentName.isEmpty()) {
-                        inputName.error = context.getString(R.string.dependent_name_prompt)
+                        inputName.error = "Digite um nome para o dependente"
                         return@setOnClickListener
                     }
 
