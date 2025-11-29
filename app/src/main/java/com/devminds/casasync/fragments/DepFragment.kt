@@ -163,13 +163,16 @@ class DepFragment : BaseFragment(R.layout.fragment_dependent) {
         ))
 
         // listener para capturar as mudanças de task
+        var isInitialLoad = true
         listeners.add(listenRealtime(
             collectionPath = "dependents/${depId}/tasks", // a collection
             clazz = Task::class.java, // classe Task
             onUpdate = { tasks ->
                 updateAdapter(tasks) // atualiza a lista em tempo real
+                if (isInitialLoad) isInitialLoad = false
             },
             onChange = { change ->
+                if (isInitialLoad) return@listenRealtime
                 when (change.type) { // mensagens para cada tipo de mudança
                     DocumentChange.Type.ADDED -> DialogUtils.showMessage(context, getString(R.string.new_task_text))
                     DocumentChange.Type.MODIFIED -> DialogUtils.showMessage(context, getString(R.string.modified_task_text))
