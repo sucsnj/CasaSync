@@ -164,14 +164,11 @@ class DepFragment : BaseFragment(R.layout.fragment_dependent) {
         loadingImage = view.findViewById(R.id.loadingImage)
 
         showLoading(true) // mostra loading
-
         clearNavHistory()
-
         syncFirestoreToApp()
 
         toolbar = view.findViewById(R.id.topBar)
         toolbar.navigationIcon = null // esconde o botão de voltar
-
         title = view.findViewById(R.id.title)
 
         // cabeçalho
@@ -182,7 +179,22 @@ class DepFragment : BaseFragment(R.layout.fragment_dependent) {
                 title.text = welcome
 
                 val dependentId = it.id
-                listenerRegistration = listenForDependentTasks(dependentId)
+                //listenerRegistration = listenForDependentTasks(dependentId)
+
+                listenerRegistration = listenRealtime(
+                    collectionPath = "dependents/${it.id}/tasks",
+                    clazz = Task::class.java,
+                    onUpdate = { tasks ->
+                        updateAdapter(tasks) // atualiza a lista em tempo real
+                    },
+                    onChange = { change ->
+                        when (change.type) {
+                            DocumentChange.Type.ADDED -> DialogUtils.showMessage(context, getString(R.string.new_task_text))
+                            DocumentChange.Type.MODIFIED -> DialogUtils.showMessage(context, getString(R.string.modified_task_text))
+                            DocumentChange.Type.REMOVED -> DialogUtils.showMessage(context, getString(R.string.removed_task_text))
+                        }
+                    }
+                )
 
                 // foto do dependent
                 photo = view.findViewById(R.id.dependentPhoto)!! // foto

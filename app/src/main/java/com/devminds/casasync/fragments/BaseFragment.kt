@@ -13,6 +13,7 @@ import com.devminds.casasync.setCustomTransition
 import android.widget.EditText
 import android.content.Context
 import android.os.Build
+import android.util.Log
 import android.view.Window
 import android.view.WindowInsets
 import android.view.inputmethod.InputMethodManager
@@ -20,9 +21,15 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.devminds.casasync.parts.Task
+import com.google.firebase.firestore.DocumentChange
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
 
 // passa um fragmento como parâmetro para a classe
 abstract class BaseFragment(@param:LayoutRes private val layoutRes: Int) : Fragment() {
+
+    private var listenerRegistration: ListenerRegistration? = null
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -42,7 +49,10 @@ abstract class BaseFragment(@param:LayoutRes private val layoutRes: Int) : Fragm
 
     // limpa o histórico de navegação
     fun clearNavHistory() {
-        requireActivity().supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        requireActivity().supportFragmentManager.popBackStack(
+            null,
+            FragmentManager.POP_BACK_STACK_INCLUSIVE
+        )
     }
 
     // teclado com delay num edittext
@@ -83,6 +93,7 @@ abstract class BaseFragment(@param:LayoutRes private val layoutRes: Int) : Fragm
         return statusBarColor
     }
 
+    // atualiza a lista de tarefas para o dependente quando o admin faz alguma mudança
     fun <T> updateAdapterGeneric(
         oldList: MutableList<T>,
         newList: List<T>,
@@ -109,5 +120,42 @@ abstract class BaseFragment(@param:LayoutRes private val layoutRes: Int) : Fragm
         oldList.addAll(newList)
 
         diffResult.dispatchUpdatesTo(adapter)
+    }
+
+    // atualiza a UI
+    fun <T> listenRealtime(
+        collectionPath: String,
+        clazz: Class<T>,
+        onUpdate: (List<T>) -> Unit,
+        onChange: ((DocumentChange) -> Unit)? = null
+    ): ListenerRegistration {
+        val db = FirebaseFirestore.getInstance()
+        val ref = db.collection(collectionPath)
+
+        val registration = ref.addSnapshotListener { snapshot, error ->
+            if (error != null) {
+                Log.e("Firestore", "Erro ao escutar $collectionPath", error)
+                return@addSnapshotListener
+            }
+
+            snapshot?.let {
+                // dispara callback de mudança individual (opcional)
+                onChange?.let { changeCallback ->
+                    for (change in it.documentChanges) {
+                        changeCallback(change)
+                    }
+                }
+
+                // converte todos os docs para objetos
+                val list = it.documents.mapNotNull { doc -> doc.toObject(clazz) }
+                onUpdate(list)
+            }
+        }
+        return registration
+    }
+
+    override fun onStop() {
+        super.onStop()
+        listenerRegistration?.remove()
     }
 }
