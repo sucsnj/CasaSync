@@ -662,12 +662,19 @@ object FirestoreHelper {
             }
     }
 
-//    fun renameDependent(dependentId: String, newName: String) {
-//        val db = FirebaseFirestore.getInstance()
-//
-//        val depRef = db.collection("dependents").document(dependentId)
-//
-//        depRef.update("name", newName)
-//
-//    }
+    fun renameDependent(dependentId: String, newName: String) {
+        val db = FirebaseFirestore.getInstance()
+
+        if (dependentId.isEmpty()) {
+            Log.e("Firestore", "ID do dependent está vazio. Abortando sincronização.")
+            return
+        }
+
+        val depRef = db.collection("dependents").document(dependentId)
+        depRef.update("name", newName)
+
+        Log.d("Firestore", "Nome do dependent $dependentId atualizado para $newName")
+    }
+
+
 }

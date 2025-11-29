@@ -258,6 +258,9 @@ object Utils {
                                                          userViewModel.persistAndSyncUser()
                                                      }
 
+                                                     // renomeia o dependente na collection dependents
+                                                     FirestoreHelper.renameDependent(item.id, newName)
+
                                                      DialogUtils.showMessage(
                                                          context,
                                                          successRenameToast
