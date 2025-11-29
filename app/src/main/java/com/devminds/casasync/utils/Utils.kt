@@ -229,7 +229,7 @@ object Utils {
                     if (context !is Activity) return@setOnLongClickListener false
 
                     val options = arrayOf(
-                        // context.getString(R.string.rename_dialog), // renomear desativado para dependentes
+                         context.getString(R.string.rename_dialog),
                         "Login: ${item.email}", // mostra o login
                         "Senha: ${item.passcode}", // mostra a senha
                         context.getString(R.string.delete_dialog)
@@ -240,49 +240,51 @@ object Utils {
                         .setItems(options) { _, which ->
                             when (which) {
                                 0 -> {
-                                    return@setItems
+                                         val (dialogView, editTextDialog) = renameDialogItem(
+                                             context,
+                                             item.name
+                                         )
+                                         val dialogNameEdit = AlertDialog.Builder(context)
+                                             .setTitle(context.getString(R.string.rename_dialog))
+                                             .setView(dialogView)
+                                             .setCancelable(false)
+                                             .setPositiveButton(context.getString(R.string.accept_dialog)) { _, _ ->
+                                                 val newName = editTextDialog.text.toString().trim()
+                                                 if (newName.isNotEmpty()) {
+                                                     item.name = newName
+                                                     recycler.adapter?.notifyItemChanged(position)
+
+                                                     userViewModel.user.value?.let {
+                                                         userViewModel.persistAndSyncUser()
+                                                     }
+
+                                                     DialogUtils.showMessage(
+                                                         context,
+                                                         successRenameToast
+                                                     )
+                                                 }
+                                             }
+                                             .setNegativeButton(
+                                                 context.getString(R.string.cancel_dialog),
+                                                 null
+                                             )
+                                             .create()
+                                         dialogNameEdit.setOnShowListener {
+                                             editTextDialog.requestFocus()
+                                             editTextDialog.keyboardDelay(context, 100)
+                                         }
+                                         dialogNameEdit.show()
                                 }
 
                                 1 -> {
+                                    // referência ao login
                                     return@setItems
                                 }
 
-                                // 0 -> {
-                                //     val (dialogView, editTextDialog) = renameDialogItem(
-                                //         context,
-                                //         item.name
-                                //     )
-                                //     val dialogNameEdit = AlertDialog.Builder(context)
-                                //         .setTitle(context.getString(R.string.rename_dialog))
-                                //         .setView(dialogView)
-                                //         .setCancelable(false)
-                                //         .setPositiveButton(context.getString(R.string.accept_dialog)) { _, _ ->
-                                //             val newName = editTextDialog.text.toString().trim()
-                                //             if (newName.isNotEmpty()) {
-                                //                 item.name = newName
-                                //                 recycler.adapter?.notifyItemChanged(position)
-
-                                //                 userViewModel.user.value?.let {
-                                //                     userViewModel.persistAndSyncUser()
-                                //                 }
-
-                                //                 DialogUtils.showMessage(
-                                //                     context,
-                                //                     successRenameToast
-                                //                 )
-                                //             }
-                                //         }
-                                //         .setNegativeButton(
-                                //             context.getString(R.string.cancel_dialog),
-                                //             null
-                                //         )
-                                //         .create()
-                                //     dialogNameEdit.setOnShowListener {
-                                //         editTextDialog.requestFocus()
-                                //         editTextDialog.keyboardDelay(context, 100)
-                                //     }
-                                //     dialogNameEdit.show()
-                                // }
+                                2 -> {
+                                    // referência a senha
+                                    return@setItems
+                                }
 
                                 // 1 -> {
                                 //     AlertDialog.Builder(context)
@@ -324,7 +326,7 @@ object Utils {
                                     //     .show()
                                 // }
 
-                                2 -> {
+                                3 -> {
                                     val itemNameDelete = item.name
                                     AlertDialog.Builder(context)
                                         .setTitle(context.getString(R.string.delete_dialog))

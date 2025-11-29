@@ -661,4 +661,13 @@ object FirestoreHelper {
                 Log.e("Firestore", "Erro ao remover tarefa $taskId", it)
             }
     }
+
+//    fun renameDependent(dependentId: String, newName: String) {
+//        val db = FirebaseFirestore.getInstance()
+//
+//        val depRef = db.collection("dependents").document(dependentId)
+//
+//        depRef.update("name", newName)
+//
+//    }
 }
