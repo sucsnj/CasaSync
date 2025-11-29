@@ -85,15 +85,15 @@ object FirestoreHelper {
             }
     }
 
-    fun getDependentByEmail(email: String, onResult: (User?) -> Unit) {
+    fun getDependentByEmail(email: String, onResult: (Dependent?) -> Unit) {
         getDb().collection("dependents")
             .whereEqualTo("email", email)
             .get()
             .addOnSuccessListener { documents ->
                 if (!documents.isEmpty) {
                     val doc = documents.documents[0]
-                    val user = doc.toObject(User::class.java)
-                    onResult(user)
+                    val dependent = doc.toObject(Dependent::class.java)
+                    onResult(dependent)
                 } else {
                     onResult(null)
                 }
@@ -676,5 +676,21 @@ object FirestoreHelper {
         Log.d("Firestore", "Nome do dependent $dependentId atualizado para $newName")
     }
 
+    fun checkForLoginDependentExists(dependentEmail: String): Boolean {
+        val db = FirebaseFirestore.getInstance()
 
+        var exists = true
+        db.collection("dependents")
+            .whereEqualTo("email", dependentEmail)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                if (!querySnapshot.isEmpty) {
+                    exists = true
+                }
+            }
+            .addOnFailureListener {
+                exists = false
+            }
+        return exists
+    }
 }

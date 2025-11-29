@@ -201,14 +201,22 @@ class HouseFragment : BaseFragment(R.layout.fragment_house) {
                     val dependentPasscode = inputPasscode.text.toString().trim()
                     var dependentActive = true
 
-                    // login com 6 dígitos
-                    if (dependentEmail.length != 6) {
-                        inputEmail.error = "O login deve ter 6 dígitos"
-                        return@setOnClickListener
+                    // verifica no banco de dados se o login já existe
+                    FirestoreHelper.getDependentByEmail(dependentEmail) { dependent ->
+                        if (dependent != null) {
+                            inputEmail.error = "O login já existe"
+                            return@getDependentByEmail
+                        }
                     }
 
                     if (dependentEmail.isEmpty()) {
                         dependentActive = false
+                    } else {
+                        // login de 4 até 6 dígitos
+                        if (dependentEmail.length !in 4..6) {
+                            inputEmail.error = "O login deve ter de 4 até 6 caracteres"
+                            return@setOnClickListener
+                        }
                     }
 
                     if (dependentName.isEmpty()) {
