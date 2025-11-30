@@ -1,6 +1,5 @@
 package com.devminds.casasync.fragments
 
-import android.util.Log
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -9,7 +8,6 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.activityViewModels
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -28,7 +26,6 @@ import com.bumptech.glide.Glide
 import com.devminds.casasync.parts.Dependent
 import com.google.firebase.firestore.ListenerRegistration
 import com.devminds.casasync.utils.DialogUtils
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.DocumentChange
 
 class DepFragment : BaseFragment(R.layout.fragment_dependent) {
@@ -169,7 +166,8 @@ class DepFragment : BaseFragment(R.layout.fragment_dependent) {
             clazz = Task::class.java, // classe Task
             onUpdate = { tasks ->
                 updateAdapter(tasks) // atualiza a lista em tempo real
-                if (isInitialLoad) isInitialLoad = false
+                @Suppress("AssignedValueIsNeverRead")
+                if (isInitialLoad) isInitialLoad = false // valor nunca lido esperado e necessário
             },
             onChange = { change ->
                 if (isInitialLoad) return@listenRealtime

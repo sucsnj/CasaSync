@@ -15,12 +15,10 @@ import android.content.Context
 import android.os.Build
 import android.util.Log
 import android.view.Window
-import android.view.WindowInsets
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.devminds.casasync.parts.Task
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
@@ -82,13 +80,18 @@ abstract class BaseFragment(@param:LayoutRes private val layoutRes: Int) : Fragm
     }
 
     fun statusBarColor(color: String): Int {
-        var statusBarColor = 0
-        if (color == "white") {
-            statusBarColor = ContextCompat.getColor(requireContext(), R.color.white)
-        } else if (color == "notch") {
-            statusBarColor = ContextCompat.getColor(requireContext(), R.color.notch)
-        } else {
-            statusBarColor = ContextCompat.getColor(requireContext(), R.color.black)
+        @Suppress("VariableInitializerIsRedundant")
+        var statusBarColor = 0 // inicialização redundante esperada de variável
+        statusBarColor = when (color) {
+            "white" -> {
+                ContextCompat.getColor(requireContext(), R.color.white)
+            }
+            "notch" -> {
+                ContextCompat.getColor(requireContext(), R.color.notch)
+            }
+            else -> {
+                ContextCompat.getColor(requireContext(), R.color.black)
+            }
         }
         return statusBarColor
     }

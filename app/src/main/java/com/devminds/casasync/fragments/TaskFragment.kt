@@ -1,7 +1,6 @@
 package com.devminds.casasync.fragments
 
 import android.app.AlertDialog
-import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -152,13 +151,13 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
 
     fun syncFirestoreToAppDep() {
         val depId = dependentViewModel.dependent.value?.id
-        depId?.let {
-            FirestoreHelper.syncFirestoreToDependent(it) { result ->
+        depId?.let { depId ->
+            FirestoreHelper.syncFirestoreToDependent(depId) { result ->
                 if (result != null) {
                     dependentViewModel.setDependent(result)
                     // também atualiza a task atual se precisar
                     val currentTaskId = taskViewModel.task.value?.id
-                    val updatedTask = result.tasks.find { it.id == currentTaskId }
+                    val updatedTask = result.tasks.find { depId == currentTaskId }
                     if (updatedTask != null) {
                         taskViewModel.setTask(updatedTask)
                     }

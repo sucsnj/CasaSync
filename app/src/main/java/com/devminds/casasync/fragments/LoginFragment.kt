@@ -41,6 +41,8 @@ import com.google.firebase.auth.FirebaseUser
 import com.devminds.casasync.parts.House
 import com.devminds.casasync.utils.Animations
 import com.devminds.casasync.views.DependentViewModel
+
+// imports deprecateds necessários para login com google
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -53,7 +55,8 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
     private val dependentViewModel: DependentViewModel by activityViewModels()
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
-    private val RC_SIGN_IN = 9001
+    @Suppress("PrivatePropertyName")
+    private val RC_SIGN_IN = 9001 // underscore necessário para não dar erro
     private lateinit var txtLoginPrompt: TextView
     private lateinit var txtPasswordPrompt: TextView
     private lateinit var btnGoogleLogin: LinearLayout
@@ -92,7 +95,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
     }
 
     // chama o menu de biometria
-    private fun biometricCaller(context: Context, delay: Long, role: String) {
+    private fun biometricCaller(context: Context, delay: Long) {
         // delay para chamar a biometria
         Handler(Looper.getMainLooper()).postDelayed({
             // chama a biometria
@@ -365,7 +368,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         val (lastRole) = biometric.getLastLoggedUser(requireContext())
 
         lastRole?.let {
-            biometricCaller(context, 2700, lastRole)
+            biometricCaller(context, 2700)
         }
 
         txtLoginPrompt = view.findViewById(R.id.txtLoginPrompt)
@@ -459,7 +462,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         btnBiometricLogin = view.findViewById(R.id.btnBiometricLogin)
         btnBiometricLogin.setOnClickListener {
             lastRole?.let {
-                biometricCaller(context, 100, lastRole)
+                biometricCaller(context, 100)
             }
         }
     }
