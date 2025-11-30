@@ -118,7 +118,7 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
         dependentViewModel.dependent.observe(viewLifecycleOwner) { dependent ->
             title.text = dependent?.name ?: "Dependente"
             dependentPhoto = view.findViewById(R.id.dependentPhoto)
-            // foto do dependente TODO
+            // foto do dependente @TODO o dependente precisa de uma foto futuramente
             dependentPhoto.setImageResource(R.drawable.ico_dep)
         }
         // botão de voltar
@@ -180,7 +180,6 @@ class DependentFragment : BaseFragment(R.layout.fragment_dependent) {
                 successRenameToast = getString(R.string.rename_success_task_toast),
                 userViewModel = userViewModel,
                 dependentViewModel = dependentViewModel,
-                taskViewModel = taskViewModel, // *insere data e hora quando a tarefa é concluída via menu de contexto
                 context = context
             )
             

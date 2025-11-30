@@ -35,7 +35,7 @@ class Auth {
     fun authenticateDepWithFirestore(email: String, password: String, onResult: (Dependent?) -> Unit) {
         val db = FirebaseFirestore.getInstance()
         val hashedPassword = password
-//        val hashedPassword = hashPassword(password) // @TODO corrigir
+//        val hashedPassword = hashPassword(password) // @TODO dependente ainda não tem senha hash
 
         db.collection("dependents")
             .whereEqualTo("email", email)

@@ -31,14 +31,8 @@ import com.devminds.casasync.views.TaskViewModel
 import androidx.core.content.edit
 import com.devminds.casasync.FirestoreHelper
 import com.devminds.casasync.MainActivity
-import com.devminds.casasync.fragments.LoginFragment
 import com.devminds.casasync.parts.User
 import com.devminds.casasync.views.DependentViewModel
-import android.text.InputType
-import androidx.core.content.ContextCompat
-import android.view.MotionEvent
-
-import com.google.android.material.textfield.TextInputEditText
 
 // classe utilitária
 object Utils {
@@ -394,7 +388,6 @@ object Utils {
         successRenameToast: String,
         userViewModel: UserViewModel,
         dependentViewModel: DependentViewModel,
-        taskViewModel: TaskViewModel, // precisa para acessar o TaskViewModel com as datas e horas
         context: Context
     ): GenericAdapter<Task> {
         return GenericAdapter(

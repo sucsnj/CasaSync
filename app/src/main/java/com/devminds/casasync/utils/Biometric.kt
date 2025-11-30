@@ -53,6 +53,7 @@ class Biometric : BiometricPrompt.AuthenticationCallback(){
     }
 
     // utilitário: dado um id, retorna o role da lista
+    @Suppress("unused") // não é utilizada no momento
     fun getRoleForUser(context: Context, id: String): String? {
         val users = getBiometricAuthUsers(context)
         val match = users.find { it.startsWith("$id:") }

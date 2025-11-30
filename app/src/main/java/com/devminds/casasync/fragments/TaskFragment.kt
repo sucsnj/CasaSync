@@ -208,14 +208,20 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
         val dep = dependentViewModel.dependent.value
 
         // id da task atual
-        taskId = arguments?.getString("taskId")
+        taskId = arguments?.getString("taskId") // inicializada pela primeira vez
 
         // listener para detectar mudanças na task em tempo real para a UI
         listeners.add(listenDocumentRealtime(
             documentPath = "dependents/${dep?.id}/tasks/$taskId", // caminho da collection para a task
             clazz = Task::class.java, // classe modelo
-            onUpdate = {
-                syncFirestoreToAppDep() // o que fazer quando detectar mudança
+            onUpdate = { updatedTask ->
+                updatedTask?.let {
+                    // atualiza o ViewModel e a UI para ambos os logins
+                    taskViewModel.setTask(it)
+                    title.text = it.name
+                    taskDescription.text = it.description
+                    subtitle.text = it.previsionDate ?: ""
+                }
             }
         ))
 
@@ -371,6 +377,8 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
                 else -> false
             }
         }
+
+        taskId = arguments?.getString("taskId") // deve ser inicializada novamente para o ciclo da fragment não quebrar
 
         // observa o dependente selecionado
         subtitle = view.findViewById(R.id.subtitle)
