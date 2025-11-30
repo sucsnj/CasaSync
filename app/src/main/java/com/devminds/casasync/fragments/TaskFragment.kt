@@ -29,6 +29,7 @@ import com.devminds.casasync.utils.DialogUtils
 import com.devminds.casasync.utils.TaskAlarmReceiver
 import com.devminds.casasync.utils.DatePickers
 import com.devminds.casasync.utils.DateUtils
+import com.google.firebase.firestore.ListenerRegistration
 
 class TaskFragment : BaseFragment(R.layout.fragment_task) {
 
@@ -49,6 +50,7 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
     private lateinit var checker: CheckBox
     private lateinit var btnSaveTask: TextView
     private lateinit var swipeRefresh: SwipeRefreshLayout
+    private val listeners = mutableListOf<ListenerRegistration>()
 
     fun scheduleTaskNotification(context: Context, viewModel: TaskViewModel) {
         viewModel.task.value?.let { task ->
@@ -165,6 +167,7 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
         }
     }
 
+    // atualiza a UI
     fun refreshPage(swipeRefresh: SwipeRefreshLayout, userViewModel: UserViewModel) {
         swipeRefresh.setOnRefreshListener {
             // pega o usuário atual do ViewModel
@@ -180,6 +183,12 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
             // encerra o efeito de refresh
             swipeRefresh.isRefreshing = false
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        listeners.forEach { it.remove() }
+        listeners.clear()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -198,6 +207,18 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
         // variáveis para condicionar o tipo de login
         val user = userViewModel.user.value
         val dep = dependentViewModel.dependent.value
+
+        // id da task atual
+        taskId = arguments?.getString("taskId")
+
+        // listener para detectar mudanças na task em tempo real para a UI
+        listeners.add(listenDocumentRealtime(
+            documentPath = "dependents/${dep?.id}/tasks/$taskId", // caminho da collection para a task
+            clazz = Task::class.java, // classe modelo
+            onUpdate = {
+                syncFirestoreToAppDep() // o que fazer quando detectar mudança
+            }
+        ))
 
         // observa a tarefa selecionada
         taskViewModel.task.observe(viewLifecycleOwner) { task ->
@@ -352,7 +373,6 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
             }
         }
 
-        taskId = arguments?.getString("taskId")
         // observa o dependente selecionado
         subtitle = view.findViewById(R.id.subtitle)
         dependentViewModel.dependent.observe(viewLifecycleOwner) { dependent ->
