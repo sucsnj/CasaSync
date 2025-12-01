@@ -204,7 +204,6 @@ object Utils {
         itemOptions: String,
         successRenameToast: String,
         userViewModel: UserViewModel,
-        dependentViewModel: DependentViewModel,
         context: Context
     ): GenericAdapter<Dependent> {
         return GenericAdapter(

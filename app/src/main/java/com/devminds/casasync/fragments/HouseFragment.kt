@@ -19,7 +19,6 @@ import com.devminds.casasync.parts.House
 import com.devminds.casasync.utils.Utils
 import com.devminds.casasync.views.HouseViewModel
 import com.devminds.casasync.views.UserViewModel
-import com.devminds.casasync.views.DependentViewModel
 import com.google.android.material.appbar.MaterialToolbar
 import java.util.UUID
 import com.devminds.casasync.TransitionType
@@ -30,7 +29,6 @@ class HouseFragment : BaseFragment(R.layout.fragment_house) {
     private lateinit var adapter: GenericAdapter<Dependent>
     private val userViewModel: UserViewModel by activityViewModels()
     private val houseViewModel: HouseViewModel by activityViewModels()
-    private val dependentViewModel: DependentViewModel by activityViewModels()
     private var currentHouse: House? = null
     private val dependentList = mutableListOf<Dependent>()
     private lateinit var toolbar: MaterialToolbar
@@ -149,7 +147,6 @@ class HouseFragment : BaseFragment(R.layout.fragment_house) {
                 itemOptions = getString(R.string.dependent_options),
                 successRenameToast = getString(R.string.rename_success_dependent_toast),
                 userViewModel = userViewModel,
-                dependentViewModel = dependentViewModel,
                 context = context
             )
             recyclerDependents.adapter = adapter

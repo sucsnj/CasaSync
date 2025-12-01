@@ -675,22 +675,4 @@ object FirestoreHelper {
 
         Log.d("Firestore", "Nome do dependent $dependentId atualizado para $newName")
     }
-
-    fun checkForLoginDependentExists(dependentEmail: String): Boolean {
-        val db = FirebaseFirestore.getInstance()
-
-        var exists = true
-        db.collection("dependents")
-            .whereEqualTo("email", dependentEmail)
-            .get()
-            .addOnSuccessListener { querySnapshot ->
-                if (!querySnapshot.isEmpty) {
-                    exists = true
-                }
-            }
-            .addOnFailureListener {
-                exists = false
-            }
-        return exists
-    }
 }
