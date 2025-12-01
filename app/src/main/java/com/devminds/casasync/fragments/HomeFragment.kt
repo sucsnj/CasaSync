@@ -118,8 +118,6 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Log.d("HomeFragment", "onViewCreated()")
-
         val context = requireContext()
 
         loadingOverlay = view.findViewById(R.id.loadingOverlay)

@@ -208,5 +208,17 @@
     <string name="new_task_text">Você tem uma nova tarefa!</string>
     <string name="modified_task_text">Uma terefa foi modificada</string>
     <string name="removed_task_text">Uma tarefa foi removida</string>
+    <string name="no_description">Sem descrição</string>
+    <string name="edit_description">Editar Descrição</string>
+    <string name="save_dialog">Salvar</string>
+    <string name="permission_denied">Você não tem permissão para editar isso</string>
+    <string name="user">Usuário</string>
+    <string name="administrator">Administrador</string>
+    <string name="user_type_select">Selecione o tipo de usuário</string>
+    <string name="login_chars">Login (De 4 até 6 Caracteres)</string>
+    <string name="login_exists">O login já existe</string>
+    <string name="login_chars_alert">O login deve ter de 4 até 6 caracteres</string>
+    <string name="password_alert">A senha deve conter pelo menos 4 caracteres</string>
+    <string name="dependent_name_alert">Digite um nome para o dependente</string>
 
 </resources>

@@ -159,7 +159,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
 
                     val newUser = User(
                         id = firebaseUser.uid,
-                        name = firebaseUser.displayName ?: "Usuário",
+                        name = firebaseUser.displayName ?: getString(R.string.user),
                         email = firebaseUser.email ?: "",
                         password = "",
                         photoUrl = firebaseUser.photoUrl?.toString() ?: "",
@@ -193,8 +193,6 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
 
     // autentica o usuário com o firebase
     private fun firebaseAuthWithGoogle(idToken: String) {
-
-        Log.d("LoginFragment", "Chegou aqui")
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         firebaseAuth.signInWithCredential(credential)
             .addOnCompleteListener(requireActivity()) { task ->
@@ -406,9 +404,9 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                         if (userFound != null) { // existe um usuário em 'users', ou seja, é admin
                             FirestoreHelper.getDependentByEmail(email) { dependentFound ->
                                 if (dependentFound != null) { // existe um admin que é dependente também
-                                    val options = arrayOf("Administrador", "Dependente")
+                                    val options = arrayOf(getString(R.string.administrator), getString(R.string.dependent))
                                     val dialog = AlertDialog.Builder(requireContext())
-                                        .setTitle("Selecione o tipo de usuário")
+                                        .setTitle(getString(R.string.user_type_select))
                                         .setItems(options) { _, which ->
                                             when (which) {
                                                 0 -> loginAsUser(context, email, password)

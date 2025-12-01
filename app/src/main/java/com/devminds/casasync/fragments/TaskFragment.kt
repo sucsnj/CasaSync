@@ -228,10 +228,10 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
         // observa a tarefa selecionada
         taskViewModel.task.observe(viewLifecycleOwner) { task ->
             title.text = task?.name ?: "Tarefa" // nome no título
-            taskDescription.text = task?.description ?: "Sem descrição" // descrição da tarefa
+            taskDescription.text = task?.description ?: getString(R.string.no_description) // descrição da tarefa
             // se a descrição estiver vazia, mostra "Sem descrição" na dica
             if (task?.description.toString() == "") {
-                taskDescription.hint = "Sem descrição"
+                taskDescription.hint = getString(R.string.no_description)
             }
 
             // alterar descrição
@@ -257,13 +257,13 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
 
                     // diálogo
                     AlertDialog.Builder(context)
-                        .setTitle("Editar Descrição")
+                        .setTitle(getString(R.string.edit_description))
                         .setView(layout)
                         .setCancelable(false)
-                        .setNegativeButton("Cancelar") { dialog, _ ->
+                        .setNegativeButton(getString(R.string.cancel_dialog)) { dialog, _ ->
                             dialog.dismiss()
                         }
-                        .setPositiveButton("Salvar") { dialog, _ ->
+                        .setPositiveButton(getString(R.string.save_dialog)) { dialog, _ ->
                             val newDescription = editText.text.toString()
                             taskDescription.text = newDescription
 
@@ -273,7 +273,7 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
                         }
                         .show() // mostra o diálogo
                 } else if (dep != null) {
-                    DialogUtils.showMessage(context, "Você não tem permissão para editar a descrição")
+                    DialogUtils.showMessage(context, getString(R.string.permission_denied))
                 }
             }
 
@@ -331,7 +331,7 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
                 }
                 datePicker.show(parentFragmentManager, "DATE_PICKER") // mostra o datePicker (calendário)
             } else if (dep != null) {
-                DialogUtils.showMessage(context, "Você não tem permissão para editar a data prevista")
+                DialogUtils.showMessage(context, getString(R.string.permission_denied))
             }
         }
 
@@ -351,7 +351,7 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
                 }
                 hourPicker.show(parentFragmentManager, "HOUR_PICKER") // mostra o hourPicker (hora)
             } else if (dep != null) {
-                DialogUtils.showMessage(context, "Você não tem permissão para editar a hora prevista")
+                DialogUtils.showMessage(context, getString(R.string.permission_denied))
             }
         }
 
@@ -395,7 +395,6 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
             val task = taskViewModel.task.value
             if (task != null) {
                 userViewModel.persistAndSyncUser()
-//                userViewModel.persistAndSyncUserDep()
                 DialogUtils.showMessage(context, getString(R.string.task_saved))
             }
         }

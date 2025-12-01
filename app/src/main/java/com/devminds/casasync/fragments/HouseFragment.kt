@@ -168,7 +168,7 @@ class HouseFragment : BaseFragment(R.layout.fragment_house) {
                 hint = context.getString(R.string.dependent_name_prompt)
             }
             val inputEmail = EditText(context).apply {
-                hint = "Login (6 Dígitos)"
+                hint = context.getString(R.string.login_chars)
             }
             val inputPasscode = EditText(context).apply {
                 hint = context.getString(R.string.dependent_passcode_prompt)
@@ -201,7 +201,7 @@ class HouseFragment : BaseFragment(R.layout.fragment_house) {
                     // verifica no banco de dados se o login já existe
                     FirestoreHelper.getDependentByEmail(dependentEmail) { dependent ->
                         if (dependent != null) {
-                            inputEmail.error = "O login já existe"
+                            inputEmail.error = getString(R.string.login_exists)
                             return@getDependentByEmail
                         }
                     }
@@ -211,19 +211,19 @@ class HouseFragment : BaseFragment(R.layout.fragment_house) {
                     } else {
                         // login de 4 até 6 dígitos
                         if (dependentEmail.length !in 4..6) {
-                            inputEmail.error = "O login deve ter de 4 até 6 caracteres"
+                            inputEmail.error = getString(R.string.login_chars_alert)
                             return@setOnClickListener
                         } else {
                             // verifica a senha
                             if (dependentPasscode.length < 4) {
-                                inputPasscode.error = "A senha deve conter pelo menos 4 caracteres"
+                                inputPasscode.error = getString(R.string.password_alert)
                                 return@setOnClickListener
                             }
                         }
                     }
 
                     if (dependentName.isEmpty()) {
-                        inputName.error = "Digite um nome para o dependente"
+                        inputName.error = getString(R.string.dependent_name_alert)
                         return@setOnClickListener
                     }
 
