@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="BotaoAzul">
-        <item name="android:backgroundTint">@color/azul_escuro</item>
-        <item name="android:textColor">@color/branco</item>
+        <item name="android:backgroundTint">?attr/colorPrimary</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
     </style>
     <style name="BotaoCinza">
-        <item name="android:background">@color/cinza</item>
+        <item name="android:background">?attr/colorSurface</item>
     </style>
     <style name="BotaoAzulClaro">
-        <item name="android:backgroundTint">#2471FF</item>
-        <item name="android:textColor">@color/branco</item>
+        <item name="android:backgroundTint">?attr/colorPrimary</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
     </style>
     <style name="CustomDialog" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
         <!-- Remove completamente o fundo padrão -->
@@ -22,15 +22,15 @@
     </style>
     <style name="ToolbarTitleStyle" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
         <item name="android:textSize">36sp</item>
-        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
     </style>
     <style name="ToolbarTitleStyleMain" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
         <item name="android:textSize">26sp</item>
-        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
     </style>
     <style name="ToolbarSubTitleStyleMain" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
         <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
     </style>
     <style name="DialogToastAnimation">
         <item name="android:windowEnterAnimation">@anim/fade_in_scale</item>
