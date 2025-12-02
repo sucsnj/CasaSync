@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Botão azul adaptado para fundo escuro -->
+    <style name="BotaoAzul">
+        <item name="android:backgroundTint">@color/azul_escuro</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <!-- Botão cinza adaptado -->
+    <style name="BotaoCinza">
+        <item name="android:background">@color/cinza_claro</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <!-- Botão azul claro adaptado -->
+    <style name="BotaoAzulClaro">
+        <item name="android:backgroundTint">#9BE6FB</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <!-- Dialog customizado (mantém transparência) -->
+    <style name="CustomDialog" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowMinWidthMajor">90%</item>
+        <item name="android:windowMinWidthMinor">90%</item>
+    </style>
+
+    <!-- Toolbar adaptada para fundo escuro -->
+    <style name="ToolbarTitleStyle" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">36sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="ToolbarTitleStyleMain" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">26sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="ToolbarSubTitleStyleMain" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/cinza_claro</item>
+    </style>
+
+    <!-- Animações mantidas -->
+    <style name="DialogToastAnimation">
+        <item name="android:windowEnterAnimation">@anim/fade_in_scale</item>
+        <item name="android:windowExitAnimation">@anim/fade_out_scale</item>
+    </style>
+
+    <!-- Shape mantido -->
+    <style name="RoundedIconShape" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">23%</item>
+    </style>
+</resources>

@@ -2,6 +2,9 @@
     <style name="Base.Theme.CasaSync" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:textColorPrimary">@color/text_primary</item>
         <item name="android:textColorHint">@color/text_hint</item>
+
+        <item name="colorPrimary">@color/notch</item>
+        <item name="android:colorBackground">@color/branco</item>
     </style>
 
     <style name="Theme.CasaSync" parent="Base.Theme.CasaSync" />

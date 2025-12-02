@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Fundo e contraste -->
+    <color name="black">#FFFFFFFF</color> <!-- preto vira branco -->
+    <color name="white">#FF000000</color> <!-- branco vira preto -->
+    <color name="branco">#121212</color> <!-- fundo padrão escuro -->
+
+    <!-- Azul e cinzas adaptados -->
+    <color name="azul_escuro">#0A3D7A</color>
+    <color name="azul_cris">#9BE6FB</color>
+    <color name="cinza">#B0B0B0</color>
+    <color name="cinza_claro">#D0D0D0</color>
+
+    <!-- Elementos de destaque -->
+    <color name="notch">#2471FF</color> <!-- mantém azul vibrante -->
+    <color name="toast_background">#EEEEEE</color> <!-- fundo claro para toast -->
+
+    <!-- Texto adaptado para fundo escuro -->
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_hint">#B0B0B0</color>
+
+    <!-- Outros -->
+    <color name="google_btn_bg">#444444</color>
+    <color name="tobpar_items">#333333</color>
+</resources>
