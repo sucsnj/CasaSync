@@ -4,14 +4,14 @@
     android:id="@+id/dependent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_layout">
+    android:background="?attr/colorSurface">
 
     <!--  overlay para esconder atraso no login  -->
     <FrameLayout
         android:id="@+id/loadingOverlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#FFFFFFFF"
+        android:background="?attr/colorSurface"
         android:visibility="gone"
         android:gravity="center"
         android:elevation="16dp"
@@ -32,11 +32,11 @@
         android:id="@+id/topBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/background_toolbar"
+        android:background="?attr/colorPrimary"
         android:elevation="8dp"
         app:navigationIcon="@drawable/ico_arrow_back"
         app:navigationContentDescription="@string/button_back"
-        app:navigationIconTint="@android:color/white"
+        app:navigationIconTint="?attr/colorControlNormal"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView

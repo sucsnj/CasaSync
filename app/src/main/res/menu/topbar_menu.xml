@@ -6,11 +6,11 @@
         android:title="Início"
         android:icon="@drawable/ico_homepage"
         app:showAsAction="ifRoom"
-        app:iconTint="@color/tobpar_items"/>
+        app:iconTint="?attr/colorControlNormal"/>
     <item
         android:id="@+id/more_options"
         android:title="Mais opções"
         android:icon="@drawable/ico_more_vert"
         app:showAsAction="always"
-        app:iconTint="@color/tobpar_items"/>
+        app:iconTint="?attr/colorControlNormal"/>
 </menu>
