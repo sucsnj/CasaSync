@@ -8,6 +8,9 @@ import com.devminds.casasync.R
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.switchmaterial.SwitchMaterial
+import androidx.appcompat.app.AppCompatDelegate
+import android.content.SharedPreferences
+import androidx.preference.PreferenceManager
 
 class AppConfigFragment : BaseFragment(R.layout.fragment_config_app) {
 
