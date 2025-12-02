@@ -126,8 +126,13 @@
     <string name="to_do">O que fazer?\n%s</string>
     <string name="add_new_house">Adicionar nova casa</string>
     <string name="house_name">Nome da casa</string>
-    <string name="devminds_team_description">descrição do devminds</string>
-    <string name="casasync_app_description">descrição do app casasync</string>
+
+    <string name="devminds_team_description">O DevMinds é um grupo criado na faculdade Nova Roma com o propósito de transformar ideias em soluções reais. Em busca de inovação e praticidade, desenvolvemos um aplicativo móvel pensado para facilitar o dia a dia das pessoas. Nossa solução organiza tarefas domésticas de forma simples, inteligente e eficiente, ajudando usuários a terem mais controle, produtividade e tranquilidade na rotina.
+Com tecnologia, criatividade e trabalho em equipe, o DevMinds nasce para impactar vidas e tornar o cotidiano mais leve.</string>
+
+    <string name="casasync_app_description">Desenvolvemos um aplicativo móvel inovador, criado para transformar a forma como as tarefas domésticas são organizadas. Nossa solução combina praticidade e tecnologia para tornar o dia a dia mais simples, produtivo e eficiente. Com uma interface intuitiva e recursos pensados para facilitar a rotina, o aplicativo ajuda usuários a manterem tudo sob controle, evitando esquecimentos e tornando a divisão das tarefas muito mais clara e organizada.
+sobre a aplicação.</string>
+
     <string name="dev_name1">Anthony Rychard</string>
     <string name="dev_link1">https://github.com/Ryuki49</string>
     <string name="dev_name2">Alyson Thadeu</string>

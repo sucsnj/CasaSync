@@ -126,8 +126,17 @@
     <string name="to_do">What to do?\n%s</string>
     <string name="add_new_house">Add new house</string>
     <string name="house_name">House name</string>
-    <string name="devminds_team_description">DevMinds description</string>
-    <string name="casasync_app_description">CasaSync app description</string>
+
+    <string name="devminds_team_description">DevMinds is a group created at Nova Roma University with the purpose of transforming ideas into real solutions. In the pursuit of innovation and practicality, we developed a mobile application designed to make people’s daily lives easier.
+
+Our solution organizes household tasks in a simple, smart, and efficient way, helping users gain more control, productivity, and peace of mind in their routines.
+
+With technology, creativity, and teamwork, DevMinds was born to impact lives and make everyday life lighter.</string>
+
+    <string name="casasync_app_description">We developed an innovative mobile application, created to transform the way household tasks are organized. Our solution combines practicality and technology to make daily life simpler, more productive, and more efficient.
+
+With an intuitive interface and features designed to streamline routines, the app helps users keep everything under control, avoid forgetfulness, and make the division of tasks much clearer and more organized.</string>
+
     <string name="dev_name1">Anthony Rychard</string>
     <string name="dev_link1">https://github.com/Ryuki49</string>
     <string name="dev_name2">Alyson Thadeu</string>
