@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="BotaoAzul">
-        <item name="android:backgroundTint">?attr/colorPrimary</item>
+        <item name="android:backgroundTint">@color/azul_escuro</item>
         <item name="android:textColor">?attr/colorOnPrimary</item>
     </style>
     <style name="BotaoCinza">

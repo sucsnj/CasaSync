@@ -13,15 +13,8 @@ class MyApp : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        // define o tema do app com base na preferência salva
-        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-        val isDarkMode = prefs.getBoolean("dark_mode", false)
-
-        if (isDarkMode) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-        }
+        // força o tema escuro
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
         // inicializa o Firebase
         FirebaseApp.initializeApp(this)

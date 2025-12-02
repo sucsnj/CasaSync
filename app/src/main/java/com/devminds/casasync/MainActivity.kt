@@ -4,6 +4,7 @@ import android.os.Build
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.devminds.casasync.utils.PermissionHelper
@@ -18,6 +19,9 @@ class MainActivity : AppCompatActivity() {
             finish()
             return
         }
+
+        // força o tema escuro
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)

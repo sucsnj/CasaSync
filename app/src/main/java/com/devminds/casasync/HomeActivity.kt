@@ -3,9 +3,11 @@ package com.devminds.casasync
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
+import androidx.preference.PreferenceManager
 import com.devminds.casasync.fragments.DepFragment
 import com.devminds.casasync.fragments.HomeFragment
 
@@ -31,6 +33,16 @@ class HomeActivity : AppCompatActivity() {
                 "admin" -> HomeFragment()
                 "dependent" -> DepFragment()
                 else -> HomeFragment()
+            }
+
+            // define o tema do app com base na preferência salva
+            val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+            val isDarkMode = prefs.getBoolean("dark_mode", false)
+
+            if (isDarkMode) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             }
 
             supportFragmentManager.beginTransaction()
