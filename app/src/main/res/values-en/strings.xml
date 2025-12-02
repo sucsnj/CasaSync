@@ -1,0 +1,232 @@
+<resources>
+    <!-- App -->
+    <string name="app_name">CasaSync</string>
+    <string name="text_powered_by_devminds">Powered by DevMinds</string>
+
+    <!-- Login -->
+    <string name="login_email_prompt">Enter your email</string>
+    <string name="login_email_confirm_prompt">Confirm your email</string>
+    <string name="login_password_prompt">Enter your password</string>
+    <string name="login_password_confirm_prompt">Confirm your password</string>
+    <string name="login_button">Login</string>
+    <string name="login_google_button">Sign in with Google</string>
+    <string name="login_success_message">Login successful!</string>
+    <string name="login_error_message">Error logging in. Check your credentials.</string>
+    <string name="login_empty_message">Fill in the login fields!</string>
+    <string name="login_exists_message">This user is already registered. Try another email!</string>
+    <string name="login_account_text">Already have an account?</string>
+    <string name="login_account_button"><u>Log in!</u></string>
+    <string name="login_forgot_password_text">Forgot your password?</string>
+
+    <!-- Cadastro -->
+    <string name="new_user_text">New user</string>
+    <string name="personal_data_text">Personal Data</string>
+    <string name="new_account_text">Don’t have an account yet?</string>
+    <string name="new_account_button"><u>Sign up!</u></string>
+    <string name="new_account_success_message">Registration successful!</string>
+    <string name="new_account_error_message">Error registering. Check the information provided.</string>
+
+    <!-- Recovery -->
+    <string name="recovery_title_text">Password Recovery</string>
+    <string name="recovery_validate_button">Validate</string>
+    <string name="recovery_change_password_button">Change Password</string>
+    <string name="recovery_new_password_prompt">Enter your new password</string>
+    <string name="recovery_login_found_message">Login found!</string>
+    <string name="recovery_login_not_found_message">Login not found!</string>
+    <string name="recovery_login_empty_message">Fill in the login field!</string>
+    <string name="recovery_password_changed_message">Password Changed!</string>
+    <string name="recovery_password_empty_message">Enter a new password!</string>
+
+    <!-- User Info -->
+    <string name="user_name_prompt">Enter your full name</string>
+    <string name="user_photo_description">User photo</string>
+    <string name="user_welcome_text">Welcome, </string>
+    <string name="user_name_text">Gandalf</string>
+    <string name="user_birthdate_prompt">Date of Birth</string>
+    <string name="gender_male_text">Male</string>
+    <string name="gender_female_text">Female</string>
+    <string name="gender_other_text">Other</string>
+    <string name="user_phone_prompt">Contact Phone</string>
+
+    <!-- Address -->
+    <string name="address_title_text">Address</string>
+    <string name="address_cep_prompt">ZIP code of your address</string>
+    <string name="address_street_prompt">Street/Avenue</string>
+    <string name="address_city_prompt">City Name</string>
+    <string name="address_district_prompt">Neighborhood Name</string>
+    <string name="address_number_prompt">Address number</string>
+    <string name="address_complement_prompt">Complement (house, apartment…)</string>
+
+    <!-- House -->
+    <string name="new_house_button">Add House</string>
+    <string name="house_name_prompt">House Name</string>
+    <string name="house_image_description">House Image</string>
+    <string name="house_enter_text">You are in the house, </string>
+    <string name="house_name_text">Bolsão</string>
+
+    <!-- Task -->
+    <string name="new_task_button">Add Task</string>
+    <string name="task_name_prompt">Task Name</string>
+
+    <!-- Dependent -->
+    <string name="new_dependent_button">Add Dependent</string>
+    <string name="dependent_name_prompt">Name</string>
+    <string name="dependent_email_prompt">Email</string>
+    <string name="dependent_passcode_prompt">Password</string>
+
+    <!-- Buttons -->
+    <string name="button_add">Add</string>
+    <string name="button_cancel">Cancel</string>
+    <string name="button_accept_terms">Accept Terms of Use</string>
+    <string name="button_decline_terms">Decline Terms of Use</string>
+    <string name="button_admin">Responsible</string>
+    <string name="button_dependent">Dependent</string>
+    <string name="register_buttom">Register</string>
+
+    <!-- UI Texts -->
+    <string name="text_enter">Enter</string>
+    <string name="text_or">Or</string>
+    <string name="config_title_text">Settings</string>
+    <string name="contact_security_title_text">Contact and Security</string>
+
+    <!-- Images -->
+    <string name="image_logo_devminds_description">DevMinds Logo</string>
+    <string name="image_logo_google_description">Google Logo</string>
+    <string name="image_logo_casasync_description">CasaSync Logo</string>
+
+    <!-- Misc -->
+    <string name="text_never_reached">_Never reached here_</string>
+    <string name="text_main_screen">for goods alone in the middle of the screen</string>
+    <string name="rename_dialog">Rename</string>
+    <string name="delete_dialog">Delete</string>
+
+    <string name="house_options">Options for the house: </string>
+    <string name="rename_success_house_toast">House renamed</string>
+
+    <string name="dependent_options">Options for the dependent: </string>
+    <string name="rename_success_dependent_toast">Dependent renamed</string>
+
+    <string name="task_options">Options for the task: </string>
+    <string name="rename_success_task_toast">Task renamed</string>
+
+    <string name="accept_dialog">Accept</string>
+    <string name="cancel_dialog">Cancel</string>
+    <string name="confirm_delete_dialog">Do you really want to delete:&#160;</string>
+    <string name="question_mark">\?</string>
+    <string name="success_delete_dialog">, successfully deleted!</string>
+    <string name="devminds_text">DevMinds</string>
+    <string name="welcome_text">Hello,&#160;</string>
+    <string name="button_back">Back</string>
+    <string name="tasks_to">"Tasks for&#160;"</string>
+    <string name="task_name">Task name</string>
+    <string name="task_description">Task description</string>
+    <string name="add_task_dialog">Add new task</string>
+    <string name="invalid_house_name">Enter a valid name</string>
+    <string name="btn_add_dependent">Add new dependent</string>
+    <string name="to_do">What to do?\n%s</string>
+    <string name="add_new_house">Add new house</string>
+    <string name="house_name">House name</string>
+    <string name="devminds_team_description">DevMinds description</string>
+    <string name="casasync_app_description">CasaSync app description</string>
+    <string name="dev_name1">Anthony Rychard</string>
+    <string name="dev_link1">https://github.com/Ryuki49</string>
+    <string name="dev_name2">Alyson Thadeu</string>
+    <string name="dev_link2">https://github.com/AlysonThadeu</string>
+    <string name="dev_name3">Carlos Santana</string>
+    <string name="dev_link3">https://github.com/sucsnj</string>
+    <string name="dev_name4">Edvan Cordeiro</string>
+    <string name="dev_link4">https://github.com/Edvan-Junior</string>
+    <string name="dev_name5">Rogens Rocha</string>
+    <string name="dev_link5">https://github.com/RogensRocha</string>
+    <string name="prevision_date">Expected date</string>
+    <string name="prevision_hour">Expected time</string>
+    <string name="finish_dialog">Finish task</string>
+    <string name="default_web_client_id">941068486881-41jjnlij8guqt6ofuliia3sh9pue8mvq.apps.googleusercontent.com</string>
+    <string name="finished">Finished</string>
+    <string name="snackbar_icon">Snackbar Icon</string>
+    <string name="item_name">Item name</string>
+    <string name="user_info">User information</string>
+    <string name="app_info">App information</string>
+    <string name="task">Task</string>
+    <string name="depentent">Dependents</string>
+    <string name="add_dependent">Add Dependent</string>
+    <string name="user_picture">User photo</string>
+    <string name="hi_user">Hello, Gandalf</string>
+
+    <string name="user_profile">My Profile</string>
+    <string name="add_house">Add House</string>
+    <string name="dependent_picture">Dependent photo</string>
+    <string name="tasks">Tasks</string>
+    <string name="add_task">Add Task</string>
+    <string name="dependent">Dependent</string>
+    <string name="description_here">Description here</string>
+    <string name="creation_date">Creation date</string>
+    <string name="date">Date</string>
+    <string name="prevision_conclusion_date">Expected completion date</string>
+    <string name="hour">Hour</string>
+    <string name="conclusion_date">Completion date</string>
+    <string name="save_changes">Save Changes</string>
+    <string name="start_date">Start date</string>
+    <string name="icon_biometric">Biometric image</string>
+    <string name="login_with_biometric">Login with biometrics</string>
+    <string name="details">Click to see details</string>
+    <string name="item_image">Item image</string>
+    <string name="loading">Loading...</string>
+    <string name="starting_app">Starting App</string>
+    <string name="no_connection">No internet connection.</string>
+    <string name="auth_success">Authentication successful!</string>
+    <string name="auth_fail">Authentication failed.</string>
+    <string name="unexpected_credential">Error: Unexpected credential type.</string>
+    <string name="auth_google_error">Error authenticating with Google.</string>
+    <string name="less_than_one_hour">Less than one hour to complete</string>
+    <string name="less_than_one_day">Less than one day to complete</string>
+    <string name="task_finished">Task completed</string>
+    <string name="same_email">Email already registered</string>
+    <string name="all_fields_warning">Fill in all fields</string>
+    <string name="house_id_not_found_error">Error: House ID not found.</string>
+    <string name="dependent_added">Dependent added</string>
+    <string name="created_house">House created</string>
+    <string name="dependent_id_not_found_error">Error: Dependent ID not found.</string>
+    <string name="select_expected_date">Select expected completion date</string>
+    <string name="select_expected_hour">Select expected completion time</string>
+    <string name="created_task">Task created</string>
+    <string name="not_finished">Not completed</string>
+    <string name="no_hour">No time</string>
+    <string name="expected_date">Expected completion date</string>
+    <string name="expected_hour">Expected completion time</string>
+    <string name="task_saved">Task saved successfully!</string>
+    <string name="notification_permission_granted">Notification permission granted</string>
+    <string name="notification_permission_denied">Notification permission denied</string>
+    <string name="logout_prompt_confirm">Do you really want to log out?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="dependent_name_error">Enter a name for the dependent</string>
+    <string name="viewPass">Current Password</string>
+    <string name="dependent_passcode_error">Enter a password</string>
+    <string name="user_or_dependent">Administrator or Dependent?</string>
+    <string name="user_not_found">No user found!</string>
+    <string name="open">Open</string>
+    <string name="new_task_text">You have a new task!</string>
+    <string name="modified_task_text">A task has been modified</string>
+    <string name="removed_task_text">A task has been removed</string>
+    <string name="no_description">No description</string>
+    <string name="edit_description">Edit Description</string>
+    <string name="save_dialog">Save</string>
+    <string name="permission_denied">You don’t have permission to edit this</string>
+    <string name="user">User</string>
+    <string name="administrator">Administrator</string>
+    <string name="user_type_select">Select user type</string>
+    <string name="login_chars">Login (From 4 to 6 Characters)</string>
+    <string name="login_exists">Login already exists</string>
+    <string name="login_chars_alert">Login must be between 4 and 6 characters</string>
+    <string name="password_alert">Password must contain at least 4 characters</string>
+    <string name="dependent_name_alert">Enter a name for the dependent</string>
+
+    <string name="settings">Settings</string>
+    <string name="change_theme">Change Theme</string>
+    <string name="change_language">Change Language</string>
+    <string name="enable_notifications">Enable Notifications</string>
+    <string name="enable_alarms">Enable Alarms</string>
+    <string name="enable_biometrics">Enable Biometrics</string>
+
+</resources>

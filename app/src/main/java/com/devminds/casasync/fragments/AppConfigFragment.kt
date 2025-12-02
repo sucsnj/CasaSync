@@ -1,5 +1,6 @@
 package com.devminds.casasync.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -9,8 +10,12 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.switchmaterial.SwitchMaterial
 import androidx.appcompat.app.AppCompatDelegate
 import android.content.SharedPreferences
+import android.content.res.Configuration
 import androidx.preference.PreferenceManager
 import androidx.core.content.edit
+import java.util.Locale
+import androidx.appcompat.widget.PopupMenu
+
 
 class AppConfigFragment : BaseFragment(R.layout.fragment_config_app) {
 
@@ -33,6 +38,13 @@ class AppConfigFragment : BaseFragment(R.layout.fragment_config_app) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             prefs.edit { putBoolean("dark_mode", true) }
             Toast.makeText(requireContext(), "Tema escuro ativado", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun saveLanguage(languageCode: String) {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(requireContext())
+        prefs.edit {
+            putString("app_language", languageCode)
         }
     }
 
@@ -59,9 +71,34 @@ class AppConfigFragment : BaseFragment(R.layout.fragment_config_app) {
             toggleTheme()
         }
 
-        btnChangeLanguage.setOnClickListener {
-            Toast.makeText(requireContext(), "Alterar idioma", Toast.LENGTH_SHORT).show()
-            // TODO: abrir diálogo ou tela de seleção de idioma
+        btnChangeLanguage.setOnClickListener { anchor ->
+            val popup = PopupMenu(requireContext(), anchor)
+            popup.menuInflater.inflate(R.menu.language_selector, popup.menu)
+
+            popup.setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.lang_pt -> {
+                        saveLanguage("pt-BR")
+                        Toast.makeText(requireContext(), "Idioma alterado para Português", Toast.LENGTH_SHORT).show()
+                        requireActivity().recreate()
+                        true
+                    }
+                    R.id.lang_en -> {
+                        saveLanguage("en")
+                        Toast.makeText(requireContext(), "Language changed to English", Toast.LENGTH_SHORT).show()
+                        requireActivity().recreate()
+                        true
+                    }
+                    R.id.lang_default -> {
+                        saveLanguage("") // vazio = padrão do sistema
+                        Toast.makeText(requireContext(), "Idioma padrão do sistema", Toast.LENGTH_SHORT).show()
+                        requireActivity().recreate()
+                        true
+                    }
+                    else -> false
+                }
+            }
+            popup.show()
         }
 
         switchNotifications.setOnCheckedChangeListener { _, isChecked ->

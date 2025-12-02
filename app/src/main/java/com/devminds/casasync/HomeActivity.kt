@@ -1,5 +1,7 @@
 package com.devminds.casasync
 
+import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -10,8 +12,23 @@ import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
 import com.devminds.casasync.fragments.DepFragment
 import com.devminds.casasync.fragments.HomeFragment
+import java.util.Locale
 
 class HomeActivity : AppCompatActivity() {
+
+    override fun attachBaseContext(newBase: Context) {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(newBase)
+        val lang = prefs.getString("app_language", "")
+
+        val locale = if (lang.isNullOrEmpty()) Locale.getDefault() else Locale(lang)
+        Locale.setDefault(locale)
+
+        val config = Configuration(newBase.resources.configuration)
+        config.setLocale(locale)
+
+        val context = newBase.createConfigurationContext(config)
+        super.attachBaseContext(context)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
