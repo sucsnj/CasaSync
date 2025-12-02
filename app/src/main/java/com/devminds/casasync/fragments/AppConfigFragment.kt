@@ -21,6 +21,21 @@ class AppConfigFragment : BaseFragment(R.layout.fragment_config_app) {
     private lateinit var switchAlarms: SwitchMaterial
     private lateinit var switchBiometrics: SwitchMaterial
 
+    private fun toggleTheme() {
+        val prefs: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
+        val isDarkMode = prefs.getBoolean("dark_mode", false)
+
+        if (isDarkMode) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            prefs.edit().putBoolean("dark_mode", false).apply()
+            Toast.makeText(requireContext(), "Tema claro ativado", Toast.LENGTH_SHORT).show()
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            prefs.edit().putBoolean("dark_mode", true).apply()
+            Toast.makeText(requireContext(), "Tema escuro ativado", Toast.LENGTH_SHORT).show()
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -41,8 +56,7 @@ class AppConfigFragment : BaseFragment(R.layout.fragment_config_app) {
 
         // listeners
         btnChangeTheme.setOnClickListener {
-            Toast.makeText(requireContext(), "Alterar tema", Toast.LENGTH_SHORT).show()
-            // TODO: implementar lógica de troca de tema (ex: AppCompatDelegate)
+            toggleTheme()
         }
 
         btnChangeLanguage.setOnClickListener {
