@@ -9,7 +9,8 @@
     </style>
     <style name="BotaoAzulClaro">
         <item name="android:backgroundTint">?attr/colorPrimary</item>
-        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="android:textColor">@color/primary_text_color</item>
+        <item name="iconTint">@android:color/white</item>
     </style>
     <style name="CustomDialog" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
         <!-- Remove completamente o fundo padrão -->
@@ -26,11 +27,11 @@
     </style>
     <style name="ToolbarTitleStyleMain" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
         <item name="android:textSize">26sp</item>
-        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="android:textColor">@color/primary_text_color</item>
     </style>
     <style name="ToolbarSubTitleStyleMain" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
         <item name="android:textSize">18sp</item>
-        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="android:textColor">@color/secundary_text_color</item>
     </style>
     <style name="DialogToastAnimation">
         <item name="android:windowEnterAnimation">@anim/fade_in_scale</item>

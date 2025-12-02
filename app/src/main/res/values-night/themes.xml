@@ -1,10 +1,16 @@
 <resources>
     <style name="Base.Theme.CasaSync" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="android:textColorPrimary">@color/text_primary</item>
-        <item name="android:textColorHint">@color/text_hint</item>
 
         <item name="colorPrimary">@color/notch</item>
-        <item name="android:colorBackground">@color/branco</item>
+        <item name="colorOnPrimary">@color/branco</item>
+        <item name="colorSurface">@color/branco</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+        <item name="android:colorBackground">?attr/colorSurface</item>
+
+        <item name="colorControlNormal">@android:color/white</item>
+        <item name="colorControlActivated">@android:color/white</item>
+        <item name="colorControlHighlight">@android:color/white</item>
+
     </style>
 
     <style name="Theme.CasaSync" parent="Base.Theme.CasaSync" />

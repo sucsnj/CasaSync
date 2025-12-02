@@ -1,16 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Fundo e contraste -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="branco">#FFFFFF</color>
+
+    <!-- Azul e cinzas adaptados -->
     <color name="azul_escuro">#072f63</color>
+    <color name="azul_cris">#9BE6FB</color>
     <color name="cinza">#A5A4AA</color>
     <color name="cinza_claro">#C7C7CA</color>
-    <color name="branco">#FFFFFF</color>
-    <color name="azul_cris">#9BE6FB</color>
-    <color name="toast_background">#333333</color>
+
+    <!-- Elementos de destaque -->
     <color name="notch">#2471FF</color>
+    <color name="toast_background">#333333</color>
+
+    <!-- Texto adaptado para fundo escuro -->
     <color name="text_primary">#212121</color>
     <color name="text_hint">#616161</color>
+
+    <!-- Outros -->
     <color name="google_btn_bg">#DADCE0</color>
     <color name="tobpar_items">#EEEEEE</color>
+    <color name="button_background">#FFFFFF</color>
+    <color name="primary_text_color">#EEEEEE</color>
+    <color name="secundary_text_color">#EEEEEE</color>
 </resources>

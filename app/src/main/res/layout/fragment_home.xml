@@ -119,6 +119,7 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.98" />
 
+    <!-- cor forçada no drawable -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnAddHouse"
         style="@style/BotaoAzulClaro"

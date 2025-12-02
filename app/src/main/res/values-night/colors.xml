@@ -22,4 +22,7 @@
     <!-- Outros -->
     <color name="google_btn_bg">#444444</color>
     <color name="tobpar_items">#333333</color>
+    <color name="button_background">#2C2C2C</color>
+    <color name="primary_text_color">#EEEEEE</color>
+    <color name="secundary_text_color">#EEEEEE</color>
 </resources>

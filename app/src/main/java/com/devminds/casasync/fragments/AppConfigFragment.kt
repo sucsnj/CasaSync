@@ -3,7 +3,6 @@ package com.devminds.casasync.fragments
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import com.devminds.casasync.R
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
@@ -11,6 +10,7 @@ import com.google.android.material.switchmaterial.SwitchMaterial
 import androidx.appcompat.app.AppCompatDelegate
 import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
+import androidx.core.content.edit
 
 class AppConfigFragment : BaseFragment(R.layout.fragment_config_app) {
 
@@ -27,11 +27,11 @@ class AppConfigFragment : BaseFragment(R.layout.fragment_config_app) {
 
         if (isDarkMode) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            prefs.edit().putBoolean("dark_mode", false).apply()
+            prefs.edit { putBoolean("dark_mode", false) }
             Toast.makeText(requireContext(), "Tema claro ativado", Toast.LENGTH_SHORT).show()
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            prefs.edit().putBoolean("dark_mode", true).apply()
+            prefs.edit { putBoolean("dark_mode", true) }
             Toast.makeText(requireContext(), "Tema escuro ativado", Toast.LENGTH_SHORT).show()
         }
     }
@@ -40,7 +40,7 @@ class AppConfigFragment : BaseFragment(R.layout.fragment_config_app) {
         super.onViewCreated(view, savedInstanceState)
 
         // toolbar - cabeçalho
-        toolbar = view.findViewById(R.id.topBarSettings)
+        toolbar = view.findViewById(R.id.topBar)
         toolbar.setNavigationOnClickListener {
             parentFragmentManager.popBackStack()
         }
