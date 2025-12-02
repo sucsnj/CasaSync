@@ -221,4 +221,11 @@
     <string name="password_alert">A senha deve conter pelo menos 4 caracteres</string>
     <string name="dependent_name_alert">Digite um nome para o dependente</string>
 
+    <string name="settings">Configurações</string>
+    <string name="change_theme">Mudar Tema</string>
+    <string name="change_language">Mudar Idioma</string>
+    <string name="enable_notifications">Habilitar Notificações</string>
+    <string name="enable_alarms">Habilitar Alarmes</string>
+    <string name="enable_biometrics">Habilitar Biometria</string>
+
 </resources>
