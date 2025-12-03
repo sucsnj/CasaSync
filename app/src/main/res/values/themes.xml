@@ -7,9 +7,9 @@
         <item name="colorOnSurface">@color/text_primary</item>
         <item name="android:colorBackground">?attr/colorSurface</item>
 
-        <item name="colorControlNormal">@android:color/white</item>
+        <!-- <item name="colorControlNormal">@android:color/white</item>
         <item name="colorControlActivated">@android:color/white</item>
-        <item name="colorControlHighlight">@android:color/white</item>
+        <item name="colorControlHighlight">@android:color/white</item> -->
 
     </style>
 
