@@ -57,7 +57,7 @@ class AppConfigFragment : BaseFragment(R.layout.fragment_config_app) {
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
             if (granted) {
                 // permissão concedida
-                // DialogUtils.showMessage(requireContext(), getString(R.string.notification_permission_granted))
+                DialogUtils.showMessage(requireContext(), getString(R.string.notification_permission_granted))
             } else {
                 // Permissão negada
                 DialogUtils.showMessage(requireContext(), getString(R.string.notification_permission_denied))
@@ -172,14 +172,14 @@ class AppConfigFragment : BaseFragment(R.layout.fragment_config_app) {
         switchNotifications.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    // em que pedir permissão para android 13+
+                    // tem que pedir permissão para android 13+
                     if (PermissionHelper.hasNotificationPermission(requireContext())) {
-                        DialogUtils.showMessage(requireContext(), getString(R.string.notification_permission_granted))
+                        // DialogUtils.showMessage(requireContext(), getString(R.string.notification_permission_granted))
                     } else {
                         requestNotificationPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
                     }
                 } else {
-                    DialogUtils.showMessage(requireContext(), getString(R.string.notification_permission_granted))
+                    // DialogUtils.showMessage(requireContext(), getString(R.string.notification_permission_granted))
                 }
             } else {
                 val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
