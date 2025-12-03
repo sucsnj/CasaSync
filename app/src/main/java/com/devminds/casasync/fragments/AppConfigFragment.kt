@@ -20,6 +20,10 @@ import com.devminds.casasync.utils.PermissionHelper
 import android.content.Intent
 import android.provider.Settings
 import androidx.core.net.toUri
+import android.content.res.Resources
+import android.content.Context
+import android.content.res.Configuration
+import java.util.Locale
 
 class AppConfigFragment : BaseFragment(R.layout.fragment_config_app) {
 
@@ -102,7 +106,7 @@ class AppConfigFragment : BaseFragment(R.layout.fragment_config_app) {
         switchAlarms = view.findViewById(R.id.switchAlarms)
         switchBiometrics = view.findViewById(R.id.switchBiometrics)
 
-        // listeners
+        // muda o tema do app (claro/escuro)
         btnChangeTheme.setOnClickListener {
             toggleTheme()
         }

@@ -13,6 +13,7 @@ import androidx.preference.PreferenceManager
 import com.devminds.casasync.fragments.DepFragment
 import com.devminds.casasync.fragments.HomeFragment
 import java.util.Locale
+import android.content.res.Resources
 
 class HomeActivity : AppCompatActivity() {
 
@@ -20,7 +21,13 @@ class HomeActivity : AppCompatActivity() {
         val prefs = PreferenceManager.getDefaultSharedPreferences(newBase)
         val lang = prefs.getString("app_language", "")
 
-        val locale = if (lang.isNullOrEmpty()) Locale.getDefault() else Locale(lang)
+        val locale = if (lang.isNullOrEmpty()) {
+            // idioma padrão do sistema
+            Resources.getSystem().configuration.locales[0]
+        } else {
+            Locale(lang)
+        }
+
         Locale.setDefault(locale)
 
         val config = Configuration(newBase.resources.configuration)
