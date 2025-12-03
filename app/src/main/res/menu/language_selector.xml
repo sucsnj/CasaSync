@@ -7,6 +7,15 @@
         android:id="@+id/lang_en"
         android:title="English (US)" />
     <item
+        android:id="@+id/lang_es"
+        android:title="Espanish (ES)" />
+    <item
+        android:id="@+id/lang_zh"
+        android:title="Chinaaa (ZH)" />
+    <item
+        android:id="@+id/lang_ja"
+        android:title="Criiiiis (JA)" />
+    <item
         android:id="@+id/lang_default"
         android:title="Default (System)" />
 </menu>

@@ -57,7 +57,7 @@ class AppConfigFragment : BaseFragment(R.layout.fragment_config_app) {
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
             if (granted) {
                 // permissão concedida
-                DialogUtils.showMessage(requireContext(), getString(R.string.notification_permission_granted))
+                // DialogUtils.showMessage(requireContext(), getString(R.string.notification_permission_granted))
             } else {
                 // Permissão negada
                 DialogUtils.showMessage(requireContext(), getString(R.string.notification_permission_denied))
@@ -122,6 +122,24 @@ class AppConfigFragment : BaseFragment(R.layout.fragment_config_app) {
                     R.id.lang_en -> {
                         saveLanguage("en")
                         DialogUtils.showMessage(requireContext(), "Language changed to English")
+                        requireActivity().recreate()
+                        true
+                    }
+                    R.id.lang_es -> {
+                        saveLanguage("es")
+                        DialogUtils.showMessage(requireContext(), "Idioma cambiado a español")
+                        requireActivity().recreate()
+                        true
+                    }
+                    R.id.lang_zh -> {
+                        saveLanguage("zh")
+                        DialogUtils.showMessage(requireContext(), "语言已更改为简体中文")
+                        requireActivity().recreate()
+                        true
+                    }
+                    R.id.lang_ja -> {
+                        saveLanguage("ja")
+                        DialogUtils.showMessage(requireContext(), "言語がポルトガル語に変更されました")
                         requireActivity().recreate()
                         true
                     }

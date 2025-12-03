@@ -1,0 +1,237 @@
+<resources>
+    <!-- App -->
+    <string name="app_name">CasaSync</string>
+    <string name="text_powered_by_devminds">Powered by DevMinds</string>
+
+    <!-- Login -->
+    <string name="login_email_prompt">Ingrese su correo electrónico</string>
+    <string name="login_email_confirm_prompt">Confirme su correo electrónico</string>
+    <string name="login_password_prompt">Ingrese su contraseña</string>
+    <string name="login_password_confirm_prompt">Confirme su contraseña</string>
+    <string name="login_button">Acceder</string>
+    <string name="login_google_button">Ingresar con Google</string>
+    <string name="login_success_message">¡Inicio de sesión realizado con éxito!</string>
+    <string name="login_error_message">Error al iniciar sesión. Verifique sus credenciales.</string>
+    <string name="login_empty_message">¡Complete los campos de inicio de sesión!</string>
+    <string name="login_exists_message">Este usuario ya está registrado. ¡Pruebe con otro correo!</string>
+    <string name="login_account_text">¿Ya tiene cuenta?</string>
+    <string name="login_account_button"><u>¡Inicie sesión!</u></string>
+    <string name="login_forgot_password_text">¿Olvidó su contraseña?</string>
+
+    <!-- Registro -->
+    <string name="new_user_text">Nuevo usuario</string>
+    <string name="personal_data_text">Datos Personales</string>
+    <string name="new_account_text">¿Aún no tiene una cuenta?</string>
+    <string name="new_account_button"><u>¡Regístrese!</u></string>
+    <string name="new_account_success_message">¡Registro realizado con éxito!</string>
+    <string name="new_account_error_message">Error al registrarse. Verifique los datos ingresados.</string>
+
+    <!-- Recuperación -->
+    <string name="recovery_title_text">Recuperar Contraseña</string>
+    <string name="recovery_validate_button">Validar</string>
+    <string name="recovery_change_password_button">Cambiar Contraseña</string>
+    <string name="recovery_new_password_prompt">Ingrese su nueva contraseña</string>
+    <string name="recovery_login_found_message">¡Usuario encontrado!</string>
+    <string name="recovery_login_not_found_message">¡Usuario no encontrado!</string>
+    <string name="recovery_login_empty_message">¡Complete el campo de usuario!</string>
+    <string name="recovery_password_changed_message">¡Contraseña cambiada!</string>
+    <string name="recovery_password_empty_message">¡Ingrese una nueva contraseña!</string>
+
+    <!-- Información del Usuario -->
+    <string name="user_name_prompt">Ingrese su nombre completo</string>
+    <string name="user_photo_description">Foto del usuario</string>
+    <string name="user_welcome_text">Bienvenido, </string>
+    <string name="user_name_text">Gandalf</string>
+    <string name="user_birthdate_prompt">Fecha de Nacimiento</string>
+    <string name="gender_male_text">Masculino</string>
+    <string name="gender_female_text">Femenino</string>
+    <string name="gender_other_text">Otro</string>
+    <string name="user_phone_prompt">Teléfono de Contacto</string>
+
+    <!-- Dirección -->
+    <string name="address_title_text">Dirección</string>
+    <string name="address_cep_prompt">Código postal de su dirección</string>
+    <string name="address_street_prompt">Calle/Avenida</string>
+    <string name="address_city_prompt">Nombre de la Ciudad</string>
+    <string name="address_district_prompt">Nombre del Barrio</string>
+    <string name="address_number_prompt">Número de la dirección</string>
+    <string name="address_complement_prompt">Complemento (casa, apartamento…)</string>
+
+    <!-- Casa -->
+    <string name="new_house_button">Agregar Casa</string>
+    <string name="house_name_prompt">Nombre de la Casa</string>
+    <string name="house_image_description">Imagen de la Casa</string>
+    <string name="house_enter_text">Está en la casa, </string>
+    <string name="house_name_text">Bolsão</string>
+
+    <!-- Tarea -->
+    <string name="new_task_button">Agregar Tarea</string>
+    <string name="task_name_prompt">Nombre de la Tarea</string>
+
+    <!-- Dependiente -->
+    <string name="new_dependent_button">Agregar Dependiente</string>
+    <string name="dependent_name_prompt">Nombre</string>
+    <string name="dependent_email_prompt">Correo electrónico</string>
+    <string name="dependent_passcode_prompt">Contraseña</string>
+
+    <!-- Botones -->
+    <string name="button_add">Agregar</string>
+    <string name="button_cancel">Cancelar</string>
+    <string name="button_accept_terms">Aceptar Términos de uso</string>
+    <string name="button_decline_terms">Rechazar Términos de uso</string>
+    <string name="button_admin">Responsable</string>
+    <string name="button_dependent">Dependiente</string>
+    <string name="register_buttom">Registrar</string>
+
+    <!-- Textos UI -->
+    <string name="text_enter">Ingresar</string>
+    <string name="text_or">O</string>
+    <string name="config_title_text">Configuraciones</string>
+    <string name="contact_security_title_text">Contacto y Seguridad</string>
+
+    <!-- Imágenes -->
+    <string name="image_logo_devminds_description">Logo de DevMinds</string>
+    <string name="image_logo_google_description">Logo de Google</string>
+    <string name="image_logo_casasync_description">Logo de CasaSync</string>
+
+    <!-- Varios -->
+    <string name="text_never_reached">_Nunca llegará aquí_</string>
+    <string name="text_main_screen">para bienes solo en medio de la pantalla</string>
+    <string name="rename_dialog">Renombrar</string>
+    <string name="delete_dialog">Eliminar</string>
+
+    <string name="house_options">Opciones para la casa: </string>
+    <string name="rename_success_house_toast">Casa renombrada</string>
+
+    <string name="dependent_options">Opciones para el dependiente: </string>
+    <string name="rename_success_dependent_toast">Dependiente renombrado</string>
+
+    <string name="task_options">Opciones para la tarea: </string>
+    <string name="rename_success_task_toast">Tarea renombrada</string>
+
+    <string name="accept_dialog">Aceptar</string>
+    <string name="cancel_dialog">Cancelar</string>
+    <string name="confirm_delete_dialog">¿Realmente desea eliminar:&#160;</string>
+    <string name="question_mark">\?</string>
+    <string name="success_delete_dialog">, eliminado con éxito!</string>
+    <string name="devminds_text">DevMinds</string>
+    <string name="welcome_text">Hola,&#160;</string>
+    <string name="button_back">Volver</string>
+    <string name="tasks_to">"Tareas para&#160;"</string>
+    <string name="task_name">Nombre de la tarea</string>
+    <string name="task_description">Descripción de la tarea</string>
+    <string name="add_task_dialog">Agregar nueva tarea</string>
+    <string name="invalid_house_name">Ingrese un nombre válido</string>
+    <string name="btn_add_dependent">Agregar nuevo dependiente</string>
+    <string name="to_do">¿Qué hacer?\n%s</string>
+    <string name="add_new_house">Agregar nueva casa</string>
+    <string name="house_name">Nombre de la casa</string>
+
+    <string name="devminds_team_description">DevMinds es un grupo creado en la facultad Nova Roma con el propósito de transformar ideas en soluciones reales. En busca de innovación y practicidad, desarrollamos una aplicación móvil pensada para facilitar el día a día de las personas. Nuestra solución organiza las tareas domésticas de forma simple, inteligente y eficiente, ayudando a los usuarios a tener más control, productividad y tranquilidad en la rutina.
+Con tecnología, creatividad y trabajo en equipo, DevMinds nace para impactar vidas y hacer el cotidiano más ligero.</string>
+
+    <string name="casasync_app_description">Desarrollamos una aplicación móvil innovadora, creada para transformar la forma en que se organizan las tareas domésticas. Nuestra solución combina practicidad y tecnología para hacer el día a día más simple, productivo y eficiente. Con una interfaz intuitiva y recursos pensados para facilitar la rutina, la aplicación ayuda a los usuarios a mantener todo bajo control, evitando olvidos y haciendo la división de las tareas mucho más clara y organizada.
+sobre la aplicación.</string>
+
+    <string name="dev_name1">Anthony Rychard</string>
+    <string name="dev_link1">https://github.com/Ryuki49</string>
+    <string name="dev_name2">Alyson Thadeu</string>
+    <string name="dev_link2">https://github.com/AlysonThadeu</string>
+    <string name="dev_name3">Carlos Santana</string>
+    <string name="dev_link3">https://github.com/sucsnj</string>
+    <string name="dev_name4">Edvan Cordeiro</string>
+    <string name="dev_link4">https://github.com/Edvan-Junior</string>
+    <string name="dev_name5">Rogens Rocha</string>
+    <string name="dev_link5">https://github.com/RogensRocha</string>
+
+    <string name="prevision_date">Fecha prevista</string>
+    <string name="prevision_hour">Hora prevista</string>
+    <string name="finish_dialog">Concluir tarea</string>
+    <string name="default_web_client_id">941068486881-41jjnlij8guqt6ofuliia3sh9pue8mvq.apps.googleusercontent.com</string>
+    <string name="finished">Concluido</string>
+    <string name="snackbar_icon">Ícono del Snackbar</string>
+    <string name="item_name">Nombre del ítem</string>
+    <string name="user_info">Información del usuario</string>
+    <string name="app_info">Información de la aplicación</string>
+    <string name="task">Tarea</string>
+    <string name="depentent">Dependientes</string>
+    <string name="add_dependent">Agregar Dependiente</string>
+    <string name="user_picture">Foto del usuario</string>
+    <string name="hi_user">Hola, Gandalf</string>
+    <string name="user_profile">Mi Perfil</string>
+    <string name="add_house">Agregar Casa</string>
+    <string name="dependent_picture">Foto del dependiente</string>
+    <string name="tasks">Tareas</string>
+    <string name="add_task">Agregar Tarea</string>
+    <string name="dependent">Dependiente</string>
+    <string name="description_here">Descripción aquí</string>
+    <string name="creation_date">Fecha de creación</string>
+    <string name="date">fecha</string>
+    <string name="prevision_conclusion_date">Fecha prevista de conclusión</string>
+    <string name="hour">Hora</string>
+    <string name="conclusion_date">Fecha de conclusión</string>
+    <string name="save_changes">Guardar cambios</string>
+    <string name="start_date">Fecha de inicio</string>
+    <string name="icon_biometric">Imagen de biometría</string>
+    <string name="login_with_biometric">Ingresar con biometría</string>
+    <string name="details">Haga clic para ver detalles</string>
+    <string name="item_image">Imagen del ítem</string>
+    <string name="loading">Cargando...</string>
+    <string name="starting_app">Iniciando aplicación</string>
+    <string name="no_connection">Sin conexión a internet.</string>
+    <string name="auth_success">¡Autenticación exitosa!</string>
+    <string name="auth_fail">La autenticación falló.</string>
+    <string name="unexpected_credential">Error: Tipo de credencial inesperado.</string>
+    <string name="auth_google_error">Error en la autenticación con Google.</string>
+    <string name="less_than_one_hour">Menos de una hora para concluir</string>
+    <string name="less_than_one_day">Menos de un día para concluir</string>
+    <string name="task_finished">Tarea concluida</string>
+    <string name="same_email">Correo ya registrado</string>
+    <string name="all_fields_warning">Complete todos los campos</string>
+    <string name="house_id_not_found_error">Error: ID de la casa no encontrado.</string>
+    <string name="dependent_added">Dependiente agregado</string>
+    <string name="created_house">Casa creada</string>
+    <string name="dependent_id_not_found_error">Error: ID del dependiente no encontrado.</string>
+    <string name="select_expected_date">Seleccione la fecha prevista de conclusión</string>
+    <string name="select_expected_hour">Seleccione la hora prevista de conclusión</string>
+    <string name="created_task">Tarea creada</string>
+    <string name="not_finished">No concluido</string>
+    <string name="no_hour">Sin hora</string>
+    <string name="expected_date">Fecha prevista de conclusión</string>
+    <string name="expected_hour">Hora prevista de conclusión</string>
+    <string name="task_saved">¡Tarea guardada con éxito!</string>
+    <string name="notification_permission_granted">Permiso de notificaciones concedido</string>
+    <string name="notification_permission_denied">Permiso de notificaciones denegado</string>
+    <string name="logout_prompt_confirm">¿Realmente desea cerrar sesión?</string>
+    <string name="yes">Sí</string>
+    <string name="no">No</string>
+    <string name="dependent_name_error">Ingrese un nombre para el dependiente</string>
+    <string name="viewPass">Contraseña actual</string>
+    <string name="dependent_passcode_error">Ingrese una contraseña</string>
+    <string name="user_or_dependent">¿Administrador o Dependiente?</string>
+    <string name="user_not_found">¡Ningún usuario encontrado!</string>
+    <string name="open">Abrir</string>
+    <string name="new_task_text">¡Tienes una nueva tarea!</string>
+    <string name="modified_task_text">Una tarea fue modificada</string>
+    <string name="removed_task_text">Una tarea fue eliminada</string>
+    <string name="no_description">Sin descripción</string>
+    <string name="edit_description">Editar descripción</string>
+    <string name="save_dialog">Guardar</string>
+    <string name="permission_denied">No tienes permiso para editar esto</string>
+    <string name="user">Usuario</string>
+    <string name="administrator">Administrador</string>
+    <string name="user_type_select">Seleccione el tipo de usuario</string>
+    <string name="login_chars">Login (De 4 a 6 caracteres)</string>
+    <string name="login_exists">El login ya existe</string>
+    <string name="login_chars_alert">El login debe tener de 4 a 6 caracteres</string>
+    <string name="password_alert">La contraseña debe contener al menos 4 caracteres</string>
+    <string name="dependent_name_alert">Ingrese un nombre para el dependiente</string>
+
+    <string name="settings">Configuraciones</string>
+    <string name="change_theme">Cambiar tema</string>
+    <string name="change_language">Cambiar idioma</string>
+    <string name="enable_notifications">Habilitar notificaciones</string>
+    <string name="enable_alarms">Habilitar alarmas</string>
+    <string name="enable_biometrics">Habilitar biometría</string>
+
+</resources>

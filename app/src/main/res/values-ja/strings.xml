@@ -1,0 +1,237 @@
+<resources>
+    <!-- App -->
+    <string name="app_name">CasaSync</string>
+    <string name="text_powered_by_devminds">Powered by DevMinds</string>
+
+
+    <string name="login_email_prompt">メールアドレスを入力してください</string>
+    <string name="login_email_confirm_prompt">メールアドレスを確認してください</string>
+    <string name="login_password_prompt">パスワードを入力してください</string>
+    <string name="login_password_confirm_prompt">パスワードを確認してください</string>
+    <string name="login_button">アクセス</string>
+    <string name="login_google_button">Googleでログイン</string>
+    <string name="login_success_message">ログインに成功しました！</string>
+    <string name="login_error_message">ログインエラー。認証情報を確認してください。</string>
+    <string name="login_empty_message">ログイン項目を入力してください！</string>
+    <string name="login_exists_message">このユーザーはすでに登録されています。別のメールを試してください！</string>
+    <string name="login_account_text">すでにアカウントをお持ちですか？</string>
+    <string name="login_account_button"><u>ログインする！</u></string>
+    <string name="login_forgot_password_text">パスワードを忘れましたか？</string>
+
+    <!-- 登録 -->
+    <string name="new_user_text">新規ユーザー</string>
+    <string name="personal_data_text">個人情報</string>
+    <string name="new_account_text">まだアカウントをお持ちでないですか？</string>
+    <string name="new_account_button"><u>登録する！</u></string>
+    <string name="new_account_success_message">登録に成功しました！</string>
+    <string name="new_account_error_message">登録エラー。入力した情報を確認してください。</string>
+
+    <!-- パスワード回復 -->
+    <string name="recovery_title_text">パスワードを回復</string>
+    <string name="recovery_validate_button">確認</string>
+    <string name="recovery_change_password_button">パスワードを変更</string>
+    <string name="recovery_new_password_prompt">新しいパスワードを入力してください</string>
+    <string name="recovery_login_found_message">ログインが見つかりました！</string>
+    <string name="recovery_login_not_found_message">ログインが見つかりません！</string>
+    <string name="recovery_login_empty_message">ログイン項目を入力してください！</string>
+    <string name="recovery_password_changed_message">パスワードが変更されました！</string>
+    <string name="recovery_password_empty_message">新しいパスワードを入力してください！</string>
+
+    <!-- ユーザー情報 -->
+    <string name="user_name_prompt">氏名を入力してください</string>
+    <string name="user_photo_description">ユーザーの写真</string>
+    <string name="user_welcome_text">ようこそ、</string>
+    <string name="user_name_text">Gandalf</string>
+    <string name="user_birthdate_prompt">生年月日</string>
+    <string name="gender_male_text">男性</string>
+    <string name="gender_female_text">女性</string>
+    <string name="gender_other_text">その他</string>
+    <string name="user_phone_prompt">連絡先電話番号</string>
+
+    <!-- 住所 -->
+    <string name="address_title_text">住所</string>
+    <string name="address_cep_prompt">郵便番号</string>
+    <string name="address_street_prompt">通り/道路/大通り</string>
+    <string name="address_city_prompt">市の名前</string>
+    <string name="address_district_prompt">地区の名前</string>
+    <string name="address_number_prompt">住所番号</string>
+    <string name="address_complement_prompt">補足（家、アパートなど）</string>
+
+    <!-- 家 -->
+    <string name="new_house_button">家を追加</string>
+    <string name="house_name_prompt">家の名前</string>
+    <string name="house_image_description">家の画像</string>
+    <string name="house_enter_text">あなたは家にいます、</string>
+    <string name="house_name_text">Bolsão</string>
+
+    <!-- タスク -->
+    <string name="new_task_button">タスクを追加</string>
+    <string name="task_name_prompt">タスク名</string>
+
+    <!-- 家族 -->
+    <string name="new_dependent_button">家族を追加</string>
+    <string name="dependent_name_prompt">名前</string>
+    <string name="dependent_email_prompt">メール</string>
+    <string name="dependent_passcode_prompt">パスワード</string>
+
+    <!-- ボタン -->
+    <string name="button_add">追加</string>
+    <string name="button_cancel">キャンセル</string>
+    <string name="button_accept_terms">利用規約に同意</string>
+    <string name="button_decline_terms">利用規約を拒否</string>
+    <string name="button_admin">管理者</string>
+    <string name="button_dependent">家族</string>
+    <string name="register_buttom">登録</string>
+
+    <!-- UI テキスト -->
+    <string name="text_enter">入る</string>
+    <string name="text_or">または</string>
+    <string name="config_title_text">設定</string>
+    <string name="contact_security_title_text">連絡先とセキュリティ</string>
+
+    <!-- 画像 -->
+    <string name="image_logo_devminds_description">DevMinds ロゴ</string>
+    <string name="image_logo_google_description">Google ロゴ</string>
+    <string name="image_logo_casasync_description">CasaSync ロゴ</string>
+
+    <!-- その他 -->
+    <string name="text_never_reached">_ここには決して到達しない_</string>
+    <string name="text_main_screen">画面中央にのみ表示</string>
+    <string name="rename_dialog">名前を変更</string>
+    <string name="delete_dialog">削除</string>
+
+    <string name="house_options">家のオプション：</string>
+    <string name="rename_success_house_toast">家の名前が変更されました</string>
+
+    <string name="dependent_options">家族のオプション：</string>
+    <string name="rename_success_dependent_toast">家族の名前が変更されました</string>
+
+    <string name="task_options">タスクのオプション：</string>
+    <string name="rename_success_task_toast">タスクの名前が変更されました</string>
+
+    <string name="accept_dialog">同意</string>
+    <string name="cancel_dialog">キャンセル</string>
+    <string name="confirm_delete_dialog">本当に削除しますか：&#160;</string>
+    <string name="question_mark">\?</string>
+    <string name="success_delete_dialog">、正常に削除されました！</string>
+    <string name="devminds_text">DevMinds</string>
+    <string name="welcome_text">こんにちは、&#160;</string>
+    <string name="button_back">戻る</string>
+    <string name="tasks_to">"タスク：&#160;"</string>
+    <string name="task_name">タスク名</string>
+    <string name="task_description">タスクの説明</string>
+    <string name="add_task_dialog">新しいタスクを追加</string>
+    <string name="invalid_house_name">有効な名前を入力してください</string>
+    <string name="btn_add_dependent">新しい家族を追加</string>
+    <string name="to_do">何をしますか？\n%s</string>
+    <string name="add_new_house">新しい家を追加</string>
+    <string name="house_name">家の名前</string>
+
+    <string name="devminds_team_description">DevMinds は Nova Roma 大学で設立されたグループで、アイデアを現実のソリューションに変えることを目的としています。革新と実用性を追求し、人々の日常生活を便利にするために設計されたモバイルアプリを開発しました。私たちのソリューションは、家庭のタスクをシンプルでスマートかつ効率的に整理し、ユーザーが日常生活でより多くのコントロール、生産性、安心を得られるようにします。
+技術、創造性、チームワークを通じて、DevMinds は生活に影響を与え、日常をより軽くします。</string>
+
+    <string name="casasync_app_description">私たちは家庭のタスクの整理方法を変革するために作られた革新的なモバイルアプリを開発しました。私たちのソリューションは、実用性と技術を組み合わせ、日常生活をよりシンプルで生産的かつ効率的にします。直感的なインターフェースと日常を便利にするために考えられた機能により、ユーザーがすべてを管理し、忘れ物を防ぎ、タスクの分担をより明確で整理されたものにします。
+アプリについて。</string>
+
+    <string name="dev_name1">Anthony Rychard</string>
+    <string name="dev_link1">https://github.com/Ryuki49</string>
+    <string name="dev_name2">Alyson Thadeu</string>
+    <string name="dev_link2">https://github.com/AlysonThadeu</string>
+    <string name="dev_name3">Carlos Santana</string>
+    <string name="dev_link3">https://github.com/sucsnj</string>
+    <string name="dev_name4">Edvan Cordeiro</string>
+    <string name="dev_link4">https://github.com/Edvan-Junior</string>
+    <string name="dev_name5">Rogens Rocha</string>
+    <string name="dev_link5">https://github.com/RogensRocha</string>
+
+    <string name="prevision_date">予定日</string>
+    <string name="prevision_hour">予定時間</string>
+    <string name="finish_dialog">タスクを完了</string>
+    <string name="default_web_client_id">941068486881-41jjnlij8guqt6ofuliia3sh9pue8mvq.apps.googleusercontent.com</string>
+    <string name="finished">完了</string>
+    <string name="snackbar_icon">Snackbar アイコン</string>
+    <string name="item_name">アイテム名</string>
+    <string name="user_info">ユーザー情報</string>
+    <string name="app_info">アプリ情報</string>
+    <string name="task">タスク</string>
+    <string name="depentent">家族</string>
+    <string name="add_dependent">家族を追加</string>
+    <string name="user_picture">ユーザーの写真</string>
+    <string name="hi_user">こんにちは、Gandalf</string>
+    <string name="user_profile">マイプロフィール</string>
+    <string name="add_house">家を追加</string>
+    <string name="dependent_picture">家族の写真</string>
+    <string name="tasks">タスク</string>
+    <string name="add_task">タスクを追加</string>
+    <string name="dependent">家族</string>
+    <string name="description_here">ここに説明</string>
+    <string name="creation_date">作成日</string>
+    <string name="date">日付</string>
+    <string name="prevision_conclusion_date">予定完了日</string>
+    <string name="hour">時間</string>
+    <string name="conclusion_date">完了日</string>
+    <string name="save_changes">変更を保存</string>
+    <string name="start_date">開始日</string>
+    <string name="icon_biometric">生体認証画像</string>
+    <string name="login_with_biometric">生体認証でログイン</string>
+    <string name="details">詳細を見るにはクリック</string>
+    <string name="item_image">アイテム画像</string>
+    <string name="loading">読み込み中...</string>
+    <string name="starting_app">アプリを起動中</string>
+    <string name="no_connection">インターネットに接続されていません。</string>
+    <string name="auth_success">認証に成功しました！</string>
+    <string name="auth_fail">認証に失敗しました。</string>
+    <string name="unexpected_credential">エラー：予期しない認証タイプ。</string>
+    <string name="auth_google_error">Google 認証エラー。</string>
+    <string name="less_than_one_hour">完了まで1時間未満</string>
+    <string name="less_than_one_day">完了まで1日未満</string>
+    <string name="task_finished">タスク完了</string>
+    <string name="same_email">メールはすでに登録されています</string>
+    <string name="all_fields_warning">すべての項目を入力してください</string>
+    <string name="house_id_not_found_error">エラー：家のIDが見つかりません。</string>
+    <string name="dependent_added">家族が追加されました</string>
+    <string name="created_house">家が作成されました</string>
+    <string name="dependent_id_not_found_error">エラー：家族のIDが見つかりません。</string>
+    <string name="select_expected_date">予定完了日を選択してください</string>
+    <string name="select_expected_hour">予定完了時間を選択してください</string>
+    <string name="created_task">タスクが作成されました</string>
+    <string name="not_finished">未完了</string>
+    <string name="no_hour">時間なし</string>
+    <string name="expected_date">予定完了日</string>
+    <string name="expected_hour">予定完了時間</string>
+    <string name="task_saved">タスクが正常に保存されました！</string>
+    <string name="notification_permission_granted">通知の許可が与えられました</string>
+    <string name="notification_permission_denied">通知の許可が拒否されました</string>
+    <string name="logout_prompt_confirm">本当にログアウトしますか？</string>
+    <string name="yes">はい</string>
+    <string name="no">いいえ</string>
+    <string name="dependent_name_error">家族の名前を入力してください</string>
+    <string name="viewPass">現在のパスワード</string>
+    <string name="dependent_passcode_error">パスワードを入力してください</string>
+    <string name="user_or_dependent">管理者または家族？</string>
+    <string name="user_not_found">ユーザーが見つかりません！</string>
+    <string name="open">開く</string>
+    <string name="new_task_text">新しいタスクがあります！</string>
+    <string name="modified_task_text">タスクが変更されました</string>
+    <string name="removed_task_text">タスクが削除されました</string>
+    <string name="no_description">説明なし</string>
+    <string name="edit_description">説明を編集</string>
+    <string name="save_dialog">保存</string>
+    <string name="permission_denied">これを編集する権限がありません</string>
+    <string name="user">ユーザー</string>
+    <string name="administrator">管理者</string>
+    <string name="user_type_select">ユーザータイプを選択してください</string>
+    <string name="login_chars">ログイン（4〜6文字）</string>
+    <string name="login_exists">ログインはすでに存在します</string>
+    <string name="login_chars_alert">ログインは4〜6文字でなければなりません</string>
+    <string name="password_alert">パスワードは少なくとも4文字必要です</string>
+    <string name="dependent_name_alert">家族の名前を入力してください</string>
+
+    <string name="settings">設定</string>
+    <string name="change_theme">テーマを変更</string>
+    <string name="change_language">言語を変更</string>
+    <string name="enable_notifications">通知を有効にする</string>
+    <string name="enable_alarms">アラームを有効にする</string>
+    <string name="enable_biometrics">生体認証を有効にする</string>
+
+</resources>

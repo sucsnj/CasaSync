@@ -1,0 +1,238 @@
+<resources>
+    <!-- App -->
+    <string name="app_name">CasaSync</string>
+    <string name="text_powered_by_devminds">Powered by DevMinds</string>
+
+    <!-- Login -->
+        <!-- 登录 -->
+    <string name="login_email_prompt">请输入您的邮箱</string>
+    <string name="login_email_confirm_prompt">请确认您的邮箱</string>
+    <string name="login_password_prompt">请输入您的密码</string>
+    <string name="login_password_confirm_prompt">请确认您的密码</string>
+    <string name="login_button">登录</string>
+    <string name="login_google_button">使用 Google 登录</string>
+    <string name="login_success_message">登录成功！</string>
+    <string name="login_error_message">登录失败。请检查您的凭证。</string>
+    <string name="login_empty_message">请填写登录信息！</string>
+    <string name="login_exists_message">该用户已注册。请尝试其他邮箱！</string>
+    <string name="login_account_text">已有账号？</string>
+    <string name="login_account_button"><u>立即登录！</u></string>
+    <string name="login_forgot_password_text">忘记密码？</string>
+
+    <!-- 注册 -->
+    <string name="new_user_text">新用户</string>
+    <string name="personal_data_text">个人资料</string>
+    <string name="new_account_text">还没有账号？</string>
+    <string name="new_account_button"><u>立即注册！</u></string>
+    <string name="new_account_success_message">注册成功！</string>
+    <string name="new_account_error_message">注册失败。请检查输入的数据。</string>
+
+    <!-- 找回密码 -->
+    <string name="recovery_title_text">找回密码</string>
+    <string name="recovery_validate_button">验证</string>
+    <string name="recovery_change_password_button">更改密码</string>
+    <string name="recovery_new_password_prompt">请输入新密码</string>
+    <string name="recovery_login_found_message">找到用户！</string>
+    <string name="recovery_login_not_found_message">未找到用户！</string>
+    <string name="recovery_login_empty_message">请填写登录信息！</string>
+    <string name="recovery_password_changed_message">密码已更改！</string>
+    <string name="recovery_password_empty_message">请输入新密码！</string>
+
+    <!-- 用户信息 -->
+    <string name="user_name_prompt">请输入您的全名</string>
+    <string name="user_photo_description">用户照片</string>
+    <string name="user_welcome_text">欢迎，</string>
+    <string name="user_name_text">Gandalf</string>
+    <string name="user_birthdate_prompt">出生日期</string>
+    <string name="gender_male_text">男</string>
+    <string name="gender_female_text">女</string>
+    <string name="gender_other_text">其他</string>
+    <string name="user_phone_prompt">联系电话</string>
+
+    <!-- 地址 -->
+    <string name="address_title_text">地址</string>
+    <string name="address_cep_prompt">邮政编码</string>
+    <string name="address_street_prompt">街道/大道</string>
+    <string name="address_city_prompt">城市名称</string>
+    <string name="address_district_prompt">区/社区名称</string>
+    <string name="address_number_prompt">门牌号</string>
+    <string name="address_complement_prompt">补充信息（房屋、公寓…）</string>
+
+    <!-- 房屋 -->
+    <string name="new_house_button">添加房屋</string>
+    <string name="house_name_prompt">房屋名称</string>
+    <string name="house_image_description">房屋图片</string>
+    <string name="house_enter_text">您在房屋中，</string>
+    <string name="house_name_text">Bolsão</string>
+
+    <!-- 任务 -->
+    <string name="new_task_button">添加任务</string>
+    <string name="task_name_prompt">任务名称</string>
+
+    <!-- 家属 -->
+    <string name="new_dependent_button">添加家属</string>
+    <string name="dependent_name_prompt">姓名</string>
+    <string name="dependent_email_prompt">邮箱</string>
+    <string name="dependent_passcode_prompt">密码</string>
+
+    <!-- 按钮 -->
+    <string name="button_add">添加</string>
+    <string name="button_cancel">取消</string>
+    <string name="button_accept_terms">接受使用条款</string>
+    <string name="button_decline_terms">拒绝使用条款</string>
+    <string name="button_admin">负责人</string>
+    <string name="button_dependent">家属</string>
+    <string name="register_buttom">注册</string>
+
+    <!-- 界面文本 -->
+    <string name="text_enter">进入</string>
+    <string name="text_or">或</string>
+    <string name="config_title_text">设置</string>
+    <string name="contact_security_title_text">联系方式与安全</string>
+
+    <!-- 图片 -->
+    <string name="image_logo_devminds_description">DevMinds 标志</string>
+    <string name="image_logo_google_description">Google 标志</string>
+    <string name="image_logo_casasync_description">CasaSync 标志</string>
+
+    <!-- 杂项 -->
+    <string name="text_never_reached">_永远不会到这里_</string>
+    <string name="text_main_screen">仅在屏幕中央显示</string>
+    <string name="rename_dialog">重命名</string>
+    <string name="delete_dialog">删除</string>
+
+    <string name="house_options">房屋选项：</string>
+    <string name="rename_success_house_toast">房屋已重命名</string>
+
+    <string name="dependent_options">家属选项：</string>
+    <string name="rename_success_dependent_toast">家属已重命名</string>
+
+    <string name="task_options">任务选项：</string>
+    <string name="rename_success_task_toast">任务已重命名</string>
+
+    <string name="accept_dialog">接受</string>
+    <string name="cancel_dialog">取消</string>
+    <string name="confirm_delete_dialog">确定要删除：&#160;</string>
+    <string name="question_mark">\?</string>
+    <string name="success_delete_dialog">，已成功删除！</string>
+    <string name="devminds_text">DevMinds</string>
+    <string name="welcome_text">你好，&#160;</string>
+    <string name="button_back">返回</string>
+    <string name="tasks_to">"任务给&#160;"</string>
+    <string name="task_name">任务名称</string>
+    <string name="task_description">任务描述</string>
+    <string name="add_task_dialog">添加新任务</string>
+    <string name="invalid_house_name">请输入有效的名称</string>
+    <string name="btn_add_dependent">添加新家属</string>
+    <string name="to_do">要做什么？\n%s</string>
+    <string name="add_new_house">添加新房屋</string>
+    <string name="house_name">房屋名称</string>
+
+    <string name="devminds_team_description">DevMinds 是在 Nova Roma 学院成立的一个团队，旨在将创意转化为现实解决方案。为了追求创新和实用性，我们开发了一款移动应用，旨在让人们的日常生活更轻松。我们的解决方案以简单、智能和高效的方式组织家庭任务，帮助用户在日常生活中获得更多控制力、生产力和安心。
+凭借技术、创造力和团队合作，DevMinds 致力于影响生活，让日常更轻松。</string>
+
+    <string name="casasync_app_description">我们开发了一款创新的移动应用，旨在改变家庭任务的组织方式。我们的解决方案结合了实用性和技术，使日常生活更简单、更高效。凭借直观的界面和贴心的功能，该应用帮助用户保持一切井井有条，避免遗忘，使任务分配更加清晰和有序。
+关于该应用。</string>
+
+        <string name="dev_name1">Anthony Rychard</string>
+    <string name="dev_link1">https://github.com/Ryuki49</string>
+    <string name="dev_name2">Alyson Thadeu</string>
+    <string name="dev_link2">https://github.com/AlysonThadeu</string>
+    <string name="dev_name3">Carlos Santana</string>
+    <string name="dev_link3">https://github.com/sucsnj</string>
+    <string name="dev_name4">Edvan Cordeiro</string>
+    <string name="dev_link4">https://github.com/Edvan-Junior</string>
+    <string name="dev_name5">Rogens Rocha</string>
+    <string name="dev_link5">https://github.com/RogensRocha</string>
+
+    <string name="prevision_date">预计日期</string>
+    <string name="prevision_hour">预计时间</string>
+    <string name="finish_dialog">完成任务</string>
+    <string name="default_web_client_id">941068486881-41jjnlij8guqt6ofuliia3sh9pue8mvq.apps.googleusercontent.com</string>
+    <string name="finished">已完成</string>
+    <string name="snackbar_icon">Snackbar 图标</string>
+    <string name="item_name">项目名称</string>
+    <string name="user_info">用户信息</string>
+    <string name="app_info">应用信息</string>
+    <string name="task">任务</string>
+    <string name="depentent">家属</string>
+    <string name="add_dependent">添加家属</string>
+    <string name="user_picture">用户照片</string>
+    <string name="hi_user">你好，Gandalf</string>
+    <string name="user_profile">我的资料</string>
+    <string name="add_house">添加房屋</string>
+    <string name="dependent_picture">家属照片</string>
+    <string name="tasks">任务</string>
+    <string name="add_task">添加任务</string>
+    <string name="dependent">家属</string>
+    <string name="description_here">在此输入描述</string>
+    <string name="creation_date">创建日期</string>
+    <string name="date">日期</string>
+    <string name="prevision_conclusion_date">预计完成日期</string>
+    <string name="hour">时间</string>
+    <string name="conclusion_date">完成日期</string>
+    <string name="save_changes">保存更改</string>
+    <string name="start_date">开始日期</string>
+    <string name="icon_biometric">生物识别图像</string>
+    <string name="login_with_biometric">使用生物识别登录</string>
+    <string name="details">点击查看详情</string>
+    <string name="item_image">项目图片</string>
+    <string name="loading">加载中...</string>
+    <string name="starting_app">启动应用</string>
+    <string name="no_connection">没有网络连接。</string>
+    <string name="auth_success">认证成功！</string>
+    <string name="auth_fail">认证失败。</string>
+    <string name="unexpected_credential">错误：凭证类型异常。</string>
+    <string name="auth_google_error">Google 认证错误。</string>
+    <string name="less_than_one_hour">少于一小时完成</string>
+    <string name="less_than_one_day">少于一天完成</string>
+    <string name="task_finished">任务已完成</string>
+    <string name="same_email">邮箱已注册</string>
+    <string name="all_fields_warning">请填写所有字段</string>
+    <string name="house_id_not_found_error">错误：未找到房屋 ID。</string>
+    <string name="dependent_added">家属已添加</string>
+    <string name="created_house">房屋已创建</string>
+    <string name="dependent_id_not_found_error">错误：未找到家属 ID。</string>
+    <string name="select_expected_date">请选择预计完成日期</string>
+    <string name="select_expected_hour">请选择预计完成时间</string>
+    <string name="created_task">任务已创建</string>
+    <string name="not_finished">未完成</string>
+    <string name="no_hour">无时间</string>
+    <string name="expected_date">预计完成日期</string>
+    <string name="expected_hour">预计完成时间</string>
+    <string name="task_saved">任务已成功保存！</string>
+    <string name="notification_permission_granted">通知权限已授予</string>
+    <string name="notification_permission_denied">通知权限已拒绝</string>
+    <string name="logout_prompt_confirm">确定要退出登录吗？</string>
+    <string name="yes">是</string>
+    <string name="no">否</string>
+    <string name="dependent_name_error">请输入家属姓名</string>
+    <string name="viewPass">当前密码</string>
+    <string name="dependent_passcode_error">请输入密码</string>
+    <string name="user_or_dependent">管理员或家属？</string>
+    <string name="user_not_found">未找到用户！</string>
+    <string name="open">打开</string>
+    <string name="new_task_text">您有一个新任务！</string>
+    <string name="modified_task_text">任务已修改</string>
+    <string name="removed_task_text">任务已删除</string>
+    <string name="no_description">无描述</string>
+    <string name="edit_description">编辑描述</string>
+    <string name="save_dialog">保存</string>
+    <string name="permission_denied">您没有权限编辑此项</string>
+    <string name="user">用户</string>
+    <string name="administrator">管理员</string>
+    <string name="user_type_select">请选择用户类型</string>
+    <string name="login_chars">登录（4 到 6 个字符）</string>
+    <string name="login_exists">登录已存在</string>
+    <string name="login_chars_alert">登录必须有 4 到 6 个字符</string>
+    <string name="password_alert">密码必须至少包含 4 个字符</string>
+    <string name="dependent_name_alert">请输入家属姓名</string>
+
+    <string name="settings">设置</string>
+    <string name="change_theme">更改主题</string>
+    <string name="change_language">更改语言</string>
+    <string name="enable_notifications">启用通知</string>
+    <string name="enable_alarms">启用提醒</string>
+    <string name="enable_biometrics">启用生物识别</string>
+
+</resources>
