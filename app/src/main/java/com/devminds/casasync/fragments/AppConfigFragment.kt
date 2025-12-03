@@ -147,6 +147,12 @@ class AppConfigFragment : BaseFragment(R.layout.fragment_config_app) {
                         requireActivity().recreate()
                         true
                     }
+                    R.id.lang_qy -> {
+                        saveLanguage("qy")
+                        DialogUtils.showMessage(requireContext(), "Texto em Quenya")
+                        requireActivity().recreate()
+                        true
+                    }
                     R.id.lang_default -> {
                         saveLanguage("") // vazio = padrão do sistema
                         DialogUtils.showMessage(requireContext(), "Idioma padrão do sistema")

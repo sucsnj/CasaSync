@@ -16,6 +16,9 @@
         android:id="@+id/lang_ja"
         android:title="Criiiiis (JA)" />
     <item
+        android:id="@+id/lang_qy"
+        android:title="Quenya (QY)" />
+    <item
         android:id="@+id/lang_default"
         android:title="Default (System)" />
 </menu>

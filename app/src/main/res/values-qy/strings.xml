@@ -1,0 +1,235 @@
+<resources>
+    <!-- App -->
+    <string name="app_name">CasaSync</string>
+    <string name="text_powered_by_devminds">Powered by DevMinds</string>
+
+    <!-- Login -->
+        <!-- Login -->
+    <string name="login_email_prompt">Tulta i correo</string>
+    <string name="login_email_confirm_prompt">Tulta ata i correo</string>
+    <string name="login_password_prompt">Tulta i nórëa</string>
+    <string name="login_password_confirm_prompt">Tulta ata i nórëa</string>
+    <string name="login_button">Anta</string>
+    <string name="login_google_button">Anta as Google</string>
+    <string name="login_success_message">Anta carna!</string>
+    <string name="login_error_message">Faila anta. Tiro i nórëa.</string>
+    <string name="login_empty_message">Náquetë i campo anta!</string>
+    <string name="login_exists_message">Usuário ná quetië. Yesta correo!</string>
+    <string name="login_account_text">Ná quetië?</string>
+    <string name="login_account_button">Carë anta!</string>
+    <string name="login_forgot_password_text">Úharya i nórëa?</string>
+
+    <!-- Cadastro -->
+    <string name="new_user_text">Usuário yára</string>
+    <string name="personal_data_text">Nórëa quetië</string>
+    <string name="new_account_text">Úcarë quetië?</string>
+    <string name="new_account_button">Yesta quetië!</string>
+    <string name="new_account_success_message">Quetië carna!</string>
+    <string name="new_account_error_message">Faila quetië. Tiro i nórëa.</string>
+
+    <!-- Recovery -->
+    <string name="recovery_title_text">Nórëa envinyata</string>
+    <string name="recovery_validate_button">Tiro</string>
+    <string name="recovery_change_password_button">Envinyata nórëa</string>
+    <string name="recovery_new_password_prompt">Tulta nórëa envinyata</string>
+    <string name="recovery_login_found_message">Anta hiritë!</string>
+    <string name="recovery_login_not_found_message">Anta úhiritë!</string>
+    <string name="recovery_login_empty_message">Náquetë i campo anta!</string>
+    <string name="recovery_password_changed_message">Nórëa envinyata!</string>
+    <string name="recovery_password_empty_message">Tulta nórëa envinyata!</string>
+
+    <!-- User Info -->
+    <string name="user_name_prompt">Tulta i essë</string>
+    <string name="user_photo_description">Atya quetië</string>
+    <string name="user_welcome_text">Aiya, </string>
+    <string name="user_name_text">Gandalf</string>
+    <string name="user_birthdate_prompt">Nóre lúmë</string>
+    <string name="gender_male_text">Nér</string>
+    <string name="gender_female_text">Nís</string>
+    <string name="gender_other_text">Elda</string>
+    <string name="user_phone_prompt">Tulta i palantír</string>
+
+    <!-- Address -->
+    <string name="address_title_text">Nóre</string>
+    <string name="address_cep_prompt">Nóre cépa</string>
+    <string name="address_street_prompt">Tië</string>
+    <string name="address_city_prompt">Ostë</string>
+    <string name="address_district_prompt">Nóre</string>
+    <string name="address_number_prompt">Nóre namba</string>
+    <string name="address_complement_prompt">Nóre úvë</string>
+
+    <!-- House -->
+    <string name="new_house_button">Anta coië</string>
+    <string name="house_name_prompt">Essë coië</string>
+    <string name="house_image_description">Coië calima</string>
+    <string name="house_enter_text">Ná coië, </string>
+    <string name="house_name_text">Bolsão</string>
+
+    <!-- Task -->
+    <string name="new_task_button">Anta carmë</string>
+    <string name="task_name_prompt">Essë carmë</string>
+
+    <!-- Dependent -->
+    <string name="new_dependent_button">Anta úvë</string>
+    <string name="dependent_name_prompt">Essë</string>
+    <string name="dependent_email_prompt">Correo</string>
+    <string name="dependent_passcode_prompt">Nórëa</string>
+
+    <!-- Buttons -->
+    <string name="button_add">Anta</string>
+    <string name="button_cancel">Avatyar</string>
+    <string name="button_accept_terms">Anta nórëa</string>
+    <string name="button_decline_terms">Avatyar nórëa</string>
+    <string name="button_admin">Herenya</string>
+    <string name="button_dependent">Úvë</string>
+    <string name="register_buttom">Quetië</string>
+
+    <!-- UI Texts -->
+    <string name="text_enter">Anta</string>
+    <string name="text_or">Nai</string>
+    <string name="config_title_text">Nórëa</string>
+    <string name="contact_security_title_text">Hlarë ar varna</string>
+
+    <!-- Images -->
+    <string name="image_logo_devminds_description">Logo DevMinds</string>
+    <string name="image_logo_google_description">Logo Google</string>
+    <string name="image_logo_casasync_description">Logo CasaSync</string>
+
+    <!-- Misc -->
+    <string name="text_never_reached">Úvë hiritë</string>
+    <string name="text_main_screen">Ná mi etë</string>
+    <string name="rename_dialog">Náquetë</string>
+    <string name="delete_dialog">Avatyar</string>
+
+    <string name="house_options">Nórëa coië: </string>
+    <string name="rename_success_house_toast">Coië náquetë</string>
+
+    <string name="dependent_options">Nórëa úvë: </string>
+    <string name="rename_success_dependent_toast">Úvë náquetë</string>
+
+    <string name="task_options">Nórëa carmë: </string>
+    <string name="rename_success_task_toast">Carmë náquetë</string>
+
+    <string name="accept_dialog">Anta</string>
+    <string name="cancel_dialog">Avatyar</string>
+    <string name="confirm_delete_dialog">Nai avatyar:&#160;</string>
+    <string name="question_mark">\?</string>
+    <string name="success_delete_dialog">, avatyar carna!</string>
+    <string name="devminds_text">DevMinds</string>
+    <string name="welcome_text">Aiya,&#160;</string>
+    <string name="button_back">Náquetë</string>
+    <string name="tasks_to">Carmë nai&#160;</string>
+    <string name="task_name">Essë carmë</string>
+    <string name="task_description">Quetië carmë</string>
+    <string name="add_task_dialog">Anta carmë vinya</string>
+    <string name="invalid_house_name">Tulta essë valin</string>
+    <string name="btn_add_dependent">Anta úvë vinya</string>
+    <string name="to_do">Mana carë?\n%s</string>
+    <string name="add_new_house">Anta coië vinya</string>
+    <string name="house_name">Essë coië</string>
+
+    
+    <!-- Descrições -->
+    <string name="devminds_team_description">DevMinds ná ohtari quetië mi Parma Nova Roma, náquetë i nórëa ar carmë mir anwa. Mi hirë vinya ar mára, carilma appa mir palantír, antaina mir alya lúmë Eldaron. I nórëa colla carmë coië mir alya, intya ar mára, auta Eldar harya mára turë, carmë ar sérë mi lúmë. Mi lambe, óre ar ohtari, DevMinds náquetë mir hiritë coivië ar alya lúmë.</string>
+
+    <string name="casasync_app_description">Carilma appa mir palantír vinya, náquetë mir hiritë carmë coië. I nórëa colla mára ar lambe, auta lúmë alya, turë ar mára. Mi cendelë alya ar nórëa antaina mir alya lúmë, i appa auta Eldar harya ilya mir turë, avatyar úquetië ar auta carmë mir calima ar alya.</string>
+
+    <!-- Desenvolvedores -->
+    <string name="dev_name1">Anthony Rychard</string>
+    <string name="dev_link1">https://github.com/Ryuki49</string>
+    <string name="dev_name2">Alyson Thadeu</string>
+    <string name="dev_link2">https://github.com/AlysonThadeu</string>
+    <string name="dev_name3">Carlos Santana</string>
+    <string name="dev_link3">https://github.com/sucsnj</string>
+    <string name="dev_name4">Edvan Cordeiro</string>
+    <string name="dev_link4">https://github.com/Edvan-Junior</string>
+    <string name="dev_name5">Rogens Rocha</string>
+    <string name="dev_link5">https://github.com/RogensRocha</string>
+
+    <!-- Datas e Horas -->
+    <string name="prevision_date">Rámar náquetë</string>
+    <string name="prevision_hour">Lúmë náquetë</string>
+    <string name="finish_dialog">Carmë telwa</string>
+    <string name="finished">Telwa</string>
+    <string name="creation_date">Rámar carmë</string>
+    <string name="date">Rámar</string>
+    <string name="hour">Lúmë</string>
+    <string name="conclusion_date">Rámar telwa</string>
+    <string name="start_date">Rámar yesta</string>
+    <string name="expected_date">Rámar náquetë telwa</string>
+    <string name="expected_hour">Lúmë náquetë telwa</string>
+    <string name="prevision_conclusion_date">Rámar náquetë telwa</string>
+
+    <!-- UI -->
+    <string name="snackbar_icon">Cenda Snackbar</string>
+    <string name="item_name">Essë nóre</string>
+    <string name="user_info">Nórëa Eldo</string>
+    <string name="app_info">Nórëa Appa</string>
+    <string name="task">Carmë</string>
+    <string name="depentent">Úvë</string>
+    <string name="add_dependent">Anta Úvë</string>
+    <string name="user_picture">Cenda Eldo</string>
+    <string name="hi_user">Aiya, Gandalf</string>
+    <string name="user_profile">Nórëa nórëa</string>
+    <string name="add_house">Anta Coië</string>
+    <string name="dependent_picture">Cenda Úvë</string>
+    <string name="tasks">Carmi</string>
+    <string name="add_task">Anta Carmë</string>
+    <string name="dependent">Úvë</string>
+    <string name="description_here">Quetië sí</string>
+    <string name="save_changes">Harya envinyata</string>
+    <string name="details">Cenda mir tirë quetië</string>
+    <string name="item_image">Cenda nóre</string>
+    <string name="loading">Náquetë...</string>
+    <string name="starting_app">Yesta Appa</string>
+    <string name="no_connection">Úharya net.</string>
+
+    <!-- Autenticação -->
+    <string name="auth_success">Anta mára!</string>
+    <string name="auth_fail">Anta úmára.</string>
+    <string name="unexpected_credential">Faila: Nórëa úharya.</string>
+    <string name="auth_google_error">Faila anta as Google.</string>
+
+    <!-- Mensagens -->
+    <string name="less_than_one_hour">Nai úmë lúmë telwa</string>
+    <string name="less_than_one_day">Nai úmë aurë telwa</string>
+    <string name="task_finished">Carmë telwa</string>
+    <string name="same_email">Correo náquetë</string>
+    <string name="all_fields_warning">Náquetë ilya campo</string>
+    <string name="dependent_added">Úvë antaina</string>
+    <string name="created_house">Coië carna</string>
+    <string name="created_task">Carmë carna</string>
+    <string name="not_finished">Útelwa</string>
+    <string name="no_hour">Úlúmë</string>
+    <string name="task_saved">Carmë harya mára!</string>
+    <string name="notification_permission_granted">Nórëa cenda antaina</string>
+    <string name="notification_permission_denied">Nórëa cenda avatyar</string>
+    <string name="logout_prompt_confirm">Nai auta?</string>
+    <string name="yes">Nai</string>
+    <string name="no">Ú</string>
+    <string name="open">Panta</string>
+    <string name="new_task_text">Nai carmë vinya!</string>
+    <string name="modified_task_text">Carmë envinyata</string>
+    <string name="removed_task_text">Carmë avatyar</string>
+    <string name="no_description">Úquetië</string>
+    <string name="edit_description">Envinyata quetië</string>
+    <string name="save_dialog">Harya</string>
+    <string name="permission_denied">Úharya nórëa</string>
+    <string name="user">Elda</string>
+    <string name="administrator">Herenya</string>
+    <string name="user_type_select">Nai Eldo nórëa</string>
+    <string name="login_chars">Anta (4–6 cenda)</string>
+    <string name="login_exists">Anta náquetë</string>
+    <string name="login_chars_alert">Anta náquetë 4–6 cenda</string>
+    <string name="password_alert">Nórëa náquetë 4 cenda</string>
+    <string name="dependent_name_alert">Náquetë essë Úvë</string>
+
+    <!-- Configurações -->
+    <string name="settings">Nórëa</string>
+    <string name="change_theme">Envinyata cendelë</string>
+    <string name="change_language">Envinyata lambe</string>
+    <string name="enable_notifications">Anta cenda</string>
+    <string name="enable_alarms">Anta cenda lúmë</string>
+    <string name="enable_biometrics">Anta biometria</string>
+
+</resources>
