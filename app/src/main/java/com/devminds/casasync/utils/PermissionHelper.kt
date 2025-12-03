@@ -51,11 +51,18 @@ object PermissionHelper {
                 Manifest.permission.POST_NOTIFICATIONS
             ) == PackageManager.PERMISSION_GRANTED
         } else {
-            // Em versões anteriores não precisa pedir permissão
             true
         }
     }
 
+    fun hasExactAlarmPermission(context: Context): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            alarmManager.canScheduleExactAlarms()
+        } else {
+            true
+        }
+    }
 
     // gerencia o resultado da solicitação de permissão
     fun handlePermissionResult(
@@ -66,10 +73,6 @@ object PermissionHelper {
         if (requestCode == 1001) {
             val granted = grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED
             val message = if (granted) {
-                // chama outra permissão que só funciona com base na anterior
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    checkAndRequestExactAlarmPermission(context)
-                }
                 context.getString(R.string.notification_permission_granted)
             } else {
                 context.getString(R.string.notification_permission_denied)

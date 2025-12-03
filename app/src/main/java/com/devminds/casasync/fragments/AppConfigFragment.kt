@@ -17,6 +17,9 @@ import androidx.core.content.edit
 import androidx.appcompat.widget.PopupMenu
 import com.devminds.casasync.utils.DialogUtils
 import com.devminds.casasync.utils.PermissionHelper
+import android.content.Intent
+import android.provider.Settings
+import androidx.core.net.toUri
 
 class AppConfigFragment : BaseFragment(R.layout.fragment_config_app) {
 
@@ -49,19 +52,37 @@ class AppConfigFragment : BaseFragment(R.layout.fragment_config_app) {
         }
     }
 
+    // registra o pedido de permissão para notificações
     private val requestNotificationPermission =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
             if (granted) {
-                // Permissão concedida
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    PermissionHelper.checkAndRequestExactAlarmPermission(requireContext())
-                }
+                // permissão concedida
                 DialogUtils.showMessage(requireContext(), getString(R.string.notification_permission_granted))
             } else {
                 // Permissão negada
                 DialogUtils.showMessage(requireContext(), getString(R.string.notification_permission_denied))
             }
         }
+
+    // registra o pedido de permissão para alarmes
+    private val requestAlarmPermission =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+            if (granted) {
+                // permissão concedida
+                DialogUtils.showMessage(requireContext(), "Permissão de alarmes concedida")
+            } else {
+                // Permissão negada
+                DialogUtils.showMessage(requireContext(), "Permissão de alarmes negada")
+            }
+        }
+
+    override fun onResume() {
+        super.onResume()
+        // muda o switch de notificações conforme a permissão atual
+        switchNotifications.isChecked = PermissionHelper.hasNotificationPermission(requireContext())
+        // muda o swtich de alarmes conforme a permissão atual
+        switchAlarms.isChecked = PermissionHelper.hasExactAlarmPermission(requireContext())
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -116,28 +137,54 @@ class AppConfigFragment : BaseFragment(R.layout.fragment_config_app) {
             popup.show()
         }
 
+        // aqui fica o estado salvo do switch de notificações, alarmes // e biometria
+        val prefs = PreferenceManager.getDefaultSharedPreferences(requireContext())
+        val enabledNotifications = prefs.getBoolean("notifications_enabled", false)
+        val enableAlarms = prefs.getBoolean("alarms_enabled", false)
+        // val enableBiometrics = prefs.getBoolean("biometrics_enabled", false)
+
+        // verifica se a permissão foi dada 
+        val hasPermission = PermissionHelper.hasNotificationPermission(requireContext())
+        val hasAlarmPermission = PermissionHelper.hasExactAlarmPermission(requireContext())
+
+        // muda o estado do switch
+        switchNotifications.isChecked = enabledNotifications && hasPermission
+
+        // botão para mudar o estado do switch de notificações
         switchNotifications.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    // Android 13+: precisa pedir permissão
+                    // em que pedir permissão para android 13+
                     if (PermissionHelper.hasNotificationPermission(requireContext())) {
                         DialogUtils.showMessage(requireContext(), getString(R.string.notification_permission_granted))
                     } else {
                         requestNotificationPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
                     }
                 } else {
-                    // Android 12 ou inferior: já tem permissão por padrão
                     DialogUtils.showMessage(requireContext(), getString(R.string.notification_permission_granted))
                 }
             } else {
+                val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
+                    putExtra(Settings.EXTRA_APP_PACKAGE, requireContext().packageName)
+                }
+                startActivity(intent)
+
                 DialogUtils.showMessage(requireContext(), getString(R.string.notification_permission_denied))
             }
         }
 
+        switchAlarms.isChecked = enableAlarms && hasAlarmPermission
+
+        // botão para mudar o estado do switch de alarmes
         switchAlarms.setOnCheckedChangeListener { _, isChecked ->
-            DialogUtils.showMessage(requireContext(),
-                if (isChecked) "Alarmes ativados" else "Alarmes desativados")
-            PermissionHelper.checkAndRequestExactAlarmPermission(requireContext())
+            if (isChecked) {
+                PermissionHelper.checkAndRequestExactAlarmPermission(requireContext())
+            } else {
+                val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM).apply {
+                    data = "package:${requireContext().packageName}".toUri()
+                }
+                startActivity(intent)
+            }
         }
 
         switchBiometrics.setOnCheckedChangeListener { _, isChecked ->

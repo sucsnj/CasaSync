@@ -48,11 +48,6 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
-        // pedido de permissão para notificações
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            PermissionHelper.checkAndRequestPostNotificationPermission(this)
-        }
     }
 
     // verifica se a permissão de notificação foi dada
