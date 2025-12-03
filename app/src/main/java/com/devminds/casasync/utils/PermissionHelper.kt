@@ -64,6 +64,18 @@ object PermissionHelper {
         }
     }
 
+    @Suppress("unused") //@TODO uso futuro
+    fun hasBiometricPermission(context: Context): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.USE_BIOMETRIC
+            ) == PackageManager.PERMISSION_GRANTED
+        } else {
+            true
+        }
+    }
+
     // gerencia o resultado da solicitação de permissão
     fun handlePermissionResult(
         context: Context,

@@ -188,10 +188,11 @@ class AppConfigFragment : BaseFragment(R.layout.fragment_config_app) {
         }
 
         switchBiometrics.setOnCheckedChangeListener { _, isChecked ->
-            Toast.makeText(requireContext(),
-                if (isChecked) "Biometria ativada" else "Biometria desativada",
-                Toast.LENGTH_SHORT).show()
-            // TODO: integrar com BiometricPrompt para autenticação
+            DialogUtils.showMessage(requireContext(), "Funcionalidade de biometria ainda não implementada.")
+
+            // DialogUtils.showMessage(requireContext(),
+            //     if (isChecked) "Biometria ativada" else "Biometria desativada")
+            // @TODO: integrar com BiometricPrompt para autenticação
         }
     }
 }
