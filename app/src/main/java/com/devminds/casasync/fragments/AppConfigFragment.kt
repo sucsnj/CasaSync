@@ -1,6 +1,6 @@
 package com.devminds.casasync.fragments
 
-import android.content.Context
+import android.Manifest
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -10,12 +10,13 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.switchmaterial.SwitchMaterial
 import androidx.appcompat.app.AppCompatDelegate
 import android.content.SharedPreferences
-import android.content.res.Configuration
+import android.os.Build
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.preference.PreferenceManager
 import androidx.core.content.edit
-import java.util.Locale
 import androidx.appcompat.widget.PopupMenu
-
+import com.devminds.casasync.utils.DialogUtils
+import com.devminds.casasync.utils.PermissionHelper
 
 class AppConfigFragment : BaseFragment(R.layout.fragment_config_app) {
 
@@ -48,6 +49,20 @@ class AppConfigFragment : BaseFragment(R.layout.fragment_config_app) {
         }
     }
 
+    private val requestNotificationPermission =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+            if (granted) {
+                // Permissão concedida
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    PermissionHelper.checkAndRequestExactAlarmPermission(requireContext())
+                }
+                DialogUtils.showMessage(requireContext(), getString(R.string.notification_permission_granted))
+            } else {
+                // Permissão negada
+                DialogUtils.showMessage(requireContext(), getString(R.string.notification_permission_denied))
+            }
+        }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -79,19 +94,19 @@ class AppConfigFragment : BaseFragment(R.layout.fragment_config_app) {
                 when (item.itemId) {
                     R.id.lang_pt -> {
                         saveLanguage("pt-BR")
-                        Toast.makeText(requireContext(), "Idioma alterado para Português", Toast.LENGTH_SHORT).show()
+                        DialogUtils.showMessage(requireContext(), "Idioma alterado para Português")
                         requireActivity().recreate()
                         true
                     }
                     R.id.lang_en -> {
                         saveLanguage("en")
-                        Toast.makeText(requireContext(), "Language changed to English", Toast.LENGTH_SHORT).show()
+                        DialogUtils.showMessage(requireContext(), "Language changed to English")
                         requireActivity().recreate()
                         true
                     }
                     R.id.lang_default -> {
                         saveLanguage("") // vazio = padrão do sistema
-                        Toast.makeText(requireContext(), "Idioma padrão do sistema", Toast.LENGTH_SHORT).show()
+                        DialogUtils.showMessage(requireContext(), "Idioma padrão do sistema")
                         requireActivity().recreate()
                         true
                     }
@@ -102,17 +117,27 @@ class AppConfigFragment : BaseFragment(R.layout.fragment_config_app) {
         }
 
         switchNotifications.setOnCheckedChangeListener { _, isChecked ->
-            Toast.makeText(requireContext(),
-                if (isChecked) "Notificações ativadas" else "Notificações desativadas",
-                Toast.LENGTH_SHORT).show()
-            // TODO: pedir permissão de notificações (NotificationManager)
+            if (isChecked) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    // Android 13+: precisa pedir permissão
+                    if (PermissionHelper.hasNotificationPermission(requireContext())) {
+                        DialogUtils.showMessage(requireContext(), getString(R.string.notification_permission_granted))
+                    } else {
+                        requestNotificationPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
+                    }
+                } else {
+                    // Android 12 ou inferior: já tem permissão por padrão
+                    DialogUtils.showMessage(requireContext(), getString(R.string.notification_permission_granted))
+                }
+            } else {
+                DialogUtils.showMessage(requireContext(), getString(R.string.notification_permission_denied))
+            }
         }
 
         switchAlarms.setOnCheckedChangeListener { _, isChecked ->
-            Toast.makeText(requireContext(),
-                if (isChecked) "Alarmes ativados" else "Alarmes desativados",
-                Toast.LENGTH_SHORT).show()
-            // TODO: configurar permissões de alarmes (AlarmManager / ExactAlarmPermission)
+            DialogUtils.showMessage(requireContext(),
+                if (isChecked) "Alarmes ativados" else "Alarmes desativados")
+            PermissionHelper.checkAndRequestExactAlarmPermission(requireContext())
         }
 
         switchBiometrics.setOnCheckedChangeListener { _, isChecked ->

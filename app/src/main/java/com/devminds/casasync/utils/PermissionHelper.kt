@@ -43,6 +43,20 @@ object PermissionHelper {
         }
     }
 
+    // verifica se a permissão de notificação já foi dada
+    fun hasNotificationPermission(context: Context): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED
+        } else {
+            // Em versões anteriores não precisa pedir permissão
+            true
+        }
+    }
+
+
     // gerencia o resultado da solicitação de permissão
     fun handlePermissionResult(
         context: Context,
