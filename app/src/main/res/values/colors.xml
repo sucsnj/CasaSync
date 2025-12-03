@@ -25,4 +25,6 @@
     <color name="button_background">#FFFFFF</color>
     <color name="primary_text_color">#EEEEEE</color>
     <color name="secundary_text_color">#EEEEEE</color>
+
+    <color name="azul_alyson">#CDDAE7</color>
 </resources>

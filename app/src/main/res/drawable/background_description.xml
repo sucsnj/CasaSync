@@ -3,7 +3,7 @@
     android:shape="rectangle">
 
     <!-- Cor de fundo (opcional) -->
-    <solid android:color="#EEEEEE" />
+    <solid android:color="@color/azul_alyson" />
 
     <!-- Borda -->
     <stroke
@@ -11,5 +11,5 @@
         android:color="#9FA6A9" /> <!-- ou qualquer cor que quiser -->
 
     <!-- Cantos arredondados (opcional) -->
-    <corners android:radius="1dp" />
+    <corners android:radius="7dp" />
 </shape>
