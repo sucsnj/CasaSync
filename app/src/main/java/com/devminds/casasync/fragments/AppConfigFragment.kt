@@ -112,8 +112,36 @@ class AppConfigFragment : BaseFragment(R.layout.fragment_config_app) {
         }
 
         btnChangeLanguage.setOnClickListener { anchor ->
+            var easterEgg = false
+            val easterEggChance = (1..10).random()
+            if (easterEggChance == 7) {
+                easterEgg = true
+            }
+
+            val messageEasterEggChance = (1..10).random()
+            if (messageEasterEggChance > 7 && easterEgg) {
+                DialogUtils.showMessage(
+                    requireContext(),
+                    "Os ventos de Aman sussurram: o idioma dos Elfos antigos está ao teu alcance. Quenya se revela."
+                )
+            } else if (messageEasterEggChance < 7 && easterEgg) {
+                DialogUtils.showMessage(
+                    requireContext(),
+                    "A voz dos Valar ecoa: o idioma dos Primogênitos desperta. Quenya está revelado a ti."
+                )
+            } else if (messageEasterEggChance == 7 && easterEgg) {
+                DialogUtils.showMessage(
+                    requireContext(),
+                    "Das terras imortais de Aman, concedemos-te o dom: fala agora a língua dos elfos, o Quenya."
+                )
+            }
+
+            // visiblidade do item de idioma quenya no menu
             val popup = PopupMenu(requireContext(), anchor)
             popup.menuInflater.inflate(R.menu.language_selector, popup.menu)
+            
+            val quenyaItem = popup.menu.findItem(R.id.lang_qy)
+            quenyaItem.isVisible = easterEgg
 
             popup.setOnMenuItemClickListener { item ->
                 when (item.itemId) {
