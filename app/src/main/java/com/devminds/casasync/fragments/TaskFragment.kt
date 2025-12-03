@@ -112,6 +112,16 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
             // agenda notificações
             scheduleTaskNotification(context, taskViewModel)
 
+            // pede permisão para notificação @TODO terminar
+            // if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            //         // tem que pedir permissão para android 13+
+            //     if (PermissionHelper.hasNotificationPermission(requireContext())) {
+            //         DialogUtils.showMessage(requireContext(), getString(R.string.notification_permission_granted))
+            //      } else {
+            //         requestNotificationPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
+            //     }
+            // }
+
             Log.d("TaskFragment", "Sincronizado com sucesso")
         }
     }
