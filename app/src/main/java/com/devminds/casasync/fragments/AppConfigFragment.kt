@@ -119,17 +119,17 @@ class AppConfigFragment : BaseFragment(R.layout.fragment_config_app) {
 
             val messageEasterEggChance = (1..10).random()
             if (messageEasterEggChance > 7 && easterEgg) {
-                DialogUtils.showMessage(
+                DialogUtils.showMessageEasterEgg(
                     requireContext(),
                     getString(R.string.quenya_message1)
                 )
             } else if (messageEasterEggChance < 7 && easterEgg) {
-                DialogUtils.showMessage(
+                DialogUtils.showMessageEasterEgg(
                     requireContext(),
                     getString(R.string.quenya_message2)
                 )
             } else if (messageEasterEggChance == 7 && easterEgg) {
-                DialogUtils.showMessage(
+                DialogUtils.showMessageEasterEgg(
                     requireContext(),
                     getString(R.string.quenya_message3)
                 )

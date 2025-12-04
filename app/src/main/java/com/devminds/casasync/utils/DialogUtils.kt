@@ -115,4 +115,59 @@ object DialogUtils {
             Toast.makeText(context, message, Toast.LENGTH_SHORT).show() // mostra o toast padrão
         }
     }
+
+    fun showMessageEasterEgg(context: Context, message: String) {
+        if (context is Activity) {
+            // fecha qualquer banner ativo antes
+            dismissActiveBanner()
+
+            val dialog = Dialog(context)
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+            dialog.setContentView(R.layout.notification_banner)
+            dialog.setCancelable(false)
+
+            val window = dialog.window
+            window?.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
+            window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            window?.setGravity(Gravity.CENTER_VERTICAL or Gravity.CENTER_HORIZONTAL)
+            window?.addFlags(
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
+                        WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON or
+                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE or
+                        WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+            )
+            window?.setDimAmount(0f)
+            window?.attributes?.windowAnimations = R.style.DialogToastAnimation
+
+            val screenWidth = context.resources.displayMetrics.widthPixels
+            val targetWidth = (screenWidth * 0.60).toInt()
+            val sideMargin = (screenWidth * 0.20).toInt()
+
+            val layout = dialog.findViewById<ConstraintLayout>(R.id.notification_layout)
+            val params = FrameLayout.LayoutParams(targetWidth, ViewGroup.LayoutParams.WRAP_CONTENT)
+            params.leftMargin = sideMargin
+            params.rightMargin = sideMargin
+            params.bottomMargin = Utils.dpToPx(context, 100)
+            layout.layoutParams = params
+
+            val textView = dialog.findViewById<TextView>(R.id.notification_text)
+            val iconView = dialog.findViewById<ImageView>(R.id.notification_icon)
+
+            textView.text = message
+            iconView.setImageResource(R.drawable.casasync) // ícone especial do easter egg
+            iconView.visibility = View.VISIBLE
+
+            // duração fixa de 10 segundos
+            Handler(Looper.getMainLooper()).postDelayed({
+                if (dialog.isShowing && !context.isFinishing && !context.isDestroyed) {
+                    dialog.dismiss()
+                }
+            }, 10_000L)
+
+            currentDialog = dialog
+            dialog.show()
+        } else {
+            Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+        }
+    }
 }
