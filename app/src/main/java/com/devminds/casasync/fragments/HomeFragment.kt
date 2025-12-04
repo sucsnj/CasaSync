@@ -200,7 +200,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
             // estilo do botão "Adicionar"
             dialog.getButton(AlertDialog.BUTTON_POSITIVE)?.apply {
                 setBackgroundResource(R.drawable.button_primary)
-                setTextColor(Color.BLACK)
+                // setTextColor(Color.BLACK)
                 setPadding(40, 12, 40, 12)
                 setOnClickListener {
                     val houseName = input.text.toString().trim()
@@ -233,7 +233,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
             // estilos do botão "Cancelar"
             dialog.getButton(AlertDialog.BUTTON_NEGATIVE)?.apply {
                 setBackgroundResource(R.drawable.button_secondary)
-                setTextColor(Color.BLACK)
+                // setTextColor(Color.BLACK)
                 setPadding(40, 12, 40, 12)
                 setOnClickListener {
                     dialog.dismiss()

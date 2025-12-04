@@ -122,35 +122,38 @@ class AppConfigFragment : BaseFragment(R.layout.fragment_config_app) {
             toggleTheme()
         }
 
+        var easterEggActivator = false
         btnChangeLanguage.setOnClickListener { anchor ->
-            val easterEgg = easterEgg()
-            viewModel.easterEggActive.value = easterEgg
+            var easterEgg = false
+            if (easterEggActivator) {
+                easterEgg = easterEgg()
+                viewModel.easterEggActive.value = easterEgg
 
-            val messageEasterEggChance = (1..10).random()
-            if (messageEasterEggChance > 7 && easterEgg) {
-                DialogUtils.showMessageEasterEgg(
-                    requireContext(),
-                    getString(R.string.quenya_message1)
-                )
-            } else if (messageEasterEggChance < 7 && easterEgg) {
-                DialogUtils.showMessageEasterEgg(
-                    requireContext(),
-                    getString(R.string.quenya_message2)
-                )
-            } else if (messageEasterEggChance == 7 && easterEgg) {
-                DialogUtils.showMessageEasterEgg(
-                    requireContext(),
-                    getString(R.string.quenya_message3)
-                )
+                val messageEasterEggChance = (1..10).random()
+                if (messageEasterEggChance > 7 && easterEgg) {
+                    DialogUtils.showMessageEasterEgg(
+                        requireContext(),
+                        getString(R.string.quenya_message1)
+                    )
+                } else if (messageEasterEggChance < 7 && easterEgg) {
+                    DialogUtils.showMessageEasterEgg(
+                        requireContext(),
+                        getString(R.string.quenya_message2)
+                    )
+                } else if (messageEasterEggChance == 7 && easterEgg) {
+                    DialogUtils.showMessageEasterEgg(
+                        requireContext(),
+                        getString(R.string.quenya_message3)
+                    )
+                }
             }
-
             // visiblidade do item de idioma quenya no menu
             val popup = PopupMenu(requireContext(), anchor)
             popup.menuInflater.inflate(R.menu.language_selector, popup.menu)
             
             val quenyaItem = popup.menu.findItem(R.id.lang_qy)
             quenyaItem.isVisible = easterEgg
-
+            
             popup.setOnMenuItemClickListener { item ->
                 when (item.itemId) {
                     R.id.lang_pt -> {
@@ -201,6 +204,8 @@ class AppConfigFragment : BaseFragment(R.layout.fragment_config_app) {
                 }
             }
             popup.show()
+
+            easterEggActivator = true
         }
 
         // aqui fica o estado salvo do switch de notificações, alarmes // e biometria

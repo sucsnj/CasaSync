@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/dialog_background"
     android:gravity="center_horizontal"
     android:orientation="vertical"
     android:padding="24dp">
@@ -13,7 +12,6 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:text="@string/add_new_house"
-        android:textColor="#1A237E"
         android:textSize="22sp"
         android:textStyle="bold" />
 
@@ -23,12 +21,9 @@
         android:layout_height="48dp"
         android:maxWidth="488dp"
         android:autofillHints="name"
-        android:background="@drawable/edittext_background"
         android:hint="@string/house_name"
         android:inputType="text"
         android:padding="12dp"
-        android:textColorHint="#616161"
-        android:textColor="#0D47A1"
         android:textCursorDrawable="@null"
         android:textSize="16sp" />
 
