@@ -257,4 +257,7 @@
 
     <string name="valaquenta">Mi yesta, Eru, Er ilya, i Quenyallo estaina Ilúvatar, ontanë i Ainur órenyallo; ar te carner Lómië Alcarëa cennerya. Mi i lómië, Ambar cuivë; an Ilúvatar carnë calima i lirë Ainuron, ar te cennerya ve cala mi mornië. Manya te melmarnë i vanessë, ar ilyë quenta, yesta ar vilya cennerya ve cennë mi caita. San Ilúvatar antanë Coivië i caita, ar tulcanë mi Rúmenna; ar Nárë Fëa úvëa tulcanë mi indo Ambaro; ar estaina Eä.</string>
 
+    <string name="invalid_login_message">Úcarë tengwi umë námi nórenna essë</string>
+    <string name="invalid_password_message">Nórenna nwalca mána námi minya 8 tengwi</string>
+
 </resources>

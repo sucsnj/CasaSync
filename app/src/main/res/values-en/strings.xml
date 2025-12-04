@@ -263,4 +263,7 @@ With an intuitive interface and features designed to streamline routines, the ap
 
     <string name="valaquenta">In the beginning, Eru, the One, who in Elvish tongue is called Ilúvatar, made from his thought the Ainur; and they made a great Music before him. In this Music the World began; for Ilúvatar made visible the song of the Ainur, and they beheld it as a light in the darkness. Many among them fell in love with its beauty, and also with its story, whose beginning and unfolding they saw as in a vision. Then Ilúvatar gave Life to that vision and set it amid the Void; and the Secret Fire was sent to burn at the heart of the World; and it was called Eä.</string>
 
+    <string name="invalid_login_message">Special characters are not allowed in the login</string>
+    <string name="invalid_password_message">The password must have at least 8 characters</string>
+
 </resources>

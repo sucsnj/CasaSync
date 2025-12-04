@@ -269,4 +269,7 @@ Com tecnologia, criatividade e trabalho em equipe, o DevMinds nasce para impacta
     no meio do Vazio; e o Fogo Secreto foi enviado para que ardesse no coração do Mundo; e ele se
     chamou Eä.</string>
 
+    <string name="invalid_login_message">Não são permitidos caracteres especiais no login</string>
+    <string name="invalid_password_message">A senha precisa ter no mínimo 8 caractres</string>
+
 </resources>

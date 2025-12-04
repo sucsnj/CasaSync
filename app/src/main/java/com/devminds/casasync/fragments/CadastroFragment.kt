@@ -47,6 +47,28 @@ class CadastroFragment : BaseFragment(R.layout.fragment_cadastro) {
                 val email = newLoginPrompt.text.toString()
                 val password = newPasswordPrompt.text.toString()
 
+                // regex para impedir caracteres inválidos no email
+                val loginRegex = "^[a-zA-Z0-9._-]+$".toRegex()
+
+                // validações
+                if (email.isNotEmpty()) {
+                    if (email.length !in 4..6) {
+                        newLoginPrompt.error = getString(R.string.login_chars_alert)
+                        return@setOnClickListener
+                    }
+                }
+
+                if (email.isNotEmpty()) {
+                    if (!loginRegex.matches(email)) {
+                        newLoginPrompt.error = getString(R.string.invalid_login_message)
+                        return@setOnClickListener
+                    }
+                    if (password.length < 8) {
+                        newPasswordPrompt.error = getString(R.string.invalid_password_message)
+                        return@setOnClickListener
+                    }
+                }
+
                 // cria um hash 256 para a senha
                 val hashedPassword = Auth().hashPassword(password)
 

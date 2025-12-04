@@ -259,4 +259,7 @@ sobre la aplicación.</string>
 
     <string name="valaquenta">En el principio, Eru, el Único, que en la lengua élfica es llamado Ilúvatar, creó de su pensamiento a los Ainur; y ellos hicieron una gran Música ante él. En esa Música comenzó el Mundo; pues Ilúvatar hizo visible la canción de los Ainur, y ellos la contemplaron como una luz en la oscuridad. Muchos de ellos se enamoraron de su belleza, y también de su historia, cuyo inicio y desarrollo presenciaron como en una visión. Entonces, Ilúvatar dio Vida a esa visión y la colocó en medio del Vacío; y el Fuego Secreto fue enviado para arder en el corazón del Mundo; y se llamó Eä.</string>
 
+    <string name="invalid_login_message">No se permiten caracteres especiales en el login</string>
+    <string name="invalid_password_message">La contraseña debe tener al menos 8 caracteres</string>
+
 </resources>
