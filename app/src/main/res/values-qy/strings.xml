@@ -5,8 +5,8 @@
 
     <!-- Login -->
         <!-- Login -->
-    <string name="login_email_prompt">Tulta i correo</string>
-    <string name="login_email_confirm_prompt">Tulta ata i correo</string>
+    <string name="login_email_prompt">Á queti nórenna essë</string>
+    <string name="login_email_confirm_prompt">Tancë nórenna essë</string>
     <string name="login_password_prompt">Tulta i nórëa</string>
     <string name="login_password_confirm_prompt">Tulta ata i nórëa</string>
     <string name="login_button">Anta</string>
@@ -14,7 +14,7 @@
     <string name="login_success_message">Anta carna!</string>
     <string name="login_error_message">Faila anta. Tiro i nórëa.</string>
     <string name="login_empty_message">Náquetë i campo anta!</string>
-    <string name="login_exists_message">Usuário ná quetië. Yesta correo!</string>
+    <string name="login_exists_message">I quen sina harta márë. Á cemë enta nórenna essë!</string>
     <string name="login_account_text">Ná quetië?</string>
     <string name="login_account_button">Carë anta!</string>
     <string name="login_forgot_password_text">Úharya i nórëa?</string>
@@ -72,7 +72,7 @@
     <!-- Dependent -->
     <string name="new_dependent_button">Anta úvë</string>
     <string name="dependent_name_prompt">Essë</string>
-    <string name="dependent_email_prompt">Correo</string>
+    <string name="dependent_email_prompt">Essë</string>
     <string name="dependent_passcode_prompt">Nórëa</string>
 
     <!-- Buttons -->
@@ -194,7 +194,7 @@
     <string name="less_than_one_hour">Nai úmë lúmë telwa</string>
     <string name="less_than_one_day">Nai úmë aurë telwa</string>
     <string name="task_finished">Carmë telwa</string>
-    <string name="same_email">Correo náquetë</string>
+    <string name="same_email">Nórenna essë harta márë</string>
     <string name="all_fields_warning">Náquetë ilya campo</string>
     <string name="dependent_added">Úvë antaina</string>
     <string name="created_house">Coië carna</string>

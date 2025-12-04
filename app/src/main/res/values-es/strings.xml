@@ -4,8 +4,8 @@
     <string name="text_powered_by_devminds">Powered by DevMinds</string>
 
     <!-- Login -->
-    <string name="login_email_prompt">Ingrese su correo electrónico</string>
-    <string name="login_email_confirm_prompt">Confirme su correo electrónico</string>
+    <string name="login_email_prompt">Ingrese su login</string>
+    <string name="login_email_confirm_prompt">Confirme su login</string>
     <string name="login_password_prompt">Ingrese su contraseña</string>
     <string name="login_password_confirm_prompt">Confirme su contraseña</string>
     <string name="login_button">Acceder</string>
@@ -13,7 +13,7 @@
     <string name="login_success_message">¡Inicio de sesión realizado con éxito!</string>
     <string name="login_error_message">Error al iniciar sesión. Verifique sus credenciales.</string>
     <string name="login_empty_message">¡Complete los campos de inicio de sesión!</string>
-    <string name="login_exists_message">Este usuario ya está registrado. ¡Pruebe con otro correo!</string>
+    <string name="login_exists_message">Este usuario ya ha sido registrado. ¡Pruebe con otro login!</string>
     <string name="login_account_text">¿Ya tiene cuenta?</string>
     <string name="login_account_button"><u>¡Inicie sesión!</u></string>
     <string name="login_forgot_password_text">¿Olvidó su contraseña?</string>
@@ -71,7 +71,7 @@
     <!-- Dependiente -->
     <string name="new_dependent_button">Agregar Dependiente</string>
     <string name="dependent_name_prompt">Nombre</string>
-    <string name="dependent_email_prompt">Correo electrónico</string>
+    <string name="dependent_email_prompt">Login</string>
     <string name="dependent_passcode_prompt">Contraseña</string>
 
     <!-- Botones -->
@@ -186,7 +186,7 @@ sobre la aplicación.</string>
     <string name="less_than_one_hour">Menos de una hora para concluir</string>
     <string name="less_than_one_day">Menos de un día para concluir</string>
     <string name="task_finished">Tarea concluida</string>
-    <string name="same_email">Correo ya registrado</string>
+    <string name="same_email">Login ya registrado</string>
     <string name="all_fields_warning">Complete todos los campos</string>
     <string name="house_id_not_found_error">Error: ID de la casa no encontrado.</string>
     <string name="dependent_added">Dependiente agregado</string>

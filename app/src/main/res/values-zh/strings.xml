@@ -5,8 +5,8 @@
 
     <!-- Login -->
         <!-- 登录 -->
-    <string name="login_email_prompt">请输入您的邮箱</string>
-    <string name="login_email_confirm_prompt">请确认您的邮箱</string>
+    <string name="login_email_prompt">请输入登录</string>
+    <string name="login_email_confirm_prompt">确认登录</string>
     <string name="login_password_prompt">请输入您的密码</string>
     <string name="login_password_confirm_prompt">请确认您的密码</string>
     <string name="login_button">登录</string>
@@ -14,7 +14,7 @@
     <string name="login_success_message">登录成功！</string>
     <string name="login_error_message">登录失败。请检查您的凭证。</string>
     <string name="login_empty_message">请填写登录信息！</string>
-    <string name="login_exists_message">该用户已注册。请尝试其他邮箱！</string>
+    <string name="login_exists_message">该用户已注册。请尝试其他登录！</string>
     <string name="login_account_text">已有账号？</string>
     <string name="login_account_button"><u>立即登录！</u></string>
     <string name="login_forgot_password_text">忘记密码？</string>
@@ -72,7 +72,7 @@
     <!-- 家属 -->
     <string name="new_dependent_button">添加家属</string>
     <string name="dependent_name_prompt">姓名</string>
-    <string name="dependent_email_prompt">邮箱</string>
+    <string name="dependent_email_prompt">登录</string>
     <string name="dependent_passcode_prompt">密码</string>
 
     <!-- 按钮 -->
@@ -187,7 +187,7 @@
     <string name="less_than_one_hour">少于一小时完成</string>
     <string name="less_than_one_day">少于一天完成</string>
     <string name="task_finished">任务已完成</string>
-    <string name="same_email">邮箱已注册</string>
+    <string name="same_email">登录已注册</string>
     <string name="all_fields_warning">请填写所有字段</string>
     <string name="house_id_not_found_error">错误：未找到房屋 ID。</string>
     <string name="dependent_added">家属已添加</string>

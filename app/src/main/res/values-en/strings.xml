@@ -4,8 +4,8 @@
     <string name="text_powered_by_devminds">Powered by DevMinds</string>
 
     <!-- Login -->
-    <string name="login_email_prompt">Enter your email</string>
-    <string name="login_email_confirm_prompt">Confirm your email</string>
+    <string name="login_email_prompt">Enter your login</string>
+    <string name="login_email_confirm_prompt">Confirm your login</string>
     <string name="login_password_prompt">Enter your password</string>
     <string name="login_password_confirm_prompt">Confirm your password</string>
     <string name="login_button">Login</string>
@@ -13,7 +13,7 @@
     <string name="login_success_message">Login successful!</string>
     <string name="login_error_message">Error logging in. Check your credentials.</string>
     <string name="login_empty_message">Fill in the login fields!</string>
-    <string name="login_exists_message">This user is already registered. Try another email!</string>
+    <string name="login_exists_message">This user has already been registered. Try another login!</string>
     <string name="login_account_text">Already have an account?</string>
     <string name="login_account_button"><u>Log in!</u></string>
     <string name="login_forgot_password_text">Forgot your password?</string>
@@ -71,7 +71,7 @@
     <!-- Dependent -->
     <string name="new_dependent_button">Add Dependent</string>
     <string name="dependent_name_prompt">Name</string>
-    <string name="dependent_email_prompt">Email</string>
+    <string name="dependent_email_prompt">Login</string>
     <string name="dependent_passcode_prompt">Password</string>
 
     <!-- Buttons -->
@@ -190,7 +190,7 @@ With an intuitive interface and features designed to streamline routines, the ap
     <string name="less_than_one_hour">Less than one hour to complete</string>
     <string name="less_than_one_day">Less than one day to complete</string>
     <string name="task_finished">Task completed</string>
-    <string name="same_email">Email already registered</string>
+    <string name="same_email">Login already registered</string>
     <string name="all_fields_warning">Fill in all fields</string>
     <string name="house_id_not_found_error">Error: House ID not found.</string>
     <string name="dependent_added">Dependent added</string>

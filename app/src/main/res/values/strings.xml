@@ -4,8 +4,8 @@
     <string name="text_powered_by_devminds">Powered by DevMinds</string>
 
     <!-- Login -->
-    <string name="login_email_prompt">Digite seu e-mail</string>
-    <string name="login_email_confirm_prompt">Confirme seu e-mail</string>
+    <string name="login_email_prompt">Digite seu login</string>
+    <string name="login_email_confirm_prompt">Confirme seu login</string>
     <string name="login_password_prompt">Digite sua senha</string>
     <string name="login_password_confirm_prompt">Confirme sua senha</string>
     <string name="login_button">Acessar</string>
@@ -13,7 +13,7 @@
     <string name="login_success_message">Login realizado com sucesso!</string>
     <string name="login_error_message">Erro ao realizar login. Verifique suas credenciais.</string>
     <string name="login_empty_message">Preencha os campos de login!</string>
-    <string name="login_exists_message">Este usuário já foi cadastrado. Tente outro email!</string>
+    <string name="login_exists_message">Este usuário já foi cadastrado. Tente outro login!</string>
     <string name="login_account_text">Já possui conta?</string>
     <string name="login_account_button"><u>Faça o login!</u></string>
     <string name="login_forgot_password_text">Esqueceu sua senha?</string>
@@ -71,7 +71,7 @@
     <!-- Dependent -->
     <string name="new_dependent_button">Adicionar Dependente</string>
     <string name="dependent_name_prompt">Nome</string>
-    <string name="dependent_email_prompt">Email</string>
+    <string name="dependent_email_prompt">Login</string>
     <string name="dependent_passcode_prompt">Senha</string>
 
     <!-- Buttons -->
@@ -184,7 +184,7 @@ Com tecnologia, criatividade e trabalho em equipe, o DevMinds nasce para impacta
     <string name="less_than_one_hour">Menos de uma hora para ser concluída</string>
     <string name="less_than_one_day">Menos de um dia para ser concluída</string>
     <string name="task_finished">Tarefa concluída</string>
-    <string name="same_email">Email já cadastrado</string>
+    <string name="same_email">Login já cadastrado</string>
     <string name="all_fields_warning">Preencha todos os campos</string>
     <string name="house_id_not_found_error">Erro: ID da casa não encontrado.</string>
     <string name="dependent_added">Dependente adicionado</string>

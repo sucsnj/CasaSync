@@ -4,8 +4,8 @@
     <string name="text_powered_by_devminds">Powered by DevMinds</string>
 
 
-    <string name="login_email_prompt">メールアドレスを入力してください</string>
-    <string name="login_email_confirm_prompt">メールアドレスを確認してください</string>
+    <string name="login_email_prompt">ログインを入力してください</string>
+    <string name="login_email_confirm_prompt">ログインを確認してください</string>
     <string name="login_password_prompt">パスワードを入力してください</string>
     <string name="login_password_confirm_prompt">パスワードを確認してください</string>
     <string name="login_button">アクセス</string>
@@ -13,7 +13,7 @@
     <string name="login_success_message">ログインに成功しました！</string>
     <string name="login_error_message">ログインエラー。認証情報を確認してください。</string>
     <string name="login_empty_message">ログイン項目を入力してください！</string>
-    <string name="login_exists_message">このユーザーはすでに登録されています。別のメールを試してください！</string>
+    <string name="login_exists_message">このユーザーはすでに登録されています。別のログインを試してください！</string>
     <string name="login_account_text">すでにアカウントをお持ちですか？</string>
     <string name="login_account_button"><u>ログインする！</u></string>
     <string name="login_forgot_password_text">パスワードを忘れましたか？</string>
@@ -71,7 +71,7 @@
     <!-- 家族 -->
     <string name="new_dependent_button">家族を追加</string>
     <string name="dependent_name_prompt">名前</string>
-    <string name="dependent_email_prompt">メール</string>
+    <string name="dependent_email_prompt">ログイン</string>
     <string name="dependent_passcode_prompt">パスワード</string>
 
     <!-- ボタン -->
@@ -186,7 +186,7 @@
     <string name="less_than_one_hour">完了まで1時間未満</string>
     <string name="less_than_one_day">完了まで1日未満</string>
     <string name="task_finished">タスク完了</string>
-    <string name="same_email">メールはすでに登録されています</string>
+    <string name="same_email">ログインはすでに登録済みです</string>
     <string name="all_fields_warning">すべての項目を入力してください</string>
     <string name="house_id_not_found_error">エラー：家のIDが見つかりません。</string>
     <string name="dependent_added">家族が追加されました</string>
