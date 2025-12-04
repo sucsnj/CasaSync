@@ -17,6 +17,8 @@ object PopupMenu {
     fun show(context: Context, anchor: View, baseFragment: BaseFragment): Menu {
         val popup = PopupMenu(context, anchor)
         popup.menuInflater.inflate(R.menu.popup_menu_layout, popup.menu)
+        // esconder user_settings
+        popup.menu.findItem(R.id.user_settings).isVisible = false
 
         popup.setOnMenuItemClickListener { popupItem ->
             when (popupItem.itemId) {

@@ -19,7 +19,7 @@ import com.devminds.casasync.utils.DialogUtils
 import com.devminds.casasync.utils.PermissionHelper
 import android.content.Intent
 import android.provider.Settings
-import androidx.core.net.toUri
+import androidx.annotation.RequiresApi
 
 class AppConfigFragment : BaseFragment(R.layout.fragment_config_app) {
 
@@ -84,6 +84,7 @@ class AppConfigFragment : BaseFragment(R.layout.fragment_config_app) {
         switchAlarms.isChecked = PermissionHelper.hasExactAlarmPermission(requireContext())
     }
 
+    @RequiresApi(Build.VERSION_CODES.S)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -212,8 +213,6 @@ class AppConfigFragment : BaseFragment(R.layout.fragment_config_app) {
                     } else {
                         requestNotificationPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
                     }
-                } else {
-                    // DialogUtils.showMessage(requireContext(), getString(R.string.notification_permission_granted))
                 }
             } else {
                 val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
@@ -231,8 +230,9 @@ class AppConfigFragment : BaseFragment(R.layout.fragment_config_app) {
         switchAlarms.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 if (PermissionHelper.hasExactAlarmPermission(requireContext())) {
-                    DialogUtils.showMessage(requireContext(), "Alarmes ativados")
+//                    DialogUtils.showMessage(requireContext(), "Alarmes ativados")
                 } else {
+                    requestAlarmPermission.launch(Manifest.permission.SCHEDULE_EXACT_ALARM)
                     PermissionHelper.checkAndRequestExactAlarmPermission(requireContext())
                 }
             } else {

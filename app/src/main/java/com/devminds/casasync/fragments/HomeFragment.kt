@@ -54,13 +54,16 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
         title = view?.findViewById(R.id.title)!! // nome
         subtitle = view?.findViewById(R.id.subtitle)!! // perfil
         userPhoto.setOnClickListener {
-            replaceFragment(UserConfigFragment(), TransitionType.FADE)
+//            replaceFragment(UserConfigFragment(), TransitionType.FADE)
+            replaceFragment(AppConfigFragment(), TransitionType.FADE)
         }
         title.setOnClickListener {
-            replaceFragment(UserConfigFragment(), TransitionType.FADE)
+//            replaceFragment(UserConfigFragment(), TransitionType.FADE)
+            replaceFragment(AppConfigFragment(), TransitionType.FADE)
         }
         subtitle.setOnClickListener {
-            replaceFragment(UserConfigFragment(), TransitionType.FADE)
+//            replaceFragment(UserConfigFragment(), TransitionType.FADE)
+            replaceFragment(AppConfigFragment(), TransitionType.FADE)
         }
     }
 
