@@ -228,20 +228,15 @@ class AppConfigFragment : BaseFragment(R.layout.fragment_config_app) {
         switchAlarms.isChecked = enableAlarms && hasAlarmPermission
 
         // botão para mudar o estado do switch de alarmes
-        // @TODO permissão para usar exact alarm
         switchAlarms.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 if (PermissionHelper.hasExactAlarmPermission(requireContext())) {
                     DialogUtils.showMessage(requireContext(), "Alarmes ativados")
                 } else {
-                    requestAlarmPermission.launch(Manifest.permission.SCHEDULE_EXACT_ALARM)
+                    PermissionHelper.checkAndRequestExactAlarmPermission(requireContext())
                 }
-                PermissionHelper.checkAndRequestExactAlarmPermission(requireContext())
             } else {
-                val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM).apply {
-                    data = "package:${requireContext().packageName}".toUri()
-                }
-                startActivity(intent)
+                PermissionHelper.checkAndRequestExactAlarmPermission(requireContext())
             }
         }
 
