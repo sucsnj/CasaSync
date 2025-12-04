@@ -1,7 +1,9 @@
 package com.devminds.casasync.fragments
 
+import android.Manifest
 import android.app.AlertDialog
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -10,6 +12,8 @@ import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.devminds.casasync.FirestoreHelper
@@ -28,6 +32,7 @@ import com.devminds.casasync.utils.DialogUtils
 import com.devminds.casasync.utils.TaskAlarmReceiver
 import com.devminds.casasync.utils.DatePickers
 import com.devminds.casasync.utils.DateUtils
+import com.devminds.casasync.utils.PermissionHelper
 import com.google.firebase.firestore.ListenerRegistration
 
 class TaskFragment : BaseFragment(R.layout.fragment_task) {
@@ -91,6 +96,15 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
         }
     }
 
+    private val requestNotificationPermission =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+            if (granted) {
+                DialogUtils.showMessage(requireContext(), getString(R.string.notification_permission_granted))
+            } else {
+                DialogUtils.showMessage(requireContext(), getString(R.string.notification_permission_denied))
+            }
+        }
+
     fun saveTask(context: Context, item: String, itemValue: String?) {
         taskViewModel.task.value?.let { task ->
             when (item) {
@@ -112,15 +126,11 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
             // agenda notificações
             scheduleTaskNotification(context, taskViewModel)
 
-            // pede permisão para notificação @TODO terminar
-            // if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            //         // tem que pedir permissão para android 13+
-            //     if (PermissionHelper.hasNotificationPermission(requireContext())) {
-            //         DialogUtils.showMessage(requireContext(), getString(R.string.notification_permission_granted))
-            //      } else {
-            //         requestNotificationPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
-            //     }
-            // }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                if (!PermissionHelper.hasNotificationPermission(requireContext())) {
+                    requestNotificationPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
+                }
+            }
 
             Log.d("TaskFragment", "Sincronizado com sucesso")
         }
@@ -393,7 +403,7 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
         // observa o dependente selecionado
         subtitle = view.findViewById(R.id.subtitle)
         dependentViewModel.dependent.observe(viewLifecycleOwner) { dependent ->
-            subtitle.text = dependent?.name ?: "Dependente" // nome do dependente no subtítulo
+            subtitle.text = dependent?.name ?: getString(R.string.dependent) // nome do dependente no subtítulo
 
             currentTask = dependent?.tasks?.find { it.id == taskId } // seta a tarefa atual
             currentTask?.let { taskViewModel.setTask(it) } // atualiza a tarefa no ViewModel
