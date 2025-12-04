@@ -2,23 +2,23 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/lang_pt"
-        android:title="Português (Brasil)" />
+        android:title="@string/language_br" />
     <item
         android:id="@+id/lang_en"
-        android:title="English (US)" />
+        android:title="@string/language_en" />
     <item
         android:id="@+id/lang_es"
-        android:title="Espanish (ES)" />
+        android:title="@string/language_es" />
     <item
         android:id="@+id/lang_zh"
-        android:title="Chinaaa (ZH)" />
+        android:title="@string/language_zh" />
     <item
         android:id="@+id/lang_ja"
-        android:title="Criiiiis (JA)" />
+        android:title="@string/language_ja" />
     <item
         android:id="@+id/lang_qy"
-        android:title="Quenya (QY)" />
+        android:title="@string/language_qy" />
     <item
         android:id="@+id/lang_default"
-        android:title="Default (System)" />
+        android:title="@string/default_language" />
 </menu>

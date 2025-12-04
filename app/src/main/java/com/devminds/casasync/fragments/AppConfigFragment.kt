@@ -69,10 +69,12 @@ class AppConfigFragment : BaseFragment(R.layout.fragment_config_app) {
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
             if (granted) {
                 // permissão concedida
-                DialogUtils.showMessage(requireContext(), "Permissão de alarmes concedida")
+                DialogUtils.showMessage(requireContext(),
+                    getString(R.string.alarms_permission_granted))
             } else {
                 // Permissão negada
-                DialogUtils.showMessage(requireContext(), "Permissão de alarmes negada")
+                DialogUtils.showMessage(requireContext(),
+                    getString(R.string.alarms_permission_denied))
             }
         }
 
@@ -119,17 +121,17 @@ class AppConfigFragment : BaseFragment(R.layout.fragment_config_app) {
             if (messageEasterEggChance > 7 && easterEgg) {
                 DialogUtils.showMessage(
                     requireContext(),
-                    "Os ventos de Aman sussurram: o idioma dos Elfos antigos está ao teu alcance. Quenya se revela."
+                    getString(R.string.quenya_message1)
                 )
             } else if (messageEasterEggChance < 7 && easterEgg) {
                 DialogUtils.showMessage(
                     requireContext(),
-                    "A voz dos Valar ecoa: o idioma dos Primogênitos desperta. Quenya está revelado a ti."
+                    getString(R.string.quenya_message2)
                 )
             } else if (messageEasterEggChance == 7 && easterEgg) {
                 DialogUtils.showMessage(
                     requireContext(),
-                    "Das terras imortais de Aman, concedemos-te o dom: fala agora a língua dos elfos, o Quenya."
+                    getString(R.string.quenya_message3)
                 )
             }
 
@@ -144,43 +146,45 @@ class AppConfigFragment : BaseFragment(R.layout.fragment_config_app) {
                 when (item.itemId) {
                     R.id.lang_pt -> {
                         saveLanguage("pt-BR")
-                        DialogUtils.showMessage(requireContext(), "Idioma alterado para Português")
+                        DialogUtils.showMessage(requireContext(),
+                            getString(R.string.changed_language))
                         requireActivity().recreate()
                         true
                     }
                     R.id.lang_en -> {
                         saveLanguage("en")
-                        DialogUtils.showMessage(requireContext(), "Language changed to English")
+                        DialogUtils.showMessage(requireContext(), getString(R.string.changed_language))
                         requireActivity().recreate()
                         true
                     }
                     R.id.lang_es -> {
                         saveLanguage("es")
-                        DialogUtils.showMessage(requireContext(), "Idioma cambiado a español")
+                        DialogUtils.showMessage(requireContext(), getString(R.string.changed_language))
                         requireActivity().recreate()
                         true
                     }
                     R.id.lang_zh -> {
                         saveLanguage("zh")
-                        DialogUtils.showMessage(requireContext(), "语言已更改为简体中文")
+                        DialogUtils.showMessage(requireContext(), getString(R.string.changed_language))
                         requireActivity().recreate()
                         true
                     }
                     R.id.lang_ja -> {
                         saveLanguage("ja")
-                        DialogUtils.showMessage(requireContext(), "言語がポルトガル語に変更されました")
+                        DialogUtils.showMessage(requireContext(), getString(R.string.changed_language))
                         requireActivity().recreate()
                         true
                     }
                     R.id.lang_qy -> {
                         saveLanguage("qy")
-                        DialogUtils.showMessage(requireContext(), "Texto em Quenya")
+                        DialogUtils.showMessage(requireContext(), getString(R.string.changed_language))
                         requireActivity().recreate()
                         true
                     }
                     R.id.lang_default -> {
                         saveLanguage("") // vazio = padrão do sistema
-                        DialogUtils.showMessage(requireContext(), "Idioma padrão do sistema")
+                        DialogUtils.showMessage(requireContext(),
+                            getString(R.string.default_language))
                         requireActivity().recreate()
                         true
                     }
@@ -242,7 +246,7 @@ class AppConfigFragment : BaseFragment(R.layout.fragment_config_app) {
 
         @Suppress("unused")
         switchBiometrics.setOnCheckedChangeListener { _, isChecked ->
-            DialogUtils.showMessage(requireContext(), "Funcionalidade de biometria ainda não implementada.")
+            DialogUtils.showMessage(requireContext(), getString(R.string.biometric_implementation))
 
             // DialogUtils.showMessage(requireContext(),
             //     if (isChecked) "Biometria ativada" else "Biometria desativada")

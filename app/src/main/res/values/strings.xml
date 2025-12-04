@@ -233,6 +233,25 @@ Com tecnologia, criatividade e trabalho em equipe, o DevMinds nasce para impacta
     <string name="enable_biometrics">Habilitar Biometria</string>
 
     // novas strings
-
+    <string name="alarms_permission_granted">Permissão de alarmes concedida</string>
+    <string name="alarms_permission_denied">Permissão de alarmes negada</string>
+    <string name="quenya_message1">Os ventos de Aman sussurram: o idioma dos Elfos antigos está ao teu alcance. Quenya se revela.</string>
+    <string name="quenya_message2">A voz dos Valar ecoa: o idioma dos Primogênitos desperta. Quenya está revelado a ti.</string>
+    <string name="quenya_message3">Das terras imortais de Aman, concedemos-te o dom: fala agora a língua dos elfos, o Quenya.</string>
+    <string name="changed_language">Idioma alterado</string>
+    <string name="default_language">Idioma padrão do sistema</string>
+    <string name="biometric_implementation">Funcionalidade de biometria ainda não implementada.</string>
+    <string name="language_br">Brasil (BR)</string>
+    <string name="language_en">Inglês (EN)</string>
+    <string name="language_es">Espanhol (ES)</string>
+    <string name="language_zh">Chinês (ZH)</string>
+    <string name="language_ja">Japonês (JA)</string>
+    <string name="language_qy">Quenya (QY)</string>
+    <string name="app_config">Configurações do App</string>
+    <string name="user_config">Configurações do Usuário</string>
+    <string name="about">Sobre</string>
+    <string name="exit">Sair</string>
+    <string name="start">Início</string>
+    <string name="more_options">Mais opções</string>
 
 </resources>

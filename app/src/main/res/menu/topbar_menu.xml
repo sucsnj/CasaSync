@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_homepage"
-        android:title="Início"
+        android:title="@string/start"
         android:icon="@drawable/ico_homepage"
         app:showAsAction="ifRoom"
         app:iconTint="?attr/colorControlNormal"/>
     <item
         android:id="@+id/more_options"
-        android:title="Mais opções"
+        android:title="@string/more_options"
         android:icon="@drawable/ico_more_vert"
         app:showAsAction="always"
         app:iconTint="?attr/colorControlNormal"/>

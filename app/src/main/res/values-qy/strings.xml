@@ -232,4 +232,25 @@
     <string name="enable_alarms">Anta cenda lúmë</string>
     <string name="enable_biometrics">Anta biometria</string>
 
+    <string name="alarms_permission_granted">Álamar ná quetië</string>
+    <string name="alarms_permission_denied">Álamar úquetië</string>
+    <string name="quenya_message1">Lómi Amano hlárar: lambë i Eldaron yára ná mára. Quenya ná calima.</string>
+    <string name="quenya_message2">Lóma i Valaron hlára: lambë i Minyaron ná cuiva. Quenya ná nányë.</string>
+    <string name="quenya_message3">E Amano marillë úvëa, antan len anna: quetë i lambë Eldaron, Quenya.</string>
+    <string name="changed_language">Lambë hyahtaina</string>
+    <string name="default_language">Lambë i nórenna</string>
+    <string name="biometric_implementation">Nórenwa hröa-tengwë umë carna.</string>
+    <string name="language_br">Brasilë (BR)</string>
+    <string name="language_en">Englë (EN)</string>
+    <string name="language_es">Espanië (ES)</string>
+    <string name="language_zh">Sinë (ZH)</string>
+    <string name="language_ja">Japanië (JA)</string>
+    <string name="language_qy">Quenya (QY)</string>
+    <string name="app_config">Nórenwa arta</string>
+    <string name="user_config">Nórenwa quénwa</string>
+    <string name="about">Apa</string>
+    <string name="exit">Mittanya</string>
+    <string name="start">Yesta</string>
+    <string name="more_options">Enta mára</string>
+
 </resources>

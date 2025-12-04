@@ -235,4 +235,25 @@
     <string name="enable_alarms">启用提醒</string>
     <string name="enable_biometrics">启用生物识别</string>
 
+    <string name="alarms_permission_granted">闹钟权限已授予</string>
+    <string name="alarms_permission_denied">闹钟权限被拒绝</string>
+    <string name="quenya_message1">阿曼的风低语：古老精灵的语言在你掌握之中。昆雅语显现。</string>
+    <string name="quenya_message2">维拉的声音回荡：长子之语苏醒。昆雅语向你揭示。</string>
+    <string name="quenya_message3">来自阿曼的不朽之地，我们赐予你礼物：现在说精灵的语言——昆雅语。</string>
+    <string name="changed_language">语言已更改</string>
+    <string name="default_language">系统默认语言</string>
+    <string name="biometric_implementation">生物识别功能尚未实现。</string>
+    <string name="language_br">巴西 (BR)</string>
+    <string name="language_en">英语 (EN)</string>
+    <string name="language_es">西班牙语 (ES)</string>
+    <string name="language_zh">中文 (ZH)</string>
+    <string name="language_ja">日语 (JA)</string>
+    <string name="language_qy">昆雅语 (QY)</string>
+    <string name="app_config">应用设置</string>
+    <string name="user_config">用户设置</string>
+    <string name="about">关于</string>
+    <string name="exit">退出</string>
+    <string name="start">开始</string>
+    <string name="more_options">更多选项</string>
+
 </resources>

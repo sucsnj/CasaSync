@@ -238,4 +238,25 @@ With an intuitive interface and features designed to streamline routines, the ap
     <string name="enable_alarms">Enable Alarms</string>
     <string name="enable_biometrics">Enable Biometrics</string>
 
+    <string name="alarms_permission_granted">Alarms permission granted</string>
+    <string name="alarms_permission_denied">Alarms permission denied</string>
+    <string name="quenya_message1">The winds of Aman whisper: the language of the ancient Elves is within your reach. Quenya reveals itself.</string>
+    <string name="quenya_message2">The voice of the Valar echoes: the language of the Firstborn awakens. Quenya is revealed to you.</string>
+    <string name="quenya_message3">From the immortal lands of Aman, we grant you the gift: speak now the tongue of the Elves, Quenya.</string>
+    <string name="changed_language">Language changed</string>
+    <string name="default_language">System default language</string>
+    <string name="biometric_implementation">Biometric functionality not yet implemented.</string>
+    <string name="language_br">Brazil (BR)</string>
+    <string name="language_en">English (EN)</string>
+    <string name="language_es">Spanish (ES)</string>
+    <string name="language_zh">Chinese (ZH)</string>
+    <string name="language_ja">Japanese (JA)</string>
+    <string name="language_qy">Quenya (QY)</string>
+    <string name="app_config">App Settings</string>
+    <string name="user_config">User Settings</string>
+    <string name="about">About</string>
+    <string name="exit">Exit</string>
+    <string name="start">Start</string>
+    <string name="more_options">More options</string>
+
 </resources>

@@ -234,4 +234,25 @@
     <string name="enable_alarms">アラームを有効にする</string>
     <string name="enable_biometrics">生体認証を有効にする</string>
 
+    <string name="alarms_permission_granted">アラームの許可が付与されました</string>
+    <string name="alarms_permission_denied">アラームの許可が拒否されました</string>
+    <string name="quenya_message1">アマンの風がささやく：古代エルフの言語があなたの手に届く。クウェンヤが現れる。</string>
+    <string name="quenya_message2">ヴァラールの声が響く：長子の言語が目覚める。クウェンヤがあなたに明かされる。</string>
+    <string name="quenya_message3">不滅の地アマンから、我らは贈り物を授ける：今こそエルフの言葉、クウェンヤを話せ。</string>
+    <string name="changed_language">言語が変更されました</string>
+    <string name="default_language">システムのデフォルト言語</string>
+    <string name="biometric_implementation">生体認証機能はまだ実装されていません。</string>
+    <string name="language_br">ブラジル (BR)</string>
+    <string name="language_en">英語 (EN)</string>
+    <string name="language_es">スペイン語 (ES)</string>
+    <string name="language_zh">中国語 (ZH)</string>
+    <string name="language_ja">日本語 (JA)</string>
+    <string name="language_qy">クウェンヤ (QY)</string>
+    <string name="app_config">アプリ設定</string>
+    <string name="user_config">ユーザー設定</string>
+    <string name="about">概要</string>
+    <string name="exit">終了</string>
+    <string name="start">開始</string>
+    <string name="more_options">その他のオプション</string>
+
 </resources>

@@ -234,4 +234,25 @@ sobre la aplicación.</string>
     <string name="enable_alarms">Habilitar alarmas</string>
     <string name="enable_biometrics">Habilitar biometría</string>
 
+    <string name="alarms_permission_granted">Permiso de alarmas concedido</string>
+    <string name="alarms_permission_denied">Permiso de alarmas denegado</string>
+    <string name="quenya_message1">Los vientos de Aman susurran: el idioma de los antiguos Elfos está a tu alcance. Quenya se revela.</string>
+    <string name="quenya_message2">La voz de los Valar resuena: el idioma de los Primeros Nacidos despierta. Quenya se te revela.</string>
+    <string name="quenya_message3">Desde las tierras inmortales de Aman, te concedemos el don: habla ahora la lengua de los Elfos, el Quenya.</string>
+    <string name="changed_language">Idioma cambiado</string>
+    <string name="default_language">Idioma predeterminado del sistema</string>
+    <string name="biometric_implementation">Funcionalidad biométrica aún no implementada.</string>
+    <string name="language_br">Brasil (BR)</string>
+    <string name="language_en">Inglés (EN)</string>
+    <string name="language_es">Español (ES)</string>
+    <string name="language_zh">Chino (ZH)</string>
+    <string name="language_ja">Japonés (JA)</string>
+    <string name="language_qy">Quenya (QY)</string>
+    <string name="app_config">Configuración de la aplicación</string>
+    <string name="user_config">Configuración del usuario</string>
+    <string name="about">Acerca de</string>
+    <string name="exit">Salir</string>
+    <string name="start">Inicio</string>
+    <string name="more_options">Más opciones</string>
+
 </resources>
