@@ -24,15 +24,17 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="vertical"
-
-        app:layout_constraintTop_toBottomOf="@id/topBar"
-        app:layout_constraintBottom_toBottomOf="parent" >
+        android:layout_marginTop="25dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <!--    cadastro de usuário    -->
         <LinearLayout
             android:id="@+id/layoutNewUser"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/background_layout"
             android:gravity="center"
             android:orientation="vertical"
             android:padding="28dp">
@@ -41,7 +43,7 @@
                 android:layout_width="160dp"
                 android:layout_height="160dp"
                 android:contentDescription="@string/image_logo_casasync_description"
-                android:src="@drawable/casasyncnome" />
+                android:src="@drawable/casasync" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -62,21 +64,10 @@
                 android:orientation="vertical"
                 android:padding="10dp">
 
-                <TextView
-                    android:id="@+id/personalData"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:layout_marginTop="10dp"
-                    android:text="@string/personal_data_text"
-                    android:textSize="30sp"
-                    android:textStyle="bold" />
-
                 <EditText
                     android:id="@+id/newUserPrompt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:minHeight="48dp"
                     android:layout_marginTop="6dp"
                     android:autofillHints="username"
                     android:drawableStart="@drawable/icon_user"
@@ -85,87 +76,14 @@
                     android:inputType="text" />
 
                 <EditText
-                    android:id="@+id/newBirthdayPrompt"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:minHeight="48dp"
-                    android:layout_marginTop="6dp"
-                    android:autofillHints="birthday"
-                    android:clickable="true"
-                    android:drawableStart="@drawable/ico_calendar"
-                    android:drawablePadding="10dp"
-                    android:focusable="false"
-                    android:hint="@string/user_birthdate_prompt"
-                    android:inputType="none" />
-
-                <RadioGroup
-                    android:id="@+id/newGender"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <RadioButton
-                        android:id="@+id/male"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/gender_male_text" />
-
-                    <RadioButton
-                        android:id="@+id/female"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/gender_female_text" />
-
-                    <RadioButton
-                        android:id="@+id/another"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/gender_other_text" />
-                </RadioGroup>
-            </LinearLayout>
-
-            <!-- contato e segurança -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/borda_layout"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="10dp">
-
-                <TextView
-                    android:id="@+id/contactAndSecurity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:layout_marginTop="10dp"
-                    android:text="@string/contact_security_title_text"
-                    android:textSize="30sp"
-                    android:textStyle="bold" />
-
-                <EditText
                     android:id="@+id/newLoginPrompt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:minHeight="48dp"
                     android:layout_marginTop="6dp"
                     android:autofillHints="none"
                     android:drawableStart="@drawable/ico_email"
                     android:drawablePadding="10dp"
                     android:hint="@string/login_email_prompt"
-                    android:inputType="textEmailAddress" />
-
-                <EditText
-                    android:id="@+id/newLoginPromptConfirm"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:minHeight="48dp"
-                    android:layout_marginTop="6dp"
-                    android:autofillHints="none"
-                    android:drawableStart="@drawable/ico_email2"
-                    android:drawablePadding="10dp"
-                    android:hint="@string/login_email_confirm_prompt"
                     android:inputType="textEmailAddress" />
 
                 <EditText
@@ -178,184 +96,6 @@
                     android:drawablePadding="10dp"
                     android:hint="@string/login_password_prompt"
                     android:inputType="textPassword" />
-
-                <EditText
-                    android:id="@+id/newPasswordPromptConfirm"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:autofillHints="none"
-                    android:drawableStart="@drawable/ico_password2"
-                    android:drawablePadding="10dp"
-                    android:hint="@string/login_password_confirm_prompt"
-                    android:inputType="textPassword" />
-
-                <EditText
-                    android:id="@+id/newPhonePrompt"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:autofillHints="phone"
-                    android:drawableStart="@drawable/ico_phone"
-                    android:drawablePadding="10dp"
-                    android:ems="10"
-                    android:hint="@string/user_phone_prompt"
-                    android:inputType="phone"
-                    android:maxLength="11" />
-
-            </LinearLayout>
-
-            <!--      endereço      -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/borda_layout"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="10dp">
-
-                <TextView
-                    android:id="@+id/address"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:layout_marginTop="10dp"
-                    android:text="@string/address_title_text"
-                    android:textSize="30sp"
-                    android:textStyle="bold" />
-
-                <EditText
-                    android:id="@+id/newCep"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:autofillHints="postalCode"
-                    android:drawableStart="@drawable/ico_cep"
-                    android:drawablePadding="10dp"
-                    android:ems="8"
-                    android:hint="@string/address_cep_prompt"
-                    android:inputType="number"
-                    android:maxLength="8" />
-
-                <EditText
-                    android:id="@+id/newStreet"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:autofillHints="postalAddress"
-                    android:drawableStart="@drawable/ico_street"
-                    android:drawablePadding="10dp"
-                    android:hint="@string/address_street_prompt"
-                    android:inputType="textPostalAddress"
-                    android:maxLines="1" />
-
-                <EditText
-                    android:id="@+id/newCity"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:autofillHints="addressLocality"
-                    android:drawableStart="@drawable/ico_city"
-                    android:drawablePadding="10dp"
-                    android:hint="@string/address_city_prompt"
-                    android:inputType="textCapWords"
-                    android:maxLines="1" />
-
-                <EditText
-                    android:id="@+id/newDistrict"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:autofillHints="addressRegion"
-                    android:drawableStart="@drawable/ico_district"
-                    android:drawablePadding="10dp"
-                    android:hint="@string/address_district_prompt"
-                    android:inputType="textCapWords"
-                    android:maxLines="1" />
-
-                <EditText
-                    android:id="@+id/newNumberAddress"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:autofillHints="postalAddress"
-                    android:drawableStart="@drawable/ico_street_number"
-                    android:drawablePadding="10dp"
-                    android:hint="@string/address_number_prompt"
-                    android:inputType="number"
-                    android:maxLines="1" />
-
-                <EditText
-                    android:id="@+id/newComplement"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:autofillHints="none"
-                    android:drawableStart="@drawable/ico_street_more"
-                    android:drawablePadding="10dp"
-                    android:hint="@string/address_complement_prompt"
-                    android:inputType="text" />
-
-            </LinearLayout>
-
-            <!--      configurações      -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/borda_layout"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="10dp">
-
-                <TextView
-                    android:id="@+id/newConfigs"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:layout_marginTop="10dp"
-                    android:text="@string/config_title_text"
-                    android:textSize="30sp"
-                    android:textStyle="bold" />
-
-                <RadioGroup
-                    android:id="@+id/newUserType"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <RadioButton
-                        android:id="@+id/adm"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/button_admin" />
-
-                    <RadioButton
-                        android:id="@+id/dependent"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/button_dependent" />
-                </RadioGroup>
-
-                <RadioGroup
-                    android:id="@+id/userTerms"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <RadioButton
-                        android:id="@+id/acceptButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/button_accept_terms" />
-
-                    <RadioButton
-                        android:id="@+id/declineButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/button_decline_terms" />
-                </RadioGroup>
 
             </LinearLayout>
 
@@ -406,6 +146,7 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
+            <!-- problema esperado (ignorar)-->
             <!--      footer      -->
             <LinearLayout
                 android:id="@+id/footer"
@@ -415,7 +156,6 @@
                 android:layout_marginBottom="10dp"
                 android:gravity="bottom|center_horizontal"
                 android:orientation="vertical"
-                tools:ignore="UseCompoundDrawables"
                 android:padding="16dp">
 
                 <ImageView
