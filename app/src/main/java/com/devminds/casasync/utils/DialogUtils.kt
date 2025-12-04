@@ -157,12 +157,12 @@ object DialogUtils {
             iconView.setImageResource(R.drawable.casasync) // ícone especial do easter egg
             iconView.visibility = View.VISIBLE
 
-            // duração fixa de 10 segundos
+            // duração fixa de 7 segundos
             Handler(Looper.getMainLooper()).postDelayed({
                 if (dialog.isShowing && !context.isFinishing && !context.isDestroyed) {
                     dialog.dismiss()
                 }
-            }, 10_000L)
+            }, 7_000L)
 
             currentDialog = dialog
             dialog.show()

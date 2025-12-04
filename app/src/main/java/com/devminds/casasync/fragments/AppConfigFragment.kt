@@ -20,6 +20,8 @@ import com.devminds.casasync.utils.PermissionHelper
 import android.content.Intent
 import android.provider.Settings
 import androidx.annotation.RequiresApi
+import androidx.fragment.app.activityViewModels
+import com.devminds.casasync.views.EasterEggViewModel
 
 class AppConfigFragment : BaseFragment(R.layout.fragment_config_app) {
 
@@ -29,6 +31,7 @@ class AppConfigFragment : BaseFragment(R.layout.fragment_config_app) {
     private lateinit var switchNotifications: SwitchMaterial
     private lateinit var switchAlarms: SwitchMaterial
     private lateinit var switchBiometrics: SwitchMaterial
+    private val viewModel: EasterEggViewModel by activityViewModels()
 
     private fun toggleTheme() {
         val prefs: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
@@ -78,6 +81,15 @@ class AppConfigFragment : BaseFragment(R.layout.fragment_config_app) {
             }
         }
 
+    fun easterEgg(): Boolean {
+        var easterEgg = false
+        val easterEggChance = (1..10).random()
+        if (easterEggChance == 7) {
+            easterEgg = true
+        }
+        return easterEgg
+    }
+
     override fun onResume() {
         super.onResume()
         // muda o switch de notificações conforme a permissão atual
@@ -111,11 +123,8 @@ class AppConfigFragment : BaseFragment(R.layout.fragment_config_app) {
         }
 
         btnChangeLanguage.setOnClickListener { anchor ->
-            var easterEgg = false
-            val easterEggChance = (1..10).random()
-            if (easterEggChance == 7) {
-                easterEgg = true
-            }
+            val easterEgg = easterEgg()
+            viewModel.easterEggActive.value = easterEgg
 
             val messageEasterEggChance = (1..10).random()
             if (messageEasterEggChance > 7 && easterEgg) {
