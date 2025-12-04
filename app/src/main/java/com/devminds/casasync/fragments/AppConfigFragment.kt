@@ -19,6 +19,7 @@ import com.devminds.casasync.utils.DialogUtils
 import com.devminds.casasync.utils.PermissionHelper
 import android.content.Intent
 import android.provider.Settings
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import com.devminds.casasync.views.EasterEggViewModel
@@ -150,10 +151,10 @@ class AppConfigFragment : BaseFragment(R.layout.fragment_config_app) {
             // visiblidade do item de idioma quenya no menu
             val popup = PopupMenu(requireContext(), anchor)
             popup.menuInflater.inflate(R.menu.language_selector, popup.menu)
-            
+
             val quenyaItem = popup.menu.findItem(R.id.lang_qy)
             quenyaItem.isVisible = easterEgg
-            
+
             popup.setOnMenuItemClickListener { item ->
                 when (item.itemId) {
                     R.id.lang_pt -> {
@@ -203,9 +204,10 @@ class AppConfigFragment : BaseFragment(R.layout.fragment_config_app) {
                     else -> false
                 }
             }
-            popup.show()
-
+            // é necessária para o easterEgg funcionar
             easterEggActivator = true
+            popup.show()
+            Log.d("AppLanguageEasterEgg", "$easterEggActivator")
         }
 
         // aqui fica o estado salvo do switch de notificações, alarmes // e biometria

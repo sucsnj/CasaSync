@@ -1,9 +1,7 @@
 package com.devminds.casasync.fragments
 
-import android.Manifest
 import android.app.AlertDialog
 import android.content.Context
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -12,8 +10,6 @@ import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.devminds.casasync.FirestoreHelper
@@ -32,8 +28,8 @@ import com.devminds.casasync.utils.DialogUtils
 import com.devminds.casasync.utils.TaskAlarmReceiver
 import com.devminds.casasync.utils.DatePickers
 import com.devminds.casasync.utils.DateUtils
-import com.devminds.casasync.utils.PermissionHelper
 import com.google.firebase.firestore.ListenerRegistration
+import com.devminds.casasync.utils.NotificationUtils
 
 class TaskFragment : BaseFragment(R.layout.fragment_task) {
 
@@ -96,15 +92,6 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
         }
     }
 
-    private val requestNotificationPermission =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
-            if (granted) {
-                DialogUtils.showMessage(requireContext(), getString(R.string.notification_permission_granted))
-            } else {
-                DialogUtils.showMessage(requireContext(), getString(R.string.notification_permission_denied))
-            }
-        }
-
     fun saveTask(context: Context, item: String, itemValue: String?) {
         taskViewModel.task.value?.let { task ->
             when (item) {
@@ -126,10 +113,9 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
             // agenda notificações
             scheduleTaskNotification(context, taskViewModel)
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                if (!PermissionHelper.hasNotificationPermission(requireContext())) {
-                    requestNotificationPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
-                }
+            val notifications = NotificationUtils.areNotificationsEnabled(context)
+            if (!notifications) {
+                NotificationUtils.openNotificationSettingsIfDisabled(context)
             }
 
             Log.d("TaskFragment", "Sincronizado com sucesso")

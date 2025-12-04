@@ -2,8 +2,26 @@ package com.devminds.casasync.utils
 
 import android.app.NotificationManager
 import android.content.Context
+import android.content.Intent
+import android.provider.Settings
+import androidx.core.app.NotificationManagerCompat
 
 object NotificationUtils {
+
+    fun areNotificationsEnabled(context: Context): Boolean {
+        return NotificationManagerCompat.from(context).areNotificationsEnabled()
+    }
+
+    fun openNotificationSettingsIfDisabled(context: Context) {
+        if (!areNotificationsEnabled(context)) {
+            val intent = run {
+                Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
+                    putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
+                }
+            }
+            context.startActivity(intent)
+        }
+    }
 
     // cria o canal de notificação (inicializa o sistema de notificação)
     fun createNotificationChannel(context: Context) {
