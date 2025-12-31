@@ -43,28 +43,14 @@ android {
 }
 
 dependencies {
-
-    implementation("androidx.preference:preference:1.2.1")
-    implementation("com.github.bumptech.glide:glide:4.16.0")
+    // AndroidX
+    implementation(libs.androidx.preference)
     implementation(libs.androidx.swiperefreshlayout)
-    annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
-    implementation("com.google.android.gms:play-services-tasks:18.0.2")
-    implementation("androidx.credentials:credentials:1.5.0")
-    implementation("androidx.credentials:credentials-play-services-auth:1.3.0")
-    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
-    implementation(libs.firebase.firestore.ktx)
-    implementation(libs.firebase.common.ktx)
-    implementation(libs.firebase.auth)
-    implementation(libs.firebase.auth.ktx)
-    implementation(libs.play.services.auth)
-    implementation(libs.firebase.core)
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services.auth)
     implementation(libs.androidx.biometric)
-    coreLibraryDesugaring(libs.desugar.jdk.libs)
-    implementation(libs.material.v1110)
-    implementation(libs.firebase.firestore)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
-    implementation(libs.gson)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.core.ktx)
@@ -72,7 +58,27 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+
+    // Google / Play Services
+    implementation(libs.play.services.auth)
+    implementation(libs.play.services.tasks)
+    implementation(libs.googleid)
+
+    // Firebase (via BoM)
+    implementation(platform("com.google.firebase:firebase-bom:33.5.1"))
+    implementation("com.google.firebase:firebase-firestore-ktx")
+    implementation("com.google.firebase:firebase-auth-ktx")
+
+    // Outros
+    implementation(libs.glide)
+    annotationProcessor(libs.compiler)
+    implementation(libs.gson)
+
+    // Testes
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    // Desugar JDK
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
 }
