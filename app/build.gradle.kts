@@ -69,6 +69,9 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore-ktx")
     implementation("com.google.firebase:firebase-auth-ktx")
 
+    // Firebase Cloud Messaging
+    implementation(libs.firebase.messaging.ktx)
+
     // Outros
     implementation(libs.glide)
     annotationProcessor(libs.compiler)
