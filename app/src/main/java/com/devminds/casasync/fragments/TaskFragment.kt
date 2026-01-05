@@ -107,32 +107,43 @@ class TaskFragment : BaseFragment(R.layout.fragment_task) {
 
     fun saveTask(context: Context, item: String, itemValue: String?) {
         taskViewModel.task.value?.let { task ->
-            when (item) {
-                "description" -> itemValue?.let { task.description = it }
-                "previsionDate" -> itemValue?.let { task.previsionDate = it }
-                "previsionHour" -> itemValue?.let { task.previsionHour = it }
-                "finishDate" -> task.finishDate = itemValue
-            }
 
-            dependentViewModel.updateTask(task)
-
-            val houseId = task.houseId
-            val depId = task.dependentId
-            userViewModel.updateTask(houseId, depId, task)
-
-            userViewModel.persistAndSyncUser()
-            dependentViewModel.persistAndSyncDependent()
-
-            // agenda notificações
-            scheduleTaskNotification(context, taskViewModel)
-
+            // pede permissão para notificações acima do android 13
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 if (!PermissionHelper.hasNotificationPermission(requireContext())) {
                     requestNotificationPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
                 }
             }
 
-            Log.d("TaskFragment", "Sincronizado com sucesso")
+            var changed = false // varificador para confirmar que houve alguma mudança real
+            when (item) {
+                "description" -> if (itemValue != null && task.description != itemValue) {
+                    task.description = itemValue
+                    changed = true
+                }
+                "previsionDate" -> if (itemValue != null && task.previsionDate != itemValue) {
+                    task.previsionDate = itemValue
+                    changed = true
+                }
+                "previsionHour" -> if (itemValue != null && task.previsionHour != itemValue) {
+                    task.previsionHour = itemValue
+                    changed = true
+                }
+                "finishDate" -> if (task.finishDate != itemValue) {
+                    task.finishDate = itemValue
+                    changed = true
+                }
+            }
+
+            if (changed) { // se houve alguma mudança real, sincroniza tudo
+                dependentViewModel.updateTask(task)
+                userViewModel.updateTask(task.houseId, task.dependentId, task)
+                userViewModel.persistAndSyncUser()
+                dependentViewModel.persistAndSyncDependent()
+                scheduleTaskNotification(context, taskViewModel)
+
+                Log.d("TaskFragment", "Sincronizado com sucesso")
+            }
         }
     }
 
